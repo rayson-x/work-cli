@@ -13,6 +13,7 @@ import (
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/output"
+	"github.com/larksuite/cli/internal/worklineauth"
 )
 
 // LogoutOptions holds all inputs for auth logout.
@@ -97,6 +98,9 @@ func authLogoutRun(opts *LogoutOptions) error {
 		}
 		if err := larkauth.RemoveStoredToken(app.AppId, user.UserOpenId); err != nil {
 			fmt.Fprintf(f.IOStreams.ErrOut, "Warning: failed to remove token for %s: %v\n", user.UserOpenId, err)
+		}
+		if err := worklineauth.RemoveAPIKey(f.Keychain, app.AppId, user.UserOpenId); err != nil {
+			fmt.Fprintln(f.IOStreams.ErrOut, "Warning: failed to remove local Workline media credential")
 		}
 	}
 

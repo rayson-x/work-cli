@@ -35,6 +35,11 @@ func TestMain(m *testing.M) {
 		os.RemoveAll(root)
 		os.Exit(2)
 	}
+	if err := os.Setenv("WORKLINE_MEDIA_SERVER_URL", "off"); err != nil {
+		println("cmd/auth test setup: Setenv failed:", err.Error())
+		os.RemoveAll(root)
+		os.Exit(2)
+	}
 	if err := registrytest.Seed(root); err != nil {
 		println("cmd/auth test setup: registrytest.Seed failed:", err.Error())
 		os.RemoveAll(root)

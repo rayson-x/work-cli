@@ -987,24 +987,119 @@ func TestAuthLoginRun_MissingRequestedScopeAlignsWithLoginSuccess(t *testing.T) 
 		t.Fatalf("stderr should not contain error prefix, got:\n%s", got)
 	}
 	stored := larkauth.GetStoredToken("cli_test", "ou_user")
-	if stored == nil {
-		t.Fatal("expected token to be stored when authorization succeeds with missing scopes")
-	}
-	if stored.Scope != "offline_access" {
-		t.Fatalf("stored scope = %q", stored.Scope)
+	if stored != nil {
+		t.Fatalf("stored token = %#v, want no token when requested scopes are missing", stored)
 	}
 	cfg, err := core.LoadMultiAppConfig()
 	if err != nil {
 		t.Fatalf("LoadMultiAppConfig() error = %v", err)
 	}
-	if len(cfg.Apps) != 1 || len(cfg.Apps[0].Users) != 1 {
+	if len(cfg.Apps) != 1 || len(cfg.Apps[0].Users) != 0 {
 		t.Fatalf("unexpected users in config: %#v", cfg.Apps)
 	}
-	if cfg.Apps[0].Users[0].UserOpenId != "ou_user" {
-		t.Fatalf("stored user open id = %q", cfg.Apps[0].Users[0].UserOpenId)
+}
+
+func TestAuthLoginRun_WorklineFailureLeavesFeishuLoggedOut(t *testing.T) {
+	keyring.MockInit()
+	setupLoginConfigDir(t)
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("WORKLINE_MEDIA_SERVER_URL", "http://workline.test")
+
+	multi := &core.MultiAppConfig{
+		CurrentApp: "default",
+		Apps:       []core.AppConfig{{Name: "default", AppId: "cli_test"}},
 	}
-	if cfg.Apps[0].Users[0].UserName != "tester" {
-		t.Fatalf("stored user name = %q", cfg.Apps[0].Users[0].UserName)
+	if err := core.SaveMultiAppConfig(multi); err != nil {
+		t.Fatalf("SaveMultiAppConfig() error = %v", err)
+	}
+
+	f, _, _, reg := cmdutil.TestFactory(t, &core.CliConfig{
+		ProfileName: "default",
+		AppID:       "cli_test",
+		AppSecret:   "secret",
+		Brand:       core.BrandFeishu,
+	})
+	reg.Register(&httpmock.Stub{Method: "POST", URL: larkauth.PathDeviceAuthorization, Body: map[string]interface{}{
+		"device_code": "device-code", "user_code": "user-code", "verification_uri": "https://example.com/verify", "verification_uri_complete": "https://example.com/verify?code=123", "expires_in": 240, "interval": 0,
+	}})
+	reg.Register(&httpmock.Stub{Method: "POST", URL: larkauth.PathOAuthTokenV2, Body: map[string]interface{}{
+		"access_token": "user-access-token", "refresh_token": "refresh-token", "expires_in": 7200, "refresh_token_expires_in": 604800, "scope": "offline_access",
+	}})
+	reg.Register(&httpmock.Stub{Method: "GET", URL: larkauth.PathUserInfoV1, Body: map[string]interface{}{
+		"code": 0, "msg": "ok", "data": map[string]interface{}{"open_id": "ou_user", "name": "tester"},
+	}})
+	reg.Register(&httpmock.Stub{Method: "POST", URL: "/v1/oauth", Status: 503, Body: map[string]interface{}{
+		"error": map[string]interface{}{"code": "feishu_verification_unavailable", "message": "temporarily unavailable"},
+	}})
+
+	err := authLoginRun(&LoginOptions{Factory: f, Ctx: context.Background(), Scope: "offline_access"}, builtinResolver())
+	if err == nil {
+		t.Fatal("expected Workline login failure")
+	}
+	if token := larkauth.GetStoredToken("cli_test", "ou_user"); token != nil {
+		t.Fatalf("stored Feishu token = %#v, want nil after Workline login failure", token)
+	}
+	cfg, err := core.LoadMultiAppConfig()
+	if err != nil {
+		t.Fatalf("LoadMultiAppConfig() error = %v", err)
+	}
+	if len(cfg.Apps) != 1 || len(cfg.Apps[0].Users) != 0 {
+		t.Fatalf("users = %#v, want no logged-in user", cfg.Apps)
+	}
+}
+
+func TestAuthLoginRun_DeviceCodeWorklineFailureLeavesFeishuLoggedOut(t *testing.T) {
+	keyring.MockInit()
+	setupLoginConfigDir(t)
+	t.Setenv("HOME", t.TempDir())
+	t.Setenv("WORKLINE_MEDIA_SERVER_URL", "http://workline.test")
+
+	multi := &core.MultiAppConfig{
+		CurrentApp: "default",
+		Apps:       []core.AppConfig{{Name: "default", AppId: "cli_test"}},
+	}
+	if err := core.SaveMultiAppConfig(multi); err != nil {
+		t.Fatalf("SaveMultiAppConfig() error = %v", err)
+	}
+	if err := saveLoginRequestedScope("device-code", "offline_access"); err != nil {
+		t.Fatalf("saveLoginRequestedScope() error = %v", err)
+	}
+
+	original := pollDeviceToken
+	t.Cleanup(func() { pollDeviceToken = original })
+	pollDeviceToken = func(context.Context, *http.Client, string, string, core.LarkBrand, string, int, int, io.Writer) *larkauth.DeviceFlowResult {
+		return &larkauth.DeviceFlowResult{OK: true, Token: &larkauth.DeviceFlowTokenData{
+			AccessToken: "user-access-token", RefreshToken: "refresh-token", ExpiresIn: 7200,
+			RefreshExpiresIn: 604800, Scope: "offline_access",
+		}}
+	}
+
+	f, _, _, reg := cmdutil.TestFactory(t, &core.CliConfig{
+		ProfileName: "default",
+		AppID:       "cli_test",
+		AppSecret:   "secret",
+		Brand:       core.BrandFeishu,
+	})
+	reg.Register(&httpmock.Stub{Method: "GET", URL: larkauth.PathUserInfoV1, Body: map[string]interface{}{
+		"code": 0, "msg": "ok", "data": map[string]interface{}{"open_id": "ou_user", "name": "tester"},
+	}})
+	reg.Register(&httpmock.Stub{Method: "POST", URL: "/v1/oauth", Status: 503, Body: map[string]interface{}{
+		"error": map[string]interface{}{"code": "feishu_verification_unavailable", "message": "temporarily unavailable"},
+	}})
+
+	err := authLoginRun(&LoginOptions{Factory: f, Ctx: context.Background(), DeviceCode: "device-code"}, builtinResolver())
+	if err == nil {
+		t.Fatal("expected Workline login failure")
+	}
+	if token := larkauth.GetStoredToken("cli_test", "ou_user"); token != nil {
+		t.Fatalf("stored Feishu token = %#v, want nil after Workline login failure", token)
+	}
+	cfg, err := core.LoadMultiAppConfig()
+	if err != nil {
+		t.Fatalf("LoadMultiAppConfig() error = %v", err)
+	}
+	if len(cfg.Apps) != 1 || len(cfg.Apps[0].Users) != 0 {
+		t.Fatalf("users = %#v, want no logged-in user", cfg.Apps)
 	}
 }
 

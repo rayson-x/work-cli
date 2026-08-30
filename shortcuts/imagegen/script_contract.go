@@ -230,7 +230,7 @@ func executeScriptGenerate(ctx context.Context, r *common.RuntimeContext) error 
 	if err != nil {
 		return err
 	}
-	result, err := runScriptJob(ctx, job)
+	result, err := runScriptJob(ctx, r, job)
 	if err != nil {
 		return err
 	}
@@ -243,7 +243,7 @@ func executeScriptEdit(ctx context.Context, r *common.RuntimeContext) error {
 	if err != nil {
 		return err
 	}
-	result, err := runScriptJob(ctx, job)
+	result, err := runScriptJob(ctx, r, job)
 	if err != nil {
 		return err
 	}
@@ -276,7 +276,7 @@ func executeScriptBatch(ctx context.Context, r *common.RuntimeContext) error {
 			defer func() { <-sem }()
 			var runErr error
 			for attempt := 1; attempt <= r.Int("max-attempts"); attempt++ {
-				results[i], runErr = runScriptJob(ctx, jobs[i])
+				results[i], runErr = runScriptJob(ctx, r, jobs[i])
 				if runErr == nil || ctx.Err() != nil {
 					break
 				}
@@ -455,8 +455,8 @@ func normalizedScriptFormat(value string) string {
 	return value
 }
 
-func runScriptJob(ctx context.Context, job scriptJob) (map[string]any, error) {
-	client, err := newAPIClient()
+func runScriptJob(ctx context.Context, r *common.RuntimeContext, job scriptJob) (map[string]any, error) {
+	client, err := newAPIClient(r)
 	if err != nil {
 		return nil, err
 	}

@@ -22,6 +22,7 @@ import (
 	"github.com/larksuite/cli/internal/output"
 	"github.com/larksuite/cli/internal/recovery"
 	"github.com/larksuite/cli/internal/registry"
+	"github.com/larksuite/cli/internal/worklineauth"
 	"github.com/larksuite/cli/shortcuts"
 	"github.com/larksuite/cli/shortcuts/common"
 )
@@ -388,6 +389,13 @@ func authLoginRun(opts *LoginOptions, resolver domainResolver) error {
 	}
 
 	scopeSummary := loadLoginScopeSummary(config.AppID, openId, finalScope, result.Token.Scope)
+	if issue := ensureRequestedScopesGranted(finalScope, result.Token.Scope, msg, scopeSummary); issue != nil {
+		return handleLoginScopeIssue(opts, msg, f, issue, openId, userName)
+	}
+	worklineCreated, err := ensureWorklineMediaLogin(opts.Ctx, f, config, openId, result.Token.AccessToken)
+	if err != nil {
+		return err
+	}
 
 	// Step 7: Store token
 	now := time.Now().UnixMilli()
@@ -402,17 +410,15 @@ func authLoginRun(opts *LoginOptions, resolver domainResolver) error {
 		GrantedAt:        now,
 	}
 	if err := larkauth.SetStoredToken(storedToken); err != nil {
+		rollbackWorklineMediaLogin(f, config.AppID, openId, worklineCreated)
 		return errs.NewInternalError(errs.SubtypeStorage, "failed to save token: %v", err).WithCause(err)
 	}
 
 	// Step 8: Update config — overwrite Users to single user, clean old tokens
 	if err := syncLoginUserToProfile(config.ProfileName, config.AppID, openId, userName); err != nil {
 		_ = larkauth.RemoveStoredToken(config.AppID, openId)
+		rollbackWorklineMediaLogin(f, config.AppID, openId, worklineCreated)
 		return err
-	}
-
-	if issue := ensureRequestedScopesGranted(finalScope, result.Token.Scope, msg, scopeSummary); issue != nil {
-		return handleLoginScopeIssue(opts, msg, f, issue, openId, userName)
 	}
 
 	writeLoginSuccess(opts, msg, f, openId, userName, scopeSummary)
@@ -471,6 +477,13 @@ func authLoginPollDeviceCode(opts *LoginOptions, config *core.CliConfig, msg *lo
 	}
 
 	scopeSummary := loadLoginScopeSummary(config.AppID, openId, requestedScope, result.Token.Scope)
+	if issue := ensureRequestedScopesGranted(requestedScope, result.Token.Scope, msg, scopeSummary); issue != nil {
+		return handleLoginScopeIssue(opts, msg, f, issue, openId, userName)
+	}
+	worklineCreated, err := ensureWorklineMediaLogin(opts.Ctx, f, config, openId, result.Token.AccessToken)
+	if err != nil {
+		return err
+	}
 
 	// Store token
 	now := time.Now().UnixMilli()
@@ -485,21 +498,36 @@ func authLoginPollDeviceCode(opts *LoginOptions, config *core.CliConfig, msg *lo
 		GrantedAt:        now,
 	}
 	if err := larkauth.SetStoredToken(storedToken); err != nil {
+		rollbackWorklineMediaLogin(f, config.AppID, openId, worklineCreated)
 		return errs.NewInternalError(errs.SubtypeSDKError, "failed to save token: %v", err).WithCause(err)
 	}
 
 	// Update config — overwrite Users to single user, clean old tokens
 	if err := syncLoginUserToProfile(config.ProfileName, config.AppID, openId, userName); err != nil {
 		_ = larkauth.RemoveStoredToken(config.AppID, openId)
+		rollbackWorklineMediaLogin(f, config.AppID, openId, worklineCreated)
 		return errs.NewInternalError(errs.SubtypeSDKError, "failed to update login profile: %v", err).WithCause(err)
-	}
-
-	if issue := ensureRequestedScopesGranted(requestedScope, result.Token.Scope, msg, scopeSummary); issue != nil {
-		return handleLoginScopeIssue(opts, msg, f, issue, openId, userName)
 	}
 
 	writeLoginSuccess(opts, msg, f, openId, userName, scopeSummary)
 	return nil
+}
+
+// ensureWorklineMediaLogin provisions the Workline media credential after the
+// Feishu device flow and requested-scope validation complete, but before the
+// Feishu login state is persisted. A failure therefore fails the whole login.
+func ensureWorklineMediaLogin(ctx context.Context, f *cmdutil.Factory, config *core.CliConfig, openID, accessToken string) (bool, error) {
+	client, err := f.ExternalHTTPClient()
+	if err != nil {
+		return false, err
+	}
+	return worklineauth.EnsureAPIKey(ctx, client, f.Keychain, config.AppID, openID, accessToken)
+}
+
+func rollbackWorklineMediaLogin(f *cmdutil.Factory, appID, openID string, created bool) {
+	if created {
+		_ = worklineauth.RemoveAPIKey(f.Keychain, appID, openID)
+	}
 }
 
 // syncLoginUserToProfile persists the logged-in user info into the named profile.

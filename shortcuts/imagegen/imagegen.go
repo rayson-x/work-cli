@@ -23,21 +23,21 @@ import (
 	"time"
 
 	"github.com/larksuite/cli/errs"
+	"github.com/larksuite/cli/internal/worklineauth"
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
 const (
-	apiKeyEnv        = "WORKLINE_MEDIA_API_KEY"
 	pollInterval     = 3 * time.Second
 	operationTimeout = 30 * time.Minute
 )
 
-var serviceURL = "http://54.151.241.139:3000"
 var httpClient = &http.Client{Timeout: 2 * time.Minute}
 
 type apiClient struct {
-	base *url.URL
-	key  string
+	base   *url.URL
+	key    string
+	client *http.Client
 }
 
 type submission struct {
@@ -207,7 +207,7 @@ func addImageOptions(request map[string]any, r *common.RuntimeContext) {
 }
 
 func executeImage(ctx context.Context, r *common.RuntimeContext, request map[string]any, refs []reference, mask string) error {
-	client, err := newAPIClient()
+	client, err := newAPIClient(r)
 	if err != nil {
 		return err
 	}
@@ -247,7 +247,7 @@ func executeImage(ctx context.Context, r *common.RuntimeContext, request map[str
 }
 
 func executeJob(ctx context.Context, r *common.RuntimeContext) error {
-	client, err := newAPIClient()
+	client, err := newAPIClient(r)
 	if err != nil {
 		return err
 	}
@@ -271,17 +271,37 @@ func executeJob(ctx context.Context, r *common.RuntimeContext) error {
 	return nil
 }
 
-func newAPIClient() (*apiClient, error) {
-	key := strings.TrimSpace(os.Getenv(apiKeyEnv))
+func newAPIClient(r *common.RuntimeContext) (*apiClient, error) {
+	if r == nil || r.Factory == nil || r.Config == nil {
+		return nil, errs.NewInternalError(errs.SubtypeSDKError, "Workline image runtime is unavailable")
+	}
+	key := strings.TrimSpace(os.Getenv(worklineauth.MediaAPIKeyEnv))
 	if key == "" {
-		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured", apiKeyEnv).
-			WithHint("configure the Workline media API key, then retry the same command")
+		var err error
+		key, err = worklineauth.APIKey(r.Factory.Keychain, r.Config.AppID, r.UserOpenId())
+		if err != nil {
+			return nil, err
+		}
 	}
-	base, err := url.Parse(serviceURL)
+	if key == "" {
+		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured", worklineauth.MediaAPIKeyEnv).
+			WithHint("run `lark-cli auth login`, or configure the Workline media API key and retry")
+	}
+	base, err := url.Parse(worklineauth.ServerURL())
+	if err != nil || base.Scheme == "" || base.Host == "" {
+		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured as an absolute URL", worklineauth.MediaServerURLEnv).
+			WithField(worklineauth.MediaServerURLEnv)
+	}
+	if base.Scheme != "https" && base.Scheme != "http" {
+		return nil, errs.NewConfigError(errs.SubtypeInvalidConfig, "%s must use HTTP or HTTPS", worklineauth.MediaServerURLEnv).
+			WithField(worklineauth.MediaServerURLEnv).
+			WithHint("set an absolute Workline media service URL")
+	}
+	client, err := r.Factory.ExternalHTTPClient()
 	if err != nil {
-		return nil, errs.NewInternalError(errs.SubtypeInvalidResponse, "compiled Workline service URL is invalid").WithCause(err)
+		return nil, err
 	}
-	return &apiClient{base: base, key: key}, nil
+	return &apiClient{base: base, key: key, client: client}, nil
 }
 
 func (c *apiClient) upload(ctx context.Context, path string) (string, error) {
@@ -416,7 +436,7 @@ func (c *apiClient) downloadFile(ctx context.Context, mediaRef, path string) err
 	if err != nil {
 		return err
 	}
-	response, err := httpClient.Do(req)
+	response, err := c.httpClient().Do(req)
 	if err != nil {
 		return networkError("download generated image", err)
 	}
@@ -450,7 +470,7 @@ func (c *apiClient) requestJSON(ctx context.Context, method, path string, body i
 	if err != nil {
 		return err
 	}
-	response, err := httpClient.Do(req)
+	response, err := c.httpClient().Do(req)
 	if err != nil {
 		return networkError("call Workline image service", err)
 	}
@@ -475,6 +495,13 @@ func (c *apiClient) request(ctx context.Context, method, path string, body io.Re
 		req.Header.Set("Content-Type", contentType)
 	}
 	return req, nil
+}
+
+func (c *apiClient) httpClient() *http.Client {
+	if c.client != nil {
+		return c.client
+	}
+	return httpClient
 }
 
 func decodeAPIError(response *http.Response) error {

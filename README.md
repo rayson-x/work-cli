@@ -17,7 +17,7 @@ work-cli workline --help
 work-cli image --help
 ```
 
-Image generation and editing use the Workline service through synchronous CLI commands. The service endpoint is compiled into this distribution; the current build reads `WORKLINE_MEDIA_API_KEY` from the environment.
+Image generation and editing use the Workline service through synchronous CLI commands. The CLI has a built-in Workline service endpoint; set `WORKLINE_MEDIA_SERVER_URL` only to override it. A completed `auth login` exchanges the Feishu user token for a local Workline credential automatically. `WORKLINE_MEDIA_API_KEY` remains an optional environment override for managed or non-interactive deployments.
 
 ```text
 work-cli image +generate --prompt <text> [--reference <path=role>] [--out-dir <directory>]
