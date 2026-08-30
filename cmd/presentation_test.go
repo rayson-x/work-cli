@@ -228,10 +228,10 @@ func TestPresentationProjectsEveryFrameworkOwnedRootHelpTarget(t *testing.T) {
 	applyPresentationAffordances(root, plan)
 
 	for _, dead := range []string{
-		"lark-cli api ",
-		"lark-cli schema ",
-		"lark-cli calendar +agenda",
-		"lark-cli mail user_mailbox.messages list",
+		"work-cli api ",
+		"work-cli schema ",
+		"work-cli calendar +agenda",
+		"work-cli mail user_mailbox.messages list",
 	} {
 		if strings.Contains(root.Long, dead) || strings.Contains(root.UsageTemplate(), dead) {
 			t.Errorf("concealed root-help target %q survived:\nLong:\n%s\nTemplate:\n%s",
@@ -239,7 +239,7 @@ func TestPresentationProjectsEveryFrameworkOwnedRootHelpTarget(t *testing.T) {
 		}
 	}
 	if !strings.Contains(root.Long, "Browse commands:") ||
-		!strings.Contains(root.UsageTemplate(), "lark-cli <command>") {
+		!strings.Contains(root.UsageTemplate(), "work-cli <command>") {
 		t.Fatalf("target-independent root guidance was removed:\nLong:\n%s\nTemplate:\n%s",
 			root.Long, root.UsageTemplate())
 	}

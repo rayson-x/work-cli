@@ -1,12 +1,22 @@
-# lark-cli
+# work-cli
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.23-blue.svg)](https://go.dev/)
-[![npm version](https://img.shields.io/npm/v/@larksuite/cli.svg)](https://www.npmjs.com/package/@larksuite/cli)
 
 [中文版](./README.zh.md) | [English](./README.md)
 
-飞书官方 CLI 工具，由 [larksuite](https://github.com/larksuite) 团队维护 — 让人类和 AI Agent 都能在终端中操作飞书。覆盖消息、文档、多维表格、电子表格、幻灯片、日历、邮箱、任务、会议、Markdown 等核心业务域，提供 200+ 命令及 26 个 AI Agent [Skills](./skills/)。
+`work-cli` 是飞书 CLI 的 Workline 发行版，为外置的 [`apparel-skills`](https://github.com/rayson-x/apparel-skills) Skill 合集提供确定性的 `workline` 数据接口，同时保留底层飞书命令能力。
+
+请从 [GitHub Releases](https://github.com/rayson-x/work-cli/releases) 下载对应平台压缩包。稳定的最新版文件名为 `work-cli_windows_amd64.zip`、`work-cli_darwin_arm64.tar.gz`、`work-cli_darwin_amd64.tar.gz`、`work-cli_linux_amd64.tar.gz`、`work-cli_linux_arm64.tar.gz`，每个 Release 都附带 `checksums.txt`。
+
+解压后先验证：
+
+```text
+work-cli --version
+work-cli workline --help
+```
+
+本项目基于官方 [larksuite/cli](https://github.com/larksuite/cli)；下方保留的飞书命令文档仍然适用，执行时把上游可执行文件名替换为 `work-cli`。
 
 [安装](#安装与快速开始) · [AI Agent Skills](#agent-skills) · [认证](#认证) · [命令](#三层命令调用) · [进阶用法](#进阶用法) · [企业接入](#个人使用还是企业集成) · [安全](#安全与风险提示使用前必读) · [贡献](#贡献)
 

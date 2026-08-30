@@ -256,8 +256,8 @@ func buildInternalWithConfig(ctx context.Context, inv cmdutil.InvocationContext,
 	}, recovery.RenderContext{Profile: inv.Profile})
 	f.Recovery = runtime.recovery
 	rootCmd := &cobra.Command{
-		Use:     "lark-cli",
-		Short:   "Lark/Feishu CLI — OAuth authorization, UAT management, API calls",
+		Use:     "work-cli",
+		Short:   "Work CLI — Workline data and Feishu/Lark operations for agents",
 		Long:    rootLong,
 		Version: build.Version,
 	}

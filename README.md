@@ -1,12 +1,22 @@
-# lark-cli
+# work-cli
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.23-blue.svg)](https://go.dev/)
-[![npm version](https://img.shields.io/npm/v/@larksuite/cli.svg)](https://www.npmjs.com/package/@larksuite/cli)
 
 [中文版](./README.zh.md) | [English](./README.md)
 
-The official [Lark/Feishu](https://www.larksuite.com/) CLI tool, maintained by the [larksuite](https://github.com/larksuite) team — built for humans and AI Agents. Covers core business domains including Messenger, Docs, Base, Sheets, Slides, Calendar, Mail, Tasks, Meetings, Markdown, and more, with 200+ commands and 26 AI Agent [Skills](./skills/).
+`work-cli` is the Workline distribution of the Lark/Feishu CLI. It adds the deterministic `workline` interface used by the external [`apparel-skills`](https://github.com/rayson-x/apparel-skills) collection while retaining the underlying Feishu command surface.
+
+Download a platform archive from [GitHub Releases](https://github.com/rayson-x/work-cli/releases). Stable latest-version URLs are `work-cli_windows_amd64.zip`, `work-cli_darwin_arm64.tar.gz`, `work-cli_darwin_amd64.tar.gz`, `work-cli_linux_amd64.tar.gz`, and `work-cli_linux_arm64.tar.gz`. Every release includes `checksums.txt`.
+
+After extraction, verify the required interface with:
+
+```text
+work-cli --version
+work-cli workline --help
+```
+
+The project is forked from the official [larksuite/cli](https://github.com/larksuite/cli); the upstream documentation below still applies to the retained Feishu/Lark commands. Use `work-cli` in place of the upstream executable name.
 
 [Install](#installation--quick-start) · [AI Agent Skills](#agent-skills) · [Auth](#authentication) · [Commands](#three-layer-command-system) · [Advanced](#advanced-usage) · [Enterprise](#personal-or-enterprise) · [Security](#security--risk-warnings-read-before-use) · [Contributing](#contributing)
 

@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Lark Technologies Pte. Ltd.
 # SPDX-License-Identifier: MIT
 
-BINARY   := lark-cli
+BINARY   := work-cli
 MODULE   := github.com/larksuite/cli
 VERSION  := $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 DATE     := $(shell date +%Y-%m-%d)

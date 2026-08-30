@@ -1,4 +1,0 @@
-interface:
-  display_name: "Fashion Workline"
-  short_description: "Extract text, image, and video-backed workline events"
-  default_prompt: "Use $fashion-workline-skill to extract evidence-backed workline events from specified WeChat conversations, including readable images and videos."

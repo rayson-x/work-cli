@@ -34,12 +34,12 @@ const (
 
 var rootLongSections = []rootHelpSection{
 	{fragments: []rootHelpFragment{
-		{text: `lark-cli — Lark/Feishu CLI tool.
+		{text: `work-cli — Workline and Lark/Feishu CLI tool.
 
 AGENT QUICKSTART (driving this as an agent? start here):
-    Browse commands:  lark-cli <domain> --help            # +shortcuts (preferred) and raw API resources`},
+    Browse commands:  work-cli <domain> --help            # +shortcuts (preferred) and raw API resources`},
 		{target: surface.CommandSchema, text: `
-    Inspect a call:   lark-cli schema <service>.<resource>.<method>   # params, types, scopes, examples`},
+    Inspect a call:   work-cli schema <service>.<resource>.<method>   # params, types, scopes, examples`},
 		{text: `
     Prefer a +shortcut over the raw API resource when one matches the task.
     Risk: each command's --help shows read | write | high-risk-write;
@@ -50,13 +50,13 @@ AGENT QUICKSTART (driving this as an agent? start here):
 		heading: "\n\nEXAMPLES (one per command style, in order of preference):",
 		fragments: []rootHelpFragment{
 			{target: rootHelpCalendarAgenda, text: `
-    lark-cli calendar +agenda                                       # +shortcut — a high-level task, prefer these`},
+    work-cli calendar +agenda                                       # +shortcut — a high-level task, prefer these`},
 			{target: rootHelpMailList, text: `
-    lark-cli mail user_mailbox.messages list --user-mailbox-id me   # typed command for one API method`},
+    work-cli mail user_mailbox.messages list --user-mailbox-id me   # typed command for one API method`},
 			{target: surface.CommandSchema, text: `
-    lark-cli schema mail.user_mailbox.messages.list                 # inspect a method's params before calling`},
+    work-cli schema mail.user_mailbox.messages.list                 # inspect a method's params before calling`},
 			{target: rootHelpAPI, text: `
-    lark-cli api GET /open-apis/calendar/v4/calendars               # raw escape hatch — any endpoint by HTTP path`},
+    work-cli api GET /open-apis/calendar/v4/calendars               # raw escape hatch — any endpoint by HTTP path`},
 		},
 	},
 }
@@ -91,11 +91,11 @@ func renderRootHelpFragments(fragments []rootHelpFragment, plan *surface.Plan) s
 
 var rootUsageSynopsis = []rootHelpFragment{
 	{text: `Usage:
-  lark-cli <command> [subcommand] [method] [flags]`},
+  work-cli <command> [subcommand] [method] [flags]`},
 	{target: rootHelpAPI, text: `
-  lark-cli api <method> <path> [--params <json>] [--data <json>]`},
+  work-cli api <method> <path> [--params <json>] [--data <json>]`},
 	{target: surface.CommandSchema, text: `
-  lark-cli schema <service.resource.method>`},
+  work-cli schema <service.resource.method>`},
 }
 
 const rootUsageTemplatePrefix = `{{if .HasParent}}Usage:{{if .Runnable}}
