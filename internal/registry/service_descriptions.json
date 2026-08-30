@@ -84,6 +84,11 @@
     "zh": { "title": "画板", "description": "画板创建、编辑" },
     "auth_domain": "docs"
   },
+  "workline": {
+    "en": { "title": "Workline", "description": "Evidence-backed fashion event and style relationship management" },
+    "zh": { "title": "款式工作线", "description": "基于证据的服装事件、款式与人员关系管理" },
+    "auth_domain": "base"
+  },
   "wiki": {
     "en": { "title": "Wiki", "description": "Wiki space and node management" },
     "zh": { "title": "知识库", "description": "知识空间、节点管理" }

@@ -39,6 +39,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/vc"
 	"github.com/larksuite/cli/shortcuts/whiteboard"
 	"github.com/larksuite/cli/shortcuts/wiki"
+	"github.com/larksuite/cli/shortcuts/workline"
 )
 
 // serviceAliases maps singular spellings agents habitually type onto the
@@ -94,6 +95,7 @@ func init() {
 	allShortcuts = append(allShortcuts, whiteboard.Shortcuts()...)
 	allShortcuts = append(allShortcuts, wiki.Shortcuts()...)
 	allShortcuts = append(allShortcuts, okr.Shortcuts()...)
+	allShortcuts = append(allShortcuts, workline.Shortcuts()...)
 }
 
 // AllShortcuts returns an isolated copy of all registered shortcuts.

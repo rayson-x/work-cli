@@ -38,14 +38,20 @@ type AppUser struct {
 
 // AppConfig is a per-app configuration entry (stored format — secrets may be unresolved).
 type AppConfig struct {
-	Name       string      `json:"name,omitempty"`
-	AppId      string      `json:"appId"`
-	AppSecret  SecretInput `json:"appSecret"`
-	Brand      LarkBrand   `json:"brand"`
-	Lang       i18n.Lang   `json:"lang,omitempty"`
-	DefaultAs  Identity    `json:"defaultAs,omitempty"` // AsUser | AsBot | AsAuto
-	StrictMode *StrictMode `json:"strictMode,omitempty"`
-	Users      []AppUser   `json:"users"`
+	Name       string           `json:"name,omitempty"`
+	AppId      string           `json:"appId"`
+	AppSecret  SecretInput      `json:"appSecret"`
+	Brand      LarkBrand        `json:"brand"`
+	Lang       i18n.Lang        `json:"lang,omitempty"`
+	DefaultAs  Identity         `json:"defaultAs,omitempty"` // AsUser | AsBot | AsAuto
+	StrictMode *StrictMode      `json:"strictMode,omitempty"`
+	Users      []AppUser        `json:"users"`
+	Workline   *WorklineProfile `json:"workline,omitempty"`
+}
+
+// WorklineProfile stores the optional Base token used by the Workline shortcut.
+type WorklineProfile struct {
+	BaseToken string `json:"base_token,omitempty"`
 }
 
 // ProfileName returns the display name for this app config.
@@ -186,6 +192,7 @@ type CliConfig struct {
 	DefaultAs           Identity // AsUser | AsBot | AsAuto | "" (from config file)
 	UserOpenId          string
 	UserName            string
+	WorklineBaseToken   string `json:"-"`
 	Lang                i18n.Lang
 	SupportedIdentities uint8 `json:"-"` // bitflag: 1=user, 2=bot; set by credential provider
 }
@@ -300,6 +307,9 @@ func ResolveConfigFromMulti(raw *MultiAppConfig, kc keychain.KeychainAccess, pro
 		Brand:       ParseBrand(string(app.Brand)),
 		Lang:        app.Lang,
 		DefaultAs:   app.DefaultAs,
+	}
+	if app.Workline != nil {
+		cfg.WorklineBaseToken = app.Workline.BaseToken
 	}
 	if len(app.Users) > 0 {
 		cfg.UserOpenId = app.Users[0].UserOpenId

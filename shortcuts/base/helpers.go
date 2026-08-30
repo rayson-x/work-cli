@@ -510,6 +510,18 @@ func baseV3Call(runtime *common.RuntimeContext, method, path string, params map[
 	return handleBaseAPIResult(result, err, "API call failed")
 }
 
+// WorklineBaseV3Call lets the composite Workline shortcut reuse the exact
+// Base transport boundary, including the headers and response normalization
+// used by the native Base commands. It is intentionally scoped to Workline so
+// other shortcuts do not grow a second generic API surface.
+func WorklineBaseV3Call(runtime *common.RuntimeContext, method, path string, params map[string][]string, data interface{}) (map[string]interface{}, error) {
+	query := map[string]interface{}{}
+	for key, values := range params {
+		query[key] = values
+	}
+	return baseV3Call(runtime, method, path, query, data)
+}
+
 func baseV3CallContext(ctx context.Context, runtime *common.RuntimeContext, method, path string, params map[string]interface{}, data interface{}) (map[string]interface{}, error) {
 	result, err := baseV3RawContext(ctx, runtime, method, path, params, data)
 	return handleBaseAPIResult(result, err, "API call failed")

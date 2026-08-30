@@ -1,5 +1,6 @@
 # Build output
 /lark-cli*
+/cli.exe
 .cache/
 dist/
 bin/
@@ -55,3 +56,6 @@ cover*.out
 
 lark-env.sh
 /automations/
+
+# Local Workline analysis inputs may contain private chat media and drafts.
+/workline-inputs/

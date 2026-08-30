@@ -525,6 +525,21 @@ func uploadAttachmentToBase(runtime *common.RuntimeContext, filePath, fileName s
 	return attachment, nil
 }
 
+// UploadWorklineAttachment exposes the same validated Base attachment upload
+// path to composite shortcuts that need to upload as part of a record action.
+// It intentionally returns the normal attachment cell item (including the
+// file_token and image dimensions) so callers can write it with the record API.
+func UploadWorklineAttachment(runtime *common.RuntimeContext, filePath, fileName string, fileSize int64, baseToken string) (map[string]interface{}, error) {
+	attachment, err := uploadAttachmentToBase(runtime, filePath, fileName, fileSize, baseAttachmentUploadTarget{
+		ParentType: baseAttachmentParentType,
+		ParentNode: baseToken,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return attachmentAppendItem(attachment), nil
+}
+
 func attachmentAppendItem(attachment map[string]interface{}) map[string]interface{} {
 	item := map[string]interface{}{
 		"file_token": attachment["file_token"],
