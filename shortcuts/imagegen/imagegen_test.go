@@ -11,6 +11,8 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -138,6 +140,60 @@ func TestValidateImageOptionsMatchesServerContract(t *testing.T) {
 	for _, test := range invalid {
 		if err := validateImageOptions(test.size, test.format, test.background, test.transparent); err == nil {
 			t.Fatalf("expected invalid options %#v", test)
+		}
+	}
+}
+
+func TestScriptCommandSurfaceMatchesCodexWorkflow(t *testing.T) {
+	wanted := map[string]bool{"generate": false, "edit": false, "generate-batch": false}
+	for _, shortcut := range Shortcuts() {
+		if _, exists := wanted[shortcut.Command]; exists {
+			wanted[shortcut.Command] = true
+			if shortcut.Hidden {
+				t.Fatalf("canonical command %q is hidden", shortcut.Command)
+			}
+		}
+		if strings.HasPrefix(shortcut.Command, "+") && !shortcut.Hidden {
+			t.Fatalf("legacy command %q must be hidden", shortcut.Command)
+		}
+	}
+	for command, found := range wanted {
+		if !found {
+			t.Fatalf("missing canonical command %q", command)
+		}
+	}
+}
+
+func TestScriptOutputPathsMatchImageGenPyNaming(t *testing.T) {
+	root := t.TempDir()
+	paths, err := scriptOutputPaths(filepath.Join(root, "dress.png"), "", "png", 3, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{filepath.Join(root, "dress-1.png"), filepath.Join(root, "dress-2.png"), filepath.Join(root, "dress-3.png")}
+	if !reflect.DeepEqual(paths, want) {
+		t.Fatalf("paths = %#v, want %#v", paths, want)
+	}
+
+	paths, err = scriptOutputPaths("ignored.png", root, "webp", 2, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = []string{filepath.Join(root, "image_1.webp"), filepath.Join(root, "image_2.webp")}
+	if !reflect.DeepEqual(paths, want) {
+		t.Fatalf("out-dir paths = %#v, want %#v", paths, want)
+	}
+}
+
+func TestValidateGPTImage2SizeMatchesCodexScript(t *testing.T) {
+	for _, size := range []string{"auto", "1024x1024", "2048x1152", "3840x2160"} {
+		if err := validateGPTImage2Size(size); err != nil {
+			t.Fatalf("valid size %q: %v", size, err)
+		}
+	}
+	for _, size := range []string{"1024", "1000x1000", "4096x4096", "256x256", "3840x1024"} {
+		if err := validateGPTImage2Size(size); err == nil {
+			t.Fatalf("expected invalid size %q", size)
 		}
 	}
 }

@@ -74,7 +74,9 @@ type reference struct {
 }
 
 func Shortcuts() []common.Shortcut {
-	return []common.Shortcut{generateShortcut(), editShortcut(), jobShortcut()}
+	legacyGenerate, legacyEdit, legacyJob := generateShortcut(), editShortcut(), jobShortcut()
+	legacyGenerate.Hidden, legacyEdit.Hidden, legacyJob.Hidden = true, true, true
+	return []common.Shortcut{scriptGenerateShortcut(), scriptEditShortcut(), scriptBatchShortcut(), legacyGenerate, legacyEdit, legacyJob}
 }
 
 func sharedFlags() []common.Flag {

@@ -9,5 +9,6 @@ import "github.com/larksuite/cli/internal/cmdutil"
 // without any changes. The real implementation lives in internal/cmdutil.
 type DryRunAPI = cmdutil.DryRunAPI
 type DryRunAPICall = cmdutil.DryRunAPICall
+type DryRunFileIntent = cmdutil.DryRunFileIntent
 
 var NewDryRunAPI = cmdutil.NewDryRunAPI
