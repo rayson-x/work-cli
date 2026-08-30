@@ -277,10 +277,31 @@ func TestStyleIdentifierNormalizationAndIdempotencyKey(t *testing.T) {
 	}
 }
 
+func TestStyleIdentifierMigrationPreservesClaimAndEvidence(t *testing.T) {
+	original := map[string]any{
+		"identifier_id":       "old-id",
+		"style":               "style-loser",
+		"issuer_or_scope":     "factory-a",
+		"identifier_kind":     "factory_style_code",
+		"value":               " xf-268466 ",
+		"supporting_evidence": []any{"evidence-1", "evidence-2"},
+	}
+	migrated := migratedStyleIdentifierFields(original, "style-winner")
+	if stringValue(migrated["style"]) != "style-winner" || stringValue(migrated["value"]) != "xf-268466" || stringValue(migrated["normalized_value"]) != "XF-268466" {
+		t.Fatalf("migrated identifier = %#v", migrated)
+	}
+	if stringValue(migrated["identifier_id"]) == "old-id" || styleIdentifierID(migrated) != stringValue(migrated["identifier_id"]) {
+		t.Fatalf("migrated identifier ID was not re-keyed: %#v", migrated)
+	}
+	if got := stringValues(migrated["supporting_evidence"]); len(got) != 2 || got[0] != "evidence-1" || got[1] != "evidence-2" {
+		t.Fatalf("supporting Evidence was not preserved: %#v", migrated)
+	}
+}
+
 func TestCandidateStyleDefaultsAndFiltering(t *testing.T) {
 	styleStatus, linkStatus := styleCreateStatuses(map[string]any{"style_status": "candidate"})
-	if styleStatus != "candidate" || linkStatus != "proposed" {
-		t.Fatalf("candidate defaults = (%q, %q), want (candidate, proposed)", styleStatus, linkStatus)
+	if styleStatus != "candidate" || linkStatus != "confirmed" {
+		t.Fatalf("candidate defaults = (%q, %q), want (candidate, confirmed)", styleStatus, linkStatus)
 	}
 	styleStatus, linkStatus = styleCreateStatuses(map[string]any{})
 	if styleStatus != "confirmed" || linkStatus != "confirmed" {
@@ -305,6 +326,34 @@ func TestCandidateStyleDefaultsAndFiltering(t *testing.T) {
 	filtered := filterRowsForTable(rows, map[string]any{"filters": map[string]any{"style_status": "candidate", "created_from_evidence_id": "evidence-1"}}, "Styles")
 	if len(filtered) != 1 || stringValue(filtered[0]["fields"].(map[string]any)["style_id"]) != "style-1" {
 		t.Fatalf("candidate Style filtering = %#v", filtered)
+	}
+}
+
+func TestNewEventInvariantRequiresConfirmedStyleInSameOperation(t *testing.T) {
+	event := func(payload map[string]any) map[string]any {
+		return map[string]any{"type": "event.create", "payload": payload}
+	}
+	style := func(payload map[string]any) map[string]any {
+		return map[string]any{"type": "style.create", "payload": payload}
+	}
+
+	if err := validateNewEventInvariants([]any{event(map[string]any{"summary": "received", "expression_mode": "fact", "evidence_ids": []any{"ev-1"}})}); err == nil {
+		t.Fatal("event without a confirmed Style link was accepted")
+	}
+	if err := validateNewEventInvariants([]any{event(map[string]any{"summary": "received", "expression_mode": "fact", "evidence_ids": []any{"ev-1"}, "style_ids": []any{"style-1"}})}); err != nil {
+		t.Fatalf("event with direct Style link was rejected: %v", err)
+	}
+	if err := validateNewEventInvariants([]any{
+		event(map[string]any{"event_id": "event-1", "summary": "received", "expression_mode": "fact", "evidence_ids": []any{"ev-1"}}),
+		style(map[string]any{"style_id": "style-1", "name": "Blue sample", "style_status": "candidate", "created_from_event_id": "event-1"}),
+	}); err != nil {
+		t.Fatalf("Event-backed candidate Style should confirm its origin link: %v", err)
+	}
+	if err := validateNewEventInvariants([]any{map[string]any{"type": "event.split", "payload": map[string]any{
+		"event_id": "event-old",
+		"events":   []any{map[string]any{"summary": "fact", "expression_mode": "fact", "evidence_ids": []any{"ev-1"}}},
+	}}}); err == nil {
+		t.Fatal("split child without a confirmed Style link was accepted")
 	}
 }
 

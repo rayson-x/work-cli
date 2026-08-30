@@ -287,6 +287,85 @@ func validateApply(_ context.Context, r *common.RuntimeContext) error {
 			return invalid("actions[%d]: %v", i, err)
 		}
 	}
+	if err := validateNewEventInvariants(actions); err != nil {
+		return invalid("%v", err)
+	}
+	return nil
+}
+
+// validateNewEventInvariants keeps incomplete Events out of the write model.
+// Existing Events may be relinked independently, but every Event created by
+// this operation must carry Evidence and reach a confirmed Style either
+// directly or through another action in the same payload.
+func validateNewEventInvariants(actions []any) error {
+	required := map[string]string{}
+	confirmed := map[string]bool{}
+
+	for actionIndex, raw := range actions {
+		action, _ := raw.(map[string]any)
+		payload, _ := action["payload"].(map[string]any)
+		switch stringValue(action["type"]) {
+		case "event.create":
+			if state := stringValue(payload["record_state"]); state != "" && state != "active" {
+				continue
+			}
+			key := stringValue(payload["event_id"])
+			if key == "" {
+				key = fmt.Sprintf("@event.create[%d]", actionIndex)
+			}
+			required[key] = fmt.Sprintf("actions[%d] event.create", actionIndex)
+			if len(actionIDs(payload, "style_ids", "style_id")) > 0 {
+				confirmed[key] = true
+			}
+		case "event.split":
+			items, _ := payload["events"].([]any)
+			for itemIndex, rawItem := range items {
+				item, _ := rawItem.(map[string]any)
+				if state := stringValue(item["record_state"]); state != "" && state != "active" {
+					continue
+				}
+				key := stringValue(item["event_id"])
+				if key == "" {
+					key = fmt.Sprintf("@event.split[%d].events[%d]", actionIndex, itemIndex)
+				}
+				required[key] = fmt.Sprintf("actions[%d] event.split events[%d]", actionIndex, itemIndex)
+				if len(actionIDs(item, "style_ids", "style_id")) > 0 {
+					confirmed[key] = true
+				}
+			}
+		}
+	}
+
+	for _, raw := range actions {
+		action, _ := raw.(map[string]any)
+		payload, _ := action["payload"].(map[string]any)
+		switch stringValue(action["type"]) {
+		case "style.create":
+			eventID := stringValue(payload["created_from_event_id"])
+			_, linkStatus := styleCreateStatuses(payload)
+			if eventID != "" && linkStatus == "confirmed" {
+				confirmed[eventID] = true
+			}
+		case "event_style.set":
+			eventID := stringValue(payload["event"])
+			if eventID == "" {
+				eventID = stringValue(payload["event_id"])
+			}
+			status := stringValue(payload["link_status"])
+			if status == "" {
+				status = stringValue(payload["status"])
+			}
+			if eventID != "" && status == "confirmed" {
+				confirmed[eventID] = true
+			}
+		}
+	}
+
+	for eventID, label := range required {
+		if !confirmed[eventID] {
+			return fmt.Errorf("%s requires at least one confirmed Style link in the same operation", label)
+		}
+	}
 	return nil
 }
 
@@ -394,6 +473,9 @@ func validateActionPayload(action string, p map[string]any) error {
 				}
 				if stringValue(item["summary"]) == "" || stringValue(item["expression_mode"]) == "" {
 					return fmt.Errorf("event.split events[%d] requires summary and expression_mode", index)
+				}
+				if state := stringValue(item["record_state"]); state != "" && state != "active" {
+					return fmt.Errorf("event.split events[%d] must be active", index)
 				}
 				if len(actionIDs(item, "evidence_ids", "evidence_id")) == 0 {
 					return fmt.Errorf("event.split events[%d] requires evidence_id or evidence_ids", index)
@@ -2158,7 +2240,7 @@ func applyAction(r *common.RuntimeContext, base string, tables map[string]tableI
 			}
 		}
 		for _, styleID := range actionIDs(p, "style_ids", "style_id") {
-			if _, err := styleLinkRecord(r, base, tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": stringValue(p["event_id"]), "style": styleID, "link_status": "proposed"})); err != nil {
+			if _, err := styleLinkRecord(r, base, tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": stringValue(p["event_id"]), "style": styleID, "link_status": "confirmed"})); err != nil {
 				return nil, err
 			}
 		}
@@ -2369,7 +2451,7 @@ func batchDescriptorFor(r *common.RuntimeContext, base string, tables map[string
 				effects = append(effects, linkBatchDescriptor(tables["EvidenceEventLinks"].ID, projectFields("EvidenceEventLinks", map[string]any{"evidence": evidenceID, "event": eventID}), "event.attach_evidence"))
 			}
 			for _, styleID := range actionIDs(p, "style_ids", "style_id") {
-				effects = append(effects, styleLinkBatchDescriptor(tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": eventID, "style": styleID, "link_status": "proposed"}), "event_style.set"))
+				effects = append(effects, styleLinkBatchDescriptor(tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": eventID, "style": styleID, "link_status": "confirmed"}), "event_style.set"))
 			}
 			if rels, ok := p["relations"].([]any); ok {
 				for _, rawRel := range rels {
@@ -2813,11 +2895,7 @@ func styleCreateStatuses(payload map[string]any) (styleStatus, linkStatus string
 	}
 	linkStatus = stringValue(payload["link_status"])
 	if linkStatus == "" {
-		if styleStatus == "candidate" {
-			linkStatus = "proposed"
-		} else {
-			linkStatus = "confirmed"
-		}
+		linkStatus = "confirmed"
 	}
 	return styleStatus, linkStatus
 }
@@ -3454,6 +3532,7 @@ func splitEvent(r *common.RuntimeContext, base string, tables map[string]tableIn
 			m["event_id"] = stableID(op + fmt.Sprintf(":event.split:%d:%s", index, mustJSON(m)))
 		}
 		m["created_operation_id"] = op
+		m["record_state"] = "active"
 		if m["revision"] == nil {
 			m["revision"] = 1
 		}
@@ -3469,7 +3548,7 @@ func splitEvent(r *common.RuntimeContext, base string, tables map[string]tableIn
 			}
 		}
 		for _, styleID := range actionIDs(m, "style_ids", "style_id") {
-			_, err = styleLinkRecord(r, base, tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": stringValue(m["event_id"]), "style": styleID, "link_status": "proposed"}))
+			_, err = styleLinkRecord(r, base, tables["EventStyleLinks"].ID, projectFields("EventStyleLinks", map[string]any{"event": stringValue(m["event_id"]), "style": styleID, "link_status": "confirmed"}))
 			if err != nil {
 				return nil, err
 			}
@@ -3580,6 +3659,9 @@ func mergeStyles(r *common.RuntimeContext, base string, tables map[string]tableI
 			}
 		}
 	}
+	if err := migrateStyleIdentifiers(r, base, tables, winner, resolvedLosers); err != nil {
+		return nil, err
+	}
 	var winnerRow map[string]any
 	aliases := []string{}
 	images := []any{}
@@ -3641,6 +3723,35 @@ func mergeStyles(r *common.RuntimeContext, base string, tables map[string]tableI
 		}
 	}
 	return map[string]any{"winner_id": winner, "merged_ids": resolvedLosers}, nil
+}
+
+func migrateStyleIdentifiers(r *common.RuntimeContext, base string, tables map[string]tableInfo, winner string, losers []any) error {
+	rows, err := listRecords(r, base, tables["StyleIdentifiers"].ID)
+	if err != nil {
+		return err
+	}
+	for _, row := range rows {
+		fields, _ := row["fields"].(map[string]any)
+		if !containsString(losers, stringValue(fields["style"])) {
+			continue
+		}
+		copyFields := migratedStyleIdentifierFields(fields, winner)
+		if _, err := upsertByComposite(r, base, tables["StyleIdentifiers"].ID, projectFields("StyleIdentifiers", copyFields), []string{"style", "issuer_or_scope", "identifier_kind", "normalized_value"}, "identifier_id"); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func migratedStyleIdentifierFields(fields map[string]any, winner string) map[string]any {
+	out := map[string]any{}
+	for key, value := range fields {
+		out[key] = value
+	}
+	out["style"] = winner
+	normalizeStyleIdentifierPayload(out)
+	out["identifier_id"] = styleIdentifierID(out)
+	return out
 }
 
 // A merge does not constitute confirmation. Preserve the winner's explicit
@@ -3810,7 +3921,7 @@ func executeStyleEvents(_ context.Context, r *common.RuntimeContext) error {
 	for _, row := range links {
 		f, _ := row["fields"].(map[string]any)
 		styleID := canonicalID(styles, "style_id", "canonical_style_id", stringValue(f["style"]))
-		if styleID == wanted && (stringValue(f["link_status"]) == "confirmed" || stringValue(f["link_status"]) == "proposed") {
+		if styleID == wanted && stringValue(f["link_status"]) == "confirmed" {
 			ids[canonicalID(events, "event_id", "canonical_event_id", stringValue(f["event"]))] = true
 		}
 	}
