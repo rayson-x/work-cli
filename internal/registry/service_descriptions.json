@@ -43,6 +43,10 @@
     "en": { "title": "Messenger", "description": "Message and group chat management" },
     "zh": { "title": "消息与群组", "description": "消息发送、群聊管理" }
   },
+  "image": {
+    "en": { "title": "Image", "description": "Generate and edit images through the Workline media service" },
+    "zh": { "title": "图片生成", "description": "通过 Workline 媒体服务生成和编辑图片" }
+  },
   "mail": {
     "en": { "title": "Mail", "description": "Email, draft, folder, and contacts management" },
     "zh": { "title": "邮箱", "description": "查看和管理用户邮箱数据，包括邮件、草稿、文件夹和联系人" }
