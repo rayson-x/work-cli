@@ -17,7 +17,7 @@ import (
 )
 
 // runRootUpgrade locates the registered `update` subcommand and runs it, so the
-// interactive root-command upgrade reuses exactly `lark-cli update` behavior
+// interactive root-command upgrade reuses exactly `work-cli update` behavior
 // (install-method detection, output, error handling). Package-level var so
 // tests can stub it and avoid real network / self-update.
 var runRootUpgrade = func(cmd *cobra.Command) {
@@ -31,7 +31,7 @@ var runRootUpgrade = func(cmd *cobra.Command) {
 
 var checkRootCachedUpdate = update.CheckCached
 
-// isBareRootInvocation reports whether this is a bare `lark-cli` (no subcommand,
+// isBareRootInvocation reports whether this is a bare `work-cli` (no subcommand,
 // no flags) — the only invocation that triggers the interactive upgrade prompt.
 // Mirrors unknownSubcommandRunE's "bare group prints help" branch: args empty
 // AND no flag tokens in the raw invocation.
@@ -77,11 +77,8 @@ func offerRootUpgrade(f *cmdutil.Factory, cmd *cobra.Command, projector *recover
 	// that is no longer the one npm would install. The version actually
 	// installed is resolved live by the update subcommand, which prints
 	// "Updating lark-cli <cur> -> <latest> via <pm> ..." before installing —
-	// that is where the user sees the real target. Keep going through the
-	// update subcommand rather than calling RunNpmInstall directly, otherwise
-	// that line disappears and the user approves a global install without ever
-	// being told what gets installed.
-	fmt.Fprintf(ios.ErrOut, "A newer lark-cli is available (current %s). Upgrade now? [y/N]: ", info.Current)
+	// that is where the user sees the real target.
+	fmt.Fprintf(ios.ErrOut, "A newer work-cli is available (current %s). Upgrade now? [y/N]: ", info.Current)
 	if !readYes(ios.In) {
 		return
 	}

@@ -50,7 +50,7 @@ func (i *updateExternalInterceptor) PreRoundTrip(req *http.Request) func(*http.R
 // preventing the host environment (e.g. CI=true) from polluting test results.
 func clearSkipEnv(t *testing.T) {
 	t.Helper()
-	for _, key := range []string{"LARKSUITE_CLI_NO_UPDATE_NOTIFIER", "CI", "BUILD_NUMBER", "RUN_ID"} {
+	for _, key := range []string{"WORK_CLI_NO_UPDATE_NOTIFIER", "LARKSUITE_CLI_NO_UPDATE_NOTIFIER", "CI", "BUILD_NUMBER", "RUN_ID"} {
 		t.Setenv(key, "")
 		os.Unsetenv(key)
 	}
@@ -198,7 +198,7 @@ func TestIsRelease(t *testing.T) {
 func TestUpdateInfoMethods(t *testing.T) {
 	info := &UpdateInfo{Current: "1.0.0", Latest: "2.0.0"}
 	got := info.Message()
-	want := "lark-cli 2.0.0 available, current 1.0.0, run: lark-cli update"
+	want := "work-cli 2.0.0 available, current 1.0.0, run: work-cli update"
 	if got != want {
 		t.Errorf("Message() = %q, want %q", got, want)
 	}
@@ -240,9 +240,9 @@ func TestRefreshCache(t *testing.T) {
 	tmp := t.TempDir()
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", tmp)
 
-	// Set up mock npm registry via DefaultClient
+	// Set up a mock GitHub release response via DefaultClient.
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(npmLatestResponse{Version: "3.0.0"})
+		json.NewEncoder(w).Encode(githubLatestRelease{TagName: "v3.0.0"})
 	}))
 	defer srv.Close()
 

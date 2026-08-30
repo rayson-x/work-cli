@@ -170,9 +170,8 @@ func setupNotices(plan *surface.Plan) {
 			}
 		}()
 
-		// Skills drift has only one recovery action: lark-cli update. Do not
-		// even inspect local drift state when that action is absent.
-		initializeSkillsCheck(build.Version)
+		// Workline skills are released separately from the binary. Do not attach
+		// the upstream bundled-skills drift notice to this distribution.
 	}
 
 	// Capture this build's immutable plan; never consult another Build's state.
@@ -189,14 +188,14 @@ func composePendingNotice(plan *surface.Plan) map[string]interface{} {
 	notice := map[string]interface{}{}
 	canUpdate := plan.CanReference(surface.CommandUpdate)
 	// Update and skills-drift notices have no recovery path of their own:
-	// both exist solely to steer the caller to `lark-cli update`.
+	// both exist solely to steer the caller to `work-cli update`.
 	if canUpdate {
 		if info := update.GetPending(); info != nil {
 			notice["update"] = map[string]interface{}{
 				"current": info.Current,
 				"latest":  info.Latest,
 				"message": info.Message(),
-				"command": "lark-cli update",
+				"command": "work-cli update",
 			}
 		}
 		if stale := skillscheck.GetPending(); stale != nil {

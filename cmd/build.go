@@ -307,7 +307,7 @@ func buildInternalWithConfig(ctx context.Context, inv cmdutil.InvocationContext,
 		return runtime.surface.CanReference(surface.CommandID(strings.Join(path, "/")))
 	}, nil))
 	rootCmd.AddCommand(completion.NewCmdCompletion(f))
-	rootCmd.AddCommand(cmdupdate.NewCmdUpdate(f))
+	rootCmd.AddCommand(cmdupdate.NewCmdWorklineUpdate(f))
 	rootCmd.AddCommand(cmdevent.NewCmdEvents(f))
 	rootCmd.AddCommand(skill.NewCmdSkill(f))
 	if !cfg.skipService {
@@ -326,7 +326,7 @@ func buildInternalWithConfig(ctx context.Context, inv cmdutil.InvocationContext,
 	classifyRootCommands(rootCmd)
 
 	installUnknownSubcommandGuard(rootCmd)
-	// Bare `lark-cli` in an interactive terminal offers an interactive upgrade
+	// Bare `work-cli` in an interactive terminal offers an interactive upgrade
 	// before printing help; non-bare invocations and non-TTY are unaffected.
 	installRootUpgradePrompt(f, rootCmd, runtime.recovery)
 

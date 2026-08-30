@@ -23,11 +23,11 @@ import (
 )
 
 const (
-	registryURL  = "https://registry.npmjs.org/@larksuite/cli/latest"
-	cacheTTL     = 24 * time.Hour
-	fetchTimeout = 15 * time.Second
-	stateFile    = "update-state.json"
-	maxBody      = 256 << 10 // 256 KB
+	releaseAPIURL = "https://api.github.com/repos/rayson-x/work-cli/releases/latest"
+	cacheTTL      = 24 * time.Hour
+	fetchTimeout  = 15 * time.Second
+	stateFile     = "work-cli-update-state.json"
+	maxBody       = 256 << 10 // 256 KB
 
 )
 
@@ -38,11 +38,9 @@ type UpdateInfo struct {
 }
 
 // Message returns a concise update notification including the canonical
-// fix command. Aligned with skillscheck.StaleNotice.Message style so
-// AI agents can parse a unified "run: lark-cli update" hint across
-// both notice types.
+// fix command.
 func (u *UpdateInfo) Message() string {
-	return fmt.Sprintf("lark-cli %s available, current %s, run: lark-cli update", u.Latest, u.Current)
+	return fmt.Sprintf("work-cli %s available, current %s, run: work-cli update", u.Latest, u.Current)
 }
 
 // pending stores the latest update info for the current process.
@@ -54,7 +52,7 @@ func SetPending(info *UpdateInfo) { pending.Store(info) }
 // GetPending returns the pending update info, or nil.
 func GetPending() *UpdateInfo { return pending.Load() }
 
-// DefaultClient is the HTTP client used for npm registry requests.
+// DefaultClient is the HTTP client used for GitHub release requests.
 // Override in tests with an httptest server client.
 var DefaultClient *http.Client
 
@@ -86,7 +84,7 @@ func CheckCached(currentVersion string) *UpdateInfo {
 	return &UpdateInfo{Current: currentVersion, Latest: state.LatestVersion}
 }
 
-// RefreshCache fetches the latest version from npm and updates the local cache.
+// RefreshCache fetches the latest Workline release and updates the local cache.
 // No-op if the cache is still fresh (< 24h). Safe to call from a goroutine.
 func RefreshCache(currentVersion string) {
 	if shouldSkip(currentVersion) {
@@ -107,7 +105,7 @@ func RefreshCache(currentVersion string) {
 }
 
 func shouldSkip(version string) bool {
-	if os.Getenv("LARKSUITE_CLI_NO_UPDATE_NOTIFIER") != "" {
+	if os.Getenv("WORK_CLI_NO_UPDATE_NOTIFIER") != "" || os.Getenv("LARKSUITE_CLI_NO_UPDATE_NOTIFIER") != "" {
 		return true
 	}
 	// Suppress in CI environments.
@@ -187,27 +185,33 @@ func saveState(s *updateState) error {
 	return validate.AtomicWrite(statePath(), data, 0644)
 }
 
-// FetchLatest queries the npm registry and returns the latest published version.
+// FetchLatest queries the Workline GitHub releases and returns the latest version.
 // This is a synchronous call with timeout, intended for diagnostic commands (doctor).
 func FetchLatest() (string, error) {
 	return fetchLatestVersion()
 }
 
-// --- npm registry ---
+// --- GitHub releases ---
 
-type npmLatestResponse struct {
-	Version string `json:"version"`
+type githubLatestRelease struct {
+	TagName string `json:"tag_name"`
 }
 
 func fetchLatestVersion() (string, error) {
-	resp, err := httpClient().Get(registryURL)
+	req, err := http.NewRequest(http.MethodGet, releaseAPIURL, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Accept", "application/vnd.github+json")
+	req.Header.Set("User-Agent", "work-cli-update-check")
+	resp, err := httpClient().Do(req)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("npm registry: HTTP %d", resp.StatusCode)
+		return "", fmt.Errorf("GitHub releases: HTTP %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(io.LimitReader(resp.Body, maxBody))
@@ -215,14 +219,15 @@ func fetchLatestVersion() (string, error) {
 		return "", err
 	}
 
-	var result npmLatestResponse
+	var result githubLatestRelease
 	if err := json.Unmarshal(body, &result); err != nil {
 		return "", err
 	}
-	if result.Version == "" {
-		return "", fmt.Errorf("npm registry: empty version")
+	version := strings.TrimPrefix(strings.TrimSpace(result.TagName), "v")
+	if version == "" || ParseVersion(version) == nil {
+		return "", fmt.Errorf("GitHub releases: invalid tag_name")
 	}
-	return result.Version, nil
+	return version, nil
 }
 
 // --- semver helpers ---
