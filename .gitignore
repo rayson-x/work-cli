@@ -59,3 +59,4 @@ lark-env.sh
 
 # Local Workline analysis inputs may contain private chat media and drafts.
 /workline-inputs/
+/output/

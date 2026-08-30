@@ -28,6 +28,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/drive"
 	"github.com/larksuite/cli/shortcuts/event"
 	"github.com/larksuite/cli/shortcuts/im"
+	"github.com/larksuite/cli/shortcuts/imagegen"
 	"github.com/larksuite/cli/shortcuts/mail"
 	"github.com/larksuite/cli/shortcuts/markdown"
 	"github.com/larksuite/cli/shortcuts/minutes"
@@ -76,6 +77,7 @@ func init() {
 	allShortcuts = append(allShortcuts, doc.Shortcuts()...)
 	allShortcuts = append(allShortcuts, drive.Shortcuts()...)
 	allShortcuts = append(allShortcuts, im.Shortcuts()...)
+	allShortcuts = append(allShortcuts, imagegen.Shortcuts()...)
 	allShortcuts = append(allShortcuts, contact_shortcuts.Shortcuts()...)
 	allShortcuts = append(allShortcuts, sheets.Shortcuts()...)
 	// Backward-compatible sheets shortcuts (pre-refactor command names),

@@ -14,7 +14,18 @@ After extraction, verify the required interface with:
 ```text
 work-cli --version
 work-cli workline --help
+work-cli image --help
 ```
+
+Image generation and editing use the Workline service through synchronous CLI commands. The service endpoint is compiled into this distribution; the current build reads `WORKLINE_MEDIA_API_KEY` from the environment.
+
+```text
+work-cli image +generate --prompt <text> [--reference <path=role>] [--out-dir <directory>]
+work-cli image +edit --input <image> --prompt <text> [--out-dir <directory>]
+work-cli image +job --task-ref <task_ref> [--wait]
+```
+
+`+generate` and `+edit` wait for the asynchronous server task, download every completed output, and return its absolute local path in `data.outputs[].path`.
 
 The project is forked from the official [larksuite/cli](https://github.com/larksuite/cli); the upstream documentation below still applies to the retained Feishu/Lark commands. Use `work-cli` in place of the upstream executable name.
 
