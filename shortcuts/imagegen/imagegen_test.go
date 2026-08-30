@@ -105,6 +105,43 @@ func TestImageClientUploadsWaitsAndDownloadsLocalFile(t *testing.T) {
 	}
 }
 
+func TestValidateImageOptionsMatchesServerContract(t *testing.T) {
+	valid := []struct {
+		size        string
+		format      string
+		background  string
+		transparent bool
+	}{
+		{size: ""},
+		{size: "auto"},
+		{size: "1024x1536", format: "png", background: "transparent"},
+		{size: "4000x4000", format: "webp"},
+	}
+	for _, test := range valid {
+		if err := validateImageOptions(test.size, test.format, test.background, test.transparent); err != nil {
+			t.Fatalf("valid options %#v: %v", test, err)
+		}
+	}
+
+	invalid := []struct {
+		size        string
+		format      string
+		background  string
+		transparent bool
+	}{
+		{size: "1024"},
+		{size: "0x1024"},
+		{size: "4001x4000"},
+		{format: "jpeg", background: "transparent"},
+		{format: "jpeg", transparent: true},
+	}
+	for _, test := range invalid {
+		if err := validateImageOptions(test.size, test.format, test.background, test.transparent); err == nil {
+			t.Fatalf("expected invalid options %#v", test)
+		}
+	}
+}
+
 func writeJSON(t *testing.T, w http.ResponseWriter, value any) {
 	t.Helper()
 	w.Header().Set("Content-Type", "application/json")

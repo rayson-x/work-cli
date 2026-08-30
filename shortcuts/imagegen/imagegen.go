@@ -82,6 +82,10 @@ func sharedFlags() []common.Flag {
 		{Name: "prompt", Desc: "Image request; accepts @file or stdin", Required: true, Input: []string{common.File, common.Stdin}},
 		{Name: "reference", Type: "string_array", Desc: "Reference image as path=role; repeat up to five times"},
 		{Name: "variants", Type: "int", Default: "1", Desc: "Number of image variants (1-8)"},
+		{Name: "size", Desc: "Optional output size: auto or WIDTHxHEIGHT"},
+		{Name: "quality", Desc: "Optional quality", Enum: []string{"low", "medium", "high", "auto"}},
+		{Name: "background", Desc: "Optional background mode"},
+		{Name: "output-format", Desc: "Output format", Enum: []string{"png", "jpeg", "webp"}},
 		{Name: "out-dir", Default: "output/imagegen", Desc: "Directory for downloaded images"},
 	}
 }
@@ -98,10 +102,6 @@ func editShortcut() common.Shortcut {
 	flags := append(sharedFlags(),
 		common.Flag{Name: "input", Desc: "Image to edit", Required: true},
 		common.Flag{Name: "mask", Desc: "Optional edit mask"},
-		common.Flag{Name: "size", Desc: "Optional output size"},
-		common.Flag{Name: "quality", Desc: "Optional quality", Enum: []string{"low", "medium", "high", "auto"}},
-		common.Flag{Name: "background", Desc: "Optional background mode"},
-		common.Flag{Name: "output-format", Desc: "Output format", Enum: []string{"png", "jpeg", "webp"}},
 	)
 	return common.Shortcut{
 		Service: "image", Command: "+edit", Description: "Edit an image and wait for the local result", Risk: "write",
@@ -123,7 +123,10 @@ func jobShortcut() common.Shortcut {
 }
 
 func validateGenerate(_ context.Context, r *common.RuntimeContext) error {
-	return validateShared(r, nil)
+	if err := validateShared(r, nil); err != nil {
+		return err
+	}
+	return validateImageOptions(r.Str("size"), r.Str("output-format"), r.Str("background"), r.Bool("transparent"))
 }
 
 func validateEdit(_ context.Context, r *common.RuntimeContext) error {
@@ -139,7 +142,10 @@ func validateEdit(_ context.Context, r *common.RuntimeContext) error {
 			return err
 		}
 	}
-	return validateShared(r, &reference{Path: input, Role: "edit_target"})
+	if err := validateShared(r, &reference{Path: input, Role: "edit_target"}); err != nil {
+		return err
+	}
+	return validateImageOptions(r.Str("size"), r.Str("output-format"), r.Str("background"), false)
 }
 
 func validateShared(r *common.RuntimeContext, primary *reference) error {
@@ -173,6 +179,7 @@ func executeGenerate(ctx context.Context, r *common.RuntimeContext) error {
 	request := map[string]any{
 		"operation": "generate", "prompt": strings.TrimSpace(r.Str("prompt")), "variant_count": r.Int("variants"),
 	}
+	addImageOptions(request, r)
 	if r.Bool("transparent") {
 		request["transparent_background"] = true
 	}
@@ -185,12 +192,16 @@ func executeEdit(ctx context.Context, r *common.RuntimeContext) error {
 	request := map[string]any{
 		"operation": "edit", "prompt": strings.TrimSpace(r.Str("prompt")), "variant_count": r.Int("variants"),
 	}
+	addImageOptions(request, r)
+	return executeImage(ctx, r, request, refs, strings.TrimSpace(r.Str("mask")))
+}
+
+func addImageOptions(request map[string]any, r *common.RuntimeContext) {
 	for flag, field := range map[string]string{"size": "size", "quality": "quality", "background": "background", "output-format": "output_format"} {
 		if value := strings.TrimSpace(r.Str(flag)); value != "" {
 			request[field] = value
 		}
 	}
-	return executeImage(ctx, r, request, refs, strings.TrimSpace(r.Str("mask")))
 }
 
 func executeImage(ctx context.Context, r *common.RuntimeContext, request map[string]any, refs []reference, mask string) error {
@@ -514,6 +525,22 @@ func parseReferences(values []string) ([]reference, error) {
 		result = append(result, reference{Path: path, Role: role})
 	}
 	return result, nil
+}
+
+func validateImageOptions(size, outputFormat, background string, transparent bool) error {
+	size = strings.TrimSpace(size)
+	if size != "" && size != "auto" {
+		widthText, heightText, ok := strings.Cut(size, "x")
+		width, widthErr := strconv.ParseInt(widthText, 10, 64)
+		height, heightErr := strconv.ParseInt(heightText, 10, 64)
+		if !ok || widthErr != nil || heightErr != nil || width < 1 || height < 1 || width > 16_000_000/height {
+			return invalid("--size must be auto or WIDTHxHEIGHT with at most 16000000 pixels")
+		}
+	}
+	if strings.TrimSpace(outputFormat) == "jpeg" && (transparent || strings.TrimSpace(background) == "transparent") {
+		return invalid("JPEG output cannot use a transparent background")
+	}
+	return nil
 }
 
 func requireRegularFile(path, flag string) error {
