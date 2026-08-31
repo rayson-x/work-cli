@@ -90,3 +90,18 @@ func TestWechatReturnsRuntimeFailure(t *testing.T) {
 		t.Fatal("expected runtime error")
 	}
 }
+
+func TestWechatHelpWithoutReaderIsSuccessful(t *testing.T) {
+	t.Cleanup(resetForTest)
+	ensureRuntime = func() (string, error) { return "", errors.New("unavailable") }
+	command := NewCmd()
+	var stdout bytes.Buffer
+	command.SetOut(&stdout)
+	command.SetArgs([]string{"--help"})
+	if err := command.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if stdout.Len() == 0 {
+		t.Fatal("expected fallback help")
+	}
+}

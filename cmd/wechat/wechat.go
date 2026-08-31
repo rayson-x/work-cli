@@ -33,6 +33,10 @@ func NewCmd() *cobra.Command {
 			}
 			path, err := ensureRuntime()
 			if err != nil {
+				if isHelp(args) {
+					fmt.Fprintln(cmd.OutOrStdout(), "Read local WeChat messages and export available files.\n\nUse `work-cli wechat <command> --help` on a supported desktop for the current reader commands.")
+					return nil
+				}
 				return errs.NewConfigError(errs.SubtypeNotConfigured, "%s", err).
 					WithHint("run `work-cli update` and retry")
 			}
@@ -62,6 +66,10 @@ func NewCmd() *cobra.Command {
 		}
 	})
 	return command
+}
+
+func isHelp(args []string) bool {
+	return len(args) == 1 && (args[0] == "--help" || args[0] == "-h")
 }
 
 func run(ctx context.Context, path string, args []string, input io.Reader, stdout, stderr io.Writer) error {
