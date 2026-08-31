@@ -285,7 +285,7 @@ func newAPIClient(r *common.RuntimeContext) (*apiClient, error) {
 	}
 	if key == "" {
 		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured", worklineauth.MediaAPIKeyEnv).
-			WithHint("run `work-cli auth login`, or configure the Workline media API key and retry")
+			WithHint("run `work-cli auth login` and retry")
 	}
 	base, err := url.Parse(worklineauth.ServerURL())
 	if err != nil || base.Scheme == "" || base.Host == "" {

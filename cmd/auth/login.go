@@ -513,9 +513,8 @@ func authLoginPollDeviceCode(opts *LoginOptions, config *core.CliConfig, msg *lo
 	return nil
 }
 
-// ensureWorklineMediaLogin provisions the Workline media credential after the
-// Feishu device flow and requested-scope validation complete, but before the
-// Feishu login state is persisted. A failure therefore fails the whole login.
+// ensureWorklineMediaLogin prepares Workline access before login state is
+// persisted. A failure therefore fails the whole login.
 func ensureWorklineMediaLogin(ctx context.Context, f *cmdutil.Factory, config *core.CliConfig, openID, accessToken string) (bool, error) {
 	client, err := f.ExternalHTTPClient()
 	if err != nil {

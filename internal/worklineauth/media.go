@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package worklineauth manages the local credential used for Workline media.
+// Package worklineauth manages local Workline access state.
 package worklineauth
 
 import (
@@ -20,10 +20,10 @@ import (
 
 const (
 	DefaultMediaServerURL = "http://54.151.241.139:3000"
-	MediaServerURLEnv = "WORKLINE_MEDIA_SERVER_URL"
-	MediaAPIKeyEnv    = "WORKLINE_MEDIA_API_KEY"
-	disabledServerURL  = "off"
-	mediaKeyPrefix    = "workline-media:v1"
+	MediaServerURLEnv     = "WORKLINE_MEDIA_SERVER_URL"
+	MediaAPIKeyEnv        = "WORKLINE_MEDIA_API_KEY"
+	disabledServerURL     = "off"
+	mediaKeyPrefix        = "workline-media:v1"
 )
 
 // ServerURL returns the built-in Workline media endpoint, unless an operator
@@ -37,41 +37,38 @@ func ServerURL() string {
 	return DefaultMediaServerURL
 }
 
-// APIKey returns the locally stored Workline media key for one Feishu account.
+// APIKey returns locally stored Workline access state for one account.
 func APIKey(store keychain.KeychainAccess, appID, openID string) (string, error) {
 	if store == nil {
 		return "", errs.NewInternalError(errs.SubtypeStorage, "local keychain is unavailable")
 	}
 	key, err := store.Get(keychain.LarkCliService, account(appID, openID))
 	if err != nil {
-		return "", errs.NewInternalError(errs.SubtypeStorage, "read Workline media API key from keychain failed").WithCause(err)
+		return "", errs.NewInternalError(errs.SubtypeStorage, "read Workline access state from credential storage failed").WithCause(err)
 	}
 	return strings.TrimSpace(key), nil
 }
 
-// RemoveAPIKey clears the local Workline media credential for one Feishu
-// account. Server-side revocation remains an administrator operation.
+// RemoveAPIKey clears local Workline access state for one account.
 func RemoveAPIKey(store keychain.KeychainAccess, appID, openID string) error {
 	if store == nil {
 		return errs.NewInternalError(errs.SubtypeStorage, "local keychain is unavailable")
 	}
 	if err := store.Remove(keychain.LarkCliService, account(appID, openID)); err != nil {
-		return errs.NewInternalError(errs.SubtypeStorage, "remove Workline media API key from keychain failed").WithCause(err)
+		return errs.NewInternalError(errs.SubtypeStorage, "remove Workline access state from credential storage failed").WithCause(err)
 	}
 	return nil
 }
 
-// EnsureAPIKey exchanges a completed Feishu user token for a Workline media
-// key once. Its first return value reports whether this call stored a newly
-// issued key. It is a no-op when no Workline endpoint is configured or a key
-// is already stored for this app/user pair.
+// EnsureAPIKey prepares local Workline access after login. Its first return
+// value reports whether this call stored new local state.
 func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.KeychainAccess, appID, openID, feishuToken string) (bool, error) {
 	rawURL := ServerURL()
 	if rawURL == "" {
 		return false, nil
 	}
 	if strings.TrimSpace(feishuToken) == "" {
-		return false, errs.NewAuthenticationError(errs.SubtypeTokenMissing, "cannot connect Workline media without a Feishu user token")
+		return false, errs.NewAuthenticationError(errs.SubtypeTokenMissing, "Workline access requires `work-cli auth login`")
 	}
 	if client == nil {
 		return false, errs.NewInternalError(errs.SubtypeSDKError, "HTTP client is unavailable")
@@ -96,7 +93,7 @@ func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.Keych
 	req.Header.Set("Accept", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkTransport, "connect Workline media account: %v", err).WithCause(err).WithRetryable()
+		return false, errs.NewNetworkError(errs.SubtypeNetworkTransport, "connect to Workline: %v", err).WithCause(err).WithRetryable()
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
@@ -106,13 +103,13 @@ func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.Keych
 		APIKey string `json:"api_key"`
 	}
 	if err := json.NewDecoder(io.LimitReader(resp.Body, 1<<20)).Decode(&result); err != nil {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "decode Workline media login response: %v", err).WithCause(err)
+		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "decode Workline response: %v", err).WithCause(err)
 	}
 	if strings.TrimSpace(result.APIKey) == "" {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "Workline media login response has no api_key")
+		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "Workline access response is incomplete")
 	}
 	if err := store.Set(keychain.LarkCliService, account(appID, openID), result.APIKey); err != nil {
-		return false, errs.NewInternalError(errs.SubtypeStorage, "save Workline media API key to keychain failed").WithCause(err)
+		return false, errs.NewInternalError(errs.SubtypeStorage, "save Workline access state to credential storage failed").WithCause(err)
 	}
 	return true, nil
 }
@@ -140,14 +137,14 @@ func exchangeError(resp *http.Response) error {
 	_ = json.NewDecoder(io.LimitReader(resp.Body, 1<<20)).Decode(&payload)
 	message := strings.TrimSpace(payload.Error.Message)
 	if message == "" {
-		message = fmt.Sprintf("Workline media login returned HTTP %d", resp.StatusCode)
+		message = fmt.Sprintf("Workline request returned HTTP %d", resp.StatusCode)
 	}
 	switch resp.StatusCode {
 	case http.StatusUnauthorized:
-		return errs.NewAuthenticationError(errs.SubtypeTokenInvalid, "Workline media rejected the Feishu user token: %s", message)
+		return errs.NewAuthenticationError(errs.SubtypeTokenInvalid, "Workline access was rejected: %s", message)
 	case http.StatusForbidden:
-		return errs.NewPermissionError(errs.SubtypePermissionDenied, "Workline media account is not allowed: %s", message).
-			WithHint("ask a Workline administrator to add your Feishu user ID to FEISHU_ALLOWED_USER_IDS")
+		return errs.NewPermissionError(errs.SubtypePermissionDenied, "Workline access is not available: %s", message).
+			WithHint("contact the Workline administrator")
 	case http.StatusTooManyRequests:
 		return errs.NewAPIError(errs.SubtypeRateLimit, "%s", message).WithRetryable()
 	default:

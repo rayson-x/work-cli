@@ -100,7 +100,7 @@ func authLogoutRun(opts *LogoutOptions) error {
 			fmt.Fprintf(f.IOStreams.ErrOut, "Warning: failed to remove token for %s: %v\n", user.UserOpenId, err)
 		}
 		if err := worklineauth.RemoveAPIKey(f.Keychain, app.AppId, user.UserOpenId); err != nil {
-			fmt.Fprintln(f.IOStreams.ErrOut, "Warning: failed to remove local Workline media credential")
+			fmt.Fprintln(f.IOStreams.ErrOut, "Warning: failed to complete local logout cleanup")
 		}
 	}
 
