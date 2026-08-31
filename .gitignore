@@ -60,3 +60,6 @@ lark-env.sh
 # Local Workline analysis inputs may contain private chat media and drafts.
 /workline-inputs/
 /output/
+
+# Downloaded only by the release bundling step; never commit private/runtime binaries.
+/internal/wechatruntime/assets/

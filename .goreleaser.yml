@@ -5,6 +5,8 @@ project_name: work-cli
 builds:
   - id: work-cli
     binary: work-cli
+    flags:
+      - -tags=bundled_wechat
     env:
       - CGO_ENABLED=0
     ldflags:

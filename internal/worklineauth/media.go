@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package worklineauth manages local Workline access state.
+// Package worklineauth manages local media access state.
 package worklineauth
 
 import (
@@ -26,7 +26,7 @@ const (
 	mediaKeyPrefix        = "workline-media:v1"
 )
 
-// ServerURL returns the built-in Workline media endpoint, unless an operator
+// ServerURL returns the built-in media address, unless an operator
 // supplies an environment override.
 func ServerURL() string {
 	if configured := strings.TrimSpace(os.Getenv(MediaServerURLEnv)); configured == disabledServerURL {
@@ -37,30 +37,30 @@ func ServerURL() string {
 	return DefaultMediaServerURL
 }
 
-// APIKey returns locally stored Workline access state for one account.
+// APIKey returns locally stored media access state for one account.
 func APIKey(store keychain.KeychainAccess, appID, openID string) (string, error) {
 	if store == nil {
 		return "", errs.NewInternalError(errs.SubtypeStorage, "local keychain is unavailable")
 	}
 	key, err := store.Get(keychain.LarkCliService, account(appID, openID))
 	if err != nil {
-		return "", errs.NewInternalError(errs.SubtypeStorage, "read Workline access state from credential storage failed").WithCause(err)
+		return "", errs.NewInternalError(errs.SubtypeStorage, "read media access state from credential storage failed").WithCause(err)
 	}
 	return strings.TrimSpace(key), nil
 }
 
-// RemoveAPIKey clears local Workline access state for one account.
+// RemoveAPIKey clears local media access state for one account.
 func RemoveAPIKey(store keychain.KeychainAccess, appID, openID string) error {
 	if store == nil {
 		return errs.NewInternalError(errs.SubtypeStorage, "local keychain is unavailable")
 	}
 	if err := store.Remove(keychain.LarkCliService, account(appID, openID)); err != nil {
-		return errs.NewInternalError(errs.SubtypeStorage, "remove Workline access state from credential storage failed").WithCause(err)
+		return errs.NewInternalError(errs.SubtypeStorage, "remove media access state from credential storage failed").WithCause(err)
 	}
 	return nil
 }
 
-// EnsureAPIKey prepares local Workline access after login. Its first return
+// EnsureAPIKey prepares local media access after login. Its first return
 // value reports whether this call stored new local state.
 func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.KeychainAccess, appID, openID, feishuToken string) (bool, error) {
 	rawURL := ServerURL()
@@ -68,7 +68,7 @@ func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.Keych
 		return false, nil
 	}
 	if strings.TrimSpace(feishuToken) == "" {
-		return false, errs.NewAuthenticationError(errs.SubtypeTokenMissing, "Workline access requires `work-cli auth login`")
+		return false, errs.NewAuthenticationError(errs.SubtypeTokenMissing, "media access requires `work-cli auth login`")
 	}
 	if client == nil {
 		return false, errs.NewInternalError(errs.SubtypeSDKError, "HTTP client is unavailable")
@@ -87,13 +87,13 @@ func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.Keych
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint.String(), nil)
 	if err != nil {
-		return false, errs.NewInternalError(errs.SubtypeInvalidResponse, "build Workline media login request: %v", err).WithCause(err)
+		return false, errs.NewInternalError(errs.SubtypeInvalidResponse, "prepare media access request: %v", err).WithCause(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+feishuToken)
 	req.Header.Set("Accept", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkTransport, "connect to Workline: %v", err).WithCause(err).WithRetryable()
+		return false, errs.NewNetworkError(errs.SubtypeNetworkTransport, "connect to media service: %v", err).WithCause(err).WithRetryable()
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
@@ -103,13 +103,13 @@ func EnsureAPIKey(ctx context.Context, client *http.Client, store keychain.Keych
 		APIKey string `json:"api_key"`
 	}
 	if err := json.NewDecoder(io.LimitReader(resp.Body, 1<<20)).Decode(&result); err != nil {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "decode Workline response: %v", err).WithCause(err)
+		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "read media access response: %v", err).WithCause(err)
 	}
 	if strings.TrimSpace(result.APIKey) == "" {
-		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "Workline access response is incomplete")
+		return false, errs.NewNetworkError(errs.SubtypeNetworkProtocol, "media access response is incomplete")
 	}
 	if err := store.Set(keychain.LarkCliService, account(appID, openID), result.APIKey); err != nil {
-		return false, errs.NewInternalError(errs.SubtypeStorage, "save Workline access state to credential storage failed").WithCause(err)
+		return false, errs.NewInternalError(errs.SubtypeStorage, "save media access state to credential storage failed").WithCause(err)
 	}
 	return true, nil
 }
@@ -137,14 +137,14 @@ func exchangeError(resp *http.Response) error {
 	_ = json.NewDecoder(io.LimitReader(resp.Body, 1<<20)).Decode(&payload)
 	message := strings.TrimSpace(payload.Error.Message)
 	if message == "" {
-		message = fmt.Sprintf("Workline request returned HTTP %d", resp.StatusCode)
+		message = fmt.Sprintf("media service returned HTTP %d", resp.StatusCode)
 	}
 	switch resp.StatusCode {
 	case http.StatusUnauthorized:
-		return errs.NewAuthenticationError(errs.SubtypeTokenInvalid, "Workline access was rejected: %s", message)
+		return errs.NewAuthenticationError(errs.SubtypeTokenInvalid, "media access was rejected: %s", message)
 	case http.StatusForbidden:
-		return errs.NewPermissionError(errs.SubtypePermissionDenied, "Workline access is not available: %s", message).
-			WithHint("contact the Workline administrator")
+		return errs.NewPermissionError(errs.SubtypePermissionDenied, "media access is not available: %s", message).
+			WithHint("contact the workspace administrator")
 	case http.StatusTooManyRequests:
 		return errs.NewAPIError(errs.SubtypeRateLimit, "%s", message).WithRetryable()
 	default:

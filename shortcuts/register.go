@@ -48,6 +48,7 @@ import (
 // is `slides`, so the invocation died before the subcommand was even considered.
 var serviceAliases = map[string][]string{
 	"slides": {"slide"},
+	"track":  {"tracking"},
 }
 
 // Empty brand (no config loaded) is treated as no-restriction so bootstrap
@@ -98,6 +99,7 @@ func init() {
 	allShortcuts = append(allShortcuts, wiki.Shortcuts()...)
 	allShortcuts = append(allShortcuts, okr.Shortcuts()...)
 	allShortcuts = append(allShortcuts, workline.Shortcuts()...)
+	allShortcuts = append(allShortcuts, workline.LegacyShortcuts()...)
 }
 
 // AllShortcuts returns an isolated copy of all registered shortcuts.

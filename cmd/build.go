@@ -15,11 +15,13 @@ import (
 	cmdconfig "github.com/larksuite/cli/cmd/config"
 	"github.com/larksuite/cli/cmd/doctor"
 	cmdevent "github.com/larksuite/cli/cmd/event"
+	"github.com/larksuite/cli/cmd/media"
 	"github.com/larksuite/cli/cmd/profile"
 	"github.com/larksuite/cli/cmd/schema"
 	"github.com/larksuite/cli/cmd/service"
 	"github.com/larksuite/cli/cmd/skill"
 	cmdupdate "github.com/larksuite/cli/cmd/update"
+	"github.com/larksuite/cli/cmd/wechat"
 	"github.com/larksuite/cli/cmd/whoami"
 	"github.com/larksuite/cli/extension/command"
 	"github.com/larksuite/cli/internal/affordance"
@@ -308,7 +310,9 @@ func buildInternalWithConfig(ctx context.Context, inv cmdutil.InvocationContext,
 	}, nil))
 	rootCmd.AddCommand(completion.NewCmdCompletion(f))
 	rootCmd.AddCommand(cmdupdate.NewCmdWorklineUpdate(f))
+	rootCmd.AddCommand(wechat.NewCmd())
 	rootCmd.AddCommand(cmdevent.NewCmdEvents(f))
+	rootCmd.AddCommand(media.NewCmdMedia(f))
 	rootCmd.AddCommand(skill.NewCmdSkill(f))
 	if !cfg.skipService {
 		if cfg.serviceCatalog != nil {

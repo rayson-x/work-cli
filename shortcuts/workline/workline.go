@@ -1,9 +1,9 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package workline contains the small, deterministic Workline interface used
-// by the fashion-style agent.  It intentionally uses the existing shortcut
-// runtime and the Base v3 records API; there is no second client or ORM.
+// Package workline contains the deterministic tracking-record interface used
+// by apparel Skills. Its public command is `work-cli track`; package and
+// interface version names remain stable implementation details.
 package workline
 
 import (
@@ -148,23 +148,37 @@ func schemaOptions(field string) []map[string]any {
 }
 
 func Shortcuts() []common.Shortcut {
-	return []common.Shortcut{queryShortcut(), applyShortcut(), styleEventsShortcut()}
+	return trackingShortcuts("track", "query", "apply", "style-events", false)
+}
+
+// LegacyShortcuts keeps prior installations functional without advertising the
+// former workline command surface to new agents.
+func LegacyShortcuts() []common.Shortcut {
+	return trackingShortcuts("workline", "+query", "+apply", "+style-events", true)
+}
+
+func trackingShortcuts(service, queryCommand, applyCommand, styleEventsCommand string, hidden bool) []common.Shortcut {
+	return []common.Shortcut{
+		queryShortcut(service, queryCommand, hidden),
+		applyShortcut(service, applyCommand, hidden),
+		styleEventsShortcut(service, styleEventsCommand, hidden),
+	}
 }
 
 func baseFlags() []common.Flag {
-	return []common.Flag{{Name: "base-token", Desc: "Workline Base token; may also be supplied by WORKLINE_BASE_TOKEN"}}
+	return []common.Flag{{Name: "base-token", Desc: "Tracking workspace ID", Hidden: true}}
 }
 
-func queryShortcut() common.Shortcut {
-	return common.Shortcut{Service: "workline", Command: "+query", Description: "Query Workline evidence, events, styles, people, context, or operations", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "query request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunQuery, Validate: validateQuery, Execute: executeQuery}
+func queryShortcut(service, command string, hidden bool) common.Shortcut {
+	return common.Shortcut{Service: service, Command: command, Description: "Find apparel progress records", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "query request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunQuery, Validate: validateQuery, Execute: executeQuery}
 }
 
-func applyShortcut() common.Shortcut {
-	return common.Shortcut{Service: "workline", Command: "+apply", Description: "Apply deterministic Workline actions", Risk: "write", UserScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, ConditionalUserScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload"}, ConditionalBotScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload", "docs:permission.member:create"}, AuthTypes: []string{"user", "bot"}, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "apply request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunApply, Validate: validateApply, Execute: executeApply}
+func applyShortcut(service, command string, hidden bool) common.Shortcut {
+	return common.Shortcut{Service: service, Command: command, Description: "Save apparel progress records", Risk: "write", UserScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, ConditionalUserScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload"}, ConditionalBotScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload", "docs:permission.member:create"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "progress request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunApply, Validate: validateApply, Execute: executeApply}
 }
 
-func styleEventsShortcut() common.Shortcut {
-	return common.Shortcut{Service: "workline", Command: "+style-events", Description: "Read the current effective events for a Style", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Flags: append(baseFlags(), common.Flag{Name: "style-id", Desc: "Style business ID", Required: true}), DryRun: dryRunStyleEvents, Validate: func(_ context.Context, r *common.RuntimeContext) error {
+func styleEventsShortcut(service, command string, hidden bool) common.Shortcut {
+	return common.Shortcut{Service: service, Command: command, Description: "View one Style's recorded progress", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "style-id", Desc: "Style ID", Required: true}), DryRun: dryRunStyleEvents, Validate: func(_ context.Context, r *common.RuntimeContext) error {
 		if strings.TrimSpace(r.Str("style-id")) == "" {
 			return invalid("--style-id is required")
 		}
@@ -553,7 +567,7 @@ func tokenFor(r *common.RuntimeContext) string {
 func requireToken(r *common.RuntimeContext) (string, error) {
 	t := tokenFor(r)
 	if t == "" || strings.HasPrefix(t, "<") {
-		return "", invalid("Base token is required; pass --base-token or configure WORKLINE_BASE_TOKEN")
+		return "", invalid("tracking workspace is not ready; run `work-cli track apply` first, then retry")
 	}
 	return t, nil
 }
@@ -571,7 +585,7 @@ func ensureBaseToken(r *common.RuntimeContext) (string, error) {
 		token = stringValue(data["app_token"])
 	}
 	if token == "" {
-		return "", errs.NewInternalError(errs.SubtypeInvalidResponse, "Workline Base create response has no base_token/app_token")
+		return "", errs.NewInternalError(errs.SubtypeInvalidResponse, "tracking workspace setup returned no usable ID")
 	}
 	// A bot-created Base is usable by the bot immediately. Best-effort grant
 	// keeps the same Base visible to the currently logged-in user without

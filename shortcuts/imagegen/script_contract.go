@@ -73,7 +73,7 @@ func scriptBatchShortcut() common.Shortcut {
 
 func scriptSharedFlags() []common.Flag {
 	return []common.Flag{
-		{Name: "model", Default: defaultScriptModel, Desc: "Compatibility model profile; Workline currently supports gpt-image-2"},
+		{Name: "model", Default: defaultScriptModel, Desc: "Compatibility model profile; currently supports gpt-image-2"},
 		{Name: "prompt", Desc: "Image prompt"},
 		{Name: "prompt-file", Desc: "UTF-8 file containing the image prompt"},
 		{Name: "n", Type: "int", Default: "1", Desc: "Number of images (1-10)"},
@@ -175,7 +175,7 @@ func validateScriptSingle(r *common.RuntimeContext, edit bool) error {
 
 func validateScriptOptions(r *common.RuntimeContext) error {
 	if strings.TrimSpace(r.Str("model")) != defaultScriptModel {
-		return invalid("Workline currently supports only the gpt-image-2 compatibility profile")
+		return invalid("only the gpt-image-2 compatibility profile is currently supported")
 	}
 	if n := r.Int("n"); n < 1 || n > 10 {
 		return invalid("--n must be between 1 and 10")
@@ -196,7 +196,7 @@ func validateScriptOptions(r *common.RuntimeContext) error {
 		return invalid("--output-compression requires JPEG or WebP output")
 	}
 	if moderation := strings.TrimSpace(r.Str("moderation")); moderation == "low" {
-		return invalid("Workline uses the managed image tool moderation policy and does not expose --moderation low")
+		return invalid("the managed image tool does not expose --moderation low")
 	}
 	if r.Bool("augment") && r.Bool("no-augment") {
 		return invalid("--augment and --no-augment cannot be used together")

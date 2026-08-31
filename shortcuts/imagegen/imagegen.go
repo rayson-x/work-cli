@@ -1,8 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package imagegen exposes the synchronous CLI facade for Workline's
-// asynchronous image service.
+// Package imagegen exposes synchronous image commands.
 package imagegen
 
 import (
@@ -273,7 +272,7 @@ func executeJob(ctx context.Context, r *common.RuntimeContext) error {
 
 func newAPIClient(r *common.RuntimeContext) (*apiClient, error) {
 	if r == nil || r.Factory == nil || r.Config == nil {
-		return nil, errs.NewInternalError(errs.SubtypeSDKError, "Workline image runtime is unavailable")
+		return nil, errs.NewInternalError(errs.SubtypeSDKError, "image command is unavailable")
 	}
 	key := strings.TrimSpace(os.Getenv(worklineauth.MediaAPIKeyEnv))
 	if key == "" {
@@ -284,18 +283,15 @@ func newAPIClient(r *common.RuntimeContext) (*apiClient, error) {
 		}
 	}
 	if key == "" {
-		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured", worklineauth.MediaAPIKeyEnv).
+		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "image access is not ready").
 			WithHint("run `work-cli auth login` and retry")
 	}
 	base, err := url.Parse(worklineauth.ServerURL())
 	if err != nil || base.Scheme == "" || base.Host == "" {
-		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "%s is not configured as an absolute URL", worklineauth.MediaServerURLEnv).
-			WithField(worklineauth.MediaServerURLEnv)
+		return nil, errs.NewConfigError(errs.SubtypeNotConfigured, "image service address is invalid")
 	}
 	if base.Scheme != "https" && base.Scheme != "http" {
-		return nil, errs.NewConfigError(errs.SubtypeInvalidConfig, "%s must use HTTP or HTTPS", worklineauth.MediaServerURLEnv).
-			WithField(worklineauth.MediaServerURLEnv).
-			WithHint("set an absolute Workline media service URL")
+		return nil, errs.NewConfigError(errs.SubtypeInvalidConfig, "image service address is invalid")
 	}
 	client, err := r.Factory.ExternalHTTPClient()
 	if err != nil {
@@ -472,14 +468,14 @@ func (c *apiClient) requestJSON(ctx context.Context, method, path string, body i
 	}
 	response, err := c.httpClient().Do(req)
 	if err != nil {
-		return networkError("call Workline image service", err)
+		return networkError("call image service", err)
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		return decodeAPIError(response)
 	}
 	if err := json.NewDecoder(response.Body).Decode(target); err != nil {
-		return errs.NewNetworkError(errs.SubtypeNetworkProtocol, "decode Workline image response: %v", err).WithCause(err)
+		return errs.NewNetworkError(errs.SubtypeNetworkProtocol, "decode image response: %v", err).WithCause(err)
 	}
 	return nil
 }
@@ -488,7 +484,7 @@ func (c *apiClient) request(ctx context.Context, method, path string, body io.Re
 	endpoint := c.base.ResolveReference(&url.URL{Path: path})
 	req, err := http.NewRequestWithContext(ctx, method, endpoint.String(), body)
 	if err != nil {
-		return nil, errs.NewInternalError(errs.SubtypeInvalidResponse, "build Workline image request: %v", err).WithCause(err)
+		return nil, errs.NewInternalError(errs.SubtypeInvalidResponse, "build image request: %v", err).WithCause(err)
 	}
 	req.Header.Set("Authorization", "Bearer "+c.key)
 	if contentType != "" {
@@ -514,7 +510,7 @@ func decodeAPIError(response *http.Response) error {
 	_ = json.NewDecoder(io.LimitReader(response.Body, 1<<20)).Decode(&payload)
 	message := payload.Error.Message
 	if message == "" {
-		message = "Workline image service returned HTTP " + strconv.Itoa(response.StatusCode)
+		message = "image service returned HTTP " + strconv.Itoa(response.StatusCode)
 	}
 	switch response.StatusCode {
 	case http.StatusUnauthorized:

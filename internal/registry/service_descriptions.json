@@ -44,8 +44,8 @@
     "zh": { "title": "消息与群组", "description": "消息发送、群聊管理" }
   },
   "image": {
-    "en": { "title": "Image", "description": "Generate and edit images through the Workline media service" },
-    "zh": { "title": "图片生成", "description": "通过 Workline 媒体服务生成和编辑图片" }
+    "en": { "title": "Image", "description": "Generate and edit images, returning completed local files" },
+    "zh": { "title": "图片生成", "description": "生成或编辑图片，并返回本地完成文件" }
   },
   "mail": {
     "en": { "title": "Mail", "description": "Email, draft, folder, and contacts management" },
@@ -88,9 +88,9 @@
     "zh": { "title": "画板", "description": "画板创建、编辑" },
     "auth_domain": "docs"
   },
-  "workline": {
-    "en": { "title": "Workline", "description": "Evidence-backed fashion event and style relationship management" },
-    "zh": { "title": "款式工作线", "description": "基于证据的服装事件、款式与人员关系管理" },
+  "track": {
+    "en": { "title": "Apparel tracking", "description": "Review and update apparel progress records" },
+    "zh": { "title": "款式追踪", "description": "查看和更新款式进度记录" },
     "auth_domain": "base"
   },
   "wiki": {

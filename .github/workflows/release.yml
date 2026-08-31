@@ -31,8 +31,11 @@ jobs:
       - name: Fetch Feishu service metadata
         run: python3 scripts/fetch_meta.py
 
-      - name: Test Workline interface
-        run: go test ./shortcuts/workline/... ./shortcuts/imagegen/... -count=1
+      - name: Fetch bundled WeChat runtime
+        run: bash scripts/fetch-wechat-runtime.sh
+
+      - name: Test tracking commands
+        run: go test ./cmd/media ./cmd/wechat ./internal/wechatruntime ./shortcuts/workline/... ./shortcuts/imagegen/... -count=1
 
       - name: Build and publish GitHub Release
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
