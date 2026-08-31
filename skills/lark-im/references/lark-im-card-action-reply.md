@@ -126,7 +126,7 @@ When a `card.action.trigger` event arrives (**each stdout JSON line is one event
 ## Updating the card
 
 ```bash
-lark-cli api POST /open-apis/interactive/v1/card/update --as bot \
+work-cli api POST /open-apis/interactive/v1/card/update --as bot \
   --data '{"token":"<token>","card":<new_card_json>}'
 ```
 
@@ -142,25 +142,25 @@ lark-cli api POST /open-apis/interactive/v1/card/update --as bot \
 
 ```bash
 # Stream all card interactions
-lark-cli event consume card.action.trigger --as bot
+work-cli event consume card.action.trigger --as bot
 
 # Grab one callback to inspect shape (debugging only — do not use in production workflows)
-lark-cli event consume card.action.trigger --as bot --max-events 1 --timeout 60s
+work-cli event consume card.action.trigger --as bot --max-events 1 --timeout 60s
 
 # Button clicks only (not form submit), with action value
-lark-cli event consume card.action.trigger --as bot \
+work-cli event consume card.action.trigger --as bot \
   --jq 'select(.action_tag == "button" and .form_value == "") | {op: .operator_id, val: (.action_value | fromjson?), token: .token}'
 
 # Form submits (button with form_value present)
-lark-cli event consume card.action.trigger --as bot \
+work-cli event consume card.action.trigger --as bot \
   --jq 'select(.action_tag == "button" and .form_value != "") | {op: .operator_id, form: (.form_value | fromjson), token: .token}'
 
 # Date picker interactions
-lark-cli event consume card.action.trigger --as bot \
+work-cli event consume card.action.trigger --as bot \
   --jq 'select(.action_tag == "date_picker") | {op: .operator_id, date: .option, tz: .timezone}'
 
 # Filter to one chat
-lark-cli event consume card.action.trigger --as bot \
+work-cli event consume card.action.trigger --as bot \
   --jq 'select(.chat_id == "oc_xxx")'
 ```
 

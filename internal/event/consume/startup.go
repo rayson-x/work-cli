@@ -54,7 +54,7 @@ func EnsureBus(ctx context.Context, tr transport.IPC, appID, profileName, domain
 			if count > 0 {
 				return nil, errs.NewValidationError(errs.SubtypeFailedPrecondition,
 					"another event bus is already connected to this app (%d remote event connection(s) detected via API); only one bus should run globally to avoid duplicate event delivery", count).
-					WithHint("remote event connection detected; `lark-cli event status` and `lark-cli event stop` only inspect local buses; stop the owner host/process, wait for the platform connection timeout, or use a separate app/profile")
+					WithHint("remote event connection detected; `work-cli event status` and `work-cli event stop` only inspect local buses; stop the owner host/process, wait for the platform connection timeout, or use a separate app/profile")
 			}
 		}
 	} else {
@@ -68,7 +68,7 @@ func EnsureBus(ctx context.Context, tr transport.IPC, appID, profileName, domain
 		return nil, errs.NewInternalError(errs.SubtypeUnknown,
 			"failed to start event bus daemon: %s", forkErr).
 			WithCause(forkErr).
-			WithHint("check disk space, permissions on %s, and `lark-cli doctor`", eventsRoot)
+			WithHint("check disk space, permissions on %s, and `work-cli doctor`", eventsRoot)
 	}
 	if pid > 0 {
 		announceForkedBus(errOut, pid)
@@ -88,11 +88,11 @@ func EnsureBus(ctx context.Context, tr transport.IPC, appID, profileName, domain
 
 	logPath := filepath.Join(core.GetConfigDir(), "events", event.SanitizeAppID(appID), "bus.log")
 	fmt.Fprintln(errOut, "[event] event bus exited unexpectedly.")
-	fmt.Fprintln(errOut, "[event] please check app credentials (lark-cli config show) and retry.")
+	fmt.Fprintln(errOut, "[event] please check app credentials (work-cli config show) and retry.")
 	fmt.Fprintf(errOut, "[event] logs: %s\n", logPath)
 	return nil, errs.NewInternalError(errs.SubtypeUnknown,
 		"failed to connect to event bus within %v (app=%s)", dialTimeout, appID).
-		WithHint("check app credentials (`lark-cli config show`) and retry; bus logs: %s", logPath)
+		WithHint("check app credentials (`work-cli config show`) and retry; bus logs: %s", logPath)
 }
 
 // probeAndDialBus distinguishes a healthy bus from a mid-shutdown listener via StatusQuery first.

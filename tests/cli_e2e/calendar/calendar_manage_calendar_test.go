@@ -22,7 +22,7 @@ func TestCalendar_ManageCalendar(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	calendarSummary := "lark-cli-e2e-cal-" + suffix
+	calendarSummary := "work-cli-e2e-cal-" + suffix
 	updatedCalendarSummary := calendarSummary + "-updated"
 	calendarDescription := "test calendar created by e2e"
 

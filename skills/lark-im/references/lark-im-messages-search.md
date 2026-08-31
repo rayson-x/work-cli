@@ -6,60 +6,60 @@ Search Feishu messages across conversations. This shortcut automatically perform
 
 By default each result message also carries a `reactions` block (counts + details from `im.reactions.batch_query`) when the server has reactions for it, and `update_time` for messages that were actually edited. With `--page-all`, every page is enriched; pass `--no-reactions` to skip the extra round-trip. See [message enrichment](lark-im-message-enrichment.md) for the full contract.
 
-This skill maps to the shortcut: `lark-cli im +messages-search` (internally calls `POST /open-apis/im/v1/messages/search` + batched `GET /open-apis/im/v1/messages/mget`, then batch-fetches chat context).
+This skill maps to the shortcut: `work-cli im +messages-search` (internally calls `POST /open-apis/im/v1/messages/search` + batched `GET /open-apis/im/v1/messages/mget`, then batch-fetches chat context).
 
 ## Commands
 
 ```bash
 # Search by keyword
-lark-cli im +messages-search --query "project progress"
+work-cli im +messages-search --query "project progress"
 
 # Restrict search to a specific group chat
-lark-cli im +messages-search --query "weekly report" --chat-id oc_xxx
+work-cli im +messages-search --query "weekly report" --chat-id oc_xxx
 
 # Filter by sender (comma-separated)
-lark-cli im +messages-search --query "requirement" --sender ou_xxx,ou_yyy
+work-cli im +messages-search --query "requirement" --sender ou_xxx,ou_yyy
 
 # Filter by attachment type
-lark-cli im +messages-search --query "report" --include-attachment-type file
+work-cli im +messages-search --query "report" --include-attachment-type file
 
 # Filter by chat type (group / p2p)
-lark-cli im +messages-search --query "progress" --chat-type group
+work-cli im +messages-search --query "progress" --chat-type group
 
 # Filter by sender type (user / bot)
-lark-cli im +messages-search --query "reminder" --sender-type bot
+work-cli im +messages-search --query "reminder" --sender-type bot
 
 # Exclude bot senders
-lark-cli im +messages-search --query "reminder" --exclude-sender-type bot
+work-cli im +messages-search --query "reminder" --exclude-sender-type bot
 
 # Only messages that @me
-lark-cli im +messages-search --query "announcement" --is-at-me
+work-cli im +messages-search --query "announcement" --is-at-me
 
 # Only messages that @mention specific users (results also include messages that @all)
-lark-cli im +messages-search --query "release" --at-chatter-ids ou_xxx,ou_yyy
+work-cli im +messages-search --query "release" --at-chatter-ids ou_xxx,ou_yyy
 
 # Combined filters + time range
-lark-cli im +messages-search --query "meeting" --sender ou_xxx --chat-type group --start "2026-03-13T00:00:00+08:00" --end "2026-03-20T23:59:59+08:00"
+work-cli im +messages-search --query "meeting" --sender ou_xxx --chat-type group --start "2026-03-13T00:00:00+08:00" --end "2026-03-20T23:59:59+08:00"
 
 # Specific time range (ISO 8601)
-lark-cli im +messages-search --query "release" --start "2026-03-01T00:00:00+08:00" --end "2026-03-10T00:00:00+08:00"
+work-cli im +messages-search --query "release" --start "2026-03-01T00:00:00+08:00" --end "2026-03-10T00:00:00+08:00"
 
 # Output format options
-lark-cli im +messages-search --query "test" --format pretty
-lark-cli im +messages-search --query "test" --format table
-lark-cli im +messages-search --query "test" --format csv
+work-cli im +messages-search --query "test" --format pretty
+work-cli im +messages-search --query "test" --format table
+work-cli im +messages-search --query "test" --format csv
 
 # Pagination
-lark-cli im +messages-search --query "test" --page-token <PAGE_TOKEN>
+work-cli im +messages-search --query "test" --page-token <PAGE_TOKEN>
 
 # Auto-pagination across multiple pages
-lark-cli im +messages-search --query "test" --page-all --format json
+work-cli im +messages-search --query "test" --page-all --format json
 
 # Auto-pagination with an explicit page cap
-lark-cli im +messages-search --query "test" --page-limit 5 --format json
+work-cli im +messages-search --query "test" --page-limit 5 --format json
 
 # Preview the request without executing it
-lark-cli im +messages-search --query "test" --dry-run
+work-cli im +messages-search --query "test" --dry-run
 ```
 
 ## Parameters
@@ -143,10 +143,10 @@ In JSON output, each message includes `chat_id` and `thread_id` (when present). 
 
 ```bash
 # View the full message stream for the conversation that contains the search result
-lark-cli im +chat-messages-list --chat-id <chat_id>
+work-cli im +chat-messages-list --chat-id <chat_id>
 
 # View replies in the thread that contains the search result
-lark-cli im +threads-messages-list --thread <thread_id>
+work-cli im +threads-messages-list --thread <thread_id>
 ```
 
 ## Resource Rendering
@@ -165,7 +165,7 @@ This guidance applies to both user and bot identity. If the user explicitly asks
 
 ```bash
 # Review recent bot interactions without forcing a keyword
-lark-cli im +messages-search --query "" --sender-type bot --start "<YYYY-MM-DDT00:00:00+08:00>" --end "<YYYY-MM-DDT23:59:59+08:00>" --page-all --format json
+work-cli im +messages-search --query "" --sender-type bot --start "<YYYY-MM-DDT00:00:00+08:00>" --end "<YYYY-MM-DDT23:59:59+08:00>" --page-all --format json
 ```
 
 Replace the time placeholders at execution time. For example, "最近一周" means computing the start date and end date from the current day before running the command; do not copy date literals from this reference into answers for relative requests.
@@ -178,10 +178,10 @@ When the user refers to a chat by name and you need its `chat_id` for the `--cha
 
 ```bash
 # Step 1: Find the chat_id by name
-lark-cli im +chat-search --query "<chat name keyword>" --format json
+work-cli im +chat-search --query "<chat name keyword>" --format json
 
 # Step 2: Use the chat_id to narrow down message search
-lark-cli im +messages-search --query "keyword" --chat-id <chat_id>
+work-cli im +messages-search --query "keyword" --chat-id <chat_id>
 ```
 
 **Do not use `im chats search` or `+chat-list` — always use the `+chat-search` shortcut.**
@@ -202,13 +202,13 @@ When the user asks you to summarize work, generate a weekly report, or compile a
 
 ```bash
 # Preferred: fetch automatically
-lark-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-all --format json
+work-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-all --format json
 
 # If you need to cap the run explicitly
-lark-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-limit 5 --format json
+work-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-limit 5 --format json
 
 # If the bounded run still returns has_more=true, continue manually
-lark-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-token <token_from_previous_run> --format json
+work-cli im +messages-search --query "" --chat-id oc_xxx --sender ou_me --start "2026-03-18T00:00:00+08:00" --end "2026-03-25T23:59:59+08:00" --page-size 50 --page-token <token_from_previous_run> --format json
 ```
 
 ### Key points

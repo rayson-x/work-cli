@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书考勤打卡：查询自己的考勤打卡记录"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli attendance --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli attendance --help"
 ---
 
 # attendance (v1)
@@ -39,8 +39,8 @@ metadata:
 ## API Resources
 
 ```bash
-lark-cli schema attendance.<resource>.<method>   # 调用 API 前必须先查看参数结构
-lark-cli attendance <resource> <method> [flags]  # 调用 API
+work-cli schema attendance.<resource>.<method>   # 调用 API 前必须先查看参数结构
+work-cli attendance <resource> <method> [flags]  # 调用 API
 ```
 
 > **重要**：使用原生 API 时，必须先运行 `schema` 查看 `--data` / `--params` 参数结构，不要猜测字段格式。

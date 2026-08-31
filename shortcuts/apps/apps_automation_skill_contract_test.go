@@ -380,7 +380,7 @@ func TestLocalDevSkillContract_UsesProjectGuideWithoutSyncInternals(t *testing.T
 
 	for _, boundary := range []string{
 		"先查看工作区 `.agents/skills/`，读取与自动化任务匹配的 `trigger-guide`。",
-		"文件缺失或不能覆盖当前任务时，报告项目缺少可用的领域 guide；不要在本 lark-cli reference 中猜测安装命令、版本或包内目录。",
+		"文件缺失或不能覆盖当前任务时，报告项目缺少可用的领域 guide；不要在本 work-cli reference 中猜测安装命令、版本或包内目录。",
 	} {
 		if !strings.Contains(section, boundary) {
 			t.Errorf("trigger-guide boundary section must explain %q", boundary)

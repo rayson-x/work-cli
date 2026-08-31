@@ -52,7 +52,7 @@ func readYes(r io.Reader) bool {
 }
 
 // offerRootUpgrade prompts for an interactive upgrade when running bare
-// `lark-cli` in an interactive terminal with a cached newer version. Every
+// `work-cli` in an interactive terminal with a cached newer version. Every
 // failure is swallowed — it must never affect help output or the exit code.
 func offerRootUpgrade(f *cmdutil.Factory, cmd *cobra.Command, projector *recovery.Projector) {
 	if f == nil || !projector.CanReference(recovery.TargetUpdate) {
@@ -76,7 +76,7 @@ func offerRootUpgrade(f *cmdutil.Factory, cmd *cobra.Command, projector *recover
 	// failed refresh leaves the old value in place), so it can name a version
 	// that is no longer the one npm would install. The version actually
 	// installed is resolved live by the update subcommand, which prints
-	// "Updating lark-cli <cur> -> <latest> via <pm> ..." before installing —
+	// "Updating work-cli <cur> -> <latest> via <pm> ..." before installing —
 	// that is where the user sees the real target.
 	fmt.Fprintf(ios.ErrOut, "A newer work-cli is available (current %s). Upgrade now? [y/N]: ", info.Current)
 	if !readYes(ios.In) {
@@ -86,7 +86,7 @@ func offerRootUpgrade(f *cmdutil.Factory, cmd *cobra.Command, projector *recover
 }
 
 // installRootUpgradePrompt wraps the root command's RunE (set to
-// unknownSubcommandRunE by installUnknownSubcommandGuard) so a bare `lark-cli`
+// unknownSubcommandRunE by installUnknownSubcommandGuard) so a bare `work-cli`
 // invocation offers an interactive upgrade before printing help. Non-bare
 // invocations are passed straight through, unchanged.
 func installRootUpgradePrompt(

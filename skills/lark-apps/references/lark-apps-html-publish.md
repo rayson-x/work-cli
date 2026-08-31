@@ -1,6 +1,6 @@
 # apps +html-publish
 
-把本地 HTML 文件或静态目录发布为妙搭应用访问 URL。运行时命令事实以 `lark-cli apps +html-publish --help` 为准。
+把本地 HTML 文件或静态目录发布为妙搭应用访问 URL。运行时命令事实以 `work-cli apps +html-publish --help` 为准。
 
 ## 何时用
 
@@ -17,9 +17,9 @@
 ## 示例
 
 ```bash
-lark-cli apps +create --name "Demo" --app-type html
-lark-cli apps +html-publish --app-id app_xxx --path ./dist
-lark-cli apps +html-publish --app-id app_xxx --path ./index.html --dry-run
+work-cli apps +create --name "Demo" --app-type html
+work-cli apps +html-publish --app-id app_xxx --path ./dist
+work-cli apps +html-publish --app-id app_xxx --path ./index.html --dry-run
 ```
 
 ## 输出契约
@@ -54,5 +54,5 @@ lark-cli apps +html-publish --app-id app_xxx --path ./index.html --dry-run
 
 ## 常见失败
 
-- `--path` 传了绝对路径：`--path` 只接受相对路径，传绝对路径会报 `--path must be a relative path within the current directory`。改用 `cd` + 相对路径，例如 `cd /target/dir && lark-cli apps +html-publish --path .`。
+- `--path` 传了绝对路径：`--path` 只接受相对路径，传绝对路径会报 `--path must be a relative path within the current directory`。改用 `cd` + 相对路径，例如 `cd /target/dir && work-cli apps +html-publish --path .`。
 - 缺少 `index.html`：目录根放置 `index.html`，或单文件路径直接指向名为 `index.html` 的文件。

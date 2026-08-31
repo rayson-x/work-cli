@@ -196,7 +196,7 @@ func wikiDeleteSpaceTaskResultCommand(taskID string, identity core.Identity) str
 	if asFlag == "" {
 		asFlag = "user"
 	}
-	return fmt.Sprintf("lark-cli drive +task_result --scenario wiki_delete_space --task-id %s --as %s", taskID, asFlag)
+	return fmt.Sprintf("work-cli drive +task_result --scenario wiki_delete_space --task-id %s --as %s", taskID, asFlag)
 }
 
 func pollWikiDeleteSpaceTask(ctx context.Context, client wikiDeleteSpaceClient, runtime *common.RuntimeContext, taskID string) (wikiDeleteSpaceTaskStatus, bool, error) {

@@ -19,9 +19,9 @@
 | `--page-size <n>` | 返回条数,1–30,默认 20 |
 
 ```bash
-lark-cli contact +search-bot --query '会议助手' --as user
-lark-cli contact +search-bot --query '助手' --has-chatted --as user
-lark-cli contact +search-bot --queries '会议助手,日报助手,审批助手' --as user
+work-cli contact +search-bot --query '会议助手' --as user
+work-cli contact +search-bot --query '助手' --has-chatted --as user
+work-cli contact +search-bot --queries '会议助手,日报助手,审批助手' --as user
 ```
 
 ## 输出
@@ -46,7 +46,7 @@ lark-cli contact +search-bot --queries '会议助手,日报助手,审批助手' 
 命中多个机器人时,结合 `description` 和 `is_agent` 判断。后续要发消息或拉群时,让用户确认目标,不要直接选择第一条。
 
 ```bash
-lark-cli contact +search-bot --query '会议助手' \
+work-cli contact +search-bot --query '会议助手' \
   --jq '.data.bots[] | select((.description // "") | contains("<功能关键词>"))' --as user
 ```
 

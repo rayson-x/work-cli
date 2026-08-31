@@ -94,7 +94,7 @@ func TestPollWikiAsyncTaskAllPollsFailWrapsWithResumeHint(t *testing.T) {
 		func(context.Context, string) (wikiAsyncTaskStatus, error) {
 			return wikiAsyncTaskStatus{}, transportErr
 		},
-		"lark-cli drive +task_result --task-id task_lost",
+		"work-cli drive +task_result --task-id task_lost",
 	)
 	if ready {
 		t.Fatalf("ready = true, want false when every poll failed")
@@ -110,7 +110,7 @@ func TestPollWikiAsyncTaskAllPollsFailWrapsWithResumeHint(t *testing.T) {
 		t.Fatalf("err does not preserve the transport cause: %v", err)
 	}
 	if !strings.Contains(p.Hint, "every status poll failed (task_id=task_lost)") ||
-		!strings.Contains(p.Hint, "lark-cli drive +task_result --task-id task_lost") {
+		!strings.Contains(p.Hint, "work-cli drive +task_result --task-id task_lost") {
 		t.Fatalf("hint = %q, want resume guidance naming the task", p.Hint)
 	}
 	if !strings.Contains(stderr.String(), "attempt 2/2 failed") {

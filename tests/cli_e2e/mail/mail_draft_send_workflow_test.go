@@ -23,7 +23,7 @@ func TestMail_DraftSendWorkflowAsUser(t *testing.T) {
 
 	const mailboxID = "me"
 	suffix := clie2e.GenerateSuffix()
-	subject := "lark-cli-e2e-mail-draft-send-" + suffix
+	subject := "work-cli-e2e-mail-draft-send-" + suffix
 	body := "draft-send workflow body " + suffix
 
 	var primaryEmail string

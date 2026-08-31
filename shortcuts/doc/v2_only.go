@@ -106,7 +106,7 @@ func validateDocsV2Only(runtime *common.RuntimeContext, shortcut string, legacyF
 }
 
 func docsV2OnlyError(runtime *common.RuntimeContext, shortcut, detail, param string) error {
-	helpCommand := "lark-cli docs " + shortcut + " --help"
+	helpCommand := "work-cli docs " + shortcut + " --help"
 	err := errs.NewValidationError(
 		errs.SubtypeInvalidArgument,
 		"docs %s is v2-only; %s",
@@ -124,7 +124,7 @@ func docsV2OnlyError(runtime *common.RuntimeContext, shortcut, detail, param str
 		if refs := runtime.ResolveAffordanceSkillReferences(); len(refs) > 0 {
 			commands := make([]string, 0, len(refs))
 			for _, ref := range refs {
-				commands = append(commands, "`lark-cli skills read "+ref+"`")
+				commands = append(commands, "`work-cli skills read "+ref+"`")
 			}
 			parts = append(parts, recovery.Command(
 				recovery.TargetSkillsRead,

@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Command audit-observer is a runnable fork of lark-cli that logs
+// Command audit-observer is a runnable fork of work-cli that logs
 // every dispatched command to stderr. Demonstrates the simplest
 // possible plugin: one After observer matching All commands.
 //

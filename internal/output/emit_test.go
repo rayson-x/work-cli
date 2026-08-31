@@ -30,7 +30,7 @@ func (m *mockProvider) Scan(_ context.Context, _ extcs.ScanRequest) (*extcs.Aler
 func TestScanForSafety_ModeOff(t *testing.T) {
 	t.Setenv("LARKSUITE_CLI_CONTENT_SAFETY_MODE", "off")
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +messages-search", map[string]any{"text": "inject"}, &buf)
+	result := ScanForSafety("work-cli im +messages-search", map[string]any{"text": "inject"}, &buf)
 	if result.Alert != nil || result.Blocked {
 		t.Error("mode=off should produce zero ScanResult")
 	}
@@ -46,7 +46,7 @@ func TestScanForSafety_ModeWarn_WithAlert(t *testing.T) {
 	defer extcs.Register(nil)
 
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +test", map[string]any{}, &buf)
+	result := ScanForSafety("work-cli im +test", map[string]any{}, &buf)
 	if result.Alert == nil {
 		t.Fatal("expected non-nil alert in warn mode")
 	}
@@ -66,7 +66,7 @@ func TestScanForSafety_ModeBlock_WithAlert(t *testing.T) {
 	defer extcs.Register(nil)
 
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +test", map[string]any{}, &buf)
+	result := ScanForSafety("work-cli im +test", map[string]any{}, &buf)
 	if !result.Blocked {
 		t.Error("block mode with alert should set Blocked=true")
 	}
@@ -96,7 +96,7 @@ func TestScanForSafety_NoProvider(t *testing.T) {
 	extcs.Register(nil)
 
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +test", map[string]any{}, &buf)
+	result := ScanForSafety("work-cli im +test", map[string]any{}, &buf)
 	if result.Alert != nil || result.Blocked {
 		t.Error("no provider should produce zero ScanResult")
 	}
@@ -109,7 +109,7 @@ func TestScanForSafety_ScanError_FailOpen(t *testing.T) {
 	defer extcs.Register(nil)
 
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +test", map[string]any{}, &buf)
+	result := ScanForSafety("work-cli im +test", map[string]any{}, &buf)
 	if result.Blocked {
 		t.Error("scan error should fail-open, not block")
 	}
@@ -126,7 +126,7 @@ func TestScanForSafety_SlowProvider_Timeout_FailOpen(t *testing.T) {
 	defer extcs.Register(nil)
 
 	var buf bytes.Buffer
-	result := ScanForSafety("lark-cli im +test", map[string]any{}, &buf)
+	result := ScanForSafety("work-cli im +test", map[string]any{}, &buf)
 	if result.Blocked {
 		t.Error("slow provider should fail-open on timeout, not block")
 	}

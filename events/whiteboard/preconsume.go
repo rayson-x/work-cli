@@ -29,7 +29,7 @@ func whiteboardSubscriptionPreConsume(eventType string) func(context.Context, ev
 			return nil, errs.NewValidationError(errs.SubtypeInvalidArgument,
 				"param whiteboard_id is required for %s", eventType).
 				WithParam("--param").
-				WithHint("pass it as --param whiteboard_id=<id>; run `lark-cli event schema %s` for details", eventType)
+				WithHint("pass it as --param whiteboard_id=<id>; run `work-cli event schema %s` for details", eventType)
 		}
 		encoded := validate.EncodePathSegment(whiteboardID)
 		subscribePath := fmt.Sprintf("/open-apis/board/v1/whiteboards/%s/subscribe", encoded)

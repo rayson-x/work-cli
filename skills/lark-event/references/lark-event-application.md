@@ -1,6 +1,6 @@
 # Lark Application Events
 
-This page covers Application-domain EventKeys supported by `lark-cli event`.
+This page covers Application-domain EventKeys supported by `work-cli event`.
 
 ## `application.bot.menu_v6`
 
@@ -9,13 +9,13 @@ Triggered when a user clicks a custom bot menu item whose response action is con
 Listen as the bot identity:
 
 ```bash
-lark-cli event consume application.bot.menu_v6 --as bot
+work-cli event consume application.bot.menu_v6 --as bot
 ```
 
 Filter a specific menu event key:
 
 ```bash
-lark-cli event consume application.bot.menu_v6 --as bot --jq 'select(.event_key == "start_eval")'
+work-cli event consume application.bot.menu_v6 --as bot --jq 'select(.event_key == "start_eval")'
 ```
 
 Output is flattened at the top level:

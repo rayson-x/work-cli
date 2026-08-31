@@ -1199,7 +1199,7 @@ func TestDriveExportReadyDownloadFailureIncludesRecoveryHint(t *testing.T) {
 	if !strings.Contains(valErr.Hint, "file_token=box_ready") {
 		t.Fatalf("hint missing file token: %q", valErr.Hint)
 	}
-	if !strings.Contains(valErr.Hint, `lark-cli drive +export-download --file-token "box_ready" --file-name "report.pdf"`) {
+	if !strings.Contains(valErr.Hint, `work-cli drive +export-download --file-token "box_ready" --file-name "report.pdf"`) {
 		t.Fatalf("hint missing recovery command: %q", valErr.Hint)
 	}
 }
@@ -1261,7 +1261,7 @@ func TestDriveExportTimeoutReturnsFollowUpCommand(t *testing.T) {
 	if !strings.Contains(stdout.String(), `"job_status_label": "processing"`) {
 		t.Fatalf("stdout missing processing job_status_label: %s", stdout.String())
 	}
-	if !strings.Contains(stdout.String(), `"next_command": "lark-cli drive +task_result --scenario export --ticket tk_456 --file-token docx123"`) {
+	if !strings.Contains(stdout.String(), `"next_command": "work-cli drive +task_result --scenario export --ticket tk_456 --file-token docx123"`) {
 		t.Fatalf("stdout missing follow-up command: %s", stdout.String())
 	}
 	if _, err := os.Stat(filepath.Join(tmpDir, "report.pdf")); !os.IsNotExist(err) {
@@ -1372,7 +1372,7 @@ func TestDriveExportPollErrorsReturnLastErrorWithRecoveryHint(t *testing.T) {
 	if !strings.Contains(p.Hint, "ticket=tk_poll_fail") {
 		t.Fatalf("hint missing ticket: %q", p.Hint)
 	}
-	if !strings.Contains(p.Hint, "lark-cli drive +task_result --scenario export --ticket tk_poll_fail --file-token docx123") {
+	if !strings.Contains(p.Hint, "work-cli drive +task_result --scenario export --ticket tk_poll_fail --file-token docx123") {
 		t.Fatalf("hint missing recovery command: %q", p.Hint)
 	}
 }
@@ -1432,8 +1432,8 @@ func TestDriveExportRateLimitStopsPollingAndSuggestsOneMinuteBackoff(t *testing.
 	for _, want := range []string{
 		"wait at least 1 minute",
 		"exponential backoff starting at 1 minute",
-		"lark-cli drive +task_result --scenario export --ticket tk_rate_limited --file-token docx123",
-		"do not run `lark-cli drive +export` again",
+		"work-cli drive +task_result --scenario export --ticket tk_rate_limited --file-token docx123",
+		"do not run `work-cli drive +export` again",
 	} {
 		if !strings.Contains(problem.Hint, want) {
 			t.Fatalf("hint missing %q: %q", want, problem.Hint)
@@ -1483,7 +1483,7 @@ func TestDriveExportCreateRateLimitSuggestsRetryingOriginalCommand(t *testing.T)
 		"wait at least 1 minute",
 		"rerun the original command with the same arguments",
 		"exponential backoff starting at 1 minute",
-		"do not run `lark-cli drive +task_result`",
+		"do not run `work-cli drive +task_result`",
 	} {
 		if !strings.Contains(problem.Hint, want) {
 			t.Fatalf("hint missing %q: %q", want, problem.Hint)
@@ -1613,8 +1613,8 @@ func TestDriveExportPollCode9499TooManyRequestsStopsImmediately(t *testing.T) {
 	}
 	for _, want := range []string{
 		"ticket=tk_9499_rate_limited",
-		"lark-cli drive +task_result --scenario export --ticket tk_9499_rate_limited --file-token docx123",
-		"do not run `lark-cli drive +export` again",
+		"work-cli drive +task_result --scenario export --ticket tk_9499_rate_limited --file-token docx123",
+		"do not run `work-cli drive +export` again",
 	} {
 		if !strings.Contains(problem.Hint, want) {
 			t.Fatalf("hint missing %q: %q", want, problem.Hint)

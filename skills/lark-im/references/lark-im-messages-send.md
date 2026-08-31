@@ -4,7 +4,7 @@
 
 Send a message to a group chat or a direct message conversation. Supports both user identity (`--as user`) and bot identity (`--as bot`).
 
-This skill maps to the shortcut: `lark-cli im +messages-send` (internally calls `POST /open-apis/im/v1/messages`).
+This skill maps to the shortcut: `work-cli im +messages-send` (internally calls `POST /open-apis/im/v1/messages`).
 
 ## Safety Constraints
 
@@ -85,11 +85,11 @@ When using `--markdown` with images, prefer pre-uploading via `images.create` an
 
 ```bash
 # 1. Upload image to get image_key
-lark-cli im images create --data '{"image_type":"message"}' --file ./diagram.png
+work-cli im images create --data '{"image_type":"message"}' --file ./diagram.png
 # Returns: {"image_key":"img_v3_xxxx"}
 
 # 2. Use image_key in --markdown
-lark-cli im +messages-send --chat-id oc_xxx --markdown $'## Report\n\n![diagram](img_v3_xxxx)\n\nSee above for details.'
+work-cli im +messages-send --chat-id oc_xxx --markdown $'## Report\n\n![diagram](img_v3_xxxx)\n\nSee above for details.'
 ```
 
 ## Preserving Formatting
@@ -103,11 +103,11 @@ This is especially useful in `zsh` / `bash` because it lets you write `\n` expli
 Use `--text` plus `$'...'`:
 
 ```bash
-lark-cli im +messages-send --chat-id oc_xxx --text $'Build failed\nBranch: feature/im-docs\nAction: please check logs'
+work-cli im +messages-send --chat-id oc_xxx --text $'Build failed\nBranch: feature/im-docs\nAction: please check logs'
 ```
 
 ```bash
-lark-cli im +messages-send --chat-id oc_xxx --text $'```bash\nmake test\nmake lint\n```'
+work-cli im +messages-send --chat-id oc_xxx --text $'```bash\nmake test\nmake lint\n```'
 ```
 
 Use this path when you want the receiver to see the text exactly as entered, not a converted Markdown post.
@@ -116,49 +116,49 @@ Use this path when you want the receiver to see the text exactly as entered, not
 
 ```bash
 # Send a formatted update
-lark-cli im +messages-send --chat-id oc_xxx --markdown $'## Update\n\n- item 1\n- item 2'
+work-cli im +messages-send --chat-id oc_xxx --markdown $'## Update\n\n- item 1\n- item 2'
 
 # Send a plain one-line message
-lark-cli im +messages-send --chat-id oc_xxx --text "Hello"
+work-cli im +messages-send --chat-id oc_xxx --text "Hello"
 
 # Equivalent manual JSON
-lark-cli im +messages-send --chat-id oc_xxx --content '{"text":"Hello"}'
+work-cli im +messages-send --chat-id oc_xxx --content '{"text":"Hello"}'
 
 # Send to a direct message (pass open_id)
-lark-cli im +messages-send --user-id ou_xxx --text "Hello"
+work-cli im +messages-send --user-id ou_xxx --text "Hello"
 
 # Send multi-line text while preserving formatting
-lark-cli im +messages-send --chat-id oc_xxx --text $'Line 1\nLine 2\n  indented line'
+work-cli im +messages-send --chat-id oc_xxx --text $'Line 1\nLine 2\n  indented line'
 
 # Send Markdown with an image (must pre-upload via images.create)
-lark-cli im images create --data '{"image_type":"message"}' --file ./screenshot.png
+work-cli im images create --data '{"image_type":"message"}' --file ./screenshot.png
 # Use the returned image_key in the markdown content
-lark-cli im +messages-send --chat-id oc_xxx --markdown $'## Status\n\n![screenshot](img_v3_xxxx)\n\nDone.'
+work-cli im +messages-send --chat-id oc_xxx --markdown $'## Status\n\n![screenshot](img_v3_xxxx)\n\nDone.'
 
 # If you need exact post structure, send JSON directly
-lark-cli im +messages-send --chat-id oc_xxx --msg-type post --content '{"zh_cn":{"title":"Title","content":[[{"tag":"text","text":"Body"}]]}}'
+work-cli im +messages-send --chat-id oc_xxx --msg-type post --content '{"zh_cn":{"title":"Title","content":[[{"tag":"text","text":"Body"}]]}}'
 
 # Send a local image (uploaded automatically before sending)
-lark-cli im +messages-send --chat-id oc_xxx --image ./photo.png
+work-cli im +messages-send --chat-id oc_xxx --image ./photo.png
 
 # Or send directly with an existing image_key
-lark-cli im +messages-send --chat-id oc_xxx --image img_xxx
+work-cli im +messages-send --chat-id oc_xxx --image img_xxx
 
 # Send a local file (uploaded automatically before sending)
-lark-cli im +messages-send --chat-id oc_xxx --file ./report.pdf
+work-cli im +messages-send --chat-id oc_xxx --file ./report.pdf
 
 # Send a video (--video-cover is required as the cover)
-lark-cli im +messages-send --chat-id oc_xxx --video ./demo.mp4 --video-cover ./cover.png
-lark-cli im +messages-send --chat-id oc_xxx --video ./demo.mp4 --video-cover img_xxx
+work-cli im +messages-send --chat-id oc_xxx --video ./demo.mp4 --video-cover ./cover.png
+work-cli im +messages-send --chat-id oc_xxx --video ./demo.mp4 --video-cover img_xxx
 
 # Send a voice message
-lark-cli im +messages-send --chat-id oc_xxx --audio ./voice.opus
+work-cli im +messages-send --chat-id oc_xxx --audio ./voice.opus
 
 # Use an idempotency key (same key sends only once within 1 hour)
-lark-cli im +messages-send --chat-id oc_xxx --text "Hello" --idempotency-key my-unique-id
+work-cli im +messages-send --chat-id oc_xxx --text "Hello" --idempotency-key my-unique-id
 
 # Preview the request without executing it
-lark-cli im +messages-send --chat-id oc_xxx --markdown $'## Test\n\nhello' --dry-run
+work-cli im +messages-send --chat-id oc_xxx --markdown $'## Test\n\nhello' --dry-run
 
 # ===== Interactive Card =====
 # 🚫 STOP — before constructing ANY interactive card JSON, you MUST read
@@ -167,7 +167,7 @@ lark-cli im +messages-send --chat-id oc_xxx --markdown $'## Test\n\nhello' --dry
 #    to --content must be the OUTPUT of that workflow. This is non-negotiable.
 
 # Once the workflow has produced the card JSON, send it:
-lark-cli im +messages-send --chat-id oc_xxx --msg-type interactive --content '<card_json_from_workflow>'
+work-cli im +messages-send --chat-id oc_xxx --msg-type interactive --content '<card_json_from_workflow>'
 ```
 
 ## Media Input Rules

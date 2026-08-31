@@ -27,8 +27,8 @@ var AppsRoleList = common.Shortcut{
 	Description: "List app roles",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +role-list --app-id <app_id>",
-		"Example: lark-cli apps +role-list --app-id <app_id> --name Admin --page-size 20",
+		"Example: work-cli apps +role-list --app-id <app_id>",
+		"Example: work-cli apps +role-list --app-id <app_id> --name Admin --page-size 20",
 		"When only a role name is known, pass --name for exact matching; call +role-get only after resolving one unique role_id",
 		"With --name, the CLI scans server pages in batches of 100, then applies --page-size and --page-token to the exact local matches",
 	},
@@ -80,7 +80,7 @@ var AppsRoleGet = common.Shortcut{
 	Description: "Get an app role",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +role-get --app-id <app_id> --role-id <role_id>",
+		"Example: work-cli apps +role-get --app-id <app_id> --role-id <role_id>",
 		"--role-id is not a human-readable role name; if only a name is known, run +role-list --name <exact_name> and use its unique returned role_id before calling +role-get",
 	},
 	Scopes:    []string{"spark:app:read"},
@@ -121,9 +121,9 @@ var AppsRoleCreate = common.Shortcut{
 	Description: "Create an app role",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +role-create --app-id <app_id> --name Admin",
-		"Example: lark-cli apps +role-create --app-id <app_id> --name Admin --description 'Can manage orders'",
-		"Example: lark-cli apps +role-create --app-id <app_id> --name Admin --role-id role_admin",
+		"Example: work-cli apps +role-create --app-id <app_id> --name Admin",
+		"Example: work-cli apps +role-create --app-id <app_id> --name Admin --description 'Can manage orders'",
+		"Example: work-cli apps +role-create --app-id <app_id> --name Admin --role-id role_admin",
 		"The create response returns data.role; run +role-get with data.role.role_id only when independent verification is required",
 	},
 	Scopes:    []string{"spark:app:write"},
@@ -187,7 +187,7 @@ var AppsRoleUpdate = common.Shortcut{
 	Description: "Update an app role",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +role-update --app-id <app_id> --role-id <role_id> --name Operator",
+		"Example: work-cli apps +role-update --app-id <app_id> --role-id <role_id> --name Operator",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -246,7 +246,7 @@ var AppsRoleDelete = common.Shortcut{
 	Description: "Delete an app role",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +role-delete --app-id <app_id> --role-id <role_id> --yes",
+		"Example: work-cli apps +role-delete --app-id <app_id> --role-id <role_id> --yes",
 		"A delete request alone is not explicit confirmation: first show the exact app, role, current member scope, and irreversible impact; use --yes only after the user confirms that impact",
 		"When independent verification is required, use +role-list --name <exact_name> and confirm the deleted role_id is absent; a failed +role-get alone does not prove deletion",
 	},

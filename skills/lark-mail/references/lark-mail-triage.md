@@ -9,42 +9,42 @@
 
 ```bash
 # 默认：收件箱邮件（默认 20 条，默认table 格式）
-lark-cli mail +triage
+work-cli mail +triage
 
 # 查看收件箱未读
-lark-cli mail +triage --filter '{"folder":"inbox","is_unread":true}'
-lark-cli mail +triage --folder INBOX --is-unread
-lark-cli mail +triage --filter is_unread
+work-cli mail +triage --filter '{"folder":"inbox","is_unread":true}'
+work-cli mail +triage --folder INBOX --is-unread
+work-cli mail +triage --filter is_unread
 
 # 全文搜索
-lark-cli mail +triage --query "合同审批"
+work-cli mail +triage --query "合同审批"
 
 # 按发件人 / 主题搜索
-lark-cli mail +triage --filter '{"from":["boss@example.com"],"subject":"季度报告"}'
+work-cli mail +triage --filter '{"from":["boss@example.com"],"subject":"季度报告"}'
 
 # 按时间范围搜索（如"上周的邮件"）
-lark-cli mail +triage --query "项目评审" --filter '{"time_range":{"start_time":"2026-03-16T00:00:00+08:00","end_time":"2026-03-22T23:59:59+08:00"}}'
+work-cli mail +triage --query "项目评审" --filter '{"time_range":{"start_time":"2026-03-16T00:00:00+08:00","end_time":"2026-03-22T23:59:59+08:00"}}'
 
 # 指定文件夹
-lark-cli mail +triage --filter '{"folder":"sent"}'
-lark-cli mail +triage --filter folder=sent
-lark-cli mail +triage --folder sent
+work-cli mail +triage --filter '{"folder":"sent"}'
+work-cli mail +triage --filter folder=sent
+work-cli mail +triage --folder sent
 
 # 系统标签（可通过 folder 或 label 传入，搜索时自动转为 folder）
-lark-cli mail +triage --filter '{"folder":"flagged"}'
-lark-cli mail +triage --filter '{"label":"important"}'
-lark-cli mail +triage --filter '{"label":"重要邮件"}'
+work-cli mail +triage --filter '{"folder":"flagged"}'
+work-cli mail +triage --filter '{"label":"important"}'
+work-cli mail +triage --filter '{"label":"重要邮件"}'
 
 # json/data 格式可配合 jq 处理
-lark-cli mail +triage --format json | jq '.messages[].subject'
+work-cli mail +triage --format json | jq '.messages[].subject'
 
 # 分页：先取 10 条，再用 page_token 翻页
-lark-cli mail +triage --max 10 --format json
+work-cli mail +triage --max 10 --format json
 # 输出中包含 page_token，传入下一次请求
-lark-cli mail +triage --page-token 'list:FfccvoqPd...' --max 10 --format json
+work-cli mail +triage --page-token 'list:FfccvoqPd...' --max 10 --format json
 
 # --page-size 是 --max 的别名
-lark-cli mail +triage --page-size 10
+work-cli mail +triage --page-size 10
 ```
 
 ## 参数

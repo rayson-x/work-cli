@@ -348,7 +348,7 @@ func assertSingleReport(t *testing.T, reportStub *httpmock.Stub, wantStatus stri
 		t.Fatalf("report call count = %d, want 1", len(reportStub.CapturedBodies))
 	}
 	body := decodeCapturedDriveMediaJSONBody(t, reportStub)
-	if body["file_scene"] != "lark-cli" || body["scene"] != "upload" || body["operation"] != "upload" {
+	if body["file_scene"] != "work-cli" || body["scene"] != "upload" || body["operation"] != "upload" {
 		t.Fatalf("unexpected report envelope: %#v", body)
 	}
 	if _, ok := body["user_id"]; ok {

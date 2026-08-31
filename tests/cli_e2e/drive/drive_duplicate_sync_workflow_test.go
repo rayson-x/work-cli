@@ -51,7 +51,7 @@ func TestDrive_DuplicateRemoteWorkflow(t *testing.T) {
 
 	t.Run("status and pull handle duplicate remote files", func(t *testing.T) {
 		suffix := clie2e.GenerateSuffix()
-		folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-dup-pull-"+suffix, "")
+		folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-dup-pull-"+suffix, "")
 
 		workDir := t.TempDir()
 		if err := os.MkdirAll(filepath.Join(workDir, "local"), 0o755); err != nil {
@@ -148,7 +148,7 @@ func TestDrive_DuplicateRemoteWorkflow(t *testing.T) {
 
 	t.Run("push resolves duplicate remote files and converges status", func(t *testing.T) {
 		suffix := clie2e.GenerateSuffix()
-		folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-dup-push-"+suffix, "")
+		folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-dup-push-"+suffix, "")
 
 		workDir := t.TempDir()
 		if err := os.MkdirAll(filepath.Join(workDir, "local"), 0o755); err != nil {
@@ -213,7 +213,7 @@ func TestDrive_DuplicateRemoteWorkflow(t *testing.T) {
 
 	t.Run("push overwrites nested remote file under its real parent", func(t *testing.T) {
 		suffix := clie2e.GenerateSuffix()
-		folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-nested-push-"+suffix, "")
+		folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-nested-push-"+suffix, "")
 		subFolderToken := createDriveFolder(t, parentT, ctx, "sub", folderToken)
 
 		workDir := t.TempDir()

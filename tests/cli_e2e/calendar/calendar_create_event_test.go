@@ -22,7 +22,7 @@ func TestCalendar_CreateEvent(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	eventSummary := "lark-cli-e2e-event-" + suffix
+	eventSummary := "work-cli-e2e-event-" + suffix
 	eventDescription := "test event description"
 
 	startAt := time.Now().UTC().Add(1 * time.Hour).Truncate(time.Minute)

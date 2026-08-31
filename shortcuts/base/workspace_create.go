@@ -20,7 +20,7 @@ var BaseWorkspaceCreate = common.Shortcut{
 		{Name: "name", Desc: "workspace name", Required: true},
 	},
 	Tips: []string{
-		`lark-cli base +workspace-create --name "Growth team"`,
+		`work-cli base +workspace-create --name "Growth team"`,
 		"Record the returned workspace_token and url; +workspace-entity-list, +workspace-move-in, and +app-create need the token.",
 	},
 	DryRun: dryRunWorkspaceCreate,

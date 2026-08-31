@@ -123,7 +123,7 @@ func addStatusNote(result map[string]interface{}, d identitydiag.Result, canAuth
 	case !d.User.Available && d.Bot.Available:
 		note := "User identity is " + identitydiag.StatusMessage(d.User.Status) + "; bot identity is ready for bot/tenant API calls."
 		if canAuthLogin {
-			note += " Run `lark-cli auth login` to enable user identity."
+			note += " Run `work-cli auth login` to enable user identity."
 		}
 		result["note"] = note
 	case d.User.Status == identitydiag.StatusNeedsRefresh:
@@ -131,7 +131,7 @@ func addStatusNote(result map[string]interface{}, d identitydiag.Result, canAuth
 	case !d.User.Available && !d.Bot.Available:
 		note := "No usable identity is available. Configure bot credentials"
 		if canAuthLogin {
-			note += " or run `lark-cli auth login`"
+			note += " or run `work-cli auth login`"
 		}
 		result["note"] = note + "."
 	}

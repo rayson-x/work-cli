@@ -292,7 +292,7 @@ func TestDocsUpdateDryRunLegacyFlagReturnsCurrentEmbeddedGuidance(t *testing.T) 
 	require.Equal(t, "invalid_argument", gjson.Get(result.Stderr, "error.subtype").String(), result.Stderr)
 	require.Equal(t, "--mode", gjson.Get(result.Stderr, "error.param").String(), result.Stderr)
 	require.Equal(t,
-		"run `lark-cli docs +update --help` for the latest command flags; read the version-matched embedded guidance before retrying: `lark-cli skills read lark-doc`, `lark-cli skills read lark-doc/references/lark-doc-update.md`, `lark-cli skills read lark-doc/references/lark-doc-xml.md`, `lark-cli skills read lark-doc/references/lark-doc-md.md`; do not inspect another local SKILL.md copy",
+		"run `work-cli docs +update --help` for the latest command flags; read the version-matched embedded guidance before retrying: `work-cli skills read lark-doc`, `work-cli skills read lark-doc/references/lark-doc-update.md`, `work-cli skills read lark-doc/references/lark-doc-xml.md`, `work-cli skills read lark-doc/references/lark-doc-md.md`; do not inspect another local SKILL.md copy",
 		gjson.Get(result.Stderr, "error.hint").String(),
 		result.Stderr,
 	)

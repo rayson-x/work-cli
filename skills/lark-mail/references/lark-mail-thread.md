@@ -6,26 +6,26 @@
 
 在实现上，每个 `messages[]` 项与 `mail +message` 的构建方式一致：安全元数据字段直接透传，正文/附件辅助字段由 shortcut 派生。每条邮件使用统一的 `attachments[]` 列表，涵盖普通附件和内嵌图片。
 
-本 skill 对应 shortcut `lark-cli mail +thread`，内部调用：
+本 skill 对应 shortcut `work-cli mail +thread`，内部调用：
 - `GET /open-apis/mail/v1/user_mailboxes/{mailbox}/threads/{thread_id}` — 获取会话中所有邮件的完整内容
 
 ## 命令
 
 ```bash
 # 读取完整会话
-lark-cli mail +thread --thread-id <thread-id>
+work-cli mail +thread --thread-id <thread-id>
 
 # 仅纯文本正文（更小的负载，适合 AI 处理）
-lark-cli mail +thread --thread-id <thread-id> --html=false
+work-cli mail +thread --thread-id <thread-id> --html=false
 
 # 指定邮箱
-lark-cli mail +thread --mailbox user@example.com --thread-id <thread-id>
+work-cli mail +thread --mailbox user@example.com --thread-id <thread-id>
 
 # JSON 输出
-lark-cli mail +thread --thread-id <thread-id> --format json
+work-cli mail +thread --thread-id <thread-id> --format json
 
 # Dry Run
-lark-cli mail +thread --thread-id <thread-id> --dry-run
+work-cli mail +thread --thread-id <thread-id> --dry-run
 ```
 
 ## 参数
@@ -74,7 +74,7 @@ lark-cli mail +thread --thread-id <thread-id> --dry-run
 - 查看某条邮件的原始 HTML：
 
 ```bash
-lark-cli mail +thread --thread-id <thread_id> --format json | jq -r '.data.messages[0].body_html'
+work-cli mail +thread --thread-id <thread_id> --format json | jq -r '.data.messages[0].body_html'
 ```
 
 ## 典型场景
@@ -83,10 +83,10 @@ lark-cli mail +thread --thread-id <thread_id> --format json | jq -r '.data.messa
 
 ```bash
 # 1. 从某封邮件获取 thread_id
-lark-cli mail +message --message-id <id> --html=false --format json | jq '.data.thread_id'
+work-cli mail +message --message-id <id> --html=false --format json | jq '.data.thread_id'
 
 # 2. 读取完整会话（仅纯文本）
-lark-cli mail +thread --thread-id <thread_id> --html=false --format json
+work-cli mail +thread --thread-id <thread_id> --html=false --format json
 
 # 3. 让 LLM 分析 messages[].body_plain_text 并生成会话摘要
 ```
@@ -95,17 +95,17 @@ lark-cli mail +thread --thread-id <thread_id> --html=false --format json
 
 ```bash
 # 获取最新一封邮件的 message_id
-lark-cli mail +thread --thread-id <thread_id> --html=false --format json | \
+work-cli mail +thread --thread-id <thread_id> --html=false --format json | \
   jq '.data.messages[-1].message_id'
 
 # 回复
-lark-cli mail +reply --message-id <last_message_id> --body "..."
+work-cli mail +reply --message-id <last_message_id> --body "..."
 ```
 
 ## 相关命令
 
-- `lark-cli mail +message` — 读取单封邮件
-- `lark-cli mail +reply` — 回复邮件
-- `lark-cli mail +forward` — 转发邮件
-- `lark-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL
-- `lark-cli mail user_mailbox.messages list` — 列出收件箱邮件（获取 `thread_id`）
+- `work-cli mail +message` — 读取单封邮件
+- `work-cli mail +reply` — 回复邮件
+- `work-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL
+- `work-cli mail user_mailbox.messages list` — 列出收件箱邮件（获取 `thread_id`）

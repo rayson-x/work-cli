@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package skill implements the `lark-cli skills` command group, which serves
+// Package skill implements the `work-cli skills` command group, which serves
 // binary-embedded skill content to AI agents. The package is "skill"; the
 // user-facing verb is "skills".
 package skill
@@ -62,15 +62,15 @@ func newListCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list [name[/path]]",
 		Short: "List skills, or list one layer under a skill path (like ls)",
-		Example: `  lark-cli skills list                      # all skills: name, description, version
-  lark-cli skills list lark-doc             # one layer under a skill (like ls)
-  lark-cli skills list lark-doc/references  # one layer under a subdirectory`,
+		Example: `  work-cli skills list                      # all skills: name, description, version
+  work-cli skills list lark-doc             # one layer under a skill (like ls)
+  work-cli skills list lark-doc/references  # one layer under a subdirectory`,
 		Args: cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 1 {
 				return errs.NewValidationError(errs.SubtypeInvalidArgument,
 					"list takes at most 1 argument: [name[/path]]").
-					WithHint("run 'lark-cli skills list --help'")
+					WithHint("run 'work-cli skills list --help'")
 			}
 			r, err := newReader(f)
 			if err != nil {
@@ -104,10 +104,10 @@ func newReadCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "read <name>[/<path>] [path]",
 		Short: "Print a skill's SKILL.md, or a file under the skill (raw markdown by default)",
-		Example: `  lark-cli skills read lark-doc                             # the skill's SKILL.md
-  lark-cli skills read lark-doc references/lark-doc-fetch.md  # a file under the skill
-  lark-cli skills read lark-doc/references/lark-doc-fetch.md  # same, slash form
-  lark-cli skills read lark-doc --json                      # JSON envelope`,
+		Example: `  work-cli skills read lark-doc                             # the skill's SKILL.md
+  work-cli skills read lark-doc references/lark-doc-fetch.md  # a file under the skill
+  work-cli skills read lark-doc/references/lark-doc-fetch.md  # same, slash form
+  work-cli skills read lark-doc --json                      # JSON envelope`,
 		Args: cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, relpath, err := parseReadTarget(args)
@@ -168,7 +168,7 @@ func parseReadTarget(args []string) (name, relpath string, err error) {
 	default:
 		return "", "", errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"read requires 1 or 2 arguments: <name>[/<path>] [path]").
-			WithHint("run 'lark-cli skills read --help'")
+			WithHint("run 'work-cli skills read --help'")
 	}
 }
 
@@ -177,7 +177,7 @@ func parseReadTarget(args []string) (name, relpath string, err error) {
 // relative form must be rewritten.
 func readGuidance(name string) string {
 	return fmt.Sprintf("> Tip: read this skill's own files (e.g. `references/...`) with "+
-		"`lark-cli skills read %s <relative-path>` to keep them in sync with this CLI version. "+
+		"`work-cli skills read %s <relative-path>` to keep them in sync with this CLI version. "+
 		"A reference to another skill (`../lark-foo/...`) uses the same command with the "+
-		"leading `../` removed: `lark-cli skills read lark-foo/...`.", name)
+		"leading `../` removed: `work-cli skills read lark-foo/...`.", name)
 }

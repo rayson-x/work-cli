@@ -22,17 +22,17 @@ func TestUserAuthorizationGolden(t *testing.T) {
 		{
 			name: "no scopes",
 			hint: UserAuthorization(),
-			visible: "run `lark-cli auth login --recommend --no-wait --json` to get device_code and verification_url; " +
+			visible: "run `work-cli auth login --recommend --no-wait --json` to get device_code and verification_url; " +
 				"present verification_url to the user exactly and end this turn; after the user confirms authorization, " +
-				"run `lark-cli auth login --device-code <device_code>` in a later turn to finish login",
+				"run `work-cli auth login --device-code <device_code>` in a later turn to finish login",
 			concealed: "obtain or refresh a user credential through this distribution's supported authorization flow, have the user complete authorization, then retry",
 		},
 		{
 			name: "multiple scopes",
 			hint: UserAuthorization("docx:document", "drive:drive"),
-			visible: "run `lark-cli auth login --scope \"docx:document drive:drive\" --no-wait --json` to get device_code and verification_url; " +
+			visible: "run `work-cli auth login --scope \"docx:document drive:drive\" --no-wait --json` to get device_code and verification_url; " +
 				"present verification_url to the user exactly and end this turn; after the user confirms authorization, " +
-				"run `lark-cli auth login --device-code <device_code>` in a later turn to finish login",
+				"run `work-cli auth login --device-code <device_code>` in a later turn to finish login",
 			concealed: "obtain or refresh a user credential through this distribution's supported authorization flow, have the user complete authorization, then retry\n" +
 				"current command requires scope(s): docx:document, drive:drive",
 		},
@@ -68,9 +68,9 @@ func TestUserAuthorizationUsesBuildLocalProfileForBothCommands(t *testing.T) {
 	hint := UserAuthorization("docx:document", "drive:drive")
 	projector := NewProjectorWithContext(nil, RenderContext{Profile: "team-beta"})
 
-	want := "run `lark-cli auth login --profile='team-beta' --scope \"docx:document drive:drive\" --no-wait --json` to get device_code and verification_url; " +
+	want := "run `work-cli auth login --profile='team-beta' --scope \"docx:document drive:drive\" --no-wait --json` to get device_code and verification_url; " +
 		"present verification_url to the user exactly and end this turn; after the user confirms authorization, " +
-		"run `lark-cli auth login --profile='team-beta' --device-code <device_code>` in a later turn to finish login"
+		"run `work-cli auth login --profile='team-beta' --device-code <device_code>` in a later turn to finish login"
 	if got := projector.RenderHint(hint); got != want {
 		t.Fatalf("profile-aware hint = %q, want %q", got, want)
 	}
@@ -93,7 +93,7 @@ func TestUserAuthorizationUsesBuildLocalProfileForBothCommands(t *testing.T) {
 
 func TestRenderContextShellQuotesProfileAsOneArgument(t *testing.T) {
 	context := RenderContext{Profile: "team'$(touch /tmp/should-not-run)"}
-	want := `lark-cli auth login --profile='team'"'"'$(touch /tmp/should-not-run)' --device-code <code>`
+	want := `work-cli auth login --profile='team'"'"'$(touch /tmp/should-not-run)' --device-code <code>`
 	if got := context.AuthLoginCommand("--device-code <code>"); got != want {
 		t.Fatalf("AuthLoginCommand() = %q, want %q", got, want)
 	}
@@ -101,8 +101,8 @@ func TestRenderContextShellQuotesProfileAsOneArgument(t *testing.T) {
 
 func TestHintRenderFiltersOnlyUnreferenceableTargets(t *testing.T) {
 	hint := Join("; ",
-		Command(TargetConfigInit, "run `lark-cli config init`"),
-		Command(TargetAuthLogin, "run `lark-cli auth login`"),
+		Command(TargetConfigInit, "run `work-cli config init`"),
+		Command(TargetAuthLogin, "run `work-cli auth login`"),
 		Text("inspect the local logs"),
 	)
 	plan := surface.NewPlan(map[surface.CommandID]surface.CommandState{
@@ -110,14 +110,14 @@ func TestHintRenderFiltersOnlyUnreferenceableTargets(t *testing.T) {
 		"auth/login":  surface.CommandDeniedVisible,
 	})
 
-	if got, want := hint.String(), "run `lark-cli config init`; run `lark-cli auth login`; inspect the local logs"; got != want {
+	if got, want := hint.String(), "run `work-cli config init`; run `work-cli auth login`; inspect the local logs"; got != want {
 		t.Fatalf("Hint.String() = %q, want %q", got, want)
 	}
-	if got, want := hint.Render(plan), "run `lark-cli auth login`; inspect the local logs"; got != want {
+	if got, want := hint.Render(plan), "run `work-cli auth login`; inspect the local logs"; got != want {
 		t.Fatalf("Hint.Render() = %q, want %q", got, want)
 	}
 	// Rendering is immutable and repeatable for another command tree.
-	if got, want := hint.String(), "run `lark-cli config init`; run `lark-cli auth login`; inspect the local logs"; got != want {
+	if got, want := hint.String(), "run `work-cli config init`; run `work-cli auth login`; inspect the local logs"; got != want {
 		t.Fatalf("Hint.String() after filtering = %q, want %q", got, want)
 	}
 }

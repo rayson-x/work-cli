@@ -19,13 +19,13 @@
 
 ```bash
 # 直接传 HTML
-lark-cli mail +lint-html --body '<p>正文</p>'
+work-cli mail +lint-html --body '<p>正文</p>'
 
 # 从文件读 HTML（路径必须在 cwd 子树内）
-lark-cli mail +lint-html --body-file ./template.html
+work-cli mail +lint-html --body-file ./template.html
 
 # 查看完整 lint 详情
-lark-cli mail +lint-html --body-file ./template.html --show-lint-details
+work-cli mail +lint-html --body-file ./template.html --show-lint-details
 ```
 
 ## 参数
@@ -87,7 +87,7 @@ lark-cli mail +lint-html --body-file ./template.html --show-lint-details
 
 ## 调用示例
 
-下面是用 `lark-cli mail +lint-html --body '<INPUT>' --show-lint-details` 实跑得到的典型 case（加 `--show-lint-details` 才能看到 finding；默认只返回 `cleaned_html`），覆盖 error 类（强制删）和 warning 类（自动修复）。
+下面是用 `work-cli mail +lint-html --body '<INPUT>' --show-lint-details` 实跑得到的典型 case（加 `--show-lint-details` 才能看到 finding；默认只返回 `cleaned_html`），覆盖 error 类（强制删）和 warning 类（自动修复）。
 
 ### Error 类（强制删除，写信链路也会拒）
 

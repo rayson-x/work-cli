@@ -33,9 +33,9 @@ func TestCommandCatalogPath(t *testing.T) {
 		leaf *cobra.Command
 		want []string
 	}{
-		{"flat dotted resource", chain("lark-cli", "im", "chat.members", "create"), []string{"im", "chat.members", "create"}},
-		{"nested resources", chain("lark-cli", "im", "spaces", "items", "get"), []string{"im", "spaces", "items", "get"}},
-		{"service level", chain("lark-cli", "im"), []string{"im"}},
+		{"flat dotted resource", chain("work-cli", "im", "chat.members", "create"), []string{"im", "chat.members", "create"}},
+		{"nested resources", chain("work-cli", "im", "spaces", "items", "get"), []string{"im", "spaces", "items", "get"}},
+		{"service level", chain("work-cli", "im"), []string{"im"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -46,7 +46,7 @@ func TestCommandCatalogPath(t *testing.T) {
 	}
 
 	// The root command (no parent) has no catalog path.
-	if got := commandCatalogPath(&cobra.Command{Use: "lark-cli"}); len(got) != 0 {
+	if got := commandCatalogPath(&cobra.Command{Use: "work-cli"}); len(got) != 0 {
 		t.Errorf("root path = %v, want empty", got)
 	}
 }

@@ -10,7 +10,7 @@ so callers can `import` it instead of copy-pasting:
 
     from sheets_df import df_to_sheet, sheet_to_df
 
-Callers run lark-cli themselves; this file is a library, not a CLI.
+Callers run work-cli themselves; this file is a library, not a CLI.
 """
 import json
 

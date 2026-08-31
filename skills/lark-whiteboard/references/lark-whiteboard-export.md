@@ -26,7 +26,7 @@
 ### 示例 1：导出画板为预览图片
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token "wbcnxxxxxxxx" \
   --output-type preview \
   --output ./preview
@@ -35,7 +35,7 @@ lark-cli whiteboard +export \
 ### 示例 2：提取画板中的代码并直接输出
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token "wbcnxxxxxxxx" \
   --output-type source
 ```
@@ -43,7 +43,7 @@ lark-cli whiteboard +export \
 ### 示例 3：导出画板为 SVG 矢量图
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token "wbcnxxxxxxxx" \
   --output-type svg \
   --output ./whiteboard.svg \
@@ -53,7 +53,7 @@ lark-cli whiteboard +export \
 ### 示例 4：导出画板原始节点结构到文件
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token "wbcnxxxxxxxx" \
   --output-type raw \
   --output ./nodes.json \

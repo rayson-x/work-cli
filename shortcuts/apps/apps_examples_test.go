@@ -19,7 +19,7 @@ func TestAppsShortcutsHaveExamples(t *testing.T) {
 		}
 		hasExample := false
 		for _, tip := range s.Tips {
-			if strings.HasPrefix(tip, "Example: lark-cli apps +") {
+			if strings.HasPrefix(tip, "Example: work-cli apps +") {
 				hasExample = true
 			}
 			if realAppID.MatchString(tip) {
@@ -30,7 +30,7 @@ func TestAppsShortcutsHaveExamples(t *testing.T) {
 			}
 		}
 		if !hasExample {
-			t.Errorf("%s has no \"Example: lark-cli apps +...\" tip", s.Command)
+			t.Errorf("%s has no \"Example: work-cli apps +...\" tip", s.Command)
 		}
 	}
 }
@@ -44,7 +44,7 @@ func TestHighFreqCommandsHaveMultipleExamples(t *testing.T) {
 		}
 		n := 0
 		for _, tip := range s.Tips {
-			if strings.HasPrefix(tip, "Example: lark-cli apps +") {
+			if strings.HasPrefix(tip, "Example: work-cli apps +") {
 				n++
 			}
 		}

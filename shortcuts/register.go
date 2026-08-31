@@ -193,7 +193,7 @@ func RegisterShortcutSnapshotWithContext(ctx context.Context, program *cobra.Com
 		// Applied OUTSIDE the create branch for the same reason as the domain tag:
 		// OpenAPI auto-registration has usually created the service command
 		// already, so setting Aliases only where the command is constructed would
-		// be dead code — it compiles, the tests pass, and `lark-cli slide …` still
+		// be dead code — it compiles, the tests pass, and `work-cli slide …` still
 		// answers "unknown command".
 		for _, alias := range serviceAliases[service] {
 			if !slices.Contains(svc.Aliases, alias) {
@@ -376,7 +376,7 @@ func applySheetsCompatGroups(svc *cobra.Command) {
 		&cobra.Group{ID: sheetsCurrentGroupID, Title: "Available Commands:"},
 		&cobra.Group{
 			ID:    sheetsDeprecatedGroupID,
-			Title: "Deprecated pre-refactor commands (still work) — update your lark-sheets skill, then: lark-cli update",
+			Title: "Deprecated pre-refactor commands (still work) — update your lark-sheets skill, then: work-cli update",
 		},
 	)
 

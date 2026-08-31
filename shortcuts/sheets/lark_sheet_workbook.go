@@ -408,7 +408,7 @@ var SheetCopy = common.Shortcut{
 	HasFormat:   true,
 	Flags:       flagsFor("+sheet-copy"),
 	Tips: []string{
-		"Example: lark-cli sheets +sheet-copy --url <URL> --sheet-name 数据源 --title 数据源-副本",
+		"Example: work-cli sheets +sheet-copy --url <URL> --sheet-name 数据源 --title 数据源-副本",
 		"--sheet-name / --sheet-id selects the SOURCE sheet; the copy's new name goes in --title.",
 	},
 	Validate: validateViaInput(sheetCopyInput),
@@ -2248,13 +2248,13 @@ func errLocalOfficeExportUnsupported(token string) error {
 		return errs.NewValidationError(errs.SubtypeFailedPrecondition,
 			"%s is a locally opened Office file, not a Lark spreadsheet — it cannot be exported", token).
 			WithHint("This workbook is already a file on your own disk: use that file directly, no export needed. " +
-				"To get a Lark spreadsheet you can export later, upload it first with `lark-cli sheets +workbook-import --file <path>`.")
+				"To get a Lark spreadsheet you can export later, upload it first with `work-cli sheets +workbook-import --file <path>`.")
 	}
 	return errs.NewValidationError(errs.SubtypeFailedPrecondition,
 		"%s is an Office file stored in Lark, not a Lark spreadsheet — export only produces artifacts for native Lark documents", token).
-		WithHint(fmt.Sprintf("Download the stored file as-is with `lark-cli drive +download --file-token %s`. "+
+		WithHint(fmt.Sprintf("Download the stored file as-is with `work-cli drive +download --file-token %s`. "+
 			"If you need a Lark spreadsheet (to export it, or to edit it with the sheets commands), convert it first: "+
-			"download it, then `lark-cli sheets +workbook-import --file <path>`.", token))
+			"download it, then `work-cli sheets +workbook-import --file <path>`.", token))
 }
 
 // isLocallyOpenedOfficeToken reports whether the token is one of the synthetic

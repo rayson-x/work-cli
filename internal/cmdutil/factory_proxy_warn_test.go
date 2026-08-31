@@ -57,7 +57,7 @@ func TestCachedHTTPClientFunc_ProxyWarnGate(t *testing.T) {
 	}
 }
 
-// TestCachedLarkClientFunc_ProxyWarnGate verifies the lark-client init path
+// TestCachedLarkClientFunc_ProxyWarnGate verifies the work-client init path
 // invokes WarnIfProxied only when stderr is an interactive terminal. The gate
 // runs after ResolveAccount, so an env-backed credential is wired up to let
 // account resolution succeed without network or config files.

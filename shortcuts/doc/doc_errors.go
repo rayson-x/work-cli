@@ -38,7 +38,7 @@ func withDocMediaDownloadRecoveryHint(err error, mediaType string) error {
 		problem.Code == http.StatusForbidden &&
 		!strings.Contains(problem.Hint, "docs +media-preview") {
 		const tokenArg = "<MEDIA_TOKEN>"
-		hint := fmt.Sprintf("Direct document media download returned HTTP 403. To preview the image or file content, try `lark-cli docs +media-preview --token %s --output <path>`.", tokenArg)
+		hint := fmt.Sprintf("Direct document media download returned HTTP 403. To preview the image or file content, try `work-cli docs +media-preview --token %s --output <path>`.", tokenArg)
 		appendDocRecoveryHint(problem, hint)
 	}
 
@@ -69,7 +69,7 @@ func docMediaDownloadPermissionDeniedError() error {
 		errs.SubtypePermissionDenied,
 		"current identity does not have export permission for this document media",
 	).WithHint(
-		"Direct document media download is unavailable. To preview the image or file content, try `lark-cli docs +media-preview --token %s --output <path>`.",
+		"Direct document media download is unavailable. To preview the image or file content, try `work-cli docs +media-preview --token %s --output <path>`.",
 		tokenArg,
 	)
 }

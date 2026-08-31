@@ -890,7 +890,7 @@ func newLocalDocResource(runtime *common.RuntimeContext, kind localDocResourceKi
 		return localDocResource{}, localResourceValidationError(kind, occurrence, "path must start with @")
 	}
 	if isReservedLocalDocResourceMarker(pathValue) {
-		return localDocResource{}, localResourceValidationError(kind, occurrence, "path uses a reserved lark-cli marker")
+		return localDocResource{}, localResourceValidationError(kind, occurrence, "path uses a reserved work-cli marker")
 	}
 	relPath := strings.TrimSpace(strings.TrimPrefix(pathValue, "@"))
 	clean := filepath.Clean(relPath)

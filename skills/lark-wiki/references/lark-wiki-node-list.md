@@ -6,28 +6,28 @@ List wiki nodes in a space or under a specific parent node. **Default fetches a 
 
 ```bash
 # Default: single page of root nodes
-lark-cli wiki +node-list --space-id <SPACE_ID>
+work-cli wiki +node-list --space-id <SPACE_ID>
 
 # Drill into a sub-directory (still single page by default)
-lark-cli wiki +node-list --space-id <SPACE_ID> --parent-node-token <NODE_TOKEN>
+work-cli wiki +node-list --space-id <SPACE_ID> --parent-node-token <NODE_TOKEN>
 
 # Drill with a wiki URL (CLI normalizes /wiki/<token> to node_token)
-lark-cli wiki +node-list --space-id <SPACE_ID> --parent-node-token "https://feishu.cn/wiki/wikcn_xxx"
+work-cli wiki +node-list --space-id <SPACE_ID> --parent-node-token "https://feishu.cn/wiki/wikcn_xxx"
 
 # Personal document library (user identity only)
-lark-cli wiki +node-list --space-id my_library --as user
+work-cli wiki +node-list --space-id my_library --as user
 
 # Walk every page (capped by --page-limit, default 10)
-lark-cli wiki +node-list --space-id <SPACE_ID> --page-all
+work-cli wiki +node-list --space-id <SPACE_ID> --page-all
 
 # Walk every page with a higher cap
-lark-cli wiki +node-list --space-id <SPACE_ID> --page-all --page-limit 30
+work-cli wiki +node-list --space-id <SPACE_ID> --page-all --page-limit 30
 
 # Resume from a cursor
-lark-cli wiki +node-list --space-id <SPACE_ID> --page-token <TOKEN>
+work-cli wiki +node-list --space-id <SPACE_ID> --page-token <TOKEN>
 
 # Pretty / table output
-lark-cli wiki +node-list --space-id <SPACE_ID> --format pretty
+work-cli wiki +node-list --space-id <SPACE_ID> --format pretty
 ```
 
 ## Flags
@@ -76,17 +76,17 @@ To list all content recursively, call `+node-list` again with each node's `node_
 
 ```bash
 # Step 1: list root nodes
-lark-cli wiki +node-list --space-id 6946843325487912356
+work-cli wiki +node-list --space-id 6946843325487912356
 
 # Step 2: drill into a node that has children
-lark-cli wiki +node-list --space-id 6946843325487912356 --parent-node-token wikcn_EXAMPLE_TOKEN
+work-cli wiki +node-list --space-id 6946843325487912356 --parent-node-token wikcn_EXAMPLE_TOKEN
 ```
 
 ## Notes
 
 - `--space-id my_library` is a per-user alias and only valid with `--as user`. The shortcut will refuse `--as bot` with `my_library` upfront.
-- `--space-id` is a numeric wiki `space_id`. Do not pass a wiki URL, wiki node token, document token, or title. Use `lark-cli wiki +space-list --as user` to discover it.
-- `--parent-node-token` must resolve to a wiki node token. If you have a docx/sheet/base/file URL, first run `lark-cli wiki +node-get --node-token <url>` and use the returned `node_token`.
+- `--space-id` is a numeric wiki `space_id`. Do not pass a wiki URL, wiki node token, document token, or title. Use `work-cli wiki +space-list --as user` to discover it.
+- `--parent-node-token` must resolve to a wiki node token. If you have a docx/sheet/base/file URL, first run `work-cli wiki +node-get --node-token <url>` and use the returned `node_token`.
 - Treat `invalid_parameters` (`space_id is not int`, `invalid page_token`), `not_found` (`node not found by parent node token`), and `permission_denied` as terminal for the current arguments. For `131006 permission_denied`, the user or app/bot identity lacks access to the target space or parent node; this is resource access, not app scope authorization. Do not retry the same request, reauthorize, or switch identity as trial and error. Ask the resource owner or wiki administrator to grant read access, or use an accessible resource.
 - For `rate_limit`, stop immediate retries and retry later with exponential backoff or a smaller `--page-limit`.
 

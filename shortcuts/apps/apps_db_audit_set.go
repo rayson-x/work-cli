@@ -15,7 +15,7 @@ import (
 // 审计保留期合法取值。
 var auditRetentions = []string{"7d", "30d", "180d", "360d", "forever"}
 
-const dbAuditSetHint = "verify --app-id and --table; check current config with `lark-cli apps +db-audit-status --app-id <app_id>`"
+const dbAuditSetHint = "verify --app-id and --table; check current config with `work-cli apps +db-audit-status --app-id <app_id>`"
 
 // AppsDBAuditEnable 为某张表开启行级审计（变更追溯）。
 //
@@ -26,7 +26,7 @@ var AppsDBAuditEnable = common.Shortcut{
 	Description: "Enable row-change audit logging for a table",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +db-audit-enable --app-id <app_id> --table orders --retention 30d",
+		"Example: work-cli apps +db-audit-enable --app-id <app_id> --table orders --retention 30d",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -88,7 +88,7 @@ var AppsDBAuditDisable = common.Shortcut{
 	Description: "Disable row-change audit logging for a table",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +db-audit-disable --app-id <app_id> --table orders",
+		"Example: work-cli apps +db-audit-disable --app-id <app_id> --table orders",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

@@ -37,22 +37,22 @@ func TestMeetingSkillOwnsVCReferences(t *testing.T) {
 		{
 			sharedName: "lark-vc-meeting-list-active.md",
 			oldName:    "lark-vc-agent-meeting-list-active.md",
-			command:    "lark-cli vc +meeting-list-active",
+			command:    "work-cli vc +meeting-list-active",
 		},
 		{
 			sharedName: "lark-vc-meeting-events.md",
 			oldName:    "lark-vc-agent-meeting-events.md",
-			command:    "lark-cli vc +meeting-events",
+			command:    "work-cli vc +meeting-events",
 		},
 		{
 			sharedName: "lark-vc-meeting-message-send.md",
 			oldName:    "lark-vc-agent-meeting-message-send.md",
-			command:    "lark-cli vc +meeting-message-send",
+			command:    "work-cli vc +meeting-message-send",
 		},
 		{
 			sharedName: "lark-vc-meeting-countdown.md",
 			oldName:    "lark-vc-agent-meeting-countdown.md",
-			command:    "lark-cli vc +meeting-countdown",
+			command:    "work-cli vc +meeting-countdown",
 		},
 	}
 

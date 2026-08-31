@@ -46,7 +46,7 @@ Batch-replace exact keywords in a minute transcript.
 
 **Replace several keywords in one call**
 ```bash
-lark-cli minutes +word-replace --minute-token obcnxxxxxxxxxxxxxxxxxxxx --replace-words '[{"source_word":"旧词","target_word":"新词"},{"source_word":"Foo","target_word":"Bar"}]' --as user
+work-cli minutes +word-replace --minute-token obcnxxxxxxxxxxxxxxxxxxxx --replace-words '[{"source_word":"旧词","target_word":"新词"},{"source_word":"Foo","target_word":"Bar"}]' --as user
 ```
 
 ## +summary
@@ -59,7 +59,7 @@ Replace the minute's AI summary text in full.
 
 **Replace the AI summary**
 ```bash
-lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary "**会议结论**\n- 方案 A 通过\n- 下周跟进排期" --as user
+work-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary "**会议结论**\n- 方案 A 通过\n- 下周跟进排期" --as user
 ```
 
 ### Skills
@@ -69,7 +69,7 @@ lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary "**�
 Write AI todos that live inside a minute — not Lark Task list items.
 
 ### Avoid when
-- Personal or shared Task lists → use the task domain (`lark-cli task`), not this shortcut
+- Personal or shared Task lists → use the task domain (`work-cli task`), not this shortcut
 
 ### Prerequisites
 - `minute_token` from [[+search]], a minutes URL, or VC recording
@@ -79,7 +79,7 @@ Write AI todos that live inside a minute — not Lark Task list items.
 
 **Add one unfinished todo**
 ```bash
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
 ```
 
 ### Skills

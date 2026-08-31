@@ -25,7 +25,7 @@ func TestDriveAddCommentMarkdownFileWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	fileName := "lark-cli-e2e-drive-comment-" + suffix + ".md"
+	fileName := "work-cli-e2e-drive-comment-" + suffix + ".md"
 
 	createResult, err := clie2e.RunCmd(ctx, clie2e.Request{
 		Args: []string{

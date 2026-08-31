@@ -217,7 +217,7 @@ func markMinutesDetailProcessing(result *minuteDetailItem, minuteToken string, a
 }
 
 func minutesDetailNextCommand(minuteToken string, artifactFlags []string) string {
-	parts := []string{"lark-cli", "minutes", "+detail", "--minute-tokens", minuteToken}
+	parts := []string{"work-cli", "minutes", "+detail", "--minute-tokens", minuteToken}
 	parts = append(parts, artifactFlags...)
 	parts = append(parts, "--wait-ready")
 	return strings.Join(parts, " ")

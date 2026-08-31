@@ -158,12 +158,12 @@ func validateWikiNodeListSpaceID(spaceID string) error {
 	if strings.Contains(spaceID, "://") || strings.ContainsAny(spaceID, "/?#") {
 		return errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"--space-id must be a numeric wiki space_id, not a URL or path",
-		).WithParam("--space-id").WithHint("Run `lark-cli wiki +space-list --as user` to discover space IDs.")
+		).WithParam("--space-id").WithHint("Run `work-cli wiki +space-list --as user` to discover space IDs.")
 	}
 	if !isDecimalWikiSpaceID(spaceID) {
 		return errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"--space-id must be a numeric wiki space_id; do not pass a wiki node token, document token, or title",
-		).WithParam("--space-id").WithHint("Run `lark-cli wiki +space-list --as user` to list accessible wiki spaces, then pass the numeric `space_id`.")
+		).WithParam("--space-id").WithHint("Run `work-cli wiki +space-list --as user` to list accessible wiki spaces, then pass the numeric `space_id`.")
 	}
 	if err := validateOptionalResourceName(spaceID, "--space-id"); err != nil {
 		return err
@@ -198,7 +198,7 @@ func normalizeWikiNodeListParentToken(parentNodeToken string) (string, error) {
 			return "", errs.NewValidationError(errs.SubtypeInvalidArgument,
 				"--parent-node-token must identify a wiki node; got a %s URL",
 				ref.Type,
-			).WithParam("--parent-node-token").WithHint("Resolve the document URL with `lark-cli wiki +node-get --node-token <url>` and use its `node_token`.")
+			).WithParam("--parent-node-token").WithHint("Resolve the document URL with `work-cli wiki +node-get --node-token <url>` and use its `node_token`.")
 		}
 		parentNodeToken = ref.Token
 	}

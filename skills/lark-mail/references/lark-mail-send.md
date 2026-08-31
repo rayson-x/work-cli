@@ -8,7 +8,7 @@
 - 本地文件附件（`--attach`）
 - 内嵌图片（`--inline`，CID 可用随机字符串）
 
-本 skill 对应 shortcut：`lark-cli mail +send`。
+本 skill 对应 shortcut：`work-cli mail +send`。
 
 ## CRITICAL — 发送工作流（必须遵循）
 
@@ -18,7 +18,7 @@
 
 **方式 A（推荐）** — 先创建草稿，再确认发送：
 ```bash
-lark-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>'
+work-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>'
 ```
 → 返回 `draft_id`
 
@@ -26,12 +26,12 @@ lark-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>'
 
 用户明确同意后，发送该草稿：
 ```bash
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
 ```
 
 **方式 B（允许）** — 用户已经明确确认收件人和内容时，可直接使用 `--confirm-send` 立即发送：
 ```bash
-lark-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>' --confirm-send
+work-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>' --confirm-send
 ```
 
 **禁止在用户未明确同意的情况下执行发送，无论是发送草稿还是直接使用 `--confirm-send`。**
@@ -40,27 +40,27 @@ lark-cli mail +send --to '<收件人>' --subject '<主题>' --body '<正文>' --
 
 ```bash
 # 保存为草稿（默认行为，不发送）— HTML 格式推荐
-lark-cli mail +send --to 'alice@example.com' --subject '周报' \
+work-cli mail +send --to 'alice@example.com' --subject '周报' \
   --body '<p>本周进展：</p><ul><li>完成 A 模块</li><li>修复 3 个 bug</li></ul>'
 
 # 保存为草稿并抄送
-lark-cli mail +send --to 'alice@example.com' --cc 'bob@example.com' --subject '状态更新' --body '<b>已完成</b>'
+work-cli mail +send --to 'alice@example.com' --cc 'bob@example.com' --subject '状态更新' --body '<b>已完成</b>'
 
 # 确认发送（仅在用户明确确认后使用）
-lark-cli mail +send --to 'alice@example.com' --subject '周报' \
+work-cli mail +send --to 'alice@example.com' --subject '周报' \
   --body '<p>本周进展如下...</p>' --confirm-send
 
 # 保存带附件的草稿
-lark-cli mail +send --to 'alice@example.com' --subject '请查收' --body '<p>见附件</p>' --attach './report.pdf' --attach './logs.zip'
+work-cli mail +send --to 'alice@example.com' --subject '请查收' --body '<p>见附件</p>' --attach './report.pdf' --attach './logs.zip'
 
 # 保存带内嵌图片的草稿（推荐：直接用相对路径，自动解析）
-lark-cli mail +send --to 'alice@example.com' --subject '预览图' --body '<img src="./logo.png" />'
+work-cli mail +send --to 'alice@example.com' --subject '预览图' --body '<img src="./logo.png" />'
 
 # 纯文本邮件（仅在内容极简时使用）
-lark-cli mail +send --to 'alice@example.com' --subject '确认' --body '收到，谢谢'
+work-cli mail +send --to 'alice@example.com' --subject '确认' --body '收到，谢谢'
 
 # Dry Run（仅打印请求，不执行）
-lark-cli mail +send --to 'alice@example.com' --subject '测试' --body '<p>test</p>' --dry-run
+work-cli mail +send --to 'alice@example.com' --subject '测试' --body '<p>test</p>' --dry-run
 ```
 
 ## 参数
@@ -107,7 +107,7 @@ lark-cli mail +send --to 'alice@example.com' --subject '测试' --body '<p>test<
   "ok": true,
   "data": {
     "draft_id": "草稿ID",
-    "tip": "draft saved. To send: lark-cli mail user_mailbox.drafts send --params '{...}'"
+    "tip": "draft saved. To send: work-cli mail user_mailbox.drafts send --params '{...}'"
   }
 }
 ```
@@ -141,41 +141,41 @@ lark-cli mail +send --to 'alice@example.com' --subject '测试' --body '<p>test<
 
 ### 场景 1：用户说"帮我写一封邮件给 Alice"（只创建草稿）
 ```bash
-lark-cli mail +send --to 'alice@example.com' --subject '周报' --body '<p>本周进展如下...</p>'
+work-cli mail +send --to 'alice@example.com' --subject '周报' --body '<p>本周进展如下...</p>'
 ```
 → 返回草稿结果时，如输出中带有草稿打开链接，则一起展示给用户；如果当前输出没有链接，则静默处理。如果用户想先看效果，可去飞书邮件 UI 中打开草稿查看详情。
 
 ### 场景 2：用户说"发邮件给 Alice 说收到了"（需要发送）
 ```bash
 # 方式 A: 创建草稿
-lark-cli mail +send --to 'alice@example.com' --subject '收到' --body '<p>已收到，谢谢！</p>'
+work-cli mail +send --to 'alice@example.com' --subject '收到' --body '<p>已收到，谢谢！</p>'
 # → 返回 draft_id
 
 # 向用户确认 "当前收件人 alice@example.com，主题「收到」。如果你想先看效果，也可以先去飞书邮件里打开草稿查看详情。确认发送吗？"
 
 # 用户确认后发送
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 
 # 方式 B: 用户已明确确认时，直接发送
-lark-cli mail +send --to 'alice@example.com' --subject '收到' --body '<p>已收到，谢谢！</p>' --confirm-send
+work-cli mail +send --to 'alice@example.com' --subject '收到' --body '<p>已收到，谢谢！</p>' --confirm-send
 ```
 
 ### 场景 3：用户说"下午 3 点给 Alice 发一封周报"（定时发送）
 ```bash
 # Step 1: 创建草稿（定时发送也走草稿流程）
-lark-cli mail +send --to 'alice@example.com' --subject '周报' --body '<p>本周进展如下...</p>'
+work-cli mail +send --to 'alice@example.com' --subject '周报' --body '<p>本周进展如下...</p>'
 # → 返回 draft_id
 
 # Step 2: 向用户确认 "邮件草稿已创建：收件人 alice@example.com，主题「周报」，定时 <目标时间> 发送。确认吗？"
 
 # Step 3: 用户确认后定时发送（send_time 为 Unix 时间戳，需至少当前时间 + 5 分钟）
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
 ```
 
 ### 场景 4：用户说"等等，先不发那封邮件了"（取消定时发送）
 ```bash
 # 取消定时发送（取消后邮件变回草稿）
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 → 取消成功后邮件恢复为草稿状态，用户可重新编辑或在之后重新发送。
 
@@ -190,7 +190,7 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 若返回非空 `message_id`，调用：
 
 ```bash
-lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
+work-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
 ```
 
 状态码：1=正在投递, 2=投递失败重试, 3=退信, 4=投递成功, 5=待审批, 6=审批拒绝。向用户简要报告各收件人投递结果，异常状态需重点提示。
@@ -202,7 +202,7 @@ lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me
 如需取消定时发送，可在预定时间前调用取消接口：
 
 ```bash
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 **取消后邮件会变回草稿**，可继续编辑或在之后重新发送。
@@ -216,7 +216,7 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 
 ## 相关命令
 
-- `lark-cli mail +reply` — 回复邮件
-- `lark-cli mail +reply-all` — 回复全部
-- `lark-cli mail +forward` — 转发邮件
-- `lark-cli mail user_mailbox.messages list` — 列出邮件
+- `work-cli mail +reply` — 回复邮件
+- `work-cli mail +reply-all` — 回复全部
+- `work-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.messages list` — 列出邮件

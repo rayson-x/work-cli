@@ -32,7 +32,7 @@ func (s *SecretStore) Set(ref, pat string) error {
 			Category: errs.CategoryConfig,
 			Subtype:  errs.SubtypeInvalidConfig,
 			Message:  "local keychain is unavailable",
-			Hint:     "make sure the system credential store is available, then retry lark-cli apps +git-credential-init",
+			Hint:     "make sure the system credential store is available, then retry work-cli apps +git-credential-init",
 		}}
 	}
 	if ref == "" {
@@ -47,7 +47,7 @@ func (s *SecretStore) Set(ref, pat string) error {
 			Category: errs.CategoryConfig,
 			Subtype:  errs.SubtypeInvalidConfig,
 			Message:  "save local Git credential PAT to keychain failed",
-			Hint:     "make sure the system credential store is available, then retry lark-cli apps +git-credential-init",
+			Hint:     "make sure the system credential store is available, then retry work-cli apps +git-credential-init",
 		}, Cause: err}
 	}
 	return nil
@@ -65,7 +65,7 @@ func (s *SecretStore) Remove(ref string) error {
 			Category: errs.CategoryConfig,
 			Subtype:  errs.SubtypeInvalidConfig,
 			Message:  "local keychain is unavailable",
-			Hint:     "make sure the system credential store is available, then retry lark-cli apps +git-credential-remove",
+			Hint:     "make sure the system credential store is available, then retry work-cli apps +git-credential-remove",
 		}}
 	}
 	if err := s.kc.Remove(KeychainService, ref); err != nil {
@@ -73,7 +73,7 @@ func (s *SecretStore) Remove(ref string) error {
 			Category: errs.CategoryConfig,
 			Subtype:  errs.SubtypeInvalidConfig,
 			Message:  "remove local Git credential PAT from keychain failed",
-			Hint:     "make sure the system credential store is available, then retry lark-cli apps +git-credential-remove",
+			Hint:     "make sure the system credential store is available, then retry work-cli apps +git-credential-remove",
 		}, Cause: err}
 	}
 	return nil

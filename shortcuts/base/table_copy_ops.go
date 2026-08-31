@@ -231,7 +231,7 @@ func tableCopyWaitError(err error) error {
 		return errs.NewInternalError(errs.SubtypeUnknown, "table copy status polling failed: %v", err).WithCause(err)
 	}
 
-	hint := "The copy task was already submitted; do not submit it again. Read task_id from the submit output and continue with lark-cli base +table-copy-status using the same identity."
+	hint := "The copy task was already submitted; do not submit it again. Read task_id from the submit output and continue with work-cli base +table-copy-status using the same identity."
 	if errors.Is(err, context.Canceled) {
 		return errs.NewNetworkError(errs.SubtypeNetworkTransport, "table copy status polling was canceled").WithHint("%s", hint).WithCause(err)
 	}
@@ -366,7 +366,7 @@ func projectTableCopyStatus(data map[string]interface{}) (tableCopyStatus, error
 }
 
 func tableCopyNextCommand(runtime *common.RuntimeContext, baseToken, taskID string) string {
-	parts := []string{"lark-cli"}
+	parts := []string{"work-cli"}
 	if runtime.Cmd.Flags().Lookup("profile") != nil && runtime.Changed("profile") {
 		profile, _ := runtime.Cmd.Flags().GetString("profile")
 		if strings.TrimSpace(profile) != "" {

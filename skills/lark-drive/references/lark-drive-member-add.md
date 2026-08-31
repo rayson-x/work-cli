@@ -7,7 +7,7 @@
 ```bash
 
 # 批量添加（同一 member-type 和 perm，最多 10 人）
-lark-cli drive +member-add \
+work-cli drive +member-add \
   --token "<bare_token_or_url>" \
   --type bitable \
   --member-id "ou_a,ou_b" \

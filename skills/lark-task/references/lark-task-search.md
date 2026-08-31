@@ -10,13 +10,13 @@ Search tasks by keyword and optional filters.
 
 ```bash
 # Search by keyword
-lark-cli task +search --query "test"
+work-cli task +search --query "test"
 
 # Search incomplete tasks assigned to specific users
-lark-cli task +search --assignee "ou_xxx,ou_yyy" --completed=false
+work-cli task +search --assignee "ou_xxx,ou_yyy" --completed=false
 
 # Search by due time range
-lark-cli task +search --query "release" --due "-1d,+7d"
+work-cli task +search --query "release" --due "-1d,+7d"
 ```
 
 ## Parameters
@@ -36,6 +36,6 @@ lark-cli task +search --query "release" --due "-1d,+7d"
 ## Workflow
 
 1. Build the keyword and filters from the user's request.
-2. Execute `lark-cli task +search ...`
+2. Execute `work-cli task +search ...`
 3. Report the matched tasks and include the next `page_token` if more results exist.
 

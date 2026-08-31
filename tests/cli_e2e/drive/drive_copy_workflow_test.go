@@ -22,7 +22,7 @@ func TestDrive_CopyWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-copy-"+suffix, "")
+	folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-copy-"+suffix, "")
 	workDir := t.TempDir()
 
 	scheduleDelete := func(fileToken string) {

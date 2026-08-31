@@ -61,7 +61,7 @@ func (s *Store) Load() (*CredentialFile, error) {
 	var file CredentialFile
 	if err := json.Unmarshal(data, &file); err != nil {
 		return nil, errs.NewConfigError(errs.SubtypeInvalidConfig, "invalid %s: %s", MetadataFilename, err).
-			WithHint("the local Git credential metadata is damaged; rerun `lark-cli apps +git-credential-init --app-id <app_id>` after backing up or removing the damaged app metadata").
+			WithHint("the local Git credential metadata is damaged; rerun `work-cli apps +git-credential-init --app-id <app_id>` after backing up or removing the damaged app metadata").
 			WithCause(err)
 	}
 	if file.Version == 0 {
@@ -72,7 +72,7 @@ func (s *Store) Load() (*CredentialFile, error) {
 			Category: errs.CategoryConfig,
 			Subtype:  errs.SubtypeInvalidConfig,
 			Message:  fmt.Sprintf("%s version %d is newer than supported version %d", MetadataFilename, file.Version, CurrentCredentialVersion),
-			Hint:     "upgrade lark-cli and retry",
+			Hint:     "upgrade work-cli and retry",
 		}}
 	}
 	return &file, nil

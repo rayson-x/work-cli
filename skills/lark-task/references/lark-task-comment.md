@@ -8,7 +8,7 @@ Add a comment to an existing task.
 
 ```bash
 # Add a comment
-lark-cli task +comment --task-id "<task_guid>" --content "Looks good!"
+work-cli task +comment --task-id "<task_guid>" --content "Looks good!"
 ```
 
 ## Parameters
@@ -21,7 +21,7 @@ lark-cli task +comment --task-id "<task_guid>" --content "Looks good!"
 ## Workflow
 
 1. Confirm the task and comment content.
-2. Execute `lark-cli task +comment --task-id "..." --content "..."`
+2. Execute `work-cli task +comment --task-id "..." --content "..."`
 3. Report success and comment ID.
 
 > [!CAUTION]

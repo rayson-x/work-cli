@@ -24,7 +24,7 @@
 
 ## 公开权限错误码
 
-调用 `lark-cli drive permission.public patch` 更新文档公开权限失败时，如果返回以下错误码，按表格给用户明确下一步。不要把这些错误简单归类为缺少 scope；它们通常表示租户、对外分享或文档密级策略拦截。
+调用 `work-cli drive permission.public patch` 更新文档公开权限失败时，如果返回以下错误码，按表格给用户明确下一步。不要把这些错误简单归类为缺少 scope；它们通常表示租户、对外分享或文档密级策略拦截。
 
 | 错误码 | 含义 | 给用户的引导 |
 |--------|------|--------------|
@@ -39,11 +39,11 @@
 
 需要将文档权限授予当前应用（bot）自身时：
 
-1. 先执行 `lark-cli api GET /open-apis/bot/v3/info --as bot`，从返回值取 `bot.open_id`。
-2. 再调用 `lark-cli drive permission.members create`，用 `member_type=openid`、`member_id=<bot_open_id>` 授权。
+1. 先执行 `work-cli api GET /open-apis/bot/v3/info --as bot`，从返回值取 `bot.open_id`。
+2. 再调用 `work-cli drive permission.members create`，用 `member_type=openid`、`member_id=<bot_open_id>` 授权。
 
 ```bash
-lark-cli drive permission.members create \
+work-cli drive permission.members create \
   --params '{"token":"<doc_token>","type":"<resource_type>"}' \
   --data '{"member_type":"openid","member_id":"<bot_open_id>","perm":"view","type":"user"}'
 ```

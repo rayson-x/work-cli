@@ -51,7 +51,7 @@ func modeFromEnv(errOut io.Writer) mode {
 }
 
 // normalizeCommandPath converts cobra CommandPath() to dotted form.
-// "lark-cli im +messages-search" -> "im.messages_search"
+// "work-cli im +messages-search" -> "im.messages_search"
 func normalizeCommandPath(cobraPath string) string {
 	segs := strings.Fields(cobraPath)
 	if len(segs) <= 1 {

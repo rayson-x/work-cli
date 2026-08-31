@@ -6,10 +6,10 @@
 
 ```bash
 # 用户以自身身份加入（默认场景）
-lark-cli calendar +join-event --token <token> --as user
+work-cli calendar +join-event --token <token> --as user
 
 # 以应用身份加入
-lark-cli calendar +join-event --token <token> --as bot
+work-cli calendar +join-event --token <token> --as bot
 ```
 
 ## 参数

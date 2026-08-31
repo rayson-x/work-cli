@@ -13,7 +13,7 @@
 ## 2. 推荐命令
 
 ```bash
-lark-cli base +view-set-filter \
+work-cli base +view-set-filter \
   --base-token <base_token> \
   --table-id <table_id> \
   --view-id <view_id> \

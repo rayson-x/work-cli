@@ -14,17 +14,17 @@
 
 ```bash
 # 查询可访问的邮箱（主邮箱 + 公共邮箱）
-lark-cli mail user_mailboxes accessible_mailboxes --params '{"user_mailbox_id":"me"}'
+work-cli mail user_mailboxes accessible_mailboxes --params '{"user_mailbox_id":"me"}'
 
 # 查询某个邮箱的可用发信地址（主地址、别名、邮件组）
-lark-cli mail user_mailbox.settings send_as --params '{"user_mailbox_id":"me"}'
+work-cli mail user_mailbox.settings send_as --params '{"user_mailbox_id":"me"}'
 ```
 
 ## 公共邮箱发信
 
 ```bash
 # --mailbox 指定公共邮箱，From 头自动使用该邮箱地址
-lark-cli mail +send --mailbox shared@example.com \
+work-cli mail +send --mailbox shared@example.com \
   --to bob@example.com --subject '通知' --body '<p>你好</p>'
 ```
 
@@ -32,13 +32,13 @@ lark-cli mail +send --mailbox shared@example.com \
 
 ```bash
 # --mailbox 指定所属邮箱，--from 指定别名地址
-lark-cli mail +send --mailbox me --from alias@example.com \
+work-cli mail +send --mailbox me --from alias@example.com \
   --to bob@example.com --subject '测试' --body '<p>你好</p>'
 ```
 
 ## 相关命令
 
-- `lark-cli mail +send` — 新邮件发信。
-- `lark-cli mail +draft-create` — 新建草稿。
-- `lark-cli mail +reply` / `+reply-all` — 回复邮件。
-- `lark-cli mail +forward` — 转发邮件。
+- `work-cli mail +send` — 新邮件发信。
+- `work-cli mail +draft-create` — 新建草稿。
+- `work-cli mail +reply` / `+reply-all` — 回复邮件。
+- `work-cli mail +forward` — 转发邮件。

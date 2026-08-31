@@ -155,7 +155,7 @@ func TestBuildWithCommandLookupEnrichesServiceReferencesWithoutCommandFacts(t *t
 		[]SkillFact{{
 			SourceFile:  "skills/lark-drive/references/lark-drive-add-comment.md",
 			Line:        126,
-			Raw:         "lark-cli drive file.comments create_v2 --file-token doccnxxxx",
+			Raw:         "work-cli drive file.comments create_v2 --file-token doccnxxxx",
 			CommandPath: "drive file.comments create_v2",
 		}},
 		nil,
@@ -163,7 +163,7 @@ func TestBuildWithCommandLookupEnrichesServiceReferencesWithoutCommandFacts(t *t
 		[]CommandExample{{
 			SourceFile:  "skills/lark-drive/references/lark-drive-add-comment.md",
 			Line:        126,
-			Raw:         "lark-cli drive file.comments create_v2 --file-token doccnxxxx",
+			Raw:         "work-cli drive file.comments create_v2 --file-token doccnxxxx",
 			CommandPath: "drive file.comments create_v2",
 			Executable:  true,
 		}},

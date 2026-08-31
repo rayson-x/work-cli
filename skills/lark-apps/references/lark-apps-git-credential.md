@@ -1,13 +1,13 @@
 # apps Git credential
 
-妙搭 Git 凭证用于本地原生 `git clone/pull/push`。运行时命令事实以 `lark-cli apps +git-credential-init --help`、`+git-credential-list --help`、`+git-credential-remove --help` 为准。
+妙搭 Git 凭证用于本地原生 `git clone/pull/push`。运行时命令事实以 `work-cli apps +git-credential-init --help`、`+git-credential-list --help`、`+git-credential-remove --help` 为准。
 
 ## 命令
 
 ```bash
-lark-cli apps +git-credential-init --app-id app_xxx
-lark-cli apps +git-credential-list
-lark-cli apps +git-credential-remove --app-id app_xxx
+work-cli apps +git-credential-init --app-id app_xxx
+work-cli apps +git-credential-list
+work-cli apps +git-credential-remove --app-id app_xxx
 ```
 
 ## 输出契约

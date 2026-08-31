@@ -40,7 +40,7 @@ func checkNoAuthsidecarBuild(getenv func(string) string, stderr io.Writer) int {
 		return 0
 	}
 	fmt.Fprintf(stderr,
-		"ERROR: %s is set, but this lark-cli binary was built WITHOUT the "+
+		"ERROR: %s is set, but this work-cli binary was built WITHOUT the "+
 			"'authsidecar' build tag.\n"+
 			"The sidecar credential-isolation feature is compiled out — "+
 			"running would bypass isolation and\n"+

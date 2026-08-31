@@ -36,7 +36,7 @@ func TestDrive_DownloadPreviewWikiSourceWorkflow(t *testing.T) {
 	fixtureContent := "drive download/preview wiki source workflow " + suffix + "\n"
 
 	// 1) Isolated Drive folder to stage the fixture (skip on missing scope).
-	folderToken := createDriveFolderOrSkipWikiSource(t, parentT, ctx, "lark-cli-e2e-drive-wiki-src-"+suffix)
+	folderToken := createDriveFolderOrSkipWikiSource(t, parentT, ctx, "work-cli-e2e-drive-wiki-src-"+suffix)
 
 	// 2) Upload the fixture file we will later reach through a wiki node.
 	fileToken := uploadWikiSourceFixture(t, parentT, ctx, folderToken, "wiki-source.txt", fixtureContent)
@@ -44,7 +44,7 @@ func TestDrive_DownloadPreviewWikiSourceWorkflow(t *testing.T) {
 	// 3) Parent wiki node (a docx origin node) that both hosts the moved file
 	//    and doubles as the document-node rejection fixture. Its cleanup deletes
 	//    child nodes recursively, so the moved file node is reclaimed with it.
-	_, parentNode := createWikiNodeUnderAnyHost(t, parentT, ctx, "lark-cli-e2e-drive-wiki-src-node-"+suffix)
+	_, parentNode := createWikiNodeUnderAnyHost(t, parentT, ctx, "work-cli-e2e-drive-wiki-src-node-"+suffix)
 	spaceID := parentNode.Get("space_id").String()
 	docNodeToken := parentNode.Get("node_token").String()
 	require.NotEmpty(t, spaceID, "parent wiki node must expose space_id; node:\n%s", parentNode.Raw)

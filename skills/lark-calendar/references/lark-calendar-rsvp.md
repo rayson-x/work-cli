@@ -7,16 +7,16 @@
 
 ```bash
 # 回复日程为接受 (使用主日历)
-lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status accept
+work-cli calendar +rsvp --event-id evt_xxx --rsvp-status accept
 
 # 回复日程为拒绝
-lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status decline
+work-cli calendar +rsvp --event-id evt_xxx --rsvp-status decline
 
 # 回复日程为待定
-lark-cli calendar +rsvp --event-id evt_xxx --rsvp-status tentative
+work-cli calendar +rsvp --event-id evt_xxx --rsvp-status tentative
 
 # 指定其他日历下的日程
-lark-cli calendar +rsvp --calendar-id cal_xxx --event-id evt_xxx --rsvp-status accept
+work-cli calendar +rsvp --calendar-id cal_xxx --event-id evt_xxx --rsvp-status accept
 ```
 
 ## 参数

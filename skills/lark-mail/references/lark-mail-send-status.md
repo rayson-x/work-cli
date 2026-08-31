@@ -14,7 +14,7 @@
 邮件发送成功后，若响应中包含非空 `message_id`，必须调用 `send_status` 查询投递状态并向用户报告。
 
 ```bash
-lark-cli mail user_mailbox.messages send_status \
+work-cli mail user_mailbox.messages send_status \
   --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
 ```
 
@@ -41,6 +41,6 @@ lark-cli mail user_mailbox.messages send_status \
 
 ## 相关命令
 
-- `lark-cli mail +send --confirm-send` — 发送新邮件。
-- `lark-cli mail +reply --confirm-send` / `+reply-all --confirm-send` — 发送回复。
-- `lark-cli mail +forward --confirm-send` — 发送转发。
+- `work-cli mail +send --confirm-send` — 发送新邮件。
+- `work-cli mail +reply --confirm-send` / `+reply-all --confirm-send` — 发送回复。
+- `work-cli mail +forward --confirm-send` — 发送转发。

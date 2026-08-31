@@ -183,7 +183,7 @@ func TestInstallRootUpgradePromptPreservesInner(t *testing.T) {
 	rawInvocationArgs = nil
 
 	innerCalls := 0
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.RunE = func(cmd *cobra.Command, args []string) error { innerCalls++; return nil }
 
 	f := &cmdutil.Factory{IOStreams: &cmdutil.IOStreams{
@@ -206,7 +206,7 @@ func TestInstallRootUpgradePromptPreservesInner(t *testing.T) {
 // path (not the stub used elsewhere): from any command it must locate the
 // registered "update" subcommand via cmd.Root() and invoke its RunE.
 func TestRunRootUpgradeDispatchesToUpdate(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	ran := 0
 	root.AddCommand(&cobra.Command{Use: "update", RunE: func(*cobra.Command, []string) error { ran++; return nil }})
 	child := &cobra.Command{Use: "im"}
@@ -222,7 +222,7 @@ func TestRunRootUpgradeDispatchesToUpdate(t *testing.T) {
 // TestInstallRootUpgradePromptNilInnerNoop covers the inner == nil guard:
 // when root has no RunE, installRootUpgradePrompt must not wrap it.
 func TestInstallRootUpgradePromptNilInnerNoop(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"} // RunE is nil
+	root := &cobra.Command{Use: "work-cli"} // RunE is nil
 	f := &cmdutil.Factory{IOStreams: &cmdutil.IOStreams{
 		In: strings.NewReader(""), Out: &bytes.Buffer{}, ErrOut: &bytes.Buffer{},
 	}}

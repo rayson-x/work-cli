@@ -1,6 +1,6 @@
 # apps +db-execute
 
-经妙搭服务端在应用数据库执行 SQL。运行时命令事实以 `lark-cli apps +db-execute --help` 为准。
+经妙搭服务端在应用数据库执行 SQL。运行时命令事实以 `work-cli apps +db-execute --help` 为准。
 
 > **写 SQL 前先看文末「平台 SQL 规范」**：妙搭底层是 PostgreSQL + 一层平台约束，SQL 内容不符合会被服务端直接拒或建出行为不对的表。最容易踩的三条：① 建业务表必须带 4 个审计列（`_created_at`/`_updated_at`/`_created_by`/`_updated_by`）+ 启用 RLS + 4 条 policy，一次调用里写全；② 人员字段用内置复合类型 `user_profile`（写入 `ROW('<user_id>')::user_profile`，查询解引用 `(field).user_id`）；③ `CREATE/DROP DATABASE·SCHEMA·USER·ROLE`、非白名单 `CREATE EXTENSION`、平台保留表 `auth`/`users` 会被硬拒，`online` 环境禁 DDL。
 
@@ -20,10 +20,10 @@
 ## 示例
 
 ```bash
-lark-cli apps +db-execute --app-id app_xxx --environment dev --sql "select * from orders limit 5" --yes
-lark-cli apps +db-execute --app-id app_xxx --environment dev --file ./migration.sql --dry-run
+work-cli apps +db-execute --app-id app_xxx --environment dev --sql "select * from orders limit 5" --yes
+work-cli apps +db-execute --app-id app_xxx --environment dev --file ./migration.sql --dry-run
 # 绝对路径文件 / cwd 不固定：经 stdin 传入
-lark-cli apps +db-execute --app-id app_xxx --environment dev --sql - --yes < /Users/.../migrations/0001_init.sql
+work-cli apps +db-execute --app-id app_xxx --environment dev --sql - --yes < /Users/.../migrations/0001_init.sql
 ```
 
 ## 输出契约
@@ -150,21 +150,21 @@ CREATE UNIQUE INDEX uk_teacher_user_id ON teacher (((teacher_profile).user_id));
 - **加唯一约束（`UNIQUE` / 唯一索引）**：线上不能有重复值。先查重复，有则先清理再加：
 
   ```bash
-  lark-cli apps +db-execute --app-id app_xxx --environment online --sql \
+  work-cli apps +db-execute --app-id app_xxx --environment online --sql \
     "SELECT <cols>, count(*) FROM t GROUP BY <cols> HAVING count(*) > 1" --yes
   ```
 
 - **已有列改 `NOT NULL`（收紧约束）**：线上该列不能有 NULL。先查 NULL 行数，有就先回填（`UPDATE t SET <col> = <默认值> WHERE <col> IS NULL`）再加约束：
 
   ```bash
-  lark-cli apps +db-execute --app-id app_xxx --environment online --sql \
+  work-cli apps +db-execute --app-id app_xxx --environment online --sql \
     "SELECT count(*) FROM t WHERE <col> IS NULL" --yes
   ```
 
 - **新加 `NOT NULL` 字段**：必须带 `DEFAULT`，且要求线上该表**无存量数据**，否则发布报错。线上已有数据时别直接加，改走三步安全变更：先 `ADD COLUMN <col> <type>`（可空）→ 回填 `UPDATE t SET <col> = <值>` → 再 `ALTER COLUMN <col> SET NOT NULL`。先查线上行数判断走哪条：
 
   ```bash
-  lark-cli apps +db-execute --app-id app_xxx --environment online --sql \
+  work-cli apps +db-execute --app-id app_xxx --environment online --sql \
     "SELECT count(*) FROM t" --yes
   ```
 

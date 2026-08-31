@@ -28,7 +28,7 @@ func TestSheets_TablePutTypedWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-tableput-typed-"+suffix, "bot")
+	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "work-cli-e2e-tableput-typed-"+suffix, "bot")
 
 	// Write a 3-row typed table whose first column is a date, second is an
 	// int64 numeric column with a custom number_format, third is a plain
@@ -96,7 +96,7 @@ func TestSheets_WorkbookCreateTypedWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	title := "lark-cli-e2e-wb-create-typed-" + suffix
+	title := "work-cli-e2e-wb-create-typed-" + suffix
 
 	// One-shot: create workbook + write typed payload (date + int + string).
 	// --folder-token is optional; omit it so the test does not depend on drive:drive

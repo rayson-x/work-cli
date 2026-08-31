@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// ref is one lark-cli command reference extracted from a shortcut example.
+// ref is one work-cli command reference extracted from a shortcut example.
 type ref struct {
 	line  int      // 1-based line number (the line where the command starts)
 	raw   string   // reconstructed command text, for error display
@@ -16,7 +16,7 @@ type ref struct {
 	flags []string // flag tokens used, e.g. "--query", "-q"
 }
 
-const cliToken = "lark-cli"
+const cliToken = "work-cli"
 
 // subcommandStart guards against false positives from prose: a real command's
 // first word is ASCII (a service name or a +shortcut). A token starting with
@@ -35,9 +35,9 @@ var shellStops = map[string]bool{
 // instead of being dropped as an unknown command or non-ASCII narration.
 const wordTrailPunct = `.,;:!?"')]}，。、；：！？）】」』`
 
-// parseRefs extracts every lark-cli command reference from text (a shortcut's
-// Tips line, which may embed an "Example: lark-cli ..." command). It is
-// deliberately format-agnostic: it keys on the "lark-cli" token whether it sits
+// parseRefs extracts every work-cli command reference from text (a shortcut's
+// Tips line, which may embed an "Example: work-cli ..." command). It is
+// deliberately format-agnostic: it keys on the "work-cli" token whether it sits
 // in a ```bash fence, an inline `code` span, or bare prose. Backslash
 // line-continuations are joined first so a multi-line invocation is parsed as
 // one command; inline-code backticks and trailing # comments terminate it.
@@ -49,7 +49,7 @@ func parseRefs(content string) []ref {
 		logical := lines[i]
 		// Shell line continuation: a trailing backslash joins the next physical
 		// line. Without this, flags on the continuation lines of a multi-line
-		// `lark-cli ... \` example are never seen by the checker.
+		// `work-cli ... \` example are never seen by the checker.
 		for endsWithBackslash(logical) && i+1 < len(lines) {
 			logical = strings.TrimRight(logical, " \t")
 			logical = logical[:len(logical)-1] // drop the trailing backslash
@@ -86,7 +86,7 @@ func parseLine(line string, lineNo int) []ref {
 	return refs
 }
 
-// parseCmd tokenizes the text following "lark-cli" into leading command words
+// parseCmd tokenizes the text following "work-cli" into leading command words
 // (the subcommand path, up to the first flag) and flag tokens. It stops at a
 // shell separator (standalone or glued), an inline-code backtick, a comment, or
 // a placeholder/prose word. ok=false filters out non-commands.
@@ -96,7 +96,7 @@ func parseCmd(after string) (words, flags []string, raw string, ok bool) {
 		after = after[:i]
 	}
 	// Drop $(...) command substitutions so flags belonging to the inner command
-	// (e.g. `--data "$(jq -n --arg x ...)"`) are not mistaken for lark-cli flags.
+	// (e.g. `--data "$(jq -n --arg x ...)"`) are not mistaken for work-cli flags.
 	after = stripCmdSubst(after)
 
 	var kept []string
@@ -150,8 +150,8 @@ func parseCmd(after string) (words, flags []string, raw string, ok bool) {
 	if len(kept) > 0 {
 		raw = " " + strings.Join(kept, " ")
 	}
-	// Keep root-only refs ("lark-cli --help") and refs whose first word looks
-	// like a subcommand; drop prose ("lark-cli 就能搞定 ...").
+	// Keep root-only refs ("work-cli --help") and refs whose first word looks
+	// like a subcommand; drop prose ("work-cli 就能搞定 ...").
 	if len(words) == 0 {
 		return words, flags, raw, len(flags) > 0
 	}

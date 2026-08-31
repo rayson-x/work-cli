@@ -26,7 +26,7 @@ var AppsDBEnvDiff = common.Shortcut{
 	Description: "Preview pending dev→online schema changes (no apply)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-env-diff --app-id <app_id>",
+		"Example: work-cli apps +db-env-diff --app-id <app_id>",
 		"Apply the previewed changes with +db-env-migrate --yes.",
 	},
 	Scopes:    []string{"spark:app:write"},
@@ -75,7 +75,7 @@ var AppsDBEnvMigrate = common.Shortcut{
 	Description: "Publish pending dev→online schema changes (irreversible)",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +db-env-migrate --app-id <app_id> --yes",
+		"Example: work-cli apps +db-env-migrate --app-id <app_id> --yes",
 		"Preview first with +db-env-diff.",
 	},
 	Scopes:    []string{"spark:app:write"},

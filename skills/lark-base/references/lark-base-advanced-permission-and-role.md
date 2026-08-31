@@ -19,7 +19,7 @@ This is the module entry point for Base advanced permissions and roles. Use it t
 
 At the start of a role workflow, before the first `+role-list`, `+role-get`, `+role-create`, `+role-update`, or `+role-delete` call:
 
-1. Run `lark-cli base +base-get --base-token <base_token>` and inspect `data.base.is_advanced`.
+1. Run `work-cli base +base-get --base-token <base_token>` and inspect `data.base.is_advanced`.
 2. If `is_advanced` is `false`, run `+advperm-enable` before the role command. If the user did not authorize enabling advanced permissions, stop and explain the required precondition.
 3. Run the requested role commands only after `is_advanced` is `true` or `+advperm-enable` succeeds. Reuse that confirmed status for later role calls in the same workflow.
 
@@ -40,7 +40,7 @@ Use these fewshots for simple role changes. For table, field, record, dashboard,
 Create a custom role that keeps copy/download disabled:
 
 ```bash
-lark-cli base +role-create \
+work-cli base +role-create \
   --base-token <base_token> \
   --json '{"role_name":"Reviewer","role_type":"custom_role","base_rule_map":{"copy":false,"download":false}}'
 ```
@@ -48,7 +48,7 @@ lark-cli base +role-create \
 Rename a role while preserving its type:
 
 ```bash
-lark-cli base +role-update \
+work-cli base +role-update \
   --base-token <base_token> \
   --role-id <role_id> \
   --json '{"role_name":"Finance Reviewer","role_type":"custom_role"}' \
@@ -58,7 +58,7 @@ lark-cli base +role-update \
 Grant read-only access to one table:
 
 ```bash
-lark-cli base +role-update \
+work-cli base +role-update \
   --base-token <base_token> \
   --role-id <role_id> \
   --json '{"role_name":"Finance Reviewer","role_type":"custom_role","table_rule_map":{"Orders":{"perm":"read_only"}}}' \

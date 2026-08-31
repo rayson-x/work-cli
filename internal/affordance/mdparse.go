@@ -67,7 +67,7 @@ func linkToBacktick(s string) string { return mdLink.ReplaceAllString(s, "`$1`")
 // resolves to its SKILL.md, while an entry containing a slash is a
 // name/relative-path reference (e.g.
 // "lark-contact/references/lark-contact-search-user.md") and resolves to that
-// path directly. Both render as `lark-cli skills read <entry>` — the slash form
+// path directly. Both render as `work-cli skills read <entry>` — the slash form
 // skills read already accepts — so an entry can point at a command's own
 // reference file, not just re-point the domain skill.
 func SkillStatPath(entry string) string {

@@ -299,7 +299,7 @@ func TestParseXMLAcceptsArbitraryAttributesWithoutChangingInput(t *testing.T) {
 }
 
 func TestParseCompatibleXMLCompatibilityAcceptsBareAmpersandsInAttributes(t *testing.T) {
-	source := `<block_insert><parameter><block_id>-1</block_id><content><img href="https://picsum.photos/320/200?seed=lark-cli&raw=1"/></content></parameter></block_insert>`
+	source := `<block_insert><parameter><block_id>-1</block_id><content><img href="https://picsum.photos/320/200?seed=work-cli&raw=1"/></content></parameter></block_insert>`
 	profile, err := ParseCompatibleXML(source)
 	if err != nil {
 		t.Fatalf("ParseCompatibleXML() error = %v", err)

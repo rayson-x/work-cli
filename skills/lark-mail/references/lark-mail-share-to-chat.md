@@ -10,16 +10,16 @@
 
 ```bash
 # 分享单封邮件到群聊（默认 receive-id-type=chat_id）
-lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
+work-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
 
 # 分享整个会话到群聊
-lark-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
+work-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
 
 # 通过邮箱分享给个人
-lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id user@example.com --receive-id-type email
+work-cli mail +share-to-chat --message-id <邮件ID> --receive-id user@example.com --receive-id-type email
 
 # Dry Run
-lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx --dry-run
+work-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx --dry-run
 ```
 
 ## 参数
@@ -51,23 +51,23 @@ lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx --dry-r
 
 ```bash
 # Step 1: 搜索群聊获取 chat_id
-lark-cli im +chat-search --query "项目群"
+work-cli im +chat-search --query "项目群"
 # → 获取 chat_id: oc_xxx
 
 # Step 2: 分享邮件
-lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
+work-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
 ```
 
 ### 场景 2：分享整个邮件会话
 
 ```bash
-lark-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
+work-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
 ```
 
 ### 场景 3：通过邮箱分享给个人
 
 ```bash
-lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id alice@example.com --receive-id-type email
+work-cli mail +share-to-chat --message-id <邮件ID> --receive-id alice@example.com --receive-id-type email
 ```
 
 ## 常见错误
@@ -78,10 +78,10 @@ lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id alice@example.
 | `--message-id and --thread-id are mutually exclusive` | 两个参数同时传 | 只传一个 |
 | 403 `user not in chat` | 用户不在目标会话中 | 确认用户是群成员 |
 | 404 `message not found` | 邮件 ID 无效 | 确认邮件 ID 正确 |
-| 403 `permission not granted` | 缺少 `im:message` 或 `im:message.send_as_user` scope | 重新授权：`lark-cli auth login --scope "im:message,im:message.send_as_user"` |
+| 403 `permission not granted` | 缺少 `im:message` 或 `im:message.send_as_user` scope | 重新授权：`work-cli auth login --scope "im:message,im:message.send_as_user"` |
 
 ## 相关命令
 
-- `lark-cli im +chat-search` — 搜索群聊获取 chat_id
-- `lark-cli mail +message` — 查看邮件内容
-- `lark-cli mail +thread` — 查看邮件会话
+- `work-cli im +chat-search` — 搜索群聊获取 chat_id
+- `work-cli mail +message` — 查看邮件内容
+- `work-cli mail +thread` — 查看邮件会话

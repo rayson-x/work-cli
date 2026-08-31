@@ -15,14 +15,14 @@ import (
 
 func TestMeetingSkillIsEmbeddedInBuiltCLI(t *testing.T) {
 	repoRoot := vcContractPath(t)
-	bin := filepath.Join(t.TempDir(), "lark-cli")
+	bin := filepath.Join(t.TempDir(), "work-cli")
 
 	buildCtx, cancelBuild := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancelBuild()
 	build := exec.CommandContext(buildCtx, "go", "build", "-o", bin, ".")
 	build.Dir = repoRoot
 	if output, err := build.CombinedOutput(); err != nil {
-		t.Fatalf("build lark-cli: %v\n%s", err, output)
+		t.Fatalf("build work-cli: %v\n%s", err, output)
 	}
 
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
@@ -62,10 +62,10 @@ func TestMeetingSkillIsEmbeddedInBuiltCLI(t *testing.T) {
 			cmd.Stdout = &stdout
 			cmd.Stderr = &stderr
 			if err := cmd.Run(); err != nil {
-				t.Fatalf("lark-cli %v: %v\nstdout:\n%s\nstderr:\n%s", tt.args, err, stdout.String(), stderr.String())
+				t.Fatalf("work-cli %v: %v\nstdout:\n%s\nstderr:\n%s", tt.args, err, stdout.String(), stderr.String())
 			}
 			if !strings.Contains(stdout.String(), tt.want) {
-				t.Fatalf("lark-cli %v output missing %q:\n%s", tt.args, tt.want, stdout.String())
+				t.Fatalf("work-cli %v output missing %q:\n%s", tt.args, tt.want, stdout.String())
 			}
 		})
 	}

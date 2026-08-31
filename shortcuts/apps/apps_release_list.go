@@ -21,7 +21,7 @@ var AppsReleaseList = common.Shortcut{
 	Description: "List an app's release history (most recent first)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +release-list --app-id <app_id>",
+		"Example: work-cli apps +release-list --app-id <app_id>",
 		"Tip: filter fields with --jq, e.g. -q '.data.releases[].release_id'",
 	},
 	Scopes:    []string{"spark:app:read"},

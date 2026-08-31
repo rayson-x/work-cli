@@ -163,7 +163,7 @@ _列表选项_
 示例：
 
 ```bash
-lark-cli sheets +batch-update --url "https://example.feishu.cn/sheets/shtXXX" --yes \
+work-cli sheets +batch-update --url "https://example.feishu.cn/sheets/shtXXX" --yes \
   --operations @ops.json
 
 # ops.json （array<{shortcut, input}>，shortcut 用 CLI 名）:
@@ -201,7 +201,7 @@ lark-cli sheets +batch-update --url "https://example.feishu.cn/sheets/shtXXX" --
 > ```
 >
 > ```bash
-> lark-cli sheets +batch-chart-create --url "..." --operations @ops.json
+> work-cli sheets +batch-chart-create --url "..." --operations @ops.json
 > ```
 
 ### `+cells-batch-clear`
@@ -210,10 +210,10 @@ lark-cli sheets +batch-update --url "https://example.feishu.cn/sheets/shtXXX" --
 
 ```bash
 # dry-run 先看清除范围
-lark-cli sheets +cells-batch-clear --url "..." \
+work-cli sheets +cells-batch-clear --url "..." \
   --ranges '["sheet1!A2:Z1000","sheet2!A2:Z1000"]' --scope all --dry-run
 # 执行
-lark-cli sheets +cells-batch-clear --url "..." \
+work-cli sheets +cells-batch-clear --url "..." \
   --ranges '["sheet1!A2:Z1000","sheet2!A2:Z1000"]' --scope all --yes
 ```
 

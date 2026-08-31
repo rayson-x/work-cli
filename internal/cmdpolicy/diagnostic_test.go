@@ -15,7 +15,7 @@ import (
 // configPolicyTree builds the minimal slice of the real command tree
 // where diagnostic exemption applies: root -> config -> policy -> show.
 func configPolicyTree() *cobra.Command {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	config := &cobra.Command{Use: "config"}
 	root.AddCommand(config)
 	policy := &cobra.Command{Use: "policy"}

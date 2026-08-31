@@ -25,7 +25,7 @@ func TestBaseTableCopyWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Minute)
 	t.Cleanup(cancel)
 
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-table-copy-"+clie2e.GenerateSuffix())
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-table-copy-"+clie2e.GenerateSuffix())
 	sourceTableID, _, _ := createTableWithRetry(
 		t,
 		parentT,

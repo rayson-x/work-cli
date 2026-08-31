@@ -7,13 +7,13 @@
 使用当前用户身份截图，文件写入默认目录：
 
 ```bash
-lark-cli vc +meeting-screenshot --as user --meeting-id <long_meeting_id>
+work-cli vc +meeting-screenshot --as user --meeting-id <long_meeting_id>
 ```
 
 使用机器人身份截图，并指定输出路径：
 
 ```bash
-lark-cli vc +meeting-screenshot --as bot --meeting-id <long_meeting_id> --output ./meeting-screenshots/current.jpg
+work-cli vc +meeting-screenshot --as bot --meeting-id <long_meeting_id> --output ./meeting-screenshots/current.jpg
 ```
 
 ## 参数

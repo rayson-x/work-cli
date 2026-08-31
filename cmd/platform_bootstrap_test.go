@@ -54,12 +54,12 @@ func writePolicy(t *testing.T, cfgDir string, body string) {
 }
 
 // fakeTree builds a minimal command tree with the same shape the real
-// CLI exposes for these tests: lark-cli has a docs group with +fetch and
+// CLI exposes for these tests: work-cli has a docs group with +fetch and
 // +update, and an im group with +send. Each leaf has its risk_level set
 // so MaxRisk filtering exercises a real path.
 func fakeTree(t *testing.T) *cobra.Command {
 	t.Helper()
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)

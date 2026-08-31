@@ -114,7 +114,7 @@ func capabilityError(eventKey string) error {
 	return errs.NewValidationError(errs.SubtypeFailedPrecondition,
 		"the running local event bus does not support %s, and %s subscribes per resource so it cannot fall back",
 		protocol.CapabilityCanonicalMetadataV1, eventKey).
-		WithHint("stop the consumers still attached to the old bus, run `lark-cli event stop` (add --force to override active consumers at the cost of dropping them), then retry `lark-cli event consume %s`", eventKey)
+		WithHint("stop the consumers still attached to the old bus, run `work-cli event stop` (add --force to override active consumers at the cost of dropping them), then retry `work-cli event consume %s`", eventKey)
 }
 
 // legacyModeNotice is the one-time, per-connection line telling the operator
@@ -122,5 +122,5 @@ func capabilityError(eventKey string) error {
 func legacyModeNotice(eventKey string) string {
 	return "[event] legacy compatibility mode for " + eventKey +
 		": the running bus predates " + protocol.CapabilityCanonicalMetadataV1 +
-		", so app_id and tenant_key are read from the event payload; restart the bus (`lark-cli event stop`) once its consumers are done to leave this mode"
+		", so app_id and tenant_key are read from the event payload; restart the bus (`work-cli event stop`) once its consumers are done to leave this mode"
 }

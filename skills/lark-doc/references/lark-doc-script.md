@@ -19,7 +19,7 @@
 | `--presentation-decision` | 是 | 完整决策 JSON；接受内联 JSON、`@./decision.json` 形式的 CWD 下相对路径或 `-`（stdin）。 |
 
 ```bash
-lark-cli docs +script --command init-draft \
+work-cli docs +script --command init-draft \
   --presentation-decision '<完整 Presentation Decision JSON>' \
   --format json
 ```
@@ -52,9 +52,9 @@ lark-cli docs +script --command init-draft \
 | `--presentation-decision` | 否 | 用于检查当前输入的完整决策 JSON；支持内联、`@./decision.json` 形式的 CWD 下相对路径或 `-`。 |
 
 ```bash
-lark-cli docs +script --command parse --content "@./document.xml" --format json
-lark-cli docs +script --command parse --doc "<Docx/Wiki URL 或 token>" --format json
-lark-cli docs +script --command parse --content "@./document.xml" --presentation-decision '<JSON>' --format json
+work-cli docs +script --command parse --content "@./document.xml" --format json
+work-cli docs +script --command parse --doc "<Docx/Wiki URL 或 token>" --format json
+work-cli docs +script --command parse --content "@./document.xml" --presentation-decision '<JSON>' --format json
 ```
 
 - `--content` 与 `--presentation-decision` 同时使用时，最多一个参数读取 stdin。

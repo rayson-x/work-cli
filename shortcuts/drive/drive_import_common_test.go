@@ -353,7 +353,7 @@ func TestDriveImportTimeoutReturnsFollowUpCommand(t *testing.T) {
 	if !bytes.Contains(stdout.Bytes(), []byte(`"timed_out": true`)) {
 		t.Fatalf("stdout missing timed_out=true: %s", stdout.String())
 	}
-	if !bytes.Contains(stdout.Bytes(), []byte(`"next_command": "lark-cli drive +task_result --scenario import --ticket tk_import"`)) {
+	if !bytes.Contains(stdout.Bytes(), []byte(`"next_command": "work-cli drive +task_result --scenario import --ticket tk_import"`)) {
 		t.Fatalf("stdout missing follow-up command: %s", stdout.String())
 	}
 	if bytes.Contains(stdout.Bytes(), []byte(`"permission_grant"`)) {

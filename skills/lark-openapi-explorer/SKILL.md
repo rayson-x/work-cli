@@ -1,17 +1,17 @@
 ---
 name: lark-openapi-explorer
 version: 1.0.0
-description: "飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。"
+description: "飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 work-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。"
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
 ---
 
 # OpenAPI Explorer
 
 > **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md) 了解认证、身份切换和安全规则。
 
-当用户的需求**无法被现有 skill 或 CLI 已注册 API 覆盖**时，使用本技能从飞书官方 markdown 文档库中逐层挖掘原生 OpenAPI 接口，然后通过 `lark-cli api` 裸调完成任务。
+当用户的需求**无法被现有 skill 或 CLI 已注册 API 覆盖**时，使用本技能从飞书官方 markdown 文档库中逐层挖掘原生 OpenAPI 接口，然后通过 `work-cli api` 裸调完成任务。
 
 ## 文档库结构
 
@@ -40,7 +40,7 @@ llms.txt                          ← 顶层索引，列出所有模块文档链
 
 ```bash
 # 先检查是否已有对应的 skill 或已注册 API
-lark-cli <可能的service> --help
+work-cli <可能的service> --help
 ```
 
 如果已有对应命令或 shortcut，直接使用，**不需要继续挖掘**。
@@ -78,20 +78,20 @@ WebFetch https://open.feishu.cn/document/server-docs/.../<api>.md
 
 ### Step 5：通过 CLI 调用 API
 
-使用 `lark-cli api` 裸调：
+使用 `work-cli api` 裸调：
 
 ```bash
 # GET 请求
-lark-cli api GET /open-apis/<path> --params '{"key":"value"}'
+work-cli api GET /open-apis/<path> --params '{"key":"value"}'
 
 # POST 请求
-lark-cli api POST /open-apis/<path> --data '{"key":"value"}'
+work-cli api POST /open-apis/<path> --data '{"key":"value"}'
 
 # PUT 请求
-lark-cli api PUT /open-apis/<path> --data '{"key":"value"}'
+work-cli api PUT /open-apis/<path> --data '{"key":"value"}'
 
 # DELETE 请求
-lark-cli api DELETE /open-apis/<path>
+work-cli api DELETE /open-apis/<path>
 ```
 
 ## 输出规范
@@ -102,7 +102,7 @@ lark-cli api DELETE /open-apis/<path>
 2. **HTTP 方法与路径**：`METHOD /open-apis/...`
 3. **关键参数**：列出必填和常用可选参数
 4. **所需权限**：scope 列表
-5. **调用示例**：给出 `lark-cli api` 的完整命令
+5. **调用示例**：给出 `work-cli api` 的完整命令
 6. **注意事项**：频率限制、特殊约束等
 
 如果用户使用英文交流，将以上所有内容翻译为英文。
@@ -120,14 +120,14 @@ lark-cli api DELETE /open-apis/<path>
 
 ```bash
 # Step 1: 确认 CLI 没有封装
-lark-cli im --help
+work-cli im --help
 # → 发现没有 chat_members 相关的 create 命令
 
 # Step 2-4: 通过文档挖掘获得 API 规范
 # → POST /open-apis/im/v1/chats/:chat_id/members
 
 # Step 5: 调用
-lark-cli api POST /open-apis/im/v1/chats/oc_xxx/members \
+work-cli api POST /open-apis/im/v1/chats/oc_xxx/members \
   --data '{"id_list":["ou_xxx","ou_yyy"]}' \
   --params '{"member_id_type":"open_id"}'
 ```
@@ -136,14 +136,14 @@ lark-cli api POST /open-apis/im/v1/chats/oc_xxx/members \
 
 ```bash
 # Step 1: 确认 CLI 没有封装
-lark-cli im --help
+work-cli im --help
 # → 没有 announcement 相关命令
 
 # Step 2-4: 挖掘文档
 # → PATCH /open-apis/im/v1/chats/:chat_id/announcement
 
 # Step 5: 调用
-lark-cli api PATCH /open-apis/im/v1/chats/oc_xxx/announcement \
+work-cli api PATCH /open-apis/im/v1/chats/oc_xxx/announcement \
   --data '{"revision":"0","requests":["<html>公告内容</html>"]}'
 ```
 

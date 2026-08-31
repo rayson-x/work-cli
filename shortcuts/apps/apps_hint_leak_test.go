@@ -21,11 +21,11 @@ func TestAppsErrorHintsCarryNoSecretsOrPII(t *testing.T) {
 	// text here so this leak guard keeps tracking the real production string.
 	hints := []string{
 		// apps_env_pull.go:86 and apps_access_scope_get.go:50 (identical literals)
-		"verify --app-id is correct and you have access to the app; list your apps with `lark-cli apps +list`",
+		"verify --app-id is correct and you have access to the app; list your apps with `work-cli apps +list`",
 		// apps_access_scope_set.go:74
-		"verify --app-id is correct; for scope=specific, each --targets id must be a valid open_id/department_id/chat_id and --approver a valid open_id; review the current scope with `lark-cli apps +access-scope-get --app-id <app_id>`",
+		"verify --app-id is correct; for scope=specific, each --targets id must be a valid open_id/department_id/chat_id and --approver a valid open_id; review the current scope with `work-cli apps +access-scope-get --app-id <app_id>`",
 		// apps_init.go:483 (git push rejection)
-		"the push was rejected — the git output is in the message above; if it is a non-fast-forward (remote has new commits), sync the remote and retry; if it is an auth failure, make sure `lark-cli apps +git-credential-init` has succeeded",
+		"the push was rejected — the git output is in the message above; if it is a non-fast-forward (remote has new commits), sync the remote and retry; if it is an auth failure, make sure `work-cli apps +git-credential-init` has succeeded",
 		// git_credential.go gitCredentialIssueHint const (referenced directly so a
 		// rename or text change breaks the build instead of silently drifting)
 		gitCredentialIssueHint,

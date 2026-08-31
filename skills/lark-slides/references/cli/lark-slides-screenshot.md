@@ -9,7 +9,7 @@
 ## 命令
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --presentation '<xml_presentation_id 或 slides/wiki URL>' \
   --slide-number 1
 ```
@@ -17,7 +17,7 @@ lark-cli slides +screenshot --as user \
 渲染本地 XML 内容：
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --content @slide.xml
 ```
 
@@ -42,7 +42,7 @@ lark-cli slides +screenshot --as user \
 ### 单页截图并固定路径
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --presentation slides_example_presentation_id \
   --slide-number 1 \
   --output .lark-slides/screenshots/example-deck-task/page-01
@@ -51,7 +51,7 @@ lark-cli slides +screenshot --as user \
 按 `slide_id` 选择单页时同样使用 `--output`：
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --presentation slides_example_presentation_id \
   --slide-id slide_example_id \
   --output .lark-slides/screenshots/example-deck-task/page-01
@@ -62,7 +62,7 @@ lark-cli slides +screenshot --as user \
 一次不要超过 10 页；如需更多页面，分批调用。可以重复传参，也可以用逗号分隔一次传多个：
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --presentation slides_example_presentation_id \
   --slide-number 1 \
   --slide-number 2 \
@@ -72,7 +72,7 @@ lark-cli slides +screenshot --as user \
 ### 渲染 XML 预览
 
 ```bash
-lark-cli slides +screenshot --as user \
+work-cli slides +screenshot --as user \
   --content @.lark-slides/out/demo/slide.xml \
   --output .lark-slides/screenshots/example-deck-task/preview
 ```

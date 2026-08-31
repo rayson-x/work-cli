@@ -130,7 +130,7 @@ var DimInsert = common.Shortcut{
 	HasFormat:   true,
 	Flags:       flagsFor("+dim-insert"),
 	Tips: []string{
-		"Example: lark-cli sheets +dim-insert --url <URL> --sheet-name Sheet1 --position 3 --count 2 --inherit-style before",
+		"Example: work-cli sheets +dim-insert --url <URL> --sheet-name Sheet1 --position 3 --count 2 --inherit-style before",
 		"Rows vs columns comes from --position alone: a row number (3) inserts rows, a column letter (C) inserts columns — there is no --dimension flag.",
 	},
 	Validate: validateViaInput(dimInsertInput),
@@ -485,7 +485,7 @@ var DimFreeze = common.Shortcut{
 	HasFormat:   true,
 	Flags:       flagsFor("+dim-freeze"),
 	Tips: []string{
-		"Example: lark-cli sheets +dim-freeze --url <URL> --sheet-name Sheet1 --rows 1 --cols 2 (holds the header row and the first 2 columns in one call)",
+		"Example: work-cli sheets +dim-freeze --url <URL> --sheet-name Sheet1 --rows 1 --cols 2 (holds the header row and the first 2 columns in one call)",
 		"Freezing is not additive: --dimension row --count 1 followed by --dimension column --count 2 leaves ONLY the columns frozen. Pass --rows/--cols together instead of calling twice",
 		"To unfreeze one axis but keep the other, state the survivor: --rows 0 --cols 2. Bare --count 0 clears both",
 	},

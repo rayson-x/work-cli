@@ -96,7 +96,7 @@ func (s driveTaskCheckStatus) StatusLabel() string {
 // driveTaskCheckResultCommand prints the resume command shown when bounded
 // polling ends before the backend task completes.
 func driveTaskCheckResultCommand(taskID, as string) string {
-	return fmt.Sprintf("lark-cli drive +task_result --scenario task_check --task-id %s --as %s", taskID, as)
+	return fmt.Sprintf("work-cli drive +task_result --scenario task_check --task-id %s --as %s", taskID, as)
 }
 
 // driveTaskCheckParams keeps the task_check query parameter shape in one place

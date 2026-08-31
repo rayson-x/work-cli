@@ -26,7 +26,7 @@ const (
 	//   - AppSecret: "appsecret:<appId>"
 	//   - Stored TAT: "tat:v1:<sha256(appId)>"
 	//   - UAT:       "<appId>:<userOpenId>"
-	LarkCliService = "lark-cli"
+	LarkCliService = "work-cli"
 )
 
 // wrapError wraps underlying keychain failures into a typed *errs.APIError
@@ -41,7 +41,7 @@ func wrapError(op string, err error) error {
 	hint := "Check if the OS keychain/credential manager is locked or accessible. If running inside a sandbox or CI environment, please ensure the process has the necessary permissions to access the keychain, you can try running this outside the sandbox."
 
 	if errors.Is(err, errNotInitialized) {
-		hint = "The keychain master key may have been cleaned up or deleted. If running inside a sandbox or CI environment, please ensure the process has the necessary permissions to access the keychain, you can try running this outside the sandbox. Otherwise, please reconfigure the CLI by running lark-cli config init."
+		hint = "The keychain master key may have been cleaned up or deleted. If running inside a sandbox or CI environment, please ensure the process has the necessary permissions to access the keychain, you can try running this outside the sandbox. Otherwise, please reconfigure the CLI by running work-cli config init."
 	}
 	hint += extraHint(err)
 

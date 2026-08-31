@@ -264,7 +264,7 @@ func withFastDeleteWorkflowBackoff(t *testing.T) {
 	})
 }
 
-// mustWriteDriveDeleteWorkflowFakeCLI writes a fake lark-cli that emulates the
+// mustWriteDriveDeleteWorkflowFakeCLI writes a fake work-cli that emulates the
 // drive delete outcomes exercised by deleteAsyncAndVerify. Every endpoint
 // bumps a per-endpoint counter when its FAKE_WORKFLOW_*_STATE env is set, so
 // tests can assert call contracts. +task_result rejects every call unless
@@ -364,7 +364,7 @@ echo "unexpected fake CLI args: $*" >&2
 exit 2
 `
 
-	binaryPath := filepath.Join(t.TempDir(), "fake-lark-cli")
+	binaryPath := filepath.Join(t.TempDir(), "fake-work-cli")
 	require.NoError(t, os.WriteFile(binaryPath, []byte(script), 0o755))
 	return binaryPath
 }

@@ -10,26 +10,26 @@ CLI 分两阶段构建最终 JSON：
 - 安全的邮件元数据字段直接透传
 - 正文、附件和辅助字段由 shortcut 派生
 
-本 skill 对应 shortcut `lark-cli mail +message`，内部步骤：
+本 skill 对应 shortcut `work-cli mail +message`，内部步骤：
 1. `GET /open-apis/mail/v1/user_mailboxes/{mailbox}/messages/{message_id}` — 获取完整邮件内容
 
 ## 命令
 
 ```bash
 # 读取一封邮件（默认包含 HTML 正文）
-lark-cli mail +message --message-id <message-id>
+work-cli mail +message --message-id <message-id>
 
 # 仅纯文本正文（更小的负载，适合 AI 处理）
-lark-cli mail +message --message-id <message-id> --html=false
+work-cli mail +message --message-id <message-id> --html=false
 
 # 指定邮箱
-lark-cli mail +message --mailbox user@example.com --message-id <message-id>
+work-cli mail +message --mailbox user@example.com --message-id <message-id>
 
 # JSON 输出（脚本友好）
-lark-cli mail +message --message-id <message-id> --format json
+work-cli mail +message --message-id <message-id> --format json
 
 # Dry Run
-lark-cli mail +message --message-id <message-id> --dry-run
+work-cli mail +message --message-id <message-id> --dry-run
 ```
 
 ## 参数
@@ -164,7 +164,7 @@ lark-cli mail +message --message-id <message-id> --dry-run
 
 ```bash
 # jq -r 自动处理 JSON 转义，输出原始 HTML
-lark-cli mail +message --message-id <id> --format json | jq -r '.data.body_html'
+work-cli mail +message --message-id <id> --format json | jq -r '.data.body_html'
 ```
 
 ## 典型场景
@@ -173,23 +173,23 @@ lark-cli mail +message --message-id <id> --format json | jq -r '.data.body_html'
 
 ```bash
 # 1. 读取邮件（仅纯文本，更小负载）
-lark-cli mail +message --message-id <id> --html=false --format json
+work-cli mail +message --message-id <id> --html=false --format json
 
 # 2. 让 LLM 分析 body_plain_text 并起草回复
 
 # 3. 发送回复
-lark-cli mail +reply --message-id <id> --body "..."
+work-cli mail +reply --message-id <id> --body "..."
 ```
 
 ### 按需获取附件或内嵌图片下载 URL
 
 ```bash
 # 1. 读取邮件，从 .data.attachments[] 中获取附件 ID
-lark-cli mail +message --message-id <id> --format json
+work-cli mail +message --message-id <id> --format json
 
 # 2. 仅为需要的 ID 获取下载 URL
-lark-cli schema mail.user_mailbox.message.attachments.download_url
-lark-cli mail user_mailbox.message.attachments download_url \
+work-cli schema mail.user_mailbox.message.attachments.download_url
+work-cli mail user_mailbox.message.attachments download_url \
   --params '{"user_mailbox_id":"me","message_id":"<id>","attachment_ids":["att_xxx","att_yyy"]}'
 ```
 
@@ -226,8 +226,8 @@ lark-cli mail user_mailbox.message.attachments download_url \
 
 ## 相关命令
 
-- `lark-cli mail +thread` — 读取会话中所有邮件
-- `lark-cli mail +reply` — 回复邮件
-- `lark-cli mail +forward` — 转发邮件
-- `lark-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL
-- `lark-cli mail user_mailbox.messages list` — 列出收件箱邮件（获取 `message_id`）
+- `work-cli mail +thread` — 读取会话中所有邮件
+- `work-cli mail +reply` — 回复邮件
+- `work-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL
+- `work-cli mail user_mailbox.messages list` — 列出收件箱邮件（获取 `message_id`）

@@ -8,9 +8,9 @@
 // implement their own server conforming to the wire protocol defined in
 // github.com/larksuite/cli/sidecar.
 //
-// The demo reuses the lark-cli credential pipeline (keychain + config) to
+// The demo reuses the work-cli credential pipeline (keychain + config) to
 // resolve real tokens, so it only works on a machine that has been
-// configured with `lark-cli auth login`.
+// configured with `work-cli auth login`.
 package main
 
 import (
@@ -39,7 +39,7 @@ func main() {
 	listen := flag.String("listen", sidecar.DefaultListenAddr, "listen address (host:port)")
 	keyFile := flag.String("key-file", defaultKeyFile(), "path to write the HMAC key")
 	logFile := flag.String("log-file", "", "audit log file (stderr if empty)")
-	profile := flag.String("profile", "", "lark-cli profile name (empty = active profile)")
+	profile := flag.String("profile", "", "work-cli profile name (empty = active profile)")
 	flag.Parse()
 
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -97,7 +97,7 @@ func run(ctx context.Context, listen, keyFile, logFile, profile string) error {
 		auditLogger = log.New(os.Stderr, "[audit] ", log.LstdFlags)
 	}
 
-	// Reuse the lark-cli credential pipeline. A production implementation
+	// Reuse the work-cli credential pipeline. A production implementation
 	// would likely source credentials from a secrets manager instead.
 	factory := cmdutil.NewDefault(nil, cmdutil.InvocationContext{Profile: profile})
 	cfg, err := factory.Config()

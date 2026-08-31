@@ -18,7 +18,7 @@ func TestCheckReferencesRejectsUnknownFlag(t *testing.T) {
 		Flags: []manifest.Flag{{Name: "api-version"}, {Name: "doc"}},
 	}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch --api-version v2 --minute-token abc",
+		Raw:        "work-cli docs +fetch --api-version v2 --minute-token abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       12,
 	}
@@ -34,7 +34,7 @@ func TestCheckReferencesRejectsUnknownFlag(t *testing.T) {
 func TestCheckReferencesDowngradesUnchangedLegacySkillReferencesInIncrementalMode(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "docs +fetch"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch --legacy-flag abc",
+		Raw:        "work-cli docs +fetch --legacy-flag abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       12,
 	}
@@ -53,7 +53,7 @@ func TestCheckReferencesDowngradesUnchangedLegacySkillReferencesInIncrementalMod
 func TestCheckReferencesRejectsUnchangedSkillReferenceForChangedCommandSurface(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "docs +fetch"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch --removed-flag abc",
+		Raw:        "work-cli docs +fetch --removed-flag abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       12,
 	}
@@ -75,7 +75,7 @@ func TestCheckReferencesRejectsUnchangedSkillReferenceForChangedCommandSurface(t
 func TestCheckReferencesDowngradesUnchangedSkillReferenceWhenCommandSurfaceChangedWithoutBase(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "drive file.comments create_v2"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli drive file.comments create_v2 --removed-flag abc",
+		Raw:        "work-cli drive file.comments create_v2 --removed-flag abc",
 		SourceFile: "skills/lark-drive/SKILL.md",
 		Line:       42,
 	}
@@ -97,7 +97,7 @@ func TestCheckReferencesDowngradesServiceReferenceWhenIncompleteBaseManifestCann
 		Source: manifest.SourceService,
 	}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli drive file.comments create_v2 --removed-flag abc",
+		Raw:        "work-cli drive file.comments create_v2 --removed-flag abc",
 		SourceFile: "skills/lark-drive/SKILL.md",
 		Line:       42,
 	}
@@ -122,7 +122,7 @@ func TestCheckReferencesDowngradesServiceReferenceWhenIncompleteBaseManifestCann
 func TestCheckReferencesUsesBaseCommandDomainForCrossSkillReferences(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "auth login"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli auth login --domain mail",
+		Raw:        "work-cli auth login --domain mail",
 		SourceFile: "skills/lark-mail/SKILL.md",
 		Line:       42,
 	}
@@ -144,7 +144,7 @@ func TestCheckReferencesUsesBaseCommandDomainForCrossSkillReferences(t *testing.
 func TestCheckReferencesDoesNotTrustChangedPathDomainForBaseRegression(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "docs +whiteboard-update"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +whiteboard-update --removed-flag abc",
+		Raw:        "work-cli docs +whiteboard-update --removed-flag abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       42,
 	}
@@ -166,7 +166,7 @@ func TestCheckReferencesDoesNotTrustChangedPathDomainForBaseRegression(t *testin
 func TestCheckReferencesRejectsChangedSkillReferencesInIncrementalMode(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "docs +fetch"}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch --bad-flag abc",
+		Raw:        "work-cli docs +fetch --bad-flag abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       12,
 	}
@@ -182,7 +182,7 @@ func TestCheckReferencesRejectsChangedSkillReferencesInIncrementalMode(t *testin
 func TestCheckReferencesAcceptsEmbeddedServiceCommand(t *testing.T) {
 	m := embeddedServiceCommandIndex()
 	ex := skillscan.Example{
-		Raw:        `lark-cli drive file.comments create_v2 --file-token doccnxxxx --params '{"file_type":"docx"}' --data '{"reply_list":[{"content":"looks good"}]}'`,
+		Raw:        `work-cli drive file.comments create_v2 --file-token doccnxxxx --params '{"file_type":"docx"}' --data '{"reply_list":[{"content":"looks good"}]}'`,
 		SourceFile: "skills/lark-drive/references/lark-drive-add-comment.md",
 		Line:       126,
 	}
@@ -202,7 +202,7 @@ func TestCheckReferencesAcceptsEmbeddedServiceCommand(t *testing.T) {
 func TestCheckReferencesRejectsUnknownFlagOnEmbeddedServiceCommand(t *testing.T) {
 	m := embeddedServiceCommandIndex()
 	ex := skillscan.Example{
-		Raw:        `lark-cli drive file.comments create_v2 --file-token doccnxxxx --bad-flag value`,
+		Raw:        `work-cli drive file.comments create_v2 --file-token doccnxxxx --bad-flag value`,
 		SourceFile: "skills/lark-drive/references/lark-drive-add-comment.md",
 		Line:       126,
 	}
@@ -238,7 +238,7 @@ func TestCheckReferencesRejectsUnknownFlagAfterPlaceholderArg(t *testing.T) {
 		Flags: []manifest.Flag{{Name: "api-version", TakesValue: true}},
 	}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch <doc_token> --bad-flag",
+		Raw:        "work-cli docs +fetch <doc_token> --bad-flag",
 		SourceFile: "skills/lark-doc/references/fetch.md",
 		Line:       20,
 	}
@@ -257,7 +257,7 @@ func TestParseExampleUsesCommandTreeBeforeFlagValues(t *testing.T) {
 		Flags: []manifest.Flag{{Name: "api-version", TakesValue: true}, {Name: "doc", TakesValue: true}},
 	}}}
 	ex := skillscan.Example{
-		Raw:        "lark-cli docs +fetch --api-version v2 --doc abc",
+		Raw:        "work-cli docs +fetch --api-version v2 --doc abc",
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       8,
 	}
@@ -281,7 +281,7 @@ func TestParseExampleAllowsFlagShorthandAndIgnoresPipelineTail(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli mail +message --message-id abc --format json -q '.data.body_html' | jq -r '.'`,
+		Raw:        `work-cli mail +message --message-id abc --format json -q '.data.body_html' | jq -r '.'`,
 		SourceFile: "skills/lark-mail/SKILL.md",
 		Line:       8,
 	}
@@ -303,7 +303,7 @@ func TestParseAgainstManifestConsumesShortFlagValue(t *testing.T) {
 		},
 	}}}
 
-	got, err := parseAgainstManifest(m, `lark-cli mail +message -q '.data.body_html' target`)
+	got, err := parseAgainstManifest(m, `work-cli mail +message -q '.data.body_html' target`)
 	if err != nil {
 		t.Fatalf("parseAgainstManifest() error = %v", err)
 	}
@@ -320,7 +320,7 @@ func TestParseExampleIgnoresTrailingShellComment(t *testing.T) {
 		Path: "schema",
 	}}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli schema wiki.<resource>.<method> # read --data and --params shape first`,
+		Raw:        `work-cli schema wiki.<resource>.<method> # read --data and --params shape first`,
 		SourceFile: "skills/lark-wiki/SKILL.md",
 		Line:       82,
 	}
@@ -341,7 +341,7 @@ func TestCheckReferencesUsesLongestManifestPrefix(t *testing.T) {
 		Flags:    []manifest.Flag{{Name: "params"}, {Name: "dry-run"}},
 	}}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli api GET /open-apis/test --params '{"a":"1"}' --dry-run`,
+		Raw:        `work-cli api GET /open-apis/test --params '{"a":"1"}' --dry-run`,
 		SourceFile: "command-manifest",
 		Line:       1,
 	}
@@ -360,7 +360,7 @@ func TestCheckReferencesDoesNotLetGroupCommandSwallowUnknownMethod(t *testing.T)
 		{Path: "mail user_mailboxes search", Runnable: true, Flags: []manifest.Flag{{Name: "params"}}},
 	}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli mail user_mailboxes missing_method --params '{"id":"me"}'`,
+		Raw:        `work-cli mail user_mailboxes missing_method --params '{"id":"me"}'`,
 		SourceFile: "skills/lark-mail/SKILL.md",
 		Line:       1,
 	}
@@ -372,7 +372,7 @@ func TestCheckReferencesDoesNotLetGroupCommandSwallowUnknownMethod(t *testing.T)
 
 func TestCheckReferencesAllowsHelpFlag(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "im"}}}
-	ex := skillscan.Example{Raw: "lark-cli im --help", SourceFile: "skills/lark-im/SKILL.md", Line: 1}
+	ex := skillscan.Example{Raw: "work-cli im --help", SourceFile: "skills/lark-im/SKILL.md", Line: 1}
 	diags, _ := CheckReferences(m, []skillscan.Example{ex})
 	if len(diags) != 0 {
 		t.Fatalf("--help should be allowed, got %#v", diags)
@@ -387,7 +387,7 @@ func TestParseAgainstManifestAcceptsAliasAndCanonicalizesFact(t *testing.T) {
 			Name: "order", Aliases: []string{"sort-order"}, TakesValue: true,
 		}},
 	}}}
-	got, err := parseAgainstManifest(m, "lark-cli im +messages --sort-order asc")
+	got, err := parseAgainstManifest(m, "work-cli im +messages --sort-order asc")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -401,7 +401,7 @@ func TestParseAgainstManifestAcceptsAliasAndCanonicalizesFact(t *testing.T) {
 
 func TestCheckReferencesSkipsTemplateServicePlaceholder(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "im"}}}
-	ex := skillscan.Example{Raw: "lark-cli im <resource> <method> [flags]", SourceFile: "skills/lark-demo/SKILL.md", Line: 1}
+	ex := skillscan.Example{Raw: "work-cli im <resource> <method> [flags]", SourceFile: "skills/lark-demo/SKILL.md", Line: 1}
 	diags, facts := CheckReferences(m, []skillscan.Example{ex})
 	if len(diags) != 0 {
 		t.Fatalf("template placeholder should not reject, got %#v", diags)
@@ -412,7 +412,7 @@ func TestCheckReferencesSkipsTemplateServicePlaceholder(t *testing.T) {
 }
 
 func TestParseAgainstManifestWarnsOnUnclosedQuote(t *testing.T) {
-	_, err := parseAgainstManifest(manifest.Manifest{}, `lark-cli docs +fetch --doc "abc`)
+	_, err := parseAgainstManifest(manifest.Manifest{}, `work-cli docs +fetch --doc "abc`)
 	if err == nil {
 		t.Fatal("expected parse error")
 	}

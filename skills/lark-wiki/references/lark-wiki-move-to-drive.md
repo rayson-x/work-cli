@@ -19,18 +19,18 @@
 
 ```bash
 # 移到指定 Drive 文件夹
-lark-cli wiki +move-to-drive \
+work-cli wiki +move-to-drive \
   --node-token <WIKI_NODE_TOKEN> \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --as user
 
 # 移到当前调用身份的“我的空间”根目录
-lark-cli wiki +move-to-drive \
+work-cli wiki +move-to-drive \
   --node-token <WIKI_NODE_TOKEN> \
   --as user
 
 # 预览提交任务和轮询任务两步请求
-lark-cli wiki +move-to-drive \
+work-cli wiki +move-to-drive \
   --node-token <WIKI_NODE_TOKEN> \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --dry-run
@@ -63,7 +63,7 @@ shortcut 会按以下协议执行：
 手动续跑命令：
 
 ```bash
-lark-cli drive +task_result \
+work-cli drive +task_result \
   --scenario wiki_move_to_drive \
   --task-id <COMPLETE_TASK_ID> \
   --as user
@@ -100,7 +100,7 @@ lark-cli drive +task_result \
   "status": 1,
   "status_msg": "processing",
   "timed_out": true,
-  "next_command": "lark-cli drive +task_result --scenario wiki_move_to_drive --task-id <OPAQUE_TASK_ID> --as user"
+  "next_command": "work-cli drive +task_result --scenario wiki_move_to_drive --task-id <OPAQUE_TASK_ID> --as user"
 }
 ```
 

@@ -12,7 +12,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const sessionStopHint = "verify --app-id and --session-id are correct (list sessions with `lark-cli apps +session-list --app-id <app_id>`); --turn-id must be the latest turn from `lark-cli apps +session-get --app-id <app_id> --session-id <session_id>`"
+const sessionStopHint = "verify --app-id and --session-id are correct (list sessions with `work-cli apps +session-list --app-id <app_id>`); --turn-id must be the latest turn from `work-cli apps +session-get --app-id <app_id> --session-id <session_id>`"
 
 // AppsSessionStop interrupts the RUNNING turn of a session. No-op if the turn
 // is queued or already finished. Does not close the session.
@@ -22,7 +22,7 @@ var AppsSessionStop = common.Shortcut{
 	Description: "Stop (interrupt) the running turn of a session",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +session-stop --app-id <app_id> --session-id <session_id> --turn-id <turn_id>",
+		"Example: work-cli apps +session-stop --app-id <app_id> --session-id <session_id> --turn-id <turn_id>",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

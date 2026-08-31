@@ -25,7 +25,7 @@ var AppsEnvVarList = common.Shortcut{
 	Description: "List app environment variables",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +env-list --app-id <app_id>",
+		"Example: work-cli apps +env-list --app-id <app_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -76,7 +76,7 @@ var AppsEnvVarSet = common.Shortcut{
 	Description: "Set an app environment variable",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +env-set --app-id <app_id> --key FOO --value bar",
+		"Example: work-cli apps +env-set --app-id <app_id> --key FOO --value bar",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -160,7 +160,7 @@ var AppsEnvVarDelete = common.Shortcut{
 	Description: "Delete app environment variables",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +env-delete --app-id <app_id> --key FOO --yes",
+		"Example: work-cli apps +env-delete --app-id <app_id> --key FOO --yes",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

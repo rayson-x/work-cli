@@ -22,8 +22,8 @@ var AppsRoleMemberList = common.Shortcut{
 	Description: "List app role members",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +role-member-list --app-id <app_id> --role-id <role_id>",
-		"Example: lark-cli apps +role-member-list --app-id <app_id> --role-id <role_id> --member-type user",
+		"Example: work-cli apps +role-member-list --app-id <app_id> --role-id <role_id>",
+		"Example: work-cli apps +role-member-list --app-id <app_id> --role-id <role_id> --member-type user",
 		"When only one member type is requested, pass --member-type user|department|chat instead of filtering the full response",
 		"--member-type returns only the selected member field; omitted fields are unknown, so omit the flag for pre/post-write baselines",
 		"--format table renders the CLI-native member_type/member_id table; this command has no --limit or --page-size flag",
@@ -91,8 +91,8 @@ var AppsRoleMemberAdd = common.Shortcut{
 	Description: "Add app role members",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +role-member-add --app-id <app_id> --role-id <role_id> --users ou_x",
-		"Example: lark-cli apps +role-member-add --app-id <app_id> --role-id <role_id> --users ou_x,ou_y --departments od-x --chats oc_x",
+		"Example: work-cli apps +role-member-add --app-id <app_id> --role-id <role_id> --users ou_x",
+		"Example: work-cli apps +role-member-add --app-id <app_id> --role-id <role_id> --users ou_x,ou_y --departments od-x --chats oc_x",
 		"Resolve every name first, then add all resolved users (ou_), departments (od-), and chats (oc_) in one call using the three type-specific flags; if any resolution fails, stop without a partial write",
 	},
 	Scopes:    []string{"spark:app:write"},
@@ -147,8 +147,8 @@ var AppsRoleMemberRemove = common.Shortcut{
 	Description: "Remove app role members",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> --users ou_x --yes",
-		"Example: lark-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> --all --yes",
+		"Example: work-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> --users ou_x --yes",
+		"Example: work-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> --all --yes",
 		"When the user names a member, resolve and verify that exact name before writing; if lookup fails, stop and never infer that the role's only current member is the target",
 		"--all clears members but does not delete the role; after a confirmed --all operation, use an unfiltered +role-member-list to verify users, departments, and chats are empty",
 	},
@@ -205,7 +205,7 @@ var AppsRoleMatchList = common.Shortcut{
 	Description: "List app roles matching a user",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +role-match-list --app-id <app_id> --user-id <user_open_id>",
+		"Example: work-cli apps +role-match-list --app-id <app_id> --user-id <user_open_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},

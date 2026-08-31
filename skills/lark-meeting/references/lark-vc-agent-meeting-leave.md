@@ -3,13 +3,13 @@
 
 通过 `meeting_id` 离开当前身份所在的视频会议（bot leave）。这是一次**写操作**，会实际把当前身份从会议中移出。
 
-本 skill 对应 shortcut：`lark-cli vc +meeting-leave`（调用 `POST /open-apis/vc/v1/bots/leave`）。
+本 skill 对应 shortcut：`work-cli vc +meeting-leave`（调用 `POST /open-apis/vc/v1/bots/leave`）。
 
 ## 命令
 
 ```bash
 # 通过 meeting_id 离会
-lark-cli vc +meeting-leave --as bot --meeting-id 69xxxxxxxxxxxxx28
+work-cli vc +meeting-leave --as bot --meeting-id 69xxxxxxxxxxxxx28
 ```
 
 ## 参数

@@ -21,7 +21,7 @@ var AppsFileQuotaGet = common.Shortcut{
 	Description: "Get an app's file-storage usage",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +file-quota-get --app-id <app_id>",
+		"Example: work-cli apps +file-quota-get --app-id <app_id>",
 		"Tip: get just the usage percent with -q '.usage_percent'",
 	},
 	Scopes:    []string{"spark:app:read"},

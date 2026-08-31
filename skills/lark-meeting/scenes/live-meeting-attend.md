@@ -19,7 +19,7 @@
 已知目标用户 `ou_` open_id 时，先查询“目标用户正在参会且应用机器人也在同一会议”的活跃会议：
 
 ```bash
-lark-cli vc +meeting-list-active --as bot --user-id <user_open_id> --format json
+work-cli vc +meeting-list-active --as bot --user-id <user_open_id> --format json
 ```
 
 - 返回多个会议时，展示主题、会议号和 `meeting_id` 让用户选择；不擅自取第一个。
@@ -35,10 +35,10 @@ lark-cli vc +meeting-list-active --as bot --user-id <user_open_id> --format json
 
 ```bash
 # 发起日程会议并加入
-lark-cli vc +meeting-join --as bot --meeting-number <9_digit_meeting_number> --action start
+work-cli vc +meeting-join --as bot --meeting-number <9_digit_meeting_number> --action start
 
 # 加入正在进行的会议
-lark-cli vc +meeting-join --as bot --meeting-number <9_digit_meeting_number>
+work-cli vc +meeting-join --as bot --meeting-number <9_digit_meeting_number>
 ```
 
 - 入会前确认目标会议号和用户意图；这是对其他参会人可见的写操作。
@@ -55,10 +55,10 @@ lark-cli vc +meeting-join --as bot --meeting-number <9_digit_meeting_number>
 
 ```bash
 # 邀请指定用户
-lark-cli vc +meeting-invite --as bot --meeting-id <meeting_id> --type SELECTED --open-ids <open_id>
+work-cli vc +meeting-invite --as bot --meeting-id <meeting_id> --type SELECTED --open-ids <open_id>
 
 # 邀请全部合格日程参会人
-lark-cli vc +meeting-invite --as bot --meeting-id <meeting_id> --type ALL_SUGGESTED
+work-cli vc +meeting-invite --as bot --meeting-id <meeting_id> --type ALL_SUGGESTED
 ```
 
 - 应用机器人必须已在目标 Calendar VC 中。
@@ -72,7 +72,7 @@ lark-cli vc +meeting-invite --as bot --meeting-id <meeting_id> --type ALL_SUGGES
 使用应用身份发现或入会得到的 `meeting_id`：
 
 ```bash
-lark-cli vc +meeting-events --as bot --meeting-id <meeting_id> --page-all --format pretty
+work-cli vc +meeting-events --as bot --meeting-id <meeting_id> --page-all --format pretty
 ```
 
 - 默认使用 `--page-all` 拉取当前完整事件流，并保留返回的 `page_token` 供后续增量查询。
@@ -88,10 +88,10 @@ lark-cli vc +meeting-events --as bot --meeting-id <meeting_id> --page-all --form
 
 ```bash
 # 文本消息
-lark-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type text --text "<message>"
+work-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type text --text "<message>"
 
 # 普通会中表情
-lark-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type THUMBSUP
+work-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type THUMBSUP
 ```
 
 - 始终沿用产生 `meeting_id` 的应用身份；不要切换成用户身份。
@@ -107,10 +107,10 @@ lark-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type 
 
 ```bash
 # 设置倒计时
-lark-cli vc +meeting-countdown --as bot --meeting-id <meeting_id> --action set --duration <minutes>
+work-cli vc +meeting-countdown --as bot --meeting-id <meeting_id> --action set --duration <minutes>
 
 # 延长倒计时
-lark-cli vc +meeting-countdown --as bot --meeting-id <meeting_id> --action prolong --duration <minutes>
+work-cli vc +meeting-countdown --as bot --meeting-id <meeting_id> --action prolong --duration <minutes>
 ```
 
 - 始终沿用产生 `meeting_id` 的应用身份；不要切换成用户身份。
@@ -125,7 +125,7 @@ lark-cli vc +meeting-countdown --as bot --meeting-id <meeting_id> --action prolo
 只有用户明确要求结束整场会议时才执行；不要把结束会议和机器人离会混用。
 
 ```bash
-lark-cli vc +meeting-end --as bot --meeting-id <meeting_id> --yes
+work-cli vc +meeting-end --as bot --meeting-id <meeting_id> --yes
 ```
 
 - 输入是长数字 `meeting_id`。
@@ -139,7 +139,7 @@ lark-cli vc +meeting-end --as bot --meeting-id <meeting_id> --yes
 只有用户明确要求机器人退出、离开或结束参会时才执行：
 
 ```bash
-lark-cli vc +meeting-leave --as bot --meeting-id <meeting_id>
+work-cli vc +meeting-leave --as bot --meeting-id <meeting_id>
 ```
 
 - 使用入会返回或应用身份活跃会议查询得到的 `meeting_id`，并确认机器人当前在该会议中。

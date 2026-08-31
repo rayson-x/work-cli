@@ -38,7 +38,7 @@ var StylesPut = common.Shortcut{
 	HasFormat:   true,
 	Flags:       flagsFor("+styles-put"),
 	Tips: []string{
-		`Example: lark-cli sheets +styles-put --url <URL> --styles '{"styles":[{"name":"Sheet1","cell_styles":[{"range":"A1:F1","font_weight":"bold"}],"freeze":{"rows":1}}]}'`,
+		`Example: work-cli sheets +styles-put --url <URL> --styles '{"styles":[{"name":"Sheet1","cell_styles":[{"range":"A1:F1","font_weight":"bold"}],"freeze":{"rows":1}}]}'`,
 		"Same --styles vocabulary as +workbook-create / +table-put; one item per target sheet, name = the real sheet name.",
 		"Style stamps are safe to re-run; the whole spec goes out as one batch request — fail-fast, and applied sub-ops are NOT rolled back.",
 	},

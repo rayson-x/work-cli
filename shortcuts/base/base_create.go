@@ -38,8 +38,8 @@ var BaseBaseCreate = common.Shortcut{
 		{Name: "table-name", Desc: "first table name for the custom first table schema; use with --fields"},
 	},
 	Tips: []string{
-		`Example: lark-cli base +base-create --name "Project Tracker" --time-zone Asia/Shanghai`,
-		`Strongly recommended initial table schema: lark-cli base +base-create --name "Project Tracker" --table-name "Tasks" --fields '[{"name":"Title","type":"text"},{"name":"Status","type":"select","options":[{"name":"Todo"},{"name":"Done"}]}]'`,
+		`Example: work-cli base +base-create --name "Project Tracker" --time-zone Asia/Shanghai`,
+		`Strongly recommended initial table schema: work-cli base +base-create --name "Project Tracker" --table-name "Tasks" --fields '[{"name":"Title","type":"text"},{"name":"Status","type":"select","options":[{"name":"Todo"},{"name":"Done"}]}]'`,
 		"Before using --fields, read lark-base-field-schema.md or rely on the same field JSON shape used by +field-create; do not invent field properties.",
 		"If --table-name and --fields are both omitted, Base creates one initial table with the platform default schema.",
 		"If created as bot, output may include permission_grant; report it so the user knows whether they can open the new Base.",

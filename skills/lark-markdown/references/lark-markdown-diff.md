@@ -8,30 +8,30 @@
 
 ```bash
 # 比较两个远端版本
-lark-cli markdown +diff \
+work-cli markdown +diff \
   --file-token boxcnxxxx \
   --from-version 7633658129540910621 \
   --to-version 7633658129540910628
 
 # 比较历史版本与远端最新版本
-lark-cli markdown +diff \
+work-cli markdown +diff \
   --file-token boxcnxxxx \
   --from-version 7633658129540910621
 
 # 比较远端最新版本与本地草稿
-lark-cli markdown +diff \
+work-cli markdown +diff \
   --file-token boxcnxxxx \
   --file ./draft.md \
   --format pretty
 
 # 比较指定远端版本与本地草稿
-lark-cli markdown +diff \
+work-cli markdown +diff \
   --file-token boxcnxxxx \
   --from-version 7633658129540910621 \
   --file ./draft.md
 
 # 预览底层请求
-lark-cli markdown +diff \
+work-cli markdown +diff \
   --file-token boxcnxxxx \
   --from-version 7633658129540910621 \
   --to-version 7633658129540910628 \

@@ -140,7 +140,7 @@ func TestBuildInternalConcealmentIsExplicitAndKeepsDenialAsCause(t *testing.T) {
 }
 
 func TestDistributionPresentationNeverConcealsYAMLPolicy(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leaf := &cobra.Command{Use: "probe", RunE: func(*cobra.Command, []string) error { return nil }}
 	root.AddCommand(leaf)
 	denial := cmdpolicy.Denial{
@@ -172,7 +172,7 @@ func TestDistributionPresentationNeverConcealsYAMLPolicy(t *testing.T) {
 
 func TestRootGroupsFollowSurfaceConcealmentNotLegacyHiddenState(t *testing.T) {
 	newRoot := func() *cobra.Command {
-		root := &cobra.Command{Use: "lark-cli"}
+		root := &cobra.Command{Use: "work-cli"}
 		child := &cobra.Command{
 			Use:     "skills",
 			GroupID: groupTooling,
@@ -205,7 +205,7 @@ func TestRootGroupsFollowSurfaceConcealmentNotLegacyHiddenState(t *testing.T) {
 }
 
 func TestPresentationDropsRootSkillsFooterWithSkillsRead(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.SetUsageTemplate(rootUsageTemplate)
 	applyPresentationAffordances(root, surface.NewPlan(map[surface.CommandID]surface.CommandState{
 		surface.CommandSkillsRead: surface.CommandConcealed,
@@ -216,7 +216,7 @@ func TestPresentationDropsRootSkillsFooterWithSkillsRead(t *testing.T) {
 }
 
 func TestPresentationProjectsEveryFrameworkOwnedRootHelpTarget(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli", Long: rootLong}
+	root := &cobra.Command{Use: "work-cli", Long: rootLong}
 	root.SetUsageTemplate(rootUsageTemplate)
 	plan := surface.NewPlan(map[surface.CommandID]surface.CommandState{
 		rootHelpAPI:            surface.CommandConcealed,
@@ -271,7 +271,7 @@ func TestFrameworkOwnedRootHelpTargetsExistInDefaultTree(t *testing.T) {
 }
 
 func TestPresentationKeepsDefaultRootHelpByteStable(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli", Long: rootLong}
+	root := &cobra.Command{Use: "work-cli", Long: rootLong}
 	root.SetUsageTemplate(rootUsageTemplate)
 	wantLong, wantUsage := root.Long, root.UsageTemplate()
 
@@ -286,7 +286,7 @@ func TestPresentationKeepsDefaultRootHelpByteStable(t *testing.T) {
 }
 
 func TestHelpRejectsDescendantOfConcealedParent(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	parent := &cobra.Command{Use: "apps"}
 	child := &cobra.Command{Use: "+db-execute", RunE: func(*cobra.Command, []string) error { return nil }}
 	parent.AddCommand(child)
@@ -473,8 +473,8 @@ func TestRecoveryRenderingKeepsExplicitProfilesIsolatedAcrossBuilds(t *testing.T
 			t.Fatalf("%s rendered error = %T, want typed error", name, rendered)
 		}
 		for _, command := range []string{
-			"lark-cli auth login --profile='" + want + "' --scope \"docx:document\" --no-wait --json",
-			"lark-cli auth login --profile='" + want + "' --device-code <device_code>",
+			"work-cli auth login --profile='" + want + "' --scope \"docx:document\" --no-wait --json",
+			"work-cli auth login --profile='" + want + "' --device-code <device_code>",
 		} {
 			if !strings.Contains(problem.Hint, command) {
 				t.Errorf("%s recovery missing %q: %q", name, command, problem.Hint)
@@ -581,7 +581,7 @@ func TestUpdateAffordancesDisappearWithoutDroppingIndependentRecovery(t *testing
 	if _, exists := entry["action"]; exists {
 		t.Errorf("unavailable update action survived: %+v", entry)
 	}
-	if strings.Contains(entry["message"].(string), "lark-cli update") {
+	if strings.Contains(entry["message"].(string), "work-cli update") {
 		t.Errorf("dead update pointer survived in message: %+v", entry)
 	}
 }

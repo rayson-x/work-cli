@@ -56,7 +56,7 @@ def run_sheets(
     if sheet_id and sheet_name:
         raise LarkCliError("Pass only one of --sheet-id or --sheet-name")
 
-    cmd = ["lark-cli", "sheets", shortcut]
+    cmd = ["work-cli", "sheets", shortcut]
     _append_flag(cmd, "url", url)
     _append_flag(cmd, "spreadsheet_token", spreadsheet_token)
     _append_flag(cmd, "sheet_id", sheet_id)
@@ -73,24 +73,24 @@ def run_sheets(
             check=False,
         )
     except FileNotFoundError as exc:
-        raise LarkCliError("lark-cli not found", cmd=cmd) from exc
+        raise LarkCliError("work-cli not found", cmd=cmd) from exc
     except subprocess.TimeoutExpired as exc:
-        raise LarkCliError(f"lark-cli timed out after {timeout}s", cmd=cmd) from exc
+        raise LarkCliError(f"work-cli timed out after {timeout}s", cmd=cmd) from exc
 
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout or "").strip()
-        raise LarkCliError(detail or f"lark-cli exited with {completed.returncode}", cmd=cmd)
+        raise LarkCliError(detail or f"work-cli exited with {completed.returncode}", cmd=cmd)
 
     try:
         envelope = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:
         snippet = completed.stdout[:500].replace("\n", "\\n")
-        raise LarkCliError(f"lark-cli stdout was not JSON: {snippet}", cmd=cmd) from exc
+        raise LarkCliError(f"work-cli stdout was not JSON: {snippet}", cmd=cmd) from exc
 
     if isinstance(envelope, dict) and envelope.get("ok") is False:
         raise LarkCliError(json.dumps(envelope, ensure_ascii=False), cmd=cmd)
     if not isinstance(envelope, dict):
-        raise LarkCliError("lark-cli returned a non-object JSON payload", cmd=cmd)
+        raise LarkCliError("work-cli returned a non-object JSON payload", cmd=cmd)
     return envelope
 
 

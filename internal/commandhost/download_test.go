@@ -151,7 +151,7 @@ func mountDownloadCommand(t *testing.T, declaration command.Command) (*cobra.Com
 		t.Fatal(err)
 	}
 	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "app-id", AppSecret: "app-secret"})
-	root := &cobra.Command{Use: "lark-cli", SilenceErrors: true, SilenceUsage: true}
+	root := &cobra.Command{Use: "work-cli", SilenceErrors: true, SilenceUsage: true}
 	service := &cobra.Command{Use: "drive"}
 	root.AddCommand(service)
 	compiled[0].Mount(service, factory)
@@ -241,7 +241,7 @@ func TestExternalDownloadDryRunReportsFileWithoutWriting(t *testing.T) {
 		t.Fatal(err)
 	}
 	factory, stdout, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "app-id", AppSecret: "app-secret"})
-	root := &cobra.Command{Use: "lark-cli", SilenceErrors: true, SilenceUsage: true}
+	root := &cobra.Command{Use: "work-cli", SilenceErrors: true, SilenceUsage: true}
 	service := &cobra.Command{Use: "drive"}
 	root.AddCommand(service)
 	compiled[0].Mount(service, factory)

@@ -362,7 +362,7 @@ func TestDocsCreateRejectsLegacyV1Flags(t *testing.T) {
 		"the old v1 interface has been shut down",
 		"legacy v1 flag(s) --markdown are no longer supported",
 		"--markdown -> use --content with --doc-format markdown",
-		"lark-cli docs +create --help",
+		"work-cli docs +create --help",
 	} {
 		if !strings.Contains(presented, want) {
 			t.Fatalf("error missing %q: %v", want, err)

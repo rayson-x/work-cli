@@ -210,10 +210,10 @@ func externalVerifyFailed(id Identity, label, provider string, err error) Identi
 }
 
 // externalCredentialHint reports the constraint, not a remediation: the
-// identity is the provider's to manage, not lark-cli's to fix. What to do about
+// identity is the provider's to manage, not work-cli's to fix. What to do about
 // it is the caller's call — there may be no user to ask.
 func externalCredentialHint(provider string) string {
-	return fmt.Sprintf("managed by the external credential provider %q and cannot be configured via lark-cli", provider)
+	return fmt.Sprintf("managed by the external credential provider %q and cannot be configured via work-cli", provider)
 }
 
 func diagnoseBot(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, verify bool) Identity {
@@ -221,7 +221,7 @@ func diagnoseBot(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, v
 		return withCommandRecovery(Identity{
 			Status:  StatusNotConfigured,
 			Message: "Bot identity: not configured (missing app config)",
-		}, recovery.TargetConfig, "run: lark-cli config --help")
+		}, recovery.TargetConfig, "run: work-cli config --help")
 	}
 	if !cfg.CanBot() {
 		return Identity{
@@ -234,7 +234,7 @@ func diagnoseBot(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, v
 		return withCommandRecovery(Identity{
 			Status:  StatusNotConfigured,
 			Message: "Bot identity: not configured (missing app secret or bot token)",
-		}, recovery.TargetConfig, "run: lark-cli config --help")
+		}, recovery.TargetConfig, "run: work-cli config --help")
 	}
 
 	id := Identity{
@@ -282,13 +282,13 @@ func diagnoseUser(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, 
 		return withCommandRecovery(Identity{
 			Status:  StatusNotConfigured,
 			Message: "User identity: not configured (missing app config)",
-		}, recovery.TargetConfig, "run: lark-cli config --help")
+		}, recovery.TargetConfig, "run: work-cli config --help")
 	}
 	if cfg.UserOpenId == "" {
 		return withCommandRecovery(Identity{
 			Status:  StatusMissing,
 			Message: "User identity: missing (no user logged in)",
-		}, recovery.TargetAuthLogin, "run: lark-cli auth login --help")
+		}, recovery.TargetAuthLogin, "run: work-cli auth login --help")
 	}
 
 	id := Identity{
@@ -299,7 +299,7 @@ func diagnoseUser(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, 
 	if stored == nil {
 		id.Status = StatusMissing
 		id.Message = "User identity: missing (no token in keychain for " + cfg.UserOpenId + ")"
-		return withCommandRecovery(id, recovery.TargetAuthLogin, "run: lark-cli auth login --help")
+		return withCommandRecovery(id, recovery.TargetAuthLogin, "run: work-cli auth login --help")
 	}
 
 	fillTokenFields(&id, stored)
@@ -315,7 +315,7 @@ func diagnoseUser(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, 
 	default:
 		id.Status = StatusMissing
 		id.Message = "User identity: missing (refresh token expired)"
-		return withCommandRecovery(id, recovery.TargetAuthLogin, "run: lark-cli auth login --help")
+		return withCommandRecovery(id, recovery.TargetAuthLogin, "run: work-cli auth login --help")
 	}
 
 	if !verify {
@@ -339,7 +339,7 @@ func diagnoseUser(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, 
 	}
 	token, err := larkauth.GetValidAccessToken(httpClient, larkauth.NewUATCallOptions(cfg, f.IOStreams.ErrOut))
 	if err != nil {
-		return markVerifyFailed("token unusable: "+err.Error(), "run: lark-cli auth login --help", recovery.TargetAuthLogin)
+		return markVerifyFailed("token unusable: "+err.Error(), "run: work-cli auth login --help", recovery.TargetAuthLogin)
 	}
 	sdk, err := f.LarkClient()
 	if err != nil {
@@ -349,7 +349,7 @@ func diagnoseUser(ctx context.Context, f *cmdutil.Factory, cfg *core.CliConfig, 
 	defer cancel()
 	verifyCtx = core.WithCredentialSource(verifyCtx, core.CredentialSourceLocal)
 	if err := larkauth.VerifyUserToken(verifyCtx, sdk, token); err != nil {
-		return markVerifyFailed("server rejected token: "+err.Error(), "run: lark-cli auth login --help", recovery.TargetAuthLogin)
+		return markVerifyFailed("server rejected token: "+err.Error(), "run: work-cli auth login --help", recovery.TargetAuthLogin)
 	}
 
 	id.Verified = boolPtr(true)

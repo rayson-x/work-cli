@@ -21,8 +21,8 @@ func TestTask_TasklistWorkflowAsBot(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	tasklistName := "lark-cli-e2e-tasklist-" + suffix
-	taskSummary := "lark-cli-e2e-task-in-tasklist-" + suffix
+	tasklistName := "work-cli-e2e-tasklist-" + suffix
+	taskSummary := "work-cli-e2e-task-in-tasklist-" + suffix
 	taskDescription := "created by tests/cli_e2e/task"
 
 	var tasklistGUID string
@@ -125,8 +125,8 @@ func TestTask_TasklistWorkflowAsUser(t *testing.T) {
 	clie2e.SkipWithoutUserToken(t)
 
 	suffix := clie2e.GenerateSuffix()
-	tasklistName := "lark-cli-e2e-user-tasklist-" + suffix
-	patchedTasklistName := "lark-cli-e2e-user-tasklist-patched-" + suffix
+	tasklistName := "work-cli-e2e-user-tasklist-" + suffix
+	patchedTasklistName := "work-cli-e2e-user-tasklist-patched-" + suffix
 	tasklistGUID := ""
 
 	parentT.Cleanup(func() {

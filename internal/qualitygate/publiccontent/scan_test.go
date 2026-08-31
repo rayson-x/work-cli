@@ -1330,7 +1330,7 @@ func TestScanFileAllowsEllipsisCredentialPlaceholders(t *testing.T) {
 }
 
 func TestScanFileAllowsSchemaDottedIdentifiers(t *testing.T) {
-	got := ScanFile("fixtures/lark-mail-recall.md", []byte("lark-cli schema mail.user_mailbox.sent_messages.get_recall_detail\n"))
+	got := ScanFile("fixtures/lark-mail-recall.md", []byte("work-cli schema mail.user_mailbox.sent_messages.get_recall_detail\n"))
 	for _, item := range got {
 		if item.Rule == "public_content_jwt_like_token" {
 			t.Fatalf("schema dotted identifier should not be jwt finding: %#v", got)

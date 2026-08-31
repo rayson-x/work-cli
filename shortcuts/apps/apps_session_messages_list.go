@@ -15,7 +15,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const sessionMessagesListHint = "verify --app-id / --session-id / --turn-id are correct; get the latest turn_id via `lark-cli apps +session-get --app-id <app_id> --session-id <session_id>`"
+const sessionMessagesListHint = "verify --app-id / --session-id / --turn-id are correct; get the latest turn_id via `work-cli apps +session-get --app-id <app_id> --session-id <session_id>`"
 
 var AppsSessionMessagesList = common.Shortcut{
 	Service:     appsService,
@@ -23,7 +23,7 @@ var AppsSessionMessagesList = common.Shortcut{
 	Description: "List the reply messages of a session turn (page_token pagination)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +session-messages-list --app-id <app_id> --session-id <session_id> --turn-id <turn_id>",
+		"Example: work-cli apps +session-messages-list --app-id <app_id> --session-id <session_id> --turn-id <turn_id>",
 		"Tip: turn_id comes from `+session-get` latest_turn.turn_id; page with --page-token <next_page_token>",
 	},
 	Scopes:    []string{"spark:app:read"},

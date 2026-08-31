@@ -3,8 +3,8 @@
 当前 Host 应用 Bot 结束会议。
 
 ```bash
-lark-cli vc +meeting-end --as bot --meeting-id 7628568141510692381 --yes
-lark-cli vc +meeting-end --as bot --meeting-id 7628568141510692381 --dry-run
+work-cli vc +meeting-end --as bot --meeting-id 7628568141510692381 --yes
+work-cli vc +meeting-end --as bot --meeting-id 7628568141510692381 --dry-run
 ```
 
 正常执行必须显式传入 `--yes`；`--dry-run` 不会结束会议。

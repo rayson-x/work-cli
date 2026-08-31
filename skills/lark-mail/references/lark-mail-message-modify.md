@@ -7,11 +7,11 @@ Use it instead of raw `user_mailbox.messages batch_modify` when the operation ta
 ## Common Commands
 
 ```bash
-lark-cli mail +message-modify --message-ids <id1>,<id2> --add-label-ids unread
-lark-cli mail +message-modify --message-ids <id> --remove-label-ids FLAGGED
-lark-cli mail +message-modify --message-ids <id> --add-folder archive
-lark-cli mail +message-modify --mailbox shared@example.com --message-ids <id> --add-folder folder_xxx
-lark-cli mail +message-modify --message-ids <id> --add-label-ids custom_label_id --dry-run
+work-cli mail +message-modify --message-ids <id1>,<id2> --add-label-ids unread
+work-cli mail +message-modify --message-ids <id> --remove-label-ids FLAGGED
+work-cli mail +message-modify --message-ids <id> --add-folder archive
+work-cli mail +message-modify --mailbox shared@example.com --message-ids <id> --add-folder folder_xxx
+work-cli mail +message-modify --message-ids <id> --add-label-ids custom_label_id --dry-run
 ```
 
 ## Flags

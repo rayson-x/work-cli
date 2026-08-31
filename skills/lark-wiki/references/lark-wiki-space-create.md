@@ -7,7 +7,7 @@ Create a wiki space. OpenAPI: `POST /open-apis/wiki/v2/spaces`. This is the proj
 ## Usage
 
 ```bash
-lark-cli wiki +space-create \
+work-cli wiki +space-create \
   --name <space_name> \
   [--description <text>] \
   [--as user]

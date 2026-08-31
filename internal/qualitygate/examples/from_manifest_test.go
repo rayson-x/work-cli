@@ -12,7 +12,7 @@ import (
 func TestHarvestManifestExamples(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{
 		Path:    "root",
-		Example: "lark-cli calendar +agenda\nlark-cli api GET /open-apis/test",
+		Example: "work-cli calendar +agenda\nwork-cli api GET /open-apis/test",
 	}}}
 	got := FromManifest(m)
 	if len(got) != 2 {

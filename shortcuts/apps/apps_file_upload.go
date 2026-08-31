@@ -32,8 +32,8 @@ var AppsFileUpload = common.Shortcut{
 	Description: "Upload a local file to an app's storage",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +file-upload --app-id <app_id> --file ./logo.png",
-		"Example: lark-cli apps +file-upload --app-id <app_id> --file ./report.pdf -q '.path'   # print the platform-generated file path",
+		"Example: work-cli apps +file-upload --app-id <app_id> --file ./logo.png",
+		"Example: work-cli apps +file-upload --app-id <app_id> --file ./report.pdf -q '.path'   # print the platform-generated file path",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

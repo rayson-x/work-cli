@@ -6,34 +6,34 @@ Fetch the message list for a conversation. Supports both group chats and direct 
 
 By default the response carries a `reactions` block (counts + details from `im.reactions.batch_query`) on every message that has reactions, and `update_time` on messages that were actually edited. Thread replies expanded via auto-`thread_replies` participate in the same batched enrichment. Pass `--no-reactions` to skip the extra round-trip. Pass `--download-resources` to additionally download message resources (image/file/audio/video/media + post-embedded, excluding stickers) into `./lark-im-resources/` and attach a `resources` block — off by default. See [message enrichment](lark-im-message-enrichment.md) for the full contract.
 
-This skill maps to the shortcut: `lark-cli im +chat-messages-list` (internally calls `GET /open-apis/im/v1/messages`, and automatically resolves the p2p chat_id when needed).
+This skill maps to the shortcut: `work-cli im +chat-messages-list` (internally calls `GET /open-apis/im/v1/messages`, and automatically resolves the p2p chat_id when needed).
 
 ## Commands
 
 ```bash
 # Get group chat messages (json output by default)
-lark-cli im +chat-messages-list --chat-id oc_xxx
+work-cli im +chat-messages-list --chat-id oc_xxx
 
 # Get direct messages with a user (pass open_id and resolve p2p chat_id automatically)
-lark-cli im +chat-messages-list --user-id ou_xxx
+work-cli im +chat-messages-list --user-id ou_xxx
 
 # Specify a time range (ISO 8601)
-lark-cli im +chat-messages-list --chat-id oc_xxx --start "2026-03-10T00:00:00+08:00" --end "2026-03-11T00:00:00+08:00"
+work-cli im +chat-messages-list --chat-id oc_xxx --start "2026-03-10T00:00:00+08:00" --end "2026-03-11T00:00:00+08:00"
 
 # Specify a time range (date only)
-lark-cli im +chat-messages-list --chat-id oc_xxx --start 2026-03-10 --end 2026-03-11
+work-cli im +chat-messages-list --chat-id oc_xxx --start 2026-03-10 --end 2026-03-11
 
 # Control sort order and page size (max 50)
-lark-cli im +chat-messages-list --chat-id oc_xxx --order asc --page-size 20
+work-cli im +chat-messages-list --chat-id oc_xxx --order asc --page-size 20
 
 # Pagination
-lark-cli im +chat-messages-list --chat-id oc_xxx --page-token "xxx"
+work-cli im +chat-messages-list --chat-id oc_xxx --page-token "xxx"
 
 # Fetch multiple pages automatically, up to 10 pages by default
-lark-cli im +chat-messages-list --chat-id oc_xxx --page-all
+work-cli im +chat-messages-list --chat-id oc_xxx --page-all
 
 # JSON output
-lark-cli im +chat-messages-list --chat-id oc_xxx --format json
+work-cli im +chat-messages-list --chat-id oc_xxx --format json
 ```
 
 ## Parameters
@@ -77,7 +77,7 @@ Two ways to get the binaries:
 In JSON output, a message may contain a `thread_id` (`omt_xxx`) field, which means the message has replies in a thread. Use [`im +threads-messages-list`](lark-im-threads-messages-list.md) to inspect replies in that thread:
 
 ```bash
-lark-cli im +threads-messages-list --thread omt_xxx
+work-cli im +threads-messages-list --thread omt_xxx
 ```
 
 | Scenario | Recommendation |
@@ -114,7 +114,7 @@ Each message contains:
 By default, `im +chat-messages-list` fetches one page. It returns `has_more` and `page_token` when more data is available. Use `--page-token` to continue:
 
 ```bash
-lark-cli im +chat-messages-list --chat-id oc_xxx --page-token <PAGE_TOKEN>
+work-cli im +chat-messages-list --chat-id oc_xxx --page-token <PAGE_TOKEN>
 ```
 
 With `--page-all`, `--page-token` sets the starting cursor. If `meta.pagination.complete=false`, resume from `meta.pagination.next_token` or raise `--page-limit`.
@@ -122,7 +122,7 @@ With `--page-all`, `--page-token` sets the starting cursor. If `meta.pagination.
 You can also fall back to the generic API:
 
 ```bash
-lark-cli api GET /open-apis/im/v1/messages \
+work-cli api GET /open-apis/im/v1/messages \
   --params 'container_id_type=chat&container_id=oc_xxx&page_size=50&page_token=<PAGE_TOKEN>'
 ```
 
@@ -142,8 +142,8 @@ lark-cli api GET /open-apis/im/v1/messages \
 1. **Resolving chat_id from a chat name:** When the user refers to a chat by name and you don't have the `chat_id`, use [`+chat-search`](lark-im-chat-search.md) first:
    ```bash
    # Find chat_id by name, then list messages
-   lark-cli im +chat-search --query "<chat name keyword>" --format json
-   lark-cli im +chat-messages-list --chat-id <chat_id>
+   work-cli im +chat-search --query "<chat name keyword>" --format json
+   work-cli im +chat-messages-list --chat-id <chat_id>
    ```
    **Do not use `im chats search` or `+chat-list` — always use the `+chat-search` shortcut.**
 2. **Prefer `--chat-id` when available:** if the chat_id is already known, use it directly to avoid extra API calls.
@@ -153,8 +153,8 @@ lark-cli api GET /open-apis/im/v1/messages \
 6. **For sender info:** the command already resolves sender names, so you do not need a separate lookup.
 7. **Application/bot identity + named group history:** If the user says "使用应用身份/以 bot 身份" and asks to list or read historical messages for a named group, use bot identity for both steps:
    ```bash
-   lark-cli im +chat-search --as bot --query "<chat name keyword>" --format json
-   lark-cli im +chat-messages-list --as bot --chat-id <chat_id> --page-size 50 --format json
+   work-cli im +chat-search --as bot --query "<chat name keyword>" --format json
+   work-cli im +chat-messages-list --as bot --chat-id <chat_id> --page-size 50 --format json
    ```
    If the request is keyword search across message content, `im +messages-search --as bot` is also supported. Continue with `--page-token` if `has_more=true`.
 

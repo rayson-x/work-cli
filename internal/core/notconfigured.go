@@ -61,13 +61,13 @@ const (
 	// localInitHint is the canonical "you're in a regular terminal, run
 	// init" guidance — shared by NotConfiguredError and NoActiveProfileError
 	// so the same session can't show two different recommended commands.
-	localInitHint = "run `lark-cli config init --new` in the background. It blocks and outputs a verification URL — retrieve the URL and open it in a browser to complete setup."
+	localInitHint = "run `work-cli config init --new` in the background. It blocks and outputs a verification URL — retrieve the URL and open it in a browser to complete setup."
 
 	// agentBindHint is the canonical "you're in an Agent workspace, see
 	// the binding workflow" guidance. Always points at --help (never a
 	// ready-to-run bind command) so the AI reads the confirmation
 	// discipline (identity preset, user opt-in) before acting.
-	agentBindHint = "read `lark-cli config bind --help`, then ask the user to confirm intent and identity preset (bot-only or user-default); only after both are confirmed, run `lark-cli config bind`"
+	agentBindHint = "read `work-cli config bind --help`, then ask the user to confirm intent and identity preset (bot-only or user-default); only after both are confirmed, run `work-cli config bind`"
 )
 
 // NotConfiguredError returns the canonical "not configured" error, with a
@@ -99,7 +99,7 @@ func NotConfiguredError() error {
 		WithFallback("bind this agent workspace through the distribution's supported setup flow")
 	return recovery.Annotate(
 		errs.NewConfigError(errs.SubtypeNotConfigured,
-			"%s context detected but lark-cli is not bound to it", ws.Display()).
+			"%s context detected but work-cli is not bound to it", ws.Display()).
 			WithHint("%s", hint.String()),
 		hint,
 	)
@@ -112,7 +112,7 @@ func NotConfiguredError() error {
 // confirms identity preset with the user before running the actual command.
 func reconfigureHint() string {
 	if CurrentWorkspace().IsLocal() {
-		return "please run `lark-cli config init` to reconfigure"
+		return "please run `work-cli config init` to reconfigure"
 	}
 	return agentBindHint
 }
@@ -149,7 +149,7 @@ func (m *MultiAppConfig) ProfileNotFoundError(profile string, source ProfileSour
 		// dangling reference, so recovery is re-pointing the persisted state.
 		hint := recovery.Join("",
 			recovery.Command(recovery.TargetProfileList,
-				fmt.Sprintf("config.json currentApp %q matches no profile; run `lark-cli profile list`, then switch with `lark-cli profile use <name>` (available: %s)", m.CurrentApp, available))).
+				fmt.Sprintf("config.json currentApp %q matches no profile; run `work-cli profile list`, then switch with `work-cli profile use <name>` (available: %s)", m.CurrentApp, available))).
 			WithFallback("the persisted default profile no longer exists; select an available profile through this distribution")
 		return recovery.Annotate(
 			errs.NewConfigError(errs.SubtypeNotConfigured, "profile %q not found", m.CurrentApp).
@@ -168,7 +168,7 @@ func (m *MultiAppConfig) ProfileNotFoundError(profile string, source ProfileSour
 	}
 	hint := recovery.Join("",
 		recovery.Command(recovery.TargetProfileList,
-			fmt.Sprintf("%s selected profile %q, which does not exist; %s (run `lark-cli profile list` for details)", selector, profile, action))).
+			fmt.Sprintf("%s selected profile %q, which does not exist; %s (run `work-cli profile list` for details)", selector, profile, action))).
 		WithFallback(fmt.Sprintf("%s selected profile %q, which does not exist; %s", selector, profile, action))
 	return recovery.Annotate(
 		errs.NewConfigError(errs.SubtypeNotConfigured, "profile %q not found", profile).

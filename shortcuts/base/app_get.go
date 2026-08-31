@@ -20,7 +20,7 @@ var BaseAppGet = common.Shortcut{
 		appTokenFlag(true),
 	},
 	Tips: []string{
-		"lark-cli base +app-get --app-token <app_token>",
+		"work-cli base +app-get --app-token <app_token>",
 		"ref maps each Base token currently referenced by app widgets to the names of its referenced tables; table/field/record commands take the Base token keys.",
 		"The response includes page summaries. Use +app-page-get or +app-block-list for component details.",
 	},

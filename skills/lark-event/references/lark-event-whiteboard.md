@@ -50,17 +50,17 @@ Whiteboard token can be obtained via the docs OAPI [list document blocks](https:
 
 ```bash
 # Stream every edit on whiteboard <token> until Ctrl+C
-lark-cli event consume board.whiteboard.updated_v1 \
+work-cli event consume board.whiteboard.updated_v1 \
     -p whiteboard_id=<whiteboard_token> \
     --as user
 
 # Sample one event for payload inspection
-lark-cli event consume board.whiteboard.updated_v1 \
+work-cli event consume board.whiteboard.updated_v1 \
     -p whiteboard_id=<whiteboard_token> \
     --as user --max-events 1 --timeout 2m
 
 # Project to "edit summary": who edited which whiteboard
-lark-cli event consume board.whiteboard.updated_v1 \
+work-cli event consume board.whiteboard.updated_v1 \
     -p whiteboard_id=<whiteboard_token> \
     --as user \
     --jq '{whiteboard: .event.whiteboard_id, editors: (.event.operator_ids | map(.open_id))}'

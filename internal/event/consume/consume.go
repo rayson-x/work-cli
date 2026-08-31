@@ -64,7 +64,7 @@ func Run(ctx context.Context, tr transport.IPC, appID, profileName, domain strin
 	if keyDef == nil {
 		return errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"unknown EventKey: %s", opts.EventKey).
-			WithHint("run `lark-cli event list` to see available keys")
+			WithHint("run `work-cli event list` to see available keys")
 	}
 	// EventKey and Def travel together; a mismatch would register one key on
 	// the bus while subscribing another's event types.
@@ -227,7 +227,7 @@ func rejectionError(ack *protocol.HelloAck, eventKey string) error {
 	}
 	return errs.NewValidationError(errs.SubtypeFailedPrecondition,
 		"cannot start consumer: %s", ack.RejectReason).
-		WithHint("EventKey %s allows only one consumer; run `lark-cli event status` to find the running one, then stop it before retrying", eventKey)
+		WithHint("EventKey %s allows only one consumer; run `work-cli event status` to find the running one, then stop it before retrying", eventKey)
 }
 
 func truncateDuration(d time.Duration) time.Duration {

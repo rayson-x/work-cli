@@ -117,7 +117,7 @@ func runSchema(f *cmdutil.Factory, snap *catalog.Snapshot, key string, asJSON bo
 		fmt.Fprintf(out, "\nOutput Schema: (schema not declared)\n")
 		if def.Schema.Native != nil {
 			fmt.Fprintf(out, "  Consumers receive the V2 envelope: {schema, header, event}.\n")
-			fmt.Fprintf(out, "  Inspect real payloads via `lark-cli event consume %s`.\n", def.Key)
+			fmt.Fprintf(out, "  Inspect real payloads via `work-cli event consume %s`.\n", def.Key)
 		}
 	}
 

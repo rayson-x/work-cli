@@ -427,7 +427,7 @@ func DowngradeMasterKeyToFile(service string) (DowngradeResult, error) {
 // fail; the right fix there is to delete the corrupt Keychain entry first.
 func extraHint(err error) string {
 	if errors.Is(err, errNotInitialized) || errors.Is(err, errKeychainBlocked) {
-		return " On macOS, you can also open an interactive Terminal session (where the system Keychain is reachable) and run `lark-cli config keychain-downgrade` to materialize the master key into a local file; subsequent runs in this sandbox/automation context will then read from the file and succeed. Trade-off: after downgrade, any process running as your macOS user can read that file (file permissions replace the Keychain's per-app ACL)."
+		return " On macOS, you can also open an interactive Terminal session (where the system Keychain is reachable) and run `work-cli config keychain-downgrade` to materialize the master key into a local file; subsequent runs in this sandbox/automation context will then read from the file and succeed. Trade-off: after downgrade, any process running as your macOS user can read that file (file permissions replace the Keychain's per-app ACL)."
 	}
 	return ""
 }

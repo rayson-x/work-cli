@@ -4,7 +4,7 @@
 
 Edit an already-sent message's content. **Bot identity only** — the edit API does not accept user tokens. Only messages the bot sent can be edited.
 
-This skill maps to the shortcut: `lark-cli im +messages-edit` (PUT on the message edit endpoint).
+This skill maps to the shortcut: `work-cli im +messages-edit` (PUT on the message edit endpoint).
 
 ## Safety Constraints
 
@@ -37,7 +37,7 @@ The bot must be the original sender — editing another identity's message fails
 To edit a message so it attaches (or re-attaches) files:
 
 ```bash
-lark-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --set-attachments file_xxx --set-attachments file_yyy
+work-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --set-attachments file_xxx --set-attachments file_yyy
 ```
 
 - `--set-attachments` accepts a bare file/folder key (`file_xxx`), and may be repeated.
@@ -50,7 +50,7 @@ lark-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated cont
 To **clear** the attachment zone entirely, pass `--clear-attachments` instead of `--set-attachments`:
 
 ```bash
-lark-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --clear-attachments
+work-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --clear-attachments
 ```
 
 - `--clear-attachments` sets the post content's `files` array to `[]`, telling the server to remove all file/folder attachments.

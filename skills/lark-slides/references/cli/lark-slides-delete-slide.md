@@ -10,17 +10,17 @@
 
 ```bash
 # 直接传 xml_presentation_id
-lark-cli slides +delete-slide --as user \
+work-cli slides +delete-slide --as user \
   --presentation "$PRES_ID" \
   --slide-id "$SID"
 
 # slides URL / wiki URL 都可以（wiki 会自动解析并校验 obj_type=slides）
-lark-cli slides +delete-slide --as user \
+work-cli slides +delete-slide --as user \
   --presentation "https://xxx.feishu.cn/wiki/wikcnXXXXXX" \
   --slide-id "$SID"
 
 # 删之前先确认打到哪份 PPT、哪一页
-lark-cli slides +delete-slide --presentation "$PRES_ID" --slide-id "$SID" --dry-run
+work-cli slides +delete-slide --presentation "$PRES_ID" --slide-id "$SID" --dry-run
 ```
 
 ## 参数

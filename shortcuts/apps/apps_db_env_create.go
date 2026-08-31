@@ -12,7 +12,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const dbEnvCreateHint = "verify --app-id is correct; if the app is already multi-env this is a conflict — inspect current tables with `lark-cli apps +db-table-list --app-id <app_id> --environment dev`"
+const dbEnvCreateHint = "verify --app-id is correct; if the app is already multi-env this is a conflict — inspect current tables with `work-cli apps +db-table-list --app-id <app_id> --environment dev`"
 
 // AppsDBEnvCreate creates a DB environment for an app（拆分单库为 dev/online 多环境）。
 //
@@ -24,7 +24,7 @@ var AppsDBEnvCreate = common.Shortcut{
 	Description: "Create a DB environment (split single-env DB into dev/online, irreversible)",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +db-env-create --environment dev --sync-data --app-id <app_id> --yes",
+		"Example: work-cli apps +db-env-create --environment dev --sync-data --app-id <app_id> --yes",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

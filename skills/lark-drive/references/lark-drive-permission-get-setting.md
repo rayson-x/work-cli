@@ -1,17 +1,17 @@
 # drive +permission-get-setting（查询权限设置）
 
-本 skill 对应 shortcut：`lark-cli drive +permission-get-setting`。它读取单个 Drive 资源自身的公开访问、分享、协作者管理、安全与评论权限设置，不递归读取文件夹中的子资源。
+本 skill 对应 shortcut：`work-cli drive +permission-get-setting`。它读取单个 Drive 资源自身的公开访问、分享、协作者管理、安全与评论权限设置，不递归读取文件夹中的子资源。
 
 ## 命令
 
 ```bash
 # 通过 URL 自动推断 type
-lark-cli drive +permission-get-setting \
+work-cli drive +permission-get-setting \
   --token 'https://example.feishu.cn/drive/folder/<folder_token>' \
   --as user --format json
 
 # 通过 bare token 显式指定 type
-lark-cli drive +permission-get-setting \
+work-cli drive +permission-get-setting \
   --token '<folder_token>' \
   --type folder \
   --as user --format json

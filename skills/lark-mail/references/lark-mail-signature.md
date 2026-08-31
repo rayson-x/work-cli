@@ -4,19 +4,19 @@
 
 查看邮箱签名列表或详情。返回签名的类型、默认使用情况、内容预览等信息。TENANT（企业）签名的模板变量会被自动替换为实际值。
 
-本 skill 对应 shortcut：`lark-cli mail +signature`。
+本 skill 对应 shortcut：`work-cli mail +signature`。
 
 ## 命令
 
 ```bash
 # 列出所有签名
-lark-cli mail +signature
+work-cli mail +signature
 
 # 查看某个签名的详情（渲染后的内容预览、模板变量值、图片信息）
-lark-cli mail +signature --detail <signature_id>
+work-cli mail +signature --detail <signature_id>
 
 # 指定邮箱
-lark-cli mail +signature --from shared@example.com
+work-cli mail +signature --from shared@example.com
 ```
 
 ## 参数
@@ -91,8 +91,8 @@ lark-cli mail +signature --from shared@example.com
 
 ```bash
 # 查看签名列表获取 ID
-lark-cli mail +signature
+work-cli mail +signature
 
 # 在发送邮件时附加签名
-lark-cli mail +send --to alice@example.com --subject '你好' --body '<p>内容</p>' --signature-id <签名ID>
+work-cli mail +send --to alice@example.com --subject '你好' --body '<p>内容</p>' --signature-id <签名ID>
 ```

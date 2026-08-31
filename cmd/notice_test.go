@@ -62,8 +62,8 @@ func TestComposePendingNoticeOfficialSkillsUnknown(t *testing.T) {
 	if entry["official_unknown"] != true {
 		t.Fatalf("skills notice = %#v, want official_unknown=true", entry)
 	}
-	if entry["command"] != "lark-cli update" {
-		t.Fatalf("skills notice command = %v, want lark-cli update", entry["command"])
+	if entry["command"] != "work-cli update" {
+		t.Fatalf("skills notice command = %v, want work-cli update", entry["command"])
 	}
 }
 

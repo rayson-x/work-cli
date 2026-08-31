@@ -163,7 +163,7 @@ _公共：URL/token（无 sheet 定位） · 系统：`--dry-run`_
 | --- | --- | --- | --- |
 | `--file-extension` | string | optional | 导出文件格式；`csv` 模式必须配 `--sheet-id`（可选值：`xlsx` / `csv`）（默认 `xlsx`） |
 | `--sheet-id` | string | optional | 仅 csv 模式必填：指定要导出哪张 sheet 为 CSV。这是 `+workbook-export` 专有 flag，与公共四件套的 sheet 定位无关（本 shortcut 不接受公共 sheet 定位） |
-| `--output-path` | string | optional | 本地保存路径；省略时**只触发并轮询导出任务、不下载文件**（返回 file_token / status，便于稍后续传）。要落盘传具体路径（如 `./out.xlsx`）或目录（如 `.`，服务端给的文件名落在该目录下）。注意：对应的 `lark-cli drive +export --doc-type sheet` 走 `--output-dir` / `--file-name` / `--overwrite` 三 flag 且默认下载到当前目录——本 wrapper 把它们合成单一 `--output-path` 简化常见用例，但默认不下载，需要的话也可改用 `drive +export`。 |
+| `--output-path` | string | optional | 本地保存路径；省略时**只触发并轮询导出任务、不下载文件**（返回 file_token / status，便于稍后续传）。要落盘传具体路径（如 `./out.xlsx`）或目录（如 `.`，服务端给的文件名落在该目录下）。注意：对应的 `work-cli drive +export --doc-type sheet` 走 `--output-dir` / `--file-name` / `--overwrite` 三 flag 且默认下载到当前目录——本 wrapper 把它们合成单一 `--output-path` 简化常见用例，但默认不下载，需要的话也可改用 `drive +export`。 |
 
 ### `+workbook-import`
 
@@ -213,7 +213,7 @@ _一个或多个子表的 typed 数据，每个数组元素写入一张子表；
 
 > **子表类型 `resource_type`**：`sheet`（普通网格子表）/ `bitable`（内嵌的多维表格子表）/ `#UNSUPPORTED_TYPE`（其它暂不支持的嵌入子表）。
 > - 网格类操作（读写单元格 / 区域 / 样式 / CSV / 筛选 / 透视 / 图表等）**仅适用于 `sheet`**。对 `bitable` / `#UNSUPPORTED_TYPE` 子表执行网格操作会被直接拒绝并返回明确报错，不再静默出错。
-> - 要操作 `bitable` 子表里的数据：该子表条目会附带 `bitable_app_token` + `bitable_table_id` 两个字段，直接用多维表格命令操作，例如 `lark-cli base +record-list --base-token <bitable_app_token> --table-id <bitable_table_id>`（记录增删改查、字段、视图等整套 `lark-cli base` 命令均可用）。不要走 sheets 网格命令。
+> - 要操作 `bitable` 子表里的数据：该子表条目会附带 `bitable_app_token` + `bitable_table_id` 两个字段，直接用多维表格命令操作，例如 `work-cli base +record-list --base-token <bitable_app_token> --table-id <bitable_table_id>`（记录增删改查、字段、视图等整套 `work-cli base` 命令均可用）。不要走 sheets 网格命令。
 > - `bitable` / `#UNSUPPORTED_TYPE` 子表条目**只含** `sheet_id` / `sheet_name` / `index` / `resource_type`（bitable 另加上述两个 token）以及 `is_hidden` / `tab_color`；**不输出** `row_count` / `column_count` / `merged_cells_count` / `chart_count` / `pivot_table_count` / `float_image_count` / `frozen_*` 等网格指标（对非网格子表无意义）。
 > - tab 管理类操作（`+sheet-rename` / `+sheet-move` / `+sheet-delete` / `+sheet-hide` 等）对任意 `resource_type` 的子表都合法，不受此限制。
 
@@ -228,12 +228,12 @@ _一个或多个子表的 typed 数据，每个数组元素写入一张子表；
 ```bash
 # 1) untyped：--values（一个二维数组，表头并入第一行；值原样写、类型由飞书自动识别，
 #    日期会落成文本，配 --styles 控制格式）
-lark-cli sheets +workbook-create --title "销售" \
+work-cli sheets +workbook-create --title "销售" \
   --values '[["门店","销售额"],["北京",259874]]'
 
 # 2) typed JSON：--sheets（一步建表 + 类型保真）。date 列落成真日期（可排序/透视）、
 #    number 不丢精度、string 列保前导零（如订单号 00123）；多子表一次建。
-lark-cli sheets +workbook-create --title "交易" --sheets '{
+work-cli sheets +workbook-create --title "交易" --sheets '{
   "sheets":[
     {"name":"明细",
      "columns":["日期","金额","单号"],
@@ -263,7 +263,7 @@ lark-cli sheets +workbook-create --title "交易" --sheets '{
 
 ```bash
 # 3) untyped：仍用 {"styles":[...]}，只有一个子表样式项（name 忽略）；range 覆盖 --values 初始区域
-lark-cli sheets +workbook-create --title "销售" \
+work-cli sheets +workbook-create --title "销售" \
   --values '[["门店","销售额"],["北京",259874],["上海",198320]]' \
   --styles '{
     "styles":[
@@ -275,7 +275,7 @@ lark-cli sheets +workbook-create --title "销售" \
   }'
 
 # 4) typed 单子表：--styles.styles[0].name 必须对应 --sheets.sheets[0].name
-lark-cli sheets +workbook-create --title "交易" --sheets '{
+work-cli sheets +workbook-create --title "交易" --sheets '{
   "sheets":[
     {"name":"明细",
      "columns":["日期","金额"],
@@ -298,7 +298,7 @@ lark-cli sheets +workbook-create --title "交易" --sheets '{
   }'
 
 # 5) typed 多子表：styles 数组和 sheets 数组长度、顺序、name 都必须一致
-lark-cli sheets +workbook-create --title "经营看板" --sheets '{
+work-cli sheets +workbook-create --title "经营看板" --sheets '{
   "sheets":[
     {"name":"收入","columns":["月份","收入"],"dtypes":{"收入":"int64"},"formats":{"收入":"#,##0"},"data":[["2026-05",1200000]]},
     {"name":"成本","columns":["月份","成本"],"dtypes":{"成本":"int64"},"formats":{"成本":"#,##0"},"data":[["2026-05",730000]]}
@@ -324,16 +324,16 @@ lark-cli sheets +workbook-create --title "经营看板" --sheets '{
 
 ```bash
 # 导入到云空间根目录；表格名默认取本地文件名（去掉扩展名）
-lark-cli sheets +workbook-import --file ./data.xlsx
+work-cli sheets +workbook-import --file ./data.xlsx
 
 # 指定目标文件夹与导入后表格名
-lark-cli sheets +workbook-import --file ./report.csv --folder-token <FOLDER_TOKEN> --name "月度报表"
+work-cli sheets +workbook-import --file ./report.csv --folder-token <FOLDER_TOKEN> --name "月度报表"
 ```
 
 - **不接受任何 spreadsheet / sheet 定位 flag**（它是新建，不操作已有表）：只有 `--file`（必填）/ `--folder-token` / `--name`。
 - **`--file` 只接受当前工作目录内的相对路径**：先 `cd` 到文件所在目录（或 workspace），再传 `./file.xlsx` / `data/file.xlsx`；传 `/home/.../file.xlsx`、`C:\...\file.xlsx` 这类绝对路径会被判定 `unsafe file path` 拒绝。
 - 导入成功后把新表链接交付给用户。
-- 本地表格文件 → 飞书电子表格一律用本命令，**不要**用 `drive +import` 导电子表格——它是 sheets 之外的通用导入、还需额外指定 `--type`，绕路且更易错。只有要把本地表格导入成**多维表格**（bitable）时，才改用 `lark-cli drive +import --type bitable`。
+- 本地表格文件 → 飞书电子表格一律用本命令，**不要**用 `drive +import` 导电子表格——它是 sheets 之外的通用导入、还需额外指定 `--type`，绕路且更易错。只有要把本地表格导入成**多维表格**（bitable）时，才改用 `work-cli drive +import --type bitable`。
 - 返回 `token` / `url`（导入完成的新表格）/ `ticket` / `ready` / `job_status`；未在内置轮询窗口内完成时返回 `timed_out=true` 与续查命令 `next_command`。
 
 ### `+workbook-export`
@@ -342,16 +342,16 @@ lark-cli sheets +workbook-import --file ./report.csv --folder-token <FOLDER_TOKE
 
 ```bash
 # 1) 只创建并轮询导出任务，不下载（默认）：返回 file_token / status 便于稍后续传
-lark-cli sheets +workbook-export --url "https://example.feishu.cn/sheets/shtXXX"
+work-cli sheets +workbook-export --url "https://example.feishu.cn/sheets/shtXXX"
 
 # 2) 下载到具体文件名
-lark-cli sheets +workbook-export --url "..." --output-path ./report.xlsx
+work-cli sheets +workbook-export --url "..." --output-path ./report.xlsx
 
 # 3) 下载到目录（保留服务端给的文件名）
-lark-cli sheets +workbook-export --url "..." --output-path ./downloads/
+work-cli sheets +workbook-export --url "..." --output-path ./downloads/
 
 # 4) csv 模式必须传 --sheet-id（API 一次只导一张子表）
-lark-cli sheets +workbook-export --url "..." --file-extension csv --sheet-id "$SID" --output-path ./sheet.csv
+work-cli sheets +workbook-export --url "..." --file-extension csv --sheet-id "$SID" --output-path ./sheet.csv
 ```
 
 > ⚠️ **默认不下载**：省略 `--output-path` 时只触发并轮询导出任务，不写本地文件——给「先排队再续传」用例留出口。要落盘必须显式给 `--output-path`。
@@ -363,7 +363,7 @@ lark-cli sheets +workbook-export --url "..." --file-extension csv --sheet-id "$S
 示例：
 
 ```bash
-lark-cli sheets +sheet-create --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +sheet-create --url "https://example.feishu.cn/sheets/shtXXX" \
   --title "汇总" --index 0
 ```
 
@@ -376,7 +376,7 @@ lark-cli sheets +sheet-create --url "https://example.feishu.cn/sheets/shtXXX" \
 ### `+sheet-rename`
 
 ```bash
-lark-cli sheets +sheet-rename --url "..." --sheet-id "$SID" --title "汇总"
+work-cli sheets +sheet-rename --url "..." --sheet-id "$SID" --title "汇总"
 ```
 
 ### `+sheet-move`
@@ -389,7 +389,7 @@ standalone 路径在缺 `--source-index` / 只给 `--sheet-name` 时会自动发
 
 ```bash
 # --title 省略时由服务端生成副本名
-lark-cli sheets +sheet-copy --url "..." --sheet-id "$SID" --title "副本"
+work-cli sheets +sheet-copy --url "..." --sheet-id "$SID" --title "副本"
 ```
 
 > 💡 `+sheet-copy` 连**公式 / 合并 / 分组底色 / 列宽 / 条件格式**一起整表复制。"照一张现成子表批量造结构相同的新子表"（如参考模板给每份数据各建一张同构子表）时，先 `+sheet-copy` 复制模板再用 `+cells-*` 只改数据，比从零 `+sheet-create` + 重建公式 / 样式省一大截，也天然满足"公式 / 分组 / 颜色照搬"。要把本地文件 / 数据并入**已有工作簿**当子表时走它（或 `+sheet-create`），别用 `+workbook-import` / `+workbook-create`——那两条只会新建独立表。
@@ -397,23 +397,23 @@ lark-cli sheets +sheet-copy --url "..." --sheet-id "$SID" --title "副本"
 ### `+sheet-hide` / `+sheet-unhide`
 
 ```bash
-lark-cli sheets +sheet-hide   --url "..." --sheet-id "$SID"
-lark-cli sheets +sheet-unhide --url "..." --sheet-id "$SID"
+work-cli sheets +sheet-hide   --url "..." --sheet-id "$SID"
+work-cli sheets +sheet-unhide --url "..." --sheet-id "$SID"
 ```
 
 ### `+sheet-set-tab-color`
 
 ```bash
 # Hex 色值；传空字符串 "" 清除标签色
-lark-cli sheets +sheet-set-tab-color --url "..." --sheet-id "$SID" --color "#FF0000"
+work-cli sheets +sheet-set-tab-color --url "..." --sheet-id "$SID" --color "#FF0000"
 ```
 
 ### `+sheet-show-gridline` / `+sheet-hide-gridline`
 
 ```bash
 # 切换子表网格线显隐；二态语义在命令名里，无需额外参数（同 +sheet-hide/+sheet-unhide）
-lark-cli sheets +sheet-show-gridline --url "..." --sheet-id "$SID"
-lark-cli sheets +sheet-hide-gridline --url "..." --sheet-id "$SID"
+work-cli sheets +sheet-show-gridline --url "..." --sheet-id "$SID"
+work-cli sheets +sheet-hide-gridline --url "..." --sheet-id "$SID"
 ```
 
 ### Validate / DryRun / Execute 约束

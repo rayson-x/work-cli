@@ -21,7 +21,7 @@ func TestBase_BasicWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
 	t.Cleanup(cancel)
 
-	baseName := "lark-cli-e2e-base-basic-" + clie2e.GenerateSuffix()
+	baseName := "work-cli-e2e-base-basic-" + clie2e.GenerateSuffix()
 	baseToken := createBaseWithRetry(t, ctx, baseName)
 
 	t.Run("get base as bot", func(t *testing.T) {
@@ -40,7 +40,7 @@ func TestBase_BasicWorkflow(t *testing.T) {
 		assert.NotEmpty(t, gjson.Get(result.Stdout, "data.base.name").String(), "stdout:\n%s", result.Stdout)
 	})
 
-	tableName := "lark-cli-e2e-table-basic-" + clie2e.GenerateSuffix()
+	tableName := "work-cli-e2e-table-basic-" + clie2e.GenerateSuffix()
 	tableID, _, primaryViewID := createTableWithRetry(
 		t,
 		parentT,

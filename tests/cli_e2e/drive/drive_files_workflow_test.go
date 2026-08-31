@@ -20,8 +20,8 @@ func TestDrive_FilesCreateFolderWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	parentFolderName := "lark-cli-e2e-drive-parent-" + suffix
-	folderName := "lark-cli-e2e-drive-folder-" + suffix
+	parentFolderName := "work-cli-e2e-drive-parent-" + suffix
+	folderName := "work-cli-e2e-drive-folder-" + suffix
 	parentFolderToken := createDriveFolder(t, parentT, ctx, parentFolderName, "")
 
 	t.Run("create_folder as bot", func(t *testing.T) {

@@ -20,8 +20,8 @@ func TestDemo_TaskLifecycle(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := time.Now().UTC().Format("20060102-150405")
-	createdSummary := "lark-cli-e2e-create-" + suffix
-	updatedSummary := "lark-cli-e2e-update-" + suffix
+	createdSummary := "work-cli-e2e-create-" + suffix
+	updatedSummary := "work-cli-e2e-update-" + suffix
 	createdDescription := "created by tests/cli_e2e/demo"
 	updatedDescription := "updated by tests/cli_e2e/demo"
 

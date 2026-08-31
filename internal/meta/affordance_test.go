@@ -38,7 +38,7 @@ func TestMethod_ParsedAffordance(t *testing.T) {
 		"avoid_when": ["已知具体 calendar_id"],
 		"prerequisites": ["user 身份登录"],
 		"tips": ["主日历的 calendar_id 即当前用户的 union_id"],
-		"examples": [{"description":"获取主日历","command":"lark-cli calendar calendars primary"}],
+		"examples": [{"description":"获取主日历","command":"work-cli calendar calendars primary"}],
 		"related": ["calendars.list"]
 	}`
 	a, ok := (Method{Affordance: json.RawMessage(raw)}).ParsedAffordance()
@@ -51,7 +51,7 @@ func TestMethod_ParsedAffordance(t *testing.T) {
 	if len(a.Tips) != 1 || a.Tips[0] != "主日历的 calendar_id 即当前用户的 union_id" {
 		t.Errorf("Tips = %v", a.Tips)
 	}
-	if len(a.Examples) != 1 || a.Examples[0].Description != "获取主日历" || a.Examples[0].Command != "lark-cli calendar calendars primary" {
+	if len(a.Examples) != 1 || a.Examples[0].Description != "获取主日历" || a.Examples[0].Command != "work-cli calendar calendars primary" {
 		t.Errorf("Examples = %+v", a.Examples)
 	}
 	if len(a.Related) != 1 || a.Related[0] != "calendars.list" {

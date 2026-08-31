@@ -1,4 +1,4 @@
-# lark-cli plugin examples
+# work-cli plugin examples
 
 Runnable fork-and-blank-import examples that demonstrate the Plugin
 SDK in production-shape. Each subdirectory is a complete `main`

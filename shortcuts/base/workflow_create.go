@@ -22,7 +22,7 @@ var BaseWorkflowCreate = common.Shortcut{
 		{Name: "json", Desc: "workflow body JSON; read lark-base-workflow.md and lark-base-workflow-schema.md before constructing steps", Required: true},
 	},
 	Tips: []string{
-		"lark-cli base +workflow-create --base-token <base_token> --json @workflow.json",
+		"work-cli base +workflow-create --base-token <base_token> --json @workflow.json",
 		"client_token is required and should be unique per create request.",
 		"New workflows are created disabled; call +workflow-enable after creation when the user wants it active.",
 		"Before constructing steps, use +table-list and +field-list to confirm real table and field names.",

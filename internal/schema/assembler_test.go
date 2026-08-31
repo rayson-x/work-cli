@@ -515,7 +515,7 @@ func TestEnvelopeOf_AffordanceFromOverlay(t *testing.T) {
 	// Reset afterwards (this binary installs no source by default) for isolation.
 	t.Cleanup(func() { affordance.SetSource(nil) })
 	affordance.SetSource(fstest.MapFS{"approval.md": &fstest.MapFile{Data: []byte(
-		"# approval\n> skill: lark-approval\n\n## instances get\n查询某审批实例的状态与进度。\n\n### Examples\n\n**按 code 查询**\n```bash\nlark-cli approval instances get --instance-code \"x\"\n```\n")}})
+		"# approval\n> skill: lark-approval\n\n## instances get\n查询某审批实例的状态与进度。\n\n### Examples\n\n**按 code 查询**\n```bash\nwork-cli approval instances get --instance-code \"x\"\n```\n")}})
 	env := synthEnvelope("approval", []string{"instances"}, meta.Method{ID: "instances.get", Name: "get"})
 	if env.Meta == nil || env.Meta.Affordance == nil {
 		t.Fatal("expected affordance from the approval overlay, got none")

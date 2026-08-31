@@ -31,7 +31,7 @@ type PaginationOptions struct {
 }
 
 // ContextOptions supplies safe callbacks when a host creates a CommandContext.
-// It is intended for the lark-cli host adapter and commandtest.
+// It is intended for the work-cli host adapter and commandtest.
 type ContextOptions struct {
 	Identity Identity
 	DryRun   bool

@@ -70,7 +70,7 @@ var documentedNonexistentExamples = map[string]bool{
 // shell separator (| && ;), or the end of the inline-code span the command
 // appears in. Flags only attach within the same backtick-delimited segment as
 // the command, because skill docs write a real invocation inside one code span
-// (`lark-cli apps +create --name x`) while a stray `--flag` discussed in prose
+// (`work-cli apps +create --name x`) while a stray `--flag` discussed in prose
 // (e.g. "`+git-credential-list` ... 不需要 `--app-id`") lives in a separate
 // span and must not attach.
 //
@@ -114,7 +114,7 @@ func extractCmdRefs(doc string) []cmdRef {
 					}
 					// Cross-service reference: nearest preceding bare word is a
 					// service/qualifier other than "apps".
-					if bareWordRe.MatchString(prevClean) && prevClean != "apps" && prevClean != "lark-cli" {
+					if bareWordRe.MatchString(prevClean) && prevClean != "apps" && prevClean != "work-cli" {
 						cur = nil
 						prevClean = clean
 						continue
@@ -164,11 +164,11 @@ func logicalLines(doc string) []string {
 }
 
 func TestExtractCmdRefs_Unit(t *testing.T) {
-	doc := "`lark-cli apps +create --name x --app-type html`\n" +
+	doc := "`work-cli apps +create --name x --app-type html`\n" +
 		"`+db-table-list`, `+db-table-get`\n" +
-		"lark-cli apps +session-list --app-id x | jq '.y --post-pipe-flag'\n" +
-		"lark-cli apps +foo --bar baz \\\n  --qux 1\n" +
-		"人名→`ou_` 用 `lark-cli contact +search-user --query <名字>`，群名→`oc_` 用 `lark-cli im +chat-search --query <群名>`\n" +
+		"work-cli apps +session-list --app-id x | jq '.y --post-pipe-flag'\n" +
+		"work-cli apps +foo --bar baz \\\n  --qux 1\n" +
+		"人名→`ou_` 用 `work-cli contact +search-user --query <名字>`，群名→`oc_` 用 `work-cli im +chat-search --query <群名>`\n" +
 		"改库走 `+db-*`；发布走 `+release-*`\n" +
 		"不存在 `apps +pull` / `apps +push` / `apps code +read` 这类 shortcut，不要臆造。\n" +
 		"`+git-credential-list` 列出本地凭证，不需要 `--app-id`。\n"

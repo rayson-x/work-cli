@@ -17,7 +17,7 @@ import (
 // (Restrict). Plugins also contribute hooks (Observe / Wrap / Lifecycle)
 // that are not policy gates but still mutate the CLI's runtime behaviour.
 // This command surfaces both halves so an operator can answer "what is
-// this binary doing differently from stock lark-cli?" in one place.
+// this binary doing differently from stock work-cli?" in one place.
 //
 // Like config policy show, the dispatch path is exempt from policy
 // enforcement (see internal/cmdpolicy/diagnostic.go) so it remains

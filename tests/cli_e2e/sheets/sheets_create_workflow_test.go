@@ -22,7 +22,7 @@ func TestSheets_CreateWorkflowAsUser(t *testing.T) {
 
 	parentT := t
 	suffix := clie2e.GenerateSuffix()
-	title := "lark-cli-e2e-user-sheets-" + suffix
+	title := "work-cli-e2e-user-sheets-" + suffix
 	var spreadsheetToken string
 
 	t.Run("create spreadsheet with +create as user", func(t *testing.T) {

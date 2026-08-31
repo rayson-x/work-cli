@@ -4,7 +4,7 @@
 
 下载妙记的音视频媒体文件到本地，或获取有效期 1 天的下载链接。只读操作，支持 `--as user` / `--as bot`。
 
-本 skill 对应 shortcut：`lark-cli minutes +download`。
+本 skill 对应 shortcut：`work-cli minutes +download`。
 
 `minute_token` 是在某个身份下解析出来的（如 `vc +recording --as bot`）：调用本命令时必须显式沿用同一个 `--as`，不要省略让身份被默认值悄悄换掉（完整规则见 [lark-shared](../../lark-shared/SKILL.md) 的「身份延续」）。
 
@@ -12,25 +12,25 @@
 
 ```bash
 # 下载妙记（默认布局，落到 ./minutes/{minute_token}/<server-filename>）
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx
 
 # 指定输出文件（单 token，文件路径）
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --output ./meeting.mp4
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --output ./meeting.mp4
 
 # 指定输出目录（单/批量均可，目录路径）
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --output-dir ./downloads
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --output-dir ./downloads
 
 # 仅获取下载链接（有效期 1 天），不下载文件
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --url-only
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --url-only
 
 # 批量下载多个妙记（默认布局，逐个落到 ./minutes/{minute_token}/）
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx,obcnyyyyyyyyyyyyyyyyyyyy
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx,obcnyyyyyyyyyyyyyyyyyyyy
 
 # 批量下载到同一指定目录
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx,obcnyyyyyyyyyyyyyyyyyyyy --output-dir ./downloads
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx,obcnyyyyyyyyyyyyyyyyyyyy --output-dir ./downloads
 
 # 预览 API 调用
-lark-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --dry-run
+work-cli minutes +download --minute-tokens obcnxxxxxxxxxxxxxxxxxxxx --dry-run
 ```
 
 ## 参数
@@ -109,8 +109,8 @@ API 限流 5 次/秒，批量下载时需注意控制频率。
 | 来源 | 获取方式 |
 |------|---------|
 | 妙记 URL | 从 URL 末尾提取，如 `https://sample.feishu.cn/minutes/obcnxxxxxxxxxxxxxxxxxxxx` → `obcnxxxxxxxxxxxxxxxxxxxx` |
-| 妙记元信息查询 | `lark-cli minutes minutes get --params '{"minute_token": "obcn..."}'` |
-| 会议录制查询 | `lark-cli vc +recording --meeting-ids <id>` 或 `lark-cli vc +recording --calendar-event-ids <event_id>` |
+| 妙记元信息查询 | `work-cli minutes minutes get --params '{"minute_token": "obcn..."}'` |
+| 会议录制查询 | `work-cli vc +recording --meeting-ids <id>` 或 `work-cli vc +recording --calendar-event-ids <event_id>` |
 
 ## 常见错误与排查
 

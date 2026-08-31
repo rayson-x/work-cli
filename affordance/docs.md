@@ -26,7 +26,7 @@ Apply targeted text or block edits, append content, or deliberately replace an e
 
 ### Tips
 - Prefer `str_replace` or `block_*` commands for targeted edits. Use `overwrite` only when replacing the entire document is intended; it can discard unrelated rich content.
-- Before a `block_*` edit, fetch the target with `lark-cli docs +fetch --detail with-ids` and a narrow `--scope`; refetch after structural changes before reusing block IDs.
+- Before a `block_*` edit, fetch the target with `work-cli docs +fetch --detail with-ids` and a narrow `--scope`; refetch after structural changes before reusing block IDs.
 - Before authoring `--content`, read the matching XML or Markdown guide under Related skills when available, unless already read. For XML, use only documented DocxXML tags.
 - Match `--doc-format` to `--content`; for multiline content, prefer `@file` or `-` (stdin).
 

@@ -20,7 +20,7 @@
 - `list` / `get` / `update` / `enable` / `disable`：返回结构里 **无** `api_key` 字段，只有 `key_preview`（格式：`****` + 原始密钥末 4 位，如 `****5f4a`）。
 - `create` / `reset`：**仅** 在 `data.api_key`（顶层）返回原始密钥一次；同时在 stderr 打印一次性提示：
   ```
-  warning: this api_key is shown only once and is NOT stored by lark-cli — copy it now and store it in your own secret manager.
+  warning: this api_key is shown only once and is NOT stored by work-cli — copy it now and store it in your own secret manager.
   ```
 - 原始密钥绝不写入 cache / config / recent / debug log / 错误信息。
 

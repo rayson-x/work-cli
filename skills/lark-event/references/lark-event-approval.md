@@ -23,20 +23,20 @@ For Approval only, `subscription_type` is an optional setup param used by PreCon
 
 ```bash
 # Omitted: register both INVOLVED_APPROVAL and MANAGED_APPROVAL for this EventKey
-lark-cli event consume approval.instance.status_changed_v4 --as user
+work-cli event consume approval.instance.status_changed_v4 --as user
 
 # Single relation
-lark-cli event consume approval.instance.status_changed_v4 \
+work-cli event consume approval.instance.status_changed_v4 \
   -p subscription_type=INVOLVED_APPROVAL \
   --as user
 
 # Explicit multi-relation registration for one local consumer
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   -p subscription_type=INVOLVED_APPROVAL,MANAGED_APPROVAL \
   --as user
 
 # JSON array form; quote it for the shell
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   -p 'subscription_type=["INVOLVED_APPROVAL","MANAGED_APPROVAL"]' \
   --as user
 ```
@@ -136,34 +136,34 @@ Task event fields:
 
 ```bash
 # Stream approval instance updates broadly; registers both involved and managed relations
-lark-cli event consume approval.instance.status_changed_v4 \
+work-cli event consume approval.instance.status_changed_v4 \
   --as user
 
 # Stream approval instance updates only for approvals involving the current user
-lark-cli event consume approval.instance.status_changed_v4 \
+work-cli event consume approval.instance.status_changed_v4 \
   -p subscription_type=INVOLVED_APPROVAL \
   --as user
 
 # Stream approval task updates for definitions managed by the current user
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   -p subscription_type=MANAGED_APPROVAL \
   --as user
 
 # Broad approval status listening:
 # run both EventKeys as separate processes; omit subscription_type so each registers both relations.
-lark-cli event consume approval.instance.status_changed_v4 \
+work-cli event consume approval.instance.status_changed_v4 \
   --as user > approval-instance.ndjson &
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   --as user > approval-task.ndjson &
 wait
 
 # Listen to both involved and managed task subscriptions with one local consumer.
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   -p subscription_type=INVOLVED_APPROVAL,MANAGED_APPROVAL \
   --as user > approval-task.ndjson
 
 # Project a compact approval-task record
-lark-cli event consume approval.task.status_changed_v4 \
+work-cli event consume approval.task.status_changed_v4 \
   -p subscription_type=INVOLVED_APPROVAL \
   --as user \
   --jq '{event_id, task_id, status, at: .operate_time}'

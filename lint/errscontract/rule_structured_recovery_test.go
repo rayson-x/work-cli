@@ -15,7 +15,7 @@ import "github.com/larksuite/cli/errs"
 
 func run() error {
 	return errs.NewAuthenticationError(errs.SubtypeTokenMissing, "not logged in").
-		WithHint("run lark-cli auth login --scope demo:read")
+		WithHint("run work-cli auth login --scope demo:read")
 }
 `
 	got := CheckStructuredRecovery("shortcuts/demo/demo.go", src)
@@ -30,7 +30,7 @@ func TestStructuredRecoveryRejectsOpaqueAuthLoginInMessageAssignment(t *testing.
 import "github.com/larksuite/cli/errs"
 
 func enrich(err *errs.PermissionError) error {
-	err.Message = "run lark-cli auth login"
+	err.Message = "run work-cli auth login"
 	return err
 }
 `
@@ -41,7 +41,7 @@ func enrich(err *errs.PermissionError) error {
 }
 
 func TestStructuredRecoveryRejectsOpaqueFrameworkCommands(t *testing.T) {
-	for _, command := range []string{"lark-cli config bind", "lark-cli profile add"} {
+	for _, command := range []string{"work-cli config bind", "work-cli profile add"} {
 		t.Run(command, func(t *testing.T) {
 			src := `package demo
 

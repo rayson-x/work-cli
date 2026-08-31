@@ -6,23 +6,23 @@ List the members of a wiki space. OpenAPI: `GET /open-apis/wiki/v2/spaces/:space
 
 ```bash
 # Default: single page
-lark-cli wiki +member-list --space-id <space_id>
+work-cli wiki +member-list --space-id <space_id>
 
 # Walk every page (capped by --page-limit, default 10)
-lark-cli wiki +member-list --space-id <space_id> --page-all
+work-cli wiki +member-list --space-id <space_id> --page-all
 
 # Walk every page, no cap
-lark-cli wiki +member-list --space-id <space_id> --page-all --page-limit 0
+work-cli wiki +member-list --space-id <space_id> --page-all --page-limit 0
 
 # Resume from a specific cursor (single-page fetch regardless of --page-all)
-lark-cli wiki +member-list --space-id <space_id> --page-token <TOKEN>
+work-cli wiki +member-list --space-id <space_id> --page-token <TOKEN>
 
 # Personal library
-lark-cli wiki +member-list --space-id my_library --as user
+work-cli wiki +member-list --space-id my_library --as user
 
 # Pretty / table / csv / ndjson output
-lark-cli wiki +member-list --space-id <space_id> --format pretty
-lark-cli wiki +member-list --space-id <space_id> --format table
+work-cli wiki +member-list --space-id <space_id> --format pretty
+work-cli wiki +member-list --space-id <space_id> --format table
 ```
 
 ## Flags

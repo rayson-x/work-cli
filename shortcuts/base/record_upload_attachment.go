@@ -58,7 +58,7 @@ var BaseRecordUploadAttachment = common.Shortcut{
 		{Name: "name", Desc: "deprecated; attachment names are derived from local file basenames", Hidden: true},
 	},
 	Tips: []string{
-		`Example: lark-cli base +record-upload-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <attachment_field_id> --file ./report.pdf`,
+		`Example: work-cli base +record-upload-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <attachment_field_id> --file ./report.pdf`,
 		`Repeat --file to append multiple attachments: --file ./report.pdf --file ./screenshot.png`,
 		`Reuse returned file_token values for download/remove`,
 	},
@@ -87,7 +87,7 @@ var BaseRecordDownloadAttachment = common.Shortcut{
 		{Name: "overwrite", Type: "bool", Desc: "overwrite existing output file"},
 	},
 	Tips: []string{
-		`Example: lark-cli base +record-download-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --file-token <file_token> --output ./downloads/`,
+		`Example: work-cli base +record-download-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --file-token <file_token> --output ./downloads/`,
 		`Omit --file-token to download every attachment in the record.`,
 		`Base attachments should be downloaded with this command; other download commands may fail for Base attachment files.`,
 		`With one --file-token, --output may be a file path or directory; with multiple or omitted --file-token values, --output must be an existing directory.`,
@@ -117,7 +117,7 @@ var BaseRecordRemoveAttachment = common.Shortcut{
 	},
 	Tips: []string{
 		baseHighRiskYesTip,
-		`Example: lark-cli base +record-remove-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <attachment_field_id> --file-token <file_token> --yes`,
+		`Example: work-cli base +record-remove-attachment --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <attachment_field_id> --file-token <file_token> --yes`,
 		`Repeat --file-token to remove multiple attachments from the same cell in one call.`,
 		`This is a high-risk write command and requires --yes.`,
 	},

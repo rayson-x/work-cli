@@ -3,7 +3,7 @@
 
 替换妙记的 AI 总结内容。写操作，会覆盖当前总结。
 
-本 skill 对应 shortcut：`lark-cli minutes +summary`（调用 `PUT /open-apis/minutes/v1/minutes/{minute_token}/summary`）。
+本 skill 对应 shortcut：`work-cli minutes +summary`（调用 `PUT /open-apis/minutes/v1/minutes/{minute_token}/summary`）。
 
 ## 典型触发表达
 
@@ -15,16 +15,16 @@
 
 ```bash
 # 直接传入总结内容（Markdown 子集）
-lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary "**会议结论**\n- 方案 A 通过\n- 下周跟进排期"
+work-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary "**会议结论**\n- 方案 A 通过\n- 下周跟进排期"
 
 # 从文件读取总结内容
-lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @summary.md
+work-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @summary.md
 
 # 从 stdin 读取
-echo "**结论**" | lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @-
+echo "**结论**" | work-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @-
 
 # 预览 API 调用
-lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @summary.md --dry-run
+work-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @summary.md --dry-run
 ```
 
 ## 参数
@@ -39,7 +39,7 @@ lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @sum
 
 ### 1. 先读后写
 
-替换前建议先用 `lark-cli minutes +detail --minute-tokens <token> --summary` 读取当前总结，确认 `minute_token` 与待替换内容无误。
+替换前建议先用 `work-cli minutes +detail --minute-tokens <token> --summary` 读取当前总结，确认 `minute_token` 与待替换内容无误。
 
 ### 2. Markdown 展示说明
 
@@ -102,8 +102,8 @@ lark-cli minutes +summary --minute-token obcnxxxxxxxxxxxxxxxxxxxx --summary @sum
 | 来源 | 获取方式 |
 |------|---------|
 | 妙记 URL | 从 URL 末尾提取，如 `https://sample.feishu.cn/minutes/obcnxxxxxxxxxxxxxxxxxxxx` |
-| 妙记搜索 | `lark-cli minutes +search --query "关键词"` |
-| 会议产物查询 | `lark-cli vc +detail --meeting-ids <id>` 或 `vc +recording`, 拿到 `minute_token`, 然后走 `minutes +detail` |
+| 妙记搜索 | `work-cli minutes +search --query "关键词"` |
+| 会议产物查询 | `work-cli vc +detail --meeting-ids <id>` 或 `vc +recording`, 拿到 `minute_token`, 然后走 `minutes +detail` |
 
 ## 常见错误与排查
 

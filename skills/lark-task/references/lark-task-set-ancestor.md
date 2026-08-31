@@ -8,10 +8,10 @@ Set a parent task for a task, or clear the parent to make it independent.
 
 ```bash
 # Set a parent task
-lark-cli task +set-ancestor --task-id "guid_1" --ancestor-id "guid_2"
+work-cli task +set-ancestor --task-id "guid_1" --ancestor-id "guid_2"
 
 # Clear the parent task
-lark-cli task +set-ancestor --task-id "guid_1"
+work-cli task +set-ancestor --task-id "guid_1"
 ```
 
 ## Parameters
@@ -24,7 +24,7 @@ lark-cli task +set-ancestor --task-id "guid_1"
 ## Workflow
 
 1. Confirm the child task and, if applicable, the ancestor task.
-2. Execute `lark-cli task +set-ancestor ...`
+2. Execute `work-cli task +set-ancestor ...`
 3. Report the updated task GUID and whether the ancestor was set or cleared.
 
 > [!CAUTION]

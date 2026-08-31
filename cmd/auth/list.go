@@ -101,7 +101,7 @@ func authListRunWithRecovery(opts *ListOptions, projector *recovery.Projector) e
 		}
 		fmt.Fprint(f.IOStreams.ErrOut, "No logged-in users.")
 		if projector.CanReference(recovery.TargetAuthLogin) {
-			fmt.Fprint(f.IOStreams.ErrOut, " Run `lark-cli auth login` to log in.")
+			fmt.Fprint(f.IOStreams.ErrOut, " Run `work-cli auth login` to log in.")
 		}
 		fmt.Fprintln(f.IOStreams.ErrOut)
 		return nil

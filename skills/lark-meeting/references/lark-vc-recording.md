@@ -6,23 +6,23 @@
 
 > **边界提醒：** 如果用户明确要的是"妙记信息""妙记详情""妙记链接""minute_token""标题""时长""owner"这类妙记元信息，先用本命令拿到 `minute_token`，再调用 `minutes minutes get`。不要直接切到 `minutes +detail`；`minutes +detail` 只用于纪要内容和逐字稿。
 
-本 skill 对应 shortcut：`lark-cli vc +recording`。
+本 skill 对应 shortcut：`work-cli vc +recording`。
 
 ## 命令
 
 ```bash
 # 通过会议 ID 查询（逗号分隔支持批量，最多 50 个）
-lark-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28
-lark-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28,69xxxxxxxxxxxxx29
+work-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28
+work-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28,69xxxxxxxxxxxxx29
 
 # 通过日程事件 ID 查询
-lark-cli vc +recording --calendar-event-ids xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_0
+work-cli vc +recording --calendar-event-ids xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx_0
 
 # 输出格式
-lark-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28 --format json
+work-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28 --format json
 
 # 预览 API 调用
-lark-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28 --dry-run
+work-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28 --dry-run
 ```
 
 ## 参数
@@ -69,8 +69,8 @@ lark-cli vc +recording --meeting-ids 69xxxxxxxxxxxxx28 --dry-run
 
 | 输入参数 | 获取方式 |
 |---------|---------|
-| `meeting_id` | 使用 `lark-cli vc +search` 搜索历史会议，取结果中的 `id` 字段 |
-| `calendar_event_id` | 使用 `lark-cli calendar +agenda` 查看日程，取结果中的 `event_id` 字段 |
+| `meeting_id` | 使用 `work-cli vc +search` 搜索历史会议，取结果中的 `id` 字段 |
+| `calendar_event_id` | 使用 `work-cli calendar +agenda` 查看日程，取结果中的 `event_id` 字段 |
 
 ## 常见错误与排查
 

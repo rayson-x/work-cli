@@ -17,17 +17,17 @@ func TestNoticeMessage(t *testing.T) {
 		{
 			name:   "replacement and skill",
 			notice: Notice{Command: "+read", Replacement: "+cells-get", Skill: "lark-sheets"},
-			want:   "+read is a pre-refactor compatibility alias; use +cells-get instead; update your lark-sheets skill, run: lark-cli update",
+			want:   "+read is a pre-refactor compatibility alias; use +cells-get instead; update your lark-sheets skill, run: work-cli update",
 		},
 		{
 			name:   "no replacement",
 			notice: Notice{Command: "+read", Skill: "lark-sheets"},
-			want:   "+read is a pre-refactor compatibility alias; update your lark-sheets skill, run: lark-cli update",
+			want:   "+read is a pre-refactor compatibility alias; update your lark-sheets skill, run: work-cli update",
 		},
 		{
 			name:   "no skill",
 			notice: Notice{Command: "+read", Replacement: "+cells-get"},
-			want:   "+read is a pre-refactor compatibility alias; use +cells-get instead; update your skill, run: lark-cli update",
+			want:   "+read is a pre-refactor compatibility alias; use +cells-get instead; update your skill, run: work-cli update",
 		},
 	}
 	for _, tt := range tests {
@@ -50,7 +50,7 @@ func TestNoticeMessageWithoutUpdateAction(t *testing.T) {
 	if got != want {
 		t.Fatalf("MessageWithoutUpdateAction() = %q, want %q", got, want)
 	}
-	if strings.Contains(got, "lark-cli update") {
+	if strings.Contains(got, "work-cli update") {
 		t.Fatalf("MessageWithoutUpdateAction() contains an update command: %q", got)
 	}
 }

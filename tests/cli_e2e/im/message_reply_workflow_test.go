@@ -22,9 +22,9 @@ func TestIM_MessageReplyWorkflowAsBot(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	chatName := "lark-cli-e2e-im-reply-" + suffix
-	originalMessage := "lark-cli-e2e-original-message-" + suffix
-	replyText := "lark-cli-e2e-reply-text-" + suffix
+	chatName := "work-cli-e2e-im-reply-" + suffix
+	originalMessage := "work-cli-e2e-original-message-" + suffix
+	replyText := "work-cli-e2e-reply-text-" + suffix
 
 	chatID := createChat(t, parentT, ctx, chatName)
 	messageID := sendMessage(t, ctx, chatID, originalMessage)

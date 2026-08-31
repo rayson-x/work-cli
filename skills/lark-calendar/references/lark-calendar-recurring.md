@@ -19,8 +19,8 @@
 
 | 步骤 | 命令 | 说明 |
 |------|------|------|
-| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --start ... --end ...` | 更新原重复性日程的时间 |
-| 2 | `lark-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<例外ID>","need_notification":false}'` （逐个） | 时间变更后例外已无意义，必须删除 |
+| 1 | `work-cli calendar +update --event-id <原重复日程ID> --start ... --end ...` | 更新原重复性日程的时间 |
+| 2 | `work-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<例外ID>","need_notification":false}'` （逐个） | 时间变更后例外已无意义，必须删除 |
 
 > 理由：更新时间会改变重复起止点，例外日程的原始占位已变，若保留会导致时间冲突或残留。
 
@@ -28,8 +28,8 @@
 
 | 步骤 | 命令 | 说明 |
 |------|------|------|
-| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --summary ... --description ...` | 更新原重复性日程的标题/描述等 |
-| 2 | `lark-cli calendar +update --event-id <例外ID> --summary ... --description ...` （逐个） | 同步更新例外日程的对应字段 |
+| 1 | `work-cli calendar +update --event-id <原重复日程ID> --summary ... --description ...` | 更新原重复性日程的标题/描述等 |
+| 2 | `work-cli calendar +update --event-id <例外ID> --summary ... --description ...` （逐个） | 同步更新例外日程的对应字段 |
 
 > 理由：例外已脱离原重复性日程独立存在，不会自动继承原日程的更新。
 
@@ -37,8 +37,8 @@
 
 | 步骤 | 命令 | 说明 |
 |------|------|------|
-| 1 | `lark-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<原重复日程ID>","need_notification":true}'` | 删除重复性日程本体 |
-| 2 | `lark-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<例外ID>","need_notification":false}'` （逐个） | 删除所有例外日程 |
+| 1 | `work-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<原重复日程ID>","need_notification":true}'` | 删除重复性日程本体 |
+| 2 | `work-cli calendar events delete --params '{"calendar_id":"<CAL_ID>","event_id":"<例外ID>","need_notification":false}'` （逐个） | 删除所有例外日程 |
 
 > 理由：例外是独立实体，删除原重复性日程不会级联删除例外。
 
@@ -46,9 +46,9 @@
 
 | 步骤 | 命令 | 说明 |
 |------|------|------|
-| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --rrule "FREQ=...;UNTIL=<截止日期>"` | 截短原重复性日程（UNTIL 设为指定时间前一次实例的日期） |
-| 2 | `lark-cli calendar events delete ...` （逐个） | 删除指定时间之后（含）的例外日程 |
-| 3 | `lark-cli calendar +create --summary ... --start <指定时间> --end ... --rrule "FREQ=..." --attendee-ids ...` | 从指定时间开始创建新的重复性日程（即「后续」部分，携带编辑后的内容） |
+| 1 | `work-cli calendar +update --event-id <原重复日程ID> --rrule "FREQ=...;UNTIL=<截止日期>"` | 截短原重复性日程（UNTIL 设为指定时间前一次实例的日期） |
+| 2 | `work-cli calendar events delete ...` （逐个） | 删除指定时间之后（含）的例外日程 |
+| 3 | `work-cli calendar +create --summary ... --start <指定时间> --end ... --rrule "FREQ=..." --attendee-ids ...` | 从指定时间开始创建新的重复性日程（即「后续」部分，携带编辑后的内容） |
 
 > UNTIL 计算规则：若用户选择「从第 N 次开始编辑」，UNTIL 应设置为第 N-1 次实例的日期（即保留到指定时间之前的最后一次）。
 > 新日程应继承原日程的参会人、会议室等配置（除非用户明确要修改）。
@@ -57,8 +57,8 @@
 
 | 步骤 | 命令 | 说明 |
 |------|------|------|
-| 1 | `lark-cli calendar +update --event-id <原重复日程ID> --rrule "FREQ=...;UNTIL=<截止日期>"` | 截短原重复性日程（UNTIL 设为指定时间前一次实例的日期） |
-| 2 | `lark-cli calendar events delete ...` （逐个） | 删除指定时间之后（含）的例外日程 |
+| 1 | `work-cli calendar +update --event-id <原重复日程ID> --rrule "FREQ=...;UNTIL=<截止日期>"` | 截短原重复性日程（UNTIL 设为指定时间前一次实例的日期） |
+| 2 | `work-cli calendar events delete ...` （逐个） | 删除指定时间之后（含）的例外日程 |
 
 > 与「编辑此次及后续」的区别：不需要步骤 3（创建新的重复性日程），因为目标是删除后续而非替换。
 

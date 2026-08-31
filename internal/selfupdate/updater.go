@@ -372,7 +372,7 @@ func (u *Updater) runSkillsInstall(source string, nameList []string) *NpmResult 
 	return u.runSkillsCommand(args...)
 }
 
-// skillsInvocation decides how to launch the `skills` CLI. When the lark-cli
+// skillsInvocation decides how to launch the `skills` CLI. When the work-cli
 // itself was installed via pnpm and pnpm is available, it uses `pnpm dlx` so
 // pnpm-only environments (pnpm's standalone installer bundles Node without
 // putting npm/npx on PATH) can still sync skills after a self-update.
@@ -424,18 +424,18 @@ func (u *Updater) runSkillsCommandInDir(dir string, args ...string) *NpmResult {
 }
 
 // VerifyBinary checks that the installed binary reports the expected version
-// by running "lark-cli --version" and comparing the version token exactly.
-// Output format is "lark-cli version X.Y.Z"; the last field is extracted and
+// by running "work-cli --version" and comparing the version token exactly.
+// Output format is "work-cli version X.Y.Z"; the last field is extracted and
 // compared against expectedVersion (both stripped of any "v" prefix).
 func (u *Updater) VerifyBinary(expectedVersion string) error {
 	if u.VerifyOverride != nil {
 		return u.VerifyOverride(expectedVersion)
 	}
 	// Prefer PATH resolution so npm global bin symlinks pick up the newly
-	// installed binary (#836). If `lark-cli` is not on PATH (e.g. the user
+	// installed binary (#836). If `work-cli` is not on PATH (e.g. the user
 	// invoked this process by absolute path), fall back to the running
 	// executable — same as the pre-#836 secondary resolution path.
-	exe, err := execLookPath("lark-cli")
+	exe, err := execLookPath("work-cli")
 	if err != nil {
 		exe, err = vfs.Executable()
 		if err != nil {

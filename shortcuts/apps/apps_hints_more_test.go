@@ -136,7 +136,7 @@ func TestWithAppsHint_FillsEmptyHintKeepsMessage(t *testing.T) {
 // answered with the +db-execute table/column hint.
 func TestWithAppsHint_WithholdsHintForFailedPrecondition(t *testing.T) {
 	in := errs.NewValidationError(errs.SubtypeFailedPrecondition, "miaoda UAT not activated").WithCode(221800)
-	out := withAppsHint(in, "verify table/column names with `lark-cli apps +db-table-get`")
+	out := withAppsHint(in, "verify table/column names with `work-cli apps +db-table-get`")
 	p, ok := errs.ProblemOf(out)
 	if !ok {
 		t.Fatalf("returned error is not typed: %T", out)
@@ -165,7 +165,7 @@ func TestWithAppsHint_WithholdsHintOnRealClassificationPath(t *testing.T) {
 		"msg":  "miaoda UAT not activated",
 	}, errclass.ClassifyContext{Identity: "user"})
 
-	p, ok := errs.ProblemOf(withAppsHint(err, "verify table/column names with `lark-cli apps +db-table-get`"))
+	p, ok := errs.ProblemOf(withAppsHint(err, "verify table/column names with `work-cli apps +db-table-get`"))
 	if !ok {
 		t.Fatalf("BuildAPIError did not produce a typed problem: %#v", err)
 	}

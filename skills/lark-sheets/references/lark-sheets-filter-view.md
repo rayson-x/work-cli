@@ -93,10 +93,10 @@ _create / update 的视图属性_
 
 ```bash
 # 列出某个 sheet 的全部筛选视图
-lark-cli sheets +filter-view-list --url "..." --sheet-id "$SID"
+work-cli sheets +filter-view-list --url "..." --sheet-id "$SID"
 
 # 按 view_id 精确定位
-lark-cli sheets +filter-view-list --url "..." --sheet-id "$SID" --view-id vAbcde1234
+work-cli sheets +filter-view-list --url "..." --sheet-id "$SID" --view-id vAbcde1234
 ```
 
 ### `+filter-view-create`
@@ -104,7 +104,7 @@ lark-cli sheets +filter-view-list --url "..." --sheet-id "$SID" --view-id vAbcde
 `--range`（必填）/ `--view-name`（可选）是独立 flag；`rules` 走 `--properties`：
 
 ```bash
-lark-cli sheets +filter-view-create --url "..." --sheet-id "$SID" \
+work-cli sheets +filter-view-create --url "..." --sheet-id "$SID" \
   --view-name "活跃用户" --range "A1:F1000" \
   --properties '{"rules":[{"column_index":"C","conditions":[{"type":"number","compare_type":"greaterThan","values":[100]}]}]}'
 ```

@@ -37,7 +37,7 @@ func registeredCommands(t *testing.T) map[string]bool {
 // targets against the live tree.
 func sheetsGroupWithHints() *cobra.Command {
 	svc := &cobra.Command{Use: "sheets"}
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddCommand(svc)
 	mounted := map[string]bool{}
 	for _, rx := range unknownSubcommandHints {
@@ -152,7 +152,7 @@ func TestHookReturnsPrescriptionAsValidationError(t *testing.T) {
 	}
 	// The name genuinely does not exist, so the message stays byte-compatible
 	// with the framework guard's wording; only the hint improves.
-	if verr.Message != `unknown subcommand "+sheet-add" for "lark-cli sheets"` {
+	if verr.Message != `unknown subcommand "+sheet-add" for "work-cli sheets"` {
 		t.Errorf("message = %q, want the framework guard's wording", verr.Message)
 	}
 	if !strings.Contains(verr.Hint, "+sheet-create") {
@@ -253,7 +253,7 @@ func TestConcealedTargetIsNotPrescribed(t *testing.T) {
 // A target that vanished outright must not produce a hint pointing at nothing.
 func TestMissingTargetIsNotPrescribed(t *testing.T) {
 	svc := &cobra.Command{Use: "sheets"}
-	(&cobra.Command{Use: "lark-cli"}).AddCommand(svc)
+	(&cobra.Command{Use: "work-cli"}).AddCommand(svc)
 	InstallUnknownSubcommandHints(svc) // no targets mounted at all
 
 	for typed := range unknownSubcommandHints {

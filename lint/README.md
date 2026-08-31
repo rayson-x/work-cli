@@ -1,12 +1,12 @@
 # lint/
 
-Source-level static checks that guard lark-cli conventions golangci-lint
+Source-level static checks that guard work-cli conventions golangci-lint
 cannot express. Each lint domain is a sibling Go package under `lint/`;
 the top-level `lint/main.go` aggregates results and emits a single
 exit code.
 
 `lint/` is its own Go module so its `golang.org/x/tools/go/packages`
-dependency does not leak into the shipped `lark-cli` binary's module
+dependency does not leak into the shipped `work-cli` binary's module
 graph.
 
 ## Layout

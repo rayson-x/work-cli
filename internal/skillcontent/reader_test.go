@@ -14,7 +14,7 @@ import (
 
 func testFS() fstest.MapFS {
 	return fstest.MapFS{
-		"lark-calendar/SKILL.md":             {Data: []byte("---\nname: lark-calendar\nversion: 1.0.0\ndescription: \"Calendar skill\"\nmetadata:\n  requires:\n    bins: [\"lark-cli\"]\n  cliHelp: \"lark-cli calendar --help\"\n---\nbody\n")},
+		"lark-calendar/SKILL.md":             {Data: []byte("---\nname: lark-calendar\nversion: 1.0.0\ndescription: \"Calendar skill\"\nmetadata:\n  requires:\n    bins: [\"work-cli\"]\n  cliHelp: \"work-cli calendar --help\"\n---\nbody\n")},
 		"lark-calendar/references/agenda.md": {Data: []byte("# Agenda")},
 		"lark-calendar/references/create.md": {Data: []byte("# Create")},
 		"lark-calendar/assets/tpl.html":      {Data: []byte("<html></html>")},
@@ -46,7 +46,7 @@ func TestList(t *testing.T) {
 	if skills[0].Metadata == nil {
 		t.Fatal("expected metadata for lark-calendar")
 	}
-	if skills[0].Metadata["cliHelp"] != "lark-cli calendar --help" {
+	if skills[0].Metadata["cliHelp"] != "work-cli calendar --help" {
 		t.Errorf("metadata.cliHelp: got %v", skills[0].Metadata["cliHelp"])
 	}
 	// No frontmatter → empty description and nil metadata (omitted from JSON).

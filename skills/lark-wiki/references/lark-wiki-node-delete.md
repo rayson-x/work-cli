@@ -5,12 +5,12 @@ Delete a wiki node (or pull a cloud doc out of Wiki). OpenAPI: `DELETE /open-api
 > ⚠️ **High-risk write & irreversible** — deletes the node and (by default) its whole subtree. Requires explicit `--yes`; without it the CLI returns a `confirmation_required` error and nothing is deleted.
 
 - **Sync / async**: an empty `task_id` means the delete completed synchronously (`ready=true`). A non-empty `task_id` triggers bounded polling; if the window elapses the output carries `timed_out=true` and a `next_command`:
-  `lark-cli drive +task_result --scenario wiki_delete_node --task-id <TASK_ID> --as <user|bot>`
+  `work-cli drive +task_result --scenario wiki_delete_node --task-id <TASK_ID> --as <user|bot>`
 
 ## Usage
 
 ```bash
-lark-cli wiki +node-delete \
+work-cli wiki +node-delete \
   --node-token <node_token | obj_token | Lark URL> \
   [--obj-type <wiki|doc|docx|sheet|bitable|mindnote|slides|file>] \
   [--space-id <space_id>] \
@@ -19,7 +19,7 @@ lark-cli wiki +node-delete \
   [--as user|bot]
 
 # Preview the call chain without deleting
-lark-cli wiki +node-delete --node-token <token> --obj-type wiki --dry-run
+work-cli wiki +node-delete --node-token <token> --obj-type wiki --dry-run
 ```
 
 ## Flags

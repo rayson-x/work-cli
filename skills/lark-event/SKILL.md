@@ -1,11 +1,11 @@
 ---
 name: lark-event
 version: 1.0.0
-description: "Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `lark-cli event consume <EventKey>` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed for AI agents running as subprocesses."
+description: "Lark/Feishu real-time event listening / subscribing / consuming: stream events as NDJSON via `work-cli event consume <EventKey>` (covers IM messages/reactions/chat changes, Approval status changes, Task updates, VC meeting started/joined/ended, Minutes generated, Whiteboard updated, etc.). Use for Lark bots, real-time message processing, long-running subscribers, streaming webhook/push handlers. Supports `--max-events` / `--timeout` bounded runs and a stderr ready-marker contract — designed for AI agents running as subprocesses."
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli event --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli event --help"
 ---
 
 # Lark Events
@@ -16,11 +16,11 @@ metadata:
 
 | Command | Purpose |
 |------|------|
-| `lark-cli event list [--json]` | List all subscribable EventKeys |
-| `lark-cli event schema <EventKey> [--json]` | Show an EventKey's params and output schema |
-| `lark-cli event consume <EventKey> [flags]` | Blocking consume; events → stdout NDJSON |
-| `lark-cli event status [--json] [--fail-on-orphan]` | Inspect the local bus daemon status |
-| `lark-cli event stop [--all] [--force]` | Stop the bus daemon |
+| `work-cli event list [--json]` | List all subscribable EventKeys |
+| `work-cli event schema <EventKey> [--json]` | Show an EventKey's params and output schema |
+| `work-cli event consume <EventKey> [flags]` | Blocking consume; events → stdout NDJSON |
+| `work-cli event status [--json] [--fail-on-orphan]` | Inspect the local bus daemon status |
+| `work-cli event stop [--all] [--force]` | Stop the bus daemon |
 
 
 ## Common flags
@@ -40,29 +40,29 @@ metadata:
 
 ```bash
 # Default: stream every event for the key (no filter, no projection)
-lark-cli event consume im.message.receive_v1 --as bot
+work-cli event consume im.message.receive_v1 --as bot
 
 # List every EventKey of one domain (the authoritative, always-current catalog)
-lark-cli event list --domain vc --json
+work-cli event list --domain vc --json
 
 # Grab one sample event to inspect payload shape
-lark-cli event consume im.message.receive_v1 --max-events 1 --timeout 30s --as bot
+work-cli event consume im.message.receive_v1 --max-events 1 --timeout 30s --as bot
 
 # Run for 10 minutes then auto-exit
-lark-cli event consume im.message.receive_v1 --timeout 10m --as bot
+work-cli event consume im.message.receive_v1 --timeout 10m --as bot
 
 # Consume multiple EventKeys concurrently (one shape per process, no dispatcher)
-lark-cli event consume im.message.receive_v1          --as bot > receive.ndjson &
-lark-cli event consume im.message.reaction.created_v1 --as bot > reaction.ndjson &
+work-cli event consume im.message.receive_v1          --as bot > receive.ndjson &
+work-cli event consume im.message.reaction.created_v1 --as bot > reaction.ndjson &
 wait
 
 ```
 
 ## Call flow
 
-1. `lark-cli event list --json` → pick a legal key. `--domain <d>` narrows to one domain; the domains are `application`, `approval`, `board`, `card`, `im`, `minutes`, `task`, `vc`. An unknown domain fails with the valid set listed in the hint.
-2. `lark-cli event schema <key> --json` → read `resolved_output_schema` + `jq_root_path` to determine field paths
-3. `lark-cli event consume <key> [--jq '<expr>']` → consume
+1. `work-cli event list --json` → pick a legal key. `--domain <d>` narrows to one domain; the domains are `application`, `approval`, `board`, `card`, `im`, `minutes`, `task`, `vc`. An unknown domain fails with the valid set listed in the hint.
+2. `work-cli event schema <key> --json` → read `resolved_output_schema` + `jq_root_path` to determine field paths
+3. `work-cli event consume <key> [--jq '<expr>']` → consume
 
 ## Subprocess contract
 
@@ -154,6 +154,6 @@ Lark-defined semantic tags (**not** JSON Schema's standard `format`). Common val
 | Approval   | [`references/lark-event-approval.md`](references/lark-event-approval.md)     | Catalog of 2 Approval EventKeys (`approval.instance.status_changed_v4`, `approval.task.status_changed_v4`) + optional/multi `subscription_type` pre-registration + user-auth subscription lifecycle + flat output field reference |
 | IM         | [`references/lark-event-im.md`](references/lark-event-im.md)                 | Catalog of 12 IM EventKeys + shape notes (flat vs V2 envelope) + `im.message.receive_v1` field gotchas (`sender_id` is open_id only; `.content` is plain text except for `interactive` cards) + common jq recipes (filter by chat_type / message_type / sender); for `card.action.trigger` see also [`../lark-im/references/lark-im-card-action-reply.md`](../lark-im/references/lark-im-card-action-reply.md) |
 | Task       | [`references/lark-event-task.md`](references/lark-event-task.md)             | Catalog of 1 Task EventKey (`task.task.update_user_access_v2`) + Native V2 envelope shape + task commit types + user/bot subscription notes |
-| VC         | [`references/lark-event-vc.md`](references/lark-event-vc.md)                 | Catalog of 7 VC EventKeys (meeting lifecycle `participant_meeting_started/joined/ended_v1`, `vc.note.generated_v1`, recording `recording_started/transcript_generated/ended_v1`) + field reference + source type semantics; the live list is always `lark-cli event list --domain vc --json` |
+| VC         | [`references/lark-event-vc.md`](references/lark-event-vc.md)                 | Catalog of 7 VC EventKeys (meeting lifecycle `participant_meeting_started/joined/ended_v1`, `vc.note.generated_v1`, recording `recording_started/transcript_generated/ended_v1`) + field reference + source type semantics; the live list is always `work-cli event list --domain vc --json` |
 | Minutes    | [`references/lark-event-minutes.md`](references/lark-event-minutes.md)       | Catalog of 1 Minutes EventKey (`minutes.minute.generated_v1`) + field reference + source type semantics (meeting only) |
 | Whiteboard | [`references/lark-event-whiteboard.md`](references/lark-event-whiteboard.md) | Catalog of 1 Board EventKey (`board.whiteboard.updated_v1`) + per-whiteboard subscription model (requires `-p whiteboard_id=<token>`) + payload field reference (whiteboard_id / operator_ids triple-id) |

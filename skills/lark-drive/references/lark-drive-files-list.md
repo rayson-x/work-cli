@@ -18,7 +18,7 @@
 读取普通文件夹：
 
 ```bash
-lark-cli drive files list \
+work-cli drive files list \
   --params '{"folder_token":"<folder_token>","page_size":200}' \
   --format json
 ```
@@ -26,7 +26,7 @@ lark-cli drive files list \
 继续翻页：
 
 ```bash
-lark-cli drive files list \
+work-cli drive files list \
   --params '{"folder_token":"<folder_token>","page_size":200,"page_token":"<PAGE_TOKEN>"}' \
   --format json
 ```
@@ -34,7 +34,7 @@ lark-cli drive files list \
 读取当前用户 Drive 根目录的直接子项：
 
 ```bash
-lark-cli drive files list \
+work-cli drive files list \
   --params '{"folder_token":"","page_size":200}' \
   --format json
 ```
@@ -48,7 +48,7 @@ lark-cli drive files list \
 按创建时间升序列出当前文件夹直接子项：
 
 ```bash
-lark-cli drive files list \
+work-cli drive files list \
   --params '{"folder_token":"<folder_token>","order_by":"CreatedTime","direction":"ASC","page_size":200}' \
   --format json
 ```
@@ -56,7 +56,7 @@ lark-cli drive files list \
 按编辑时间降序列出当前文件夹直接子项：
 
 ```bash
-lark-cli drive files list \
+work-cli drive files list \
   --params '{"folder_token":"<folder_token>","order_by":"EditedTime","direction":"DESC","page_size":200}' \
   --format json
 ```
@@ -71,7 +71,7 @@ lark-cli drive files list \
 4. 排序参数映射：创建时间 -> `order_by:"CreatedTime"`；编辑时间 / 修改时间 -> `order_by:"EditedTime"`；升序 -> `direction:"ASC"`；降序 -> `direction:"DESC"`。不要省略排序参数后再用 Python / shell 客户端排序替代。
 5. 排序查询建议带 `page_size:200` 减少翻页；只有用户要求完整分页、递归盘点、大目录全量导出，或当前页返回 `has_more=true` 后继续翻页时，才加入 `page_token`。
 6. `page_size` 在分页、递归盘点或全量导出时建议显式设置为 `200`。如果服务端或环境返回参数错误，再降级到服务端允许的值，并记录降级原因。
-7. 调用前如果不确定字段结构，先运行 `lark-cli schema drive.files.list` 查看 `--params` 结构。
+7. 调用前如果不确定字段结构，先运行 `work-cli schema drive.files.list` 查看 `--params` 结构。
 
 ## 返回结构与解析
 
@@ -177,7 +177,7 @@ while queue not empty:
 
 | 错误用法 | 问题 | 正确做法 |
 |----------|------|----------|
-| `lark-cli drive files list --folder-token <token>` | `files.list` 不提供 `--folder-token` flag | 使用 `--params '{"folder_token":"<token>"}'` |
+| `work-cli drive files list --folder-token <token>` | `files.list` 不提供 `--folder-token` flag | 使用 `--params '{"folder_token":"<token>"}'` |
 | 根目录返回 N 项就认为云空间只有 N 项 | 根目录只返回直接子项，不是递归结果 | 对返回的子文件夹继续递归 |
 | `--page-all \| python json.loads(...)` | 自动翻页输出不适合作为单个 JSON 对象解析 | 手动使用 `page_token` 翻页并逐页解析 |
 | `cmd 2>&1` 后解析 JSON | stderr 提示污染 JSON 输入 | 只解析 stdout，stderr 作为日志处理 |

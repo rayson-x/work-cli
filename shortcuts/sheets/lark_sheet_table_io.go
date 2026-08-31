@@ -95,7 +95,7 @@ var TablePut = common.Shortcut{
 		return tablePutWrite(ctx, runtime, token, payload, styles)
 	},
 	Tips: []string{
-		`Example: lark-cli sheets +table-put --url <URL> --sheets '{"sheets":[{"name":"S1","columns":["City","Rev"],"dtypes":{"Rev":"float64"},"data":[["SH",1234.5]]}]}'`,
+		`Example: work-cli sheets +table-put --url <URL> --sheets '{"sheets":[{"name":"S1","columns":["City","Rev"],"dtypes":{"Rev":"float64"},"data":[["SH",1234.5]]}]}'`,
 		"Writes into an existing spreadsheet — pass --url or --spreadsheet-token. To create a new workbook first, use +workbook-create, then point --spreadsheet-token here.",
 		"Payload sheets are matched to existing sub-sheets by name (created when absent). Date columns take ISO yyyy-mm-dd strings — converted to real dates (serial + date format).",
 		"--styles applies number formats, colors, merges, and row/col sizes in the same call (same shape as +workbook-create's --styles): one styles item per written sheet, name-matched. Skips the separate +cells-set-style round-trip.",

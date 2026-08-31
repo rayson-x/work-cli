@@ -163,7 +163,7 @@ func TestDrive_PermissionGetSettingWorkflow(t *testing.T) {
 		t,
 		t,
 		ctx,
-		"lark-cli-e2e-drive-permission-get-setting-"+clie2e.GenerateSuffix(),
+		"work-cli-e2e-drive-permission-get-setting-"+clie2e.GenerateSuffix(),
 		"bot",
 		"",
 	)

@@ -73,7 +73,7 @@ func parseCreateProgressRecordParams(runtime *common.RuntimeContext) (*createPro
 
 	sourceTitle := runtime.Str("source-title")
 	if sourceTitle == "" {
-		sourceTitle = "created by lark-cli"
+		sourceTitle = "created by work-cli"
 	}
 
 	sourceURL := runtime.Str("source-url")
@@ -123,7 +123,7 @@ var OKRCreateProgressRecord = common.Shortcut{
 		{Name: "target-type", Desc: "target type: objective | key_result", Required: true, Enum: []string{"objective", "key_result"}},
 		{Name: "progress-percent", Desc: "progress percentage"},
 		{Name: "progress-status", Desc: "progress status: normal | overdue | done. must provided with --progress-percent", Enum: []string{"normal", "overdue", "done"}},
-		{Name: "source-title", Default: "created by lark-cli", Desc: "source title for display"},
+		{Name: "source-title", Default: "created by work-cli", Desc: "source title for display"},
 		{Name: "source-url", Desc: "source URL for display (defaults to open platform URL based on brand)"},
 		{Name: "user-id-type", Default: "open_id", Desc: "user ID type: open_id | union_id | user_id"},
 		{Name: "style", Default: "simple", Desc: "input style: simple (semi-plain text JSON) | richtext (ContentBlock JSON)", Enum: []string{"simple", "richtext"}},

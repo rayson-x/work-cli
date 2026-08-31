@@ -21,9 +21,9 @@ func TestWiki_NodeWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	parentTitle := "lark-cli-e2e-wiki-parent-" + suffix
-	createdTitle := "lark-cli-e2e-wiki-create-" + suffix
-	copiedTitle := "lark-cli-e2e-wiki-copy-" + suffix
+	parentTitle := "work-cli-e2e-wiki-parent-" + suffix
+	createdTitle := "work-cli-e2e-wiki-create-" + suffix
+	copiedTitle := "work-cli-e2e-wiki-copy-" + suffix
 
 	var spaceID string
 	var hostNodeToken string

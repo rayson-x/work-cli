@@ -70,12 +70,12 @@ func rejectCalendarAutoBotFallback(runtime *common.RuntimeContext) error {
 	message := recovery.Join("",
 		recovery.Text("calendar commands require a valid user login by default; when no valid user login state is available, auto identity falls back to bot and may operate on the bot calendar instead of your own. "),
 		recovery.Command(recovery.TargetAuthLogin,
-			"Run `lark-cli auth login --domain calendar` for your calendar, "),
+			"Run `work-cli auth login --domain calendar` for your calendar, "),
 		recovery.Text("or rerun with `--as bot` if bot identity is intentional."),
 	)
 	hint := recovery.Join("\n",
 		recovery.Command(recovery.TargetAuthLogin,
-			"restore user login: `lark-cli auth login --domain calendar`"),
+			"restore user login: `work-cli auth login --domain calendar`"),
 		recovery.Text("intentional bot usage: rerun with `--as bot`"),
 	)
 	err := recovery.Attach(

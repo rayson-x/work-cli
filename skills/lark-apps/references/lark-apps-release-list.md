@@ -1,6 +1,6 @@
 # apps +release-list
 
-分页查询妙搭应用发布历史，最新发布在前。运行时命令事实以 `lark-cli apps +release-list --help` 为准。
+分页查询妙搭应用发布历史，最新发布在前。运行时命令事实以 `work-cli apps +release-list --help` 为准。
 
 ## 何时用
 
@@ -16,8 +16,8 @@
 ## 示例
 
 ```bash
-lark-cli apps +release-list --app-id app_xxx --page-size 10
-lark-cli apps +release-list --app-id app_xxx --status failed
+work-cli apps +release-list --app-id app_xxx --page-size 10
+work-cli apps +release-list --app-id app_xxx --status failed
 ```
 
 ## 输出契约

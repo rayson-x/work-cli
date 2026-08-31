@@ -39,25 +39,25 @@
 ```bash
 # 基础用法 —— 把本地 ./repo 推送到云端 fldcXXX
 # 默认 --if-exists=skip：已经存在的远端文件保持不动，只新增、不覆盖。
-lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx
+work-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx
 
 # 重复同步时可用 smart 做增量优化：它会按 modified_time 跳过已对齐的远端文件；但如果远端更旧，仍会继续走覆盖路径
-lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists smart
 
 # 显式覆盖远端同名文件（依赖 upload_all 的灰度协议字段，详见下文"覆盖语义"）
-lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists overwrite
 
 # 云端已有多个同名二进制文件时，显式选择一个远端目标再覆盖
-lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists overwrite --on-duplicate-remote newest
 
 # 文件级镜像同步：上传 / 覆盖 + 删除本地不存在的远端文件
 # （--delete-remote 必须搭配 --yes，否则会被 Validate 直接拒绝；
 #   且 Validate 阶段会动态检查 space:document:delete scope，缺权限会立刻失败，
 #   不会出现"上传成功了但是后面删除阶段挂了"的半同步状态）
-lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists overwrite --delete-remote --yes
 ```
 
@@ -141,7 +141,7 @@ lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
 | `error_class` | 常见 `code` | 含义 | Agent 应对 |
 |---|---:|---|---|
 | `app_scope_missing` | `99991672` | 应用身份缺少 Drive / 文件夹相关 scope | 停止重试，引导开通错误里列出的应用身份权限，例如 `space:folder:create` 或 `drive:drive` |
-| `user_scope_missing` | `99991679` | 用户身份缺少授权 | 停止重试，走 `lark-cli auth login --scope ...` 补错误里列出的 scope |
+| `user_scope_missing` | `99991679` | 用户身份缺少授权 | 停止重试，走 `work-cli auth login --scope ...` 补错误里列出的 scope |
 | `permission_denied` | `1061004` / HTTP 403 | 当前身份无权操作目标资源 | 停止重试，检查目标文件夹权限、身份类型（user / bot）和资源可见性 |
 | `invalid_api_parameters` | `1061002` | API 参数被服务端拒绝 | 停止重试，检查 `--folder-token`、覆盖模式、`file_token`、文件名和上传参数；不要对同一参数组合批量重试 |
 | `parent_node_missing` | `1061044` | 上传 / 建目录使用的父文件夹不存在或当前身份不可见 | 停止重试，检查 `--folder-token` 是否仍存在、是否有权限、父目录是否在 push 过程中被删除；不要继续上传同一目录树 |
@@ -176,7 +176,7 @@ lark-cli drive +push --local-dir ./repo --folder-token fldcnxxxxxxxxx \
 
 > **关于 `space:document:delete`：** 框架的 scope 预检（`runner.go: checkShortcutScopes`）会在 `Validate` 和 `--dry-run` 之前就把命令上声明的 scope 全检查一遍；如果把删除 scope 也预声明，**普通上传或 dry-run** 都会因为没授权删除权限而被拦下来。所以这一项不放在命令的默认 Scopes 里，而是在 Validate 中**条件触发**：只有 `--delete-remote --yes` 同时打开时才会调用 `runtime.EnsureScopes([]string{"space:document:delete"})` 做一次动态前置校验。这样既保留了"普通上传不需要删除权限"的便利，又能在真要做镜像删除前把 scope 缺失暴露出来，避免出现"上传成功 → 删除阶段才挂"的半同步状态。
 >
-> 想一次性把权限补齐：`lark-cli auth login --scope "drive:drive.metadata:readonly drive:file:upload space:folder:create space:document:delete"`。
+> 想一次性把权限补齐：`work-cli auth login --scope "drive:drive.metadata:readonly drive:file:upload space:folder:create space:document:delete"`。
 
 ## 范围限制
 

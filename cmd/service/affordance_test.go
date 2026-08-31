@@ -26,8 +26,8 @@ func TestRenderAffordance(t *testing.T) {
 		"prerequisites": ["已获取 chat_id"],
 		"tips": ["富文本用 msg_type=post"],
 		"examples": [
-			{"description":"发一条文本","command":"lark-cli im messages create --params '{...}'"},
-			{"command":"lark-cli im messages list"},
+			{"description":"发一条文本","command":"work-cli im messages create --params '{...}'"},
+			{"command":"work-cli im messages list"},
 			{"description":"no command, skipped","command":""}
 		],
 		"related": ["im.messages.list"]
@@ -38,8 +38,8 @@ func TestRenderAffordance(t *testing.T) {
 		"Avoid when:", "群已解散",
 		"Prerequisites:", "已获取 chat_id",
 		"Tips:", "富文本用 msg_type=post",
-		"Examples:", "发一条文本", "lark-cli im messages create --params '{...}'",
-		"lark-cli im messages list", // example with no description -> bare command line
+		"Examples:", "发一条文本", "work-cli im messages create --params '{...}'",
+		"work-cli im messages list", // example with no description -> bare command line
 		"Related:", "im.messages.list",
 	} {
 		if !strings.Contains(out, want) {
@@ -65,7 +65,7 @@ func TestServiceMethod_AffordanceNotInLong(t *testing.T) {
 		"id": "messages.create", "path": "messages", "httpMethod": "POST", "description": "发送消息",
 		"affordance": map[string]interface{}{
 			"examples": []interface{}{
-				map[string]interface{}{"description": "发文本", "command": "lark-cli im messages create ..."},
+				map[string]interface{}{"description": "发文本", "command": "work-cli im messages create ..."},
 			},
 		},
 	}
@@ -89,14 +89,14 @@ func TestRenderAffordanceForCmd(t *testing.T) {
 		if service != "im" || methodID != "messages.create" {
 			return nil, false
 		}
-		return json.RawMessage(`{"use_when":["发文本消息"],"tips":["富文本用 msg_type=post"],"examples":[{"description":"发一条","command":"lark-cli im messages create ..."}]}`), true
+		return json.RawMessage(`{"use_when":["发文本消息"],"tips":["富文本用 msg_type=post"],"examples":[{"description":"发一条","command":"work-cli im messages create ..."}]}`), true
 	}
 
 	f, _, _, _ := cmdutil.TestFactory(t, testConfig)
 	withRef := map[string]interface{}{"id": "messages.create", "path": "messages", "httpMethod": "POST", "description": "发送消息"}
 	cmd := NewCmdServiceMethod(f, imSpec(), meta.FromMap(withRef), "create", "messages", nil)
 	block := RenderAffordanceForCmd(cmd)
-	for _, want := range []string{"When to use:", "发文本消息", "Tips:", "富文本用 msg_type=post", "Examples:", "lark-cli im messages create ..."} {
+	for _, want := range []string{"When to use:", "发文本消息", "Tips:", "富文本用 msg_type=post", "Examples:", "work-cli im messages create ..."} {
 		if !strings.Contains(block, want) {
 			t.Errorf("RenderAffordanceForCmd missing %q in:\n%s", want, block)
 		}
@@ -117,7 +117,7 @@ func TestPrepareMethodHelp(t *testing.T) {
 	orig := affordanceLookup
 	t.Cleanup(func() { affordanceLookup = orig })
 	affordanceLookup = func(_, _ string) (json.RawMessage, bool) {
-		return json.RawMessage(`{"use_when":["发文本消息"],"examples":[{"description":"发一条","command":"lark-cli im messages create ..."}]}`), true
+		return json.RawMessage(`{"use_when":["发文本消息"],"examples":[{"description":"发一条","command":"work-cli im messages create ..."}]}`), true
 	}
 
 	f, _, _, _ := cmdutil.TestFactory(t, testConfig)
@@ -169,7 +169,7 @@ func TestPrepareMethodHelpProjectsConcealedSchemaPointer(t *testing.T) {
 	}) {
 		t.Fatal("PrepareMethodHelpWithProjection returned false for a service-method command")
 	}
-	if strings.Contains(cmd.Long, "lark-cli schema") ||
+	if strings.Contains(cmd.Long, "work-cli schema") ||
 		strings.Contains(cmd.Long, "Full parameter schema:") {
 		t.Fatalf("concealed schema left a dead method-help pointer:\n%s", cmd.Long)
 	}
@@ -279,7 +279,7 @@ func TestDomainSkillReferenceRequiresReadableCommandSurface(t *testing.T) {
 	if err != nil {
 		t.Fatalf("skillref.New(): %v", err)
 	}
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	domain := &cobra.Command{Use: "im", Short: "IM"}
 	cmdmeta.SetSource(domain, cmdmeta.SourceService, false)
 	domain.AddCommand(&cobra.Command{Use: "messages", Run: func(*cobra.Command, []string) {}})
@@ -305,7 +305,7 @@ func TestDomainSkillReferenceUsesDeclaredAffordanceName(t *testing.T) {
 	if err != nil {
 		t.Fatalf("skillref.New(): %v", err)
 	}
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	domain := &cobra.Command{Use: "docs", Short: "Docs"}
 	cmdmeta.SetSource(domain, cmdmeta.SourceService, false)
 	cmdmeta.SetDomain(domain, "docs")
@@ -333,7 +333,7 @@ func TestPrepareDomainHelpDisplaysConfiguredSkills(t *testing.T) {
 		"lark-drive/SKILL.md": {Data: []byte("# drive")},
 	}
 
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	domain := &cobra.Command{Use: "docs", Short: "Docs"}
 	cmdmeta.SetSource(domain, cmdmeta.SourceService, false)
 	cmdmeta.SetDomain(domain, "docs")
@@ -370,7 +370,7 @@ func TestPrepareDomainHelpDisplaysConfiguredSkills(t *testing.T) {
 	cmdmeta.SetSource(remapped, cmdmeta.SourceService, false)
 	cmdmeta.SetDomain(remapped, "docs")
 	remapped.AddCommand(&cobra.Command{Use: "documents", Run: func(*cobra.Command, []string) {}})
-	remappedRoot := &cobra.Command{Use: "lark-cli"}
+	remappedRoot := &cobra.Command{Use: "work-cli"}
 	remappedRoot.AddCommand(remapped)
 
 	if !PrepareDomainHelpWithReferences(remapped, remappedContent, resolver) {
@@ -461,7 +461,7 @@ func TestPrepareDomainHelp_GatesGuidePointerOnFS(t *testing.T) {
 	}
 	const want = "Consume and manage real-time events\n\n" +
 		"Risk levels (read | write | high-risk-write) appear in each command's --help; high-risk-write requires --yes, only after the user confirms.\n\n" +
-		"Domain guide (concepts, command choice, conventions): lark-cli skills read lark-event"
+		"Domain guide (concepts, command choice, conventions): work-cli skills read lark-event"
 	if present.Long != want {
 		t.Errorf("single-skill domain help changed\n got: %q\nwant: %q", present.Long, want)
 	}

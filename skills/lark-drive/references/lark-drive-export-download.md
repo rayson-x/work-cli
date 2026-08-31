@@ -9,22 +9,22 @@
 
 ```bash
 # 使用服务端返回的文件名下载到当前目录
-lark-cli drive +export-download \
+work-cli drive +export-download \
   --file-token "<EXPORTED_FILE_TOKEN>"
 
 # 下载到指定目录
-lark-cli drive +export-download \
+work-cli drive +export-download \
   --file-token "<EXPORTED_FILE_TOKEN>" \
   --output-dir ./exports
 
 # 指定本地文件名
-lark-cli drive +export-download \
+work-cli drive +export-download \
   --file-token "<EXPORTED_FILE_TOKEN>" \
   --file-name "weekly-report.pdf" \
   --output-dir ./exports
 
 # 允许覆盖
-lark-cli drive +export-download \
+work-cli drive +export-download \
   --file-token "<EXPORTED_FILE_TOKEN>" \
   --overwrite
 ```

@@ -81,11 +81,11 @@ func (r *Reader) ListPath(arg string) ([]DirEntry, string, error) {
 		if err != nil {
 			return nil, "", errs.NewValidationError(errs.SubtypeInvalidArgument,
 				"path %q not found in skill %q", sub, name).
-				WithHint("run 'lark-cli skills list " + name + "' to see files in this skill")
+				WithHint("run 'work-cli skills list " + name + "' to see files in this skill")
 		}
 		if !info.IsDir() {
 			return nil, "", errs.NewValidationError(errs.SubtypeInvalidArgument,
-				"path %q is a file, not a directory; use 'lark-cli skills read %s/%s' to read it", sub, name, cleaned)
+				"path %q is a file, not a directory; use 'work-cli skills read %s/%s' to read it", sub, name, cleaned)
 		}
 	}
 	entries, err := fs.ReadDir(r.fsys, dir)
@@ -163,7 +163,7 @@ func (r *Reader) ensureSkill(name string) error {
 
 func unknownSkill(name string) error {
 	return errs.NewValidationError(errs.SubtypeInvalidArgument, "unknown skill %q", name).
-		WithHint("run 'lark-cli skills list' to see available skills")
+		WithHint("run 'work-cli skills list' to see available skills")
 }
 
 // cleanSubPath returns the cleaned form of relpath, rejecting absolute paths and
@@ -194,7 +194,7 @@ func (r *Reader) ReadReference(name, relpath string) ([]byte, string, error) {
 	if err != nil {
 		return nil, "", errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"reference %q not found in skill %q", relpath, name).
-			WithHint("run 'lark-cli skills list " + name + "' to see files in this skill")
+			WithHint("run 'work-cli skills list " + name + "' to see files in this skill")
 	}
 	if info.IsDir() {
 		return nil, "", errs.NewValidationError(errs.SubtypeInvalidArgument,

@@ -24,7 +24,7 @@ func TestDrive_MemberRemoveWorkflowAsUser(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := CreateDriveFolder(t, t, ctx, "lark-cli-e2e-member-remove-"+suffix, "user", "")
+	folderToken := CreateDriveFolder(t, t, ctx, "work-cli-e2e-member-remove-"+suffix, "user", "")
 	docToken := createMemberRemoveWorkflowDoc(t, ctx, folderToken, suffix)
 	memberOpenID := requireDriveMemberFixture(t)
 

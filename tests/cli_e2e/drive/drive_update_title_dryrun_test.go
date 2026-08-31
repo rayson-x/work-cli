@@ -271,7 +271,7 @@ func TestDriveUpdateTitleDryRun_RedirectsAppsToAppsUpdate(t *testing.T) {
 			if !strings.Contains(result.Stderr, "does not support Miaoda apps") {
 				t.Fatalf("stderr should name the apps limitation\nstderr:\n%s", result.Stderr)
 			}
-			if !strings.Contains(result.Stderr, "lark-cli apps --help") {
+			if !strings.Contains(result.Stderr, "work-cli apps --help") {
 				t.Fatalf("stderr should redirect to the apps domain\nstderr:\n%s", result.Stderr)
 			}
 		})

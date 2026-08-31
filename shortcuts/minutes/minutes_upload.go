@@ -32,7 +32,7 @@ var MinutesUpload = common.Shortcut{
 		{Name: "file-token", Desc: "file_token of a supported audio/video file already uploaded to Drive", Required: true},
 	},
 	Tips: []string{
-		"This shortcut only accepts --file-token. Upload the local media file to Drive first with `lark-cli drive +upload`.",
+		"This shortcut only accepts --file-token. Upload the local media file to Drive first with `work-cli drive +upload`.",
 		minutesUploadSupportedFormatsTip,
 		minutesUploadLimitsTip,
 	},

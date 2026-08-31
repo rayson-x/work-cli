@@ -15,7 +15,7 @@
 //     while waiting on I/O / another process.
 //   - lockGlobalConfig is a cross-process file lock, keyed by the writable
 //     global Git config file path, that serializes the read-modify-write of
-//     that file across concurrent lark-cli processes. It sits below lockApp
+//     that file across concurrent work-cli processes. It sits below lockApp
 //     (which is finer-grained, per app) and above lockURL.
 //   - lockURL is an in-process sync.Mutex that never fails and blocks
 //     indefinitely; holding it while waiting on a file lock would risk
@@ -76,7 +76,7 @@ func lockApp(appID string) (func(), error) {
 // lockGlobalConfig acquires a cross-process file lock that serializes the
 // read-modify-write of the writable global Git config file identified by
 // origin (a git "file:" origin or a bare path). It is keyed by the config file
-// path so concurrent lark-cli processes editing the same global config are
+// path so concurrent work-cli processes editing the same global config are
 // serialized while edits to different config files proceed independently.
 //
 // Lock ordering: lockGlobalConfig must be taken AFTER lockApp and BEFORE

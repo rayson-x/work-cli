@@ -23,12 +23,12 @@
 ## 示例
 
 ```bash
-lark-cli apps +env-pull --app-id <app_id>
+work-cli apps +env-pull --app-id <app_id>
 ```
 
 ## 失败处理
 
-`missing_scope`（没拿到 `spark:app:read`）时，按 lark-shared 引导 `lark-cli auth login --domain apps`。其余失败优先转述 `error.hint` / `error.message`。
+`missing_scope`（没拿到 `spark:app:read`）时，按 lark-shared 引导 `work-cli auth login --domain apps`。其余失败优先转述 `error.hint` / `error.message`。
 
 ## 参考
 

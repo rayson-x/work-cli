@@ -25,7 +25,7 @@ func TestMain(m *testing.M) {
 		// order — do not seed or eagerly initialize here.
 		os.Exit(m.Run())
 	}
-	root, err := os.MkdirTemp("", "lark-cli-cmd-test-*")
+	root, err := os.MkdirTemp("", "work-cli-cmd-test-*")
 	if err != nil {
 		println("cmd test setup: MkdirTemp failed:", err.Error())
 		os.Exit(2)

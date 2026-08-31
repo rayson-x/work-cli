@@ -83,8 +83,8 @@ const (
 	// them as hybrids.
 	//
 	// Without this signal, a user enabling a policy.yml with
-	// max_risk: read would see every group (`lark-cli drive --help`,
-	// `lark-cli docs --help`) return exit 2 + risk_not_annotated,
+	// max_risk: read would see every group (`work-cli drive --help`,
+	// `work-cli docs --help`) return exit 2 + risk_not_annotated,
 	// because the guard's RunE flips Runnable()=true and the engine
 	// then demands a risk_level annotation on the group itself.
 	AnnotationPureGroup = "lark:cmd_pure_group"

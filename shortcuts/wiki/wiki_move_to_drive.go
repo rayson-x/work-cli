@@ -385,7 +385,7 @@ func wikiMoveToDriveTaskResultCommand(taskID string, identity core.Identity, pro
 		profileFlag = fmt.Sprintf(" --profile %s", profileName)
 	}
 	return fmt.Sprintf(
-		"lark-cli%s drive +task_result --scenario wiki_move_to_drive --task-id %s --as %s",
+		"work-cli%s drive +task_result --scenario wiki_move_to_drive --task-id %s --as %s",
 		profileFlag,
 		taskID,
 		asFlag,

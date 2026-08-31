@@ -127,7 +127,7 @@ func buildPermissionGrantResult(runtime *RuntimeContext, status, userOpenID, mes
 func permissionGrantLoginRecovery(runtime *RuntimeContext) string {
 	hint := recovery.Join("", recovery.Command(
 		recovery.TargetAuthLogin,
-		"Run `lark-cli auth login` and retry",
+		"Run `work-cli auth login` and retry",
 	)).WithFallback(
 		"Establish a current user identity through this distribution's supported authorization flow and retry",
 	)

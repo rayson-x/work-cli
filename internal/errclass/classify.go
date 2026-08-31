@@ -258,16 +258,16 @@ func configRecoveryHint(subtype errs.Subtype) recovery.Hint {
 	switch subtype {
 	case errs.SubtypeInvalidClient:
 		return recovery.Join("", recovery.Command(recovery.TargetConfigInit,
-			"run `lark-cli config init` to set valid app_id and app_secret")).
+			"run `work-cli config init` to set valid app_id and app_secret")).
 			WithFallback("configure valid app credentials through this distribution's supported setup flow")
 	case errs.SubtypeNotConfigured:
 		return recovery.Join("", recovery.Command(recovery.TargetConfigInit,
-			"run `lark-cli config init` to set up app_id and app_secret")).
+			"run `work-cli config init` to set up app_id and app_secret")).
 			WithFallback("configure app credentials through this distribution's supported setup flow")
 	case errs.SubtypeInvalidConfig:
 		return recovery.Join("; ",
 			recovery.Text("check the config file for syntax errors"),
-			recovery.Command(recovery.TargetConfigInit, "rerun `lark-cli config init` to reset"),
+			recovery.Command(recovery.TargetConfigInit, "rerun `work-cli config init` to reset"),
 		)
 	}
 	return recovery.Join("")
@@ -334,7 +334,7 @@ func buildPermissionErrorFromFacts(p errs.Problem, missing []string, cc Classify
 	// apply for a missing scope. The typed machine field is attached only to
 	// SubtypeAppScopeNotApplied, whose primary recovery is developer action.
 	// Other authorization subtypes route according to identity: user calls may
-	// recover through `lark-cli auth login`, while bot calls must stay on
+	// recover through `work-cli auth login`, while bot calls must stay on
 	// token/app/bot/admin recovery paths. For bot scope failures the URL may
 	// still be embedded in the human hint, but carrying it as a machine field on
 	// every permission envelope risks pointing an end user at a console they

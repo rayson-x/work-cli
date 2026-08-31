@@ -318,7 +318,7 @@ func TestBaseTableCopyAllWithoutWaitReturnsTaskAndNextCommand(t *testing.T) {
 	if data["next_action"] != "poll_status" {
 		t.Fatalf("next_action = %#v", data["next_action"])
 	}
-	wantNext := "lark-cli base +table-copy-status --base-token app_x --task-id ct1.token --as user"
+	wantNext := "work-cli base +table-copy-status --base-token app_x --task-id ct1.token --as user"
 	if data["next_command"] != wantNext {
 		t.Fatalf("next_command = %#v, want %q", data["next_command"], wantNext)
 	}
@@ -939,7 +939,7 @@ func TestBaseTableCopyWaitAuthErrorsPreserveContinuation(t *testing.T) {
 			if decodeErr := json.Unmarshal(stdout.Bytes(), &envelope); decodeErr != nil {
 				t.Fatalf("decode recovery stdout: %v\nraw=%s", decodeErr, stdout.String())
 			}
-			wantNext := "lark-cli base +table-copy-status --base-token app_x --task-id ct1.token --as user"
+			wantNext := "work-cli base +table-copy-status --base-token app_x --task-id ct1.token --as user"
 			if envelope.OK ||
 				envelope.Data.State != tableCopyStateInit ||
 				envelope.Data.Completed ||

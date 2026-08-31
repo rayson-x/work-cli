@@ -116,7 +116,7 @@ func TestAgentTimeoutHint_CarriesKeyInfo(t *testing.T) {
 				t.Errorf("%s AgentTimeoutHint missing %q: %s", lang, want, hint)
 			}
 		}
-		if strings.Contains(hint, "lark-cli auth login --no-wait --json") {
+		if strings.Contains(hint, "work-cli auth login --no-wait --json") {
 			t.Errorf("%s AgentTimeoutHint recommends an invalid optionless retry: %s", lang, hint)
 		}
 	}
@@ -124,8 +124,8 @@ func TestAgentTimeoutHint_CarriesKeyInfo(t *testing.T) {
 
 func TestAgentTimeoutHint_DefaultBytesStable(t *testing.T) {
 	wantSHA256 := map[i18n.Lang]string{
-		i18n.LangZhCN: "9b9d23f6785d7a259de98620184fb05a4952464687a9f60982ce007aee39451e",
-		i18n.LangEnUS: "f39c9cd432668401040a4eda43b5ced0d4f20c0b8f55e06ef1773bc4048c6071",
+		i18n.LangZhCN: "e892dfcdb5e417dcffae47961c60670983fb6610f6b3330bd3287f56c44c687c",
+		i18n.LangEnUS: "85dad356930188a4bf88fc093f5753dc951f65087a468e2e7ff1544e3ef6e573",
 	}
 	for lang, want := range wantSHA256 {
 		hint := getLoginMsg(lang).AgentTimeoutHint(recovery.RenderContext{})
@@ -140,8 +140,8 @@ func TestAgentTimeoutHint_ExplicitProfilePreservesStartAndResume(t *testing.T) {
 	for _, lang := range []i18n.Lang{i18n.LangZhCN, i18n.LangEnUS} {
 		hint := getLoginMsg(lang).AgentTimeoutHint(context)
 		for _, want := range []string{
-			"`lark-cli auth login --profile='team-beta'`",
-			`"lark-cli auth login --profile='team-beta' --device-code <code>"`,
+			"`work-cli auth login --profile='team-beta'`",
+			`"work-cli auth login --profile='team-beta' --device-code <code>"`,
 		} {
 			if !strings.Contains(hint, want) {
 				t.Errorf("%s profile-aware AgentTimeoutHint missing %q: %s", lang, want, hint)

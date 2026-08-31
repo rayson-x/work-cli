@@ -43,7 +43,7 @@ func TestDrive_StatusWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-drive-status-" + suffix
+	folderName := "work-cli-e2e-drive-status-" + suffix
 	folderToken := createDriveFolder(t, parentT, ctx, folderName, "")
 
 	// Local working directory. +status's --local-dir must be relative to
@@ -248,7 +248,7 @@ func TestDrive_StatusQuickWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-drive-status-quick-" + suffix
+	folderName := "work-cli-e2e-drive-status-quick-" + suffix
 	folderToken := createDriveFolder(t, parentT, ctx, folderName, "")
 
 	workDir := t.TempDir()

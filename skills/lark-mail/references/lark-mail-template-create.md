@@ -6,7 +6,7 @@
 
 不要用此命令发送邮件；模板只是预置内容，实际发信请使用 `+send` / `+draft-create` 等 shortcut 配合 `--template-id` 套用。
 
-如需修改已有模板，使用 [`lark-cli mail +template-update`](./lark-mail-template-update.md)。
+如需修改已有模板，使用 [`work-cli mail +template-update`](./lark-mail-template-update.md)。
 
 ## 安全约束
 
@@ -18,26 +18,26 @@
 
 ```bash
 # 纯 HTML 模板
-lark-cli mail +template-create --as user \
+work-cli mail +template-create --as user \
   --name '周报模板' \
   --subject '本周进展' \
   --template-content '<p>大家好，请见本周进展：</p><ul><li>……</li></ul>'
 
 # 带 HTML 内嵌图片 + 非 inline 附件
-lark-cli mail +template-create --as user \
+work-cli mail +template-create --as user \
   --name '客户通知模板' \
   --subject '产品更新' \
   --template-content '<p>新版本上线：</p><img src="./banner.png"><p>附上发版说明。</p>' \
   --attach './release-notes.pdf'
 
 # 从文件加载正文
-lark-cli mail +template-create --as user \
+work-cli mail +template-create --as user \
   --name '请假申请' \
   --template-content-file './leave.html' \
   --to 'manager@example.com,hr@example.com'
 
 # Dry Run
-lark-cli mail +template-create --as user \
+work-cli mail +template-create --as user \
   --name '周报模板' --template-content '<p>x</p>' --dry-run
 ```
 
@@ -125,6 +125,6 @@ lark-cli mail +template-create --as user \
 - 更新模板：[`+template-update`](./lark-mail-template-update.md)
 - 套用模板发信：在 `+send` / `+draft-create` / `+reply` / `+reply-all` / `+forward` 中使用 `--template-id`
 - 原生 API：
-  - `lark-cli mail user_mailbox.templates list --params '{"user_mailbox_id":"me"}'` — 列出模板
-  - `lark-cli mail user_mailbox.templates get --params '{"user_mailbox_id":"me","template_id":"<id>"}'` — 获取完整模板
-  - `lark-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'` — 删除
+  - `work-cli mail user_mailbox.templates list --params '{"user_mailbox_id":"me"}'` — 列出模板
+  - `work-cli mail user_mailbox.templates get --params '{"user_mailbox_id":"me","template_id":"<id>"}'` — 获取完整模板
+  - `work-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'` — 删除

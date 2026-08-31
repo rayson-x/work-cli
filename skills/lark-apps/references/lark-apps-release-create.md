@@ -1,6 +1,6 @@
 # apps +release-create
 
-为妙搭应用创建发布 release。运行时命令事实以 `lark-cli apps +release-create --help` 为准。
+为妙搭应用创建发布 release。运行时命令事实以 `work-cli apps +release-create --help` 为准。
 
 ## 何时用
 
@@ -15,8 +15,8 @@
 ## 示例
 
 ```bash
-lark-cli apps +release-create --app-id app_xxx
-lark-cli apps +release-create --app-id app_xxx --branch sprint/default --dry-run
+work-cli apps +release-create --app-id app_xxx
+work-cli apps +release-create --app-id app_xxx --branch sprint/default --dry-run
 ```
 
 ## 输出契约
@@ -29,4 +29,4 @@ lark-cli apps +release-create --app-id app_xxx --branch sprint/default --dry-run
 
 ## Agent 规则
 
-`+release-create` 部署的是远端 `sprint/default` 上已 push 的代码，不是本地工作区——本地若有你修改但未推送的改动，需要先 `git add` + `git commit` 并 `git push` 到 `sprint/default`，否则这些改动不会进入这次发布。`git push` 如遇认证失败、401/403、credential helper 缺失或 token 过期，先执行 `lark-cli apps +git-credential-init --app-id <app_id> --as user` 刷新本地 Git 凭证，再重试原 git 命令；刷新凭证也失败时，停止并向用户报告错误，不要换路；不要手动复制 token 或改 remote URL。发布后若 status 是 `publishing`，用 [`+release-get`](lark-apps-release-get.md) 查询。`+release-create` 部署上线属高影响动作——作为别的命令的连带前置时，按 SKILL.md「高影响动作：确认与预授权」先征得用户同意再发布。
+`+release-create` 部署的是远端 `sprint/default` 上已 push 的代码，不是本地工作区——本地若有你修改但未推送的改动，需要先 `git add` + `git commit` 并 `git push` 到 `sprint/default`，否则这些改动不会进入这次发布。`git push` 如遇认证失败、401/403、credential helper 缺失或 token 过期，先执行 `work-cli apps +git-credential-init --app-id <app_id> --as user` 刷新本地 Git 凭证，再重试原 git 命令；刷新凭证也失败时，停止并向用户报告错误，不要换路；不要手动复制 token 或改 remote URL。发布后若 status 是 `publishing`，用 [`+release-get`](lark-apps-release-get.md) 查询。`+release-create` 部署上线属高影响动作——作为别的命令的连带前置时，按 SKILL.md「高影响动作：确认与预授权」先征得用户同意再发布。

@@ -61,7 +61,7 @@ func TestDriveSearchExecutePassesThroughNotice(t *testing.T) {
 func TestMissingDriveSearchUserErrorProjectsOnlyAuthorizationCommand(t *testing.T) {
 	source := missingDriveSearchUserError("--mine")
 	sourceProblem, _ := errs.ProblemOf(source)
-	const visible = "--mine requires a logged-in user open_id, but none is configured; run `lark-cli auth login` or set user open_id in config"
+	const visible = "--mine requires a logged-in user open_id, but none is configured; run `work-cli auth login` or set user open_id in config"
 	if sourceProblem.Message != visible {
 		t.Fatalf("default message = %q, want byte-compatible %q", sourceProblem.Message, visible)
 	}

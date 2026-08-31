@@ -8,19 +8,19 @@
 
 ```bash
 # 批量创建 2 个 Objective，各带 2 个 KR。
-lark-cli okr +batch-create \
+work-cli okr +batch-create \
   --cycle-id 7000000000000000001 \
   --input '[{"text":"提升产品用户体验","mention":["ou_xxxxxxxx"],"notes":"重点关注核心路径体验","krs":[{"text":"页面加载速度提升 50%","mention":["ou_yyyyyyyy"]},{"text":"用户满意度达到 4.8 分"}]},{"text":"拓展新市场份额","krs":[{"text":"新增 10 个城市覆盖"},{"text":"市场份额提升至 25%"}]}]' \
   --as user
 
 # 从文件读取输入
-lark-cli okr +batch-create \
+work-cli okr +batch-create \
   --cycle-id 7000000000000000001 \
   --input @okr_batch.json \
   --as user
 
 # 预览 API 调用（Dry-run）
-lark-cli okr +batch-create \
+work-cli okr +batch-create \
   --cycle-id 7000000000000000001 \
   --input @okr_batch.json \
   --dry-run \
@@ -42,7 +42,7 @@ lark-cli okr +batch-create \
 | `--dry-run`      | 否  | —         | 预览 API 调用而不实际执行                                            |
 | `--format`       | 否  | `json`    | 输出格式                                                       |
 
-> **分类提示**：当用户明确要求设置 Objective 分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时，可以配置 category-id 字段进行创建。先运行 `lark-cli okr categories list --as user` 查看可用分类，然后选择一个语义合适且 `enabled=true` 的分类 ID 作为 `category-id`。分类创建后可以再调整；不必因为分类选择停下等待用户确认。
+> **分类提示**：当用户明确要求设置 Objective 分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时，可以配置 category-id 字段进行创建。先运行 `work-cli okr categories list --as user` 查看可用分类，然后选择一个语义合适且 `enabled=true` 的分类 ID 作为 `category-id`。分类创建后可以再调整；不必因为分类选择停下等待用户确认。
 
 ## 输入格式
 
@@ -77,7 +77,7 @@ lark-cli okr +batch-create \
 
 1. 使用 `+cycle-list` 获取可用的 OKR 周期 ID
 2. 构造 `--input` JSON 数组，包含要创建的 Objective 和 KR
-3. 执行 `lark-cli okr +batch-create --cycle-id <id> --input '...'`
+3. 执行 `work-cli okr +batch-create --cycle-id <id> --input '...'`
 
 ## 输出
 

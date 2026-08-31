@@ -638,8 +638,8 @@ func buildDraftEditPatchTemplate() map[string]interface{} {
 			"protected headers require `allow_protected_header_edits=true`",
 			"--set-priority high|normal|low controls draft priority via X-Cli-Priority header (CLI/OAPI specific). high → set_header X-Cli-Priority=1; low → set_header X-Cli-Priority=5; normal → remove_header X-Cli-Priority. Backend mail-data-access headersToPbBodyExtra recognizes X-Cli-Priority but not standard X-Priority/Importance for OAPI flow.",
 		},
-		"command_example":    "lark-cli mail +draft-edit --print-patch-template",
-		"patch_file_example": "lark-cli mail +draft-edit --draft-id d_xxx --patch-file ./patch.json",
+		"command_example":    "work-cli mail +draft-edit --print-patch-template",
+		"patch_file_example": "work-cli mail +draft-edit --draft-id d_xxx --patch-file ./patch.json",
 	}
 }
 

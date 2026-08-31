@@ -46,7 +46,7 @@ var AppsGitCredentialInit = common.Shortcut{
 	Description: "Initialize Git credentials and a URL-scoped Git helper for an app repository",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +git-credential-init --app-id <app_id>",
+		"Example: work-cli apps +git-credential-init --app-id <app_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -115,7 +115,7 @@ var AppsGitCredentialInit = common.Shortcut{
 				fmt.Fprintln(w)
 				fmt.Fprintln(w, "Git credential saved, but Git helper was not configured")
 				fmt.Fprintf(w, "Reason: %s\n", result.ConfigWarning)
-				fmt.Fprintf(w, "Next step: lark-cli apps +git-credential-init --app-id %s\n", result.AppID)
+				fmt.Fprintf(w, "Next step: work-cli apps +git-credential-init --app-id %s\n", result.AppID)
 				return
 			}
 			fmt.Fprintln(w)
@@ -132,7 +132,7 @@ var AppsGitCredentialRemove = common.Shortcut{
 	Description: "Remove local Git credentials and the URL-scoped Git helper for an app repository",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +git-credential-remove --app-id <app_id>",
+		"Example: work-cli apps +git-credential-remove --app-id <app_id>",
 	},
 	Scopes:    []string{},
 	AuthTypes: []string{"user"},
@@ -206,7 +206,7 @@ var AppsGitCredentialList = common.Shortcut{
 	Description: "List local Git credentials for app repositories",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +git-credential-list",
+		"Example: work-cli apps +git-credential-list",
 	},
 	Scopes:    []string{},
 	AuthTypes: []string{"user"},
@@ -235,7 +235,7 @@ var AppsGitCredentialList = common.Shortcut{
 			if len(records) == 0 {
 				fmt.Fprintln(w, "No Git credentials initialized")
 				fmt.Fprintln(w)
-				fmt.Fprintln(w, "Next step: lark-cli apps +git-credential-init --app-id <app_id>")
+				fmt.Fprintln(w, "Next step: work-cli apps +git-credential-init --app-id <app_id>")
 				return
 			}
 			tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
@@ -246,7 +246,7 @@ var AppsGitCredentialList = common.Shortcut{
 			_ = tw.Flush()
 			fmt.Fprintln(w)
 			fmt.Fprintln(w, "Profile switches do not remove old URL-scoped Git helpers automatically.")
-			fmt.Fprintln(w, "Cleanup: lark-cli apps +git-credential-remove --app-id <app_id>")
+			fmt.Fprintln(w, "Cleanup: work-cli apps +git-credential-remove --app-id <app_id>")
 		})
 		return nil
 	},
@@ -343,7 +343,7 @@ func runGitCredentialHelper(ctx context.Context, f *cmdutil.Factory, appID, acti
 		return nil
 	}
 	if appID == "" {
-		fmt.Fprintln(f.IOStreams.ErrOut, "Git credential unavailable: missing app_id; rerun lark-cli apps +git-credential-init --app-id <app_id>")
+		fmt.Fprintln(f.IOStreams.ErrOut, "Git credential unavailable: missing app_id; rerun work-cli apps +git-credential-init --app-id <app_id>")
 		return nil
 	}
 	manager := newGitCredentialManager(appID, f.Keychain, factoryIssuer{f: f})
@@ -458,7 +458,7 @@ func gitCredentialLocalError(action string, err error) error {
 		Category: errs.CategoryConfig,
 		Subtype:  errs.SubtypeInvalidConfig,
 		Message:  fmt.Sprintf("%s: %s", action, err),
-		Hint:     "retry the command; if the local Git credential state is damaged, rerun `lark-cli apps +git-credential-init --app-id <app_id>` or remove the app credential again",
+		Hint:     "retry the command; if the local Git credential state is damaged, rerun `work-cli apps +git-credential-init --app-id <app_id>` or remove the app credential again",
 	}, Cause: err}
 }
 

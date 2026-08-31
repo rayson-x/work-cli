@@ -9,22 +9,22 @@
 
 ```bash
 # 查询待办审批
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 
 # 查询已办审批
-lark-cli approval tasks query --params '{"topic":"2"}' --as user
+work-cli approval tasks query --params '{"topic":"2"}' --as user
 
 # 按关键词搜索任务列表
-lark-cli approval tasks query --params '{"topic":"1","keyword":"测试","page_size":10}' --as user
+work-cli approval tasks query --params '{"topic":"1","keyword":"测试","page_size":10}' --as user
 
 # 按任务时间范围筛选（秒级时间戳）
-lark-cli approval tasks query --params '{"topic":"1","start_timestamp":"<START_SECONDS>","end_timestamp":"<END_SECONDS>"}' --as user
+work-cli approval tasks query --params '{"topic":"1","start_timestamp":"<START_SECONDS>","end_timestamp":"<END_SECONDS>"}' --as user
 
 # 使用 page_token 翻页
-lark-cli approval tasks query --params '{"topic":"1","page_token":"example_page_token"}' --as user
+work-cli approval tasks query --params '{"topic":"1","page_token":"example_page_token"}' --as user
 
 # 表格格式输出，便于快速浏览
-lark-cli approval tasks query --params '{"topic":"1"}' --format table --as user
+work-cli approval tasks query --params '{"topic":"1"}' --format table --as user
 ```
 
 ## 参数

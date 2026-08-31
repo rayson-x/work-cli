@@ -23,9 +23,9 @@ func TestDocs_CreateAndFetchWorkflowAsBot(t *testing.T) {
 
 	parentT := t
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-docs-folder-" + suffix
-	docTitle := "lark-cli-e2e-docs-" + suffix
-	docContent := "# Test Document\n\nThis document was created by lark-cli e2e test."
+	folderName := "work-cli-e2e-docs-folder-" + suffix
+	docTitle := "work-cli-e2e-docs-" + suffix
+	docContent := "# Test Document\n\nThis document was created by work-cli e2e test."
 
 	const defaultAs = "bot"
 	folderToken := drive.CreateDriveFolder(t, parentT, ctx, folderName, defaultAs, "")
@@ -51,7 +51,7 @@ func TestDocs_CreateAndFetchWorkflowAsBot(t *testing.T) {
 		result.AssertStdoutStatus(t, true)
 		content := gjson.Get(result.Stdout, "data.document.content").String()
 		assert.Contains(t, content, docTitle)
-		assert.Contains(t, content, "This document was created by lark-cli e2e test.")
+		assert.Contains(t, content, "This document was created by work-cli e2e test.")
 	})
 
 	t.Run("script parse by token", func(t *testing.T) {
@@ -81,8 +81,8 @@ func TestDocs_CreateAndFetchWorkflowAsUser(t *testing.T) {
 
 	parentT := t
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-user-docs-folder-" + suffix
-	docTitle := "lark-cli-e2e-user-docs-" + suffix
+	folderName := "work-cli-e2e-user-docs-folder-" + suffix
+	docTitle := "work-cli-e2e-user-docs-" + suffix
 	docContent := "# User Test Document\n\nCreated with user access token."
 	var docToken string
 	const defaultAs = "user"

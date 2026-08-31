@@ -4,7 +4,7 @@
 
 Create a group chat. Supports both user identity (`--as user`) and bot identity (`--as bot`). You can specify the group name, description, members (users/bots), owner, chat type (private/public), and group mode. Set `--chat-mode topic` to create a topic chat.
 
-This skill maps to the shortcut: `lark-cli im +chat-create` (internally calls `POST /open-apis/im/v1/chats`).
+This skill maps to the shortcut: `work-cli im +chat-create` (internally calls `POST /open-apis/im/v1/chats`).
 
 - `--as bot` requires the `im:chat:create` scope.
 - `--as user` requires the `im:chat:create_by_user` scope.
@@ -13,40 +13,40 @@ This skill maps to the shortcut: `lark-cli im +chat-create` (internally calls `P
 
 ```bash
 # Create a private group (default)
-lark-cli im +chat-create --name "My Group"
+work-cli im +chat-create --name "My Group"
 
 # Create a public group (name is required and must be at least 2 characters)
-lark-cli im +chat-create --name "Public Group" --type public
+work-cli im +chat-create --name "Public Group" --type public
 
 # Create a topic chat
-lark-cli im +chat-create --name "Topic Group" --chat-mode topic
+work-cli im +chat-create --name "Topic Group" --chat-mode topic
 
 # Specify the group owner
-lark-cli im +chat-create --name "My Group" --owner ou_xxx
+work-cli im +chat-create --name "My Group" --owner ou_xxx
 
 # Invite user members (comma-separated open_ids, up to 50)
-lark-cli im +chat-create --name "My Group" --users "ou_aaa,ou_bbb"
+work-cli im +chat-create --name "My Group" --users "ou_aaa,ou_bbb"
 
 # Invite bot members (comma-separated app IDs, up to 5)
-lark-cli im +chat-create --name "My Group" --bots "cli_aaa,cli_bbb"
+work-cli im +chat-create --name "My Group" --bots "cli_aaa,cli_bbb"
 
 # Invite both users and bots
-lark-cli im +chat-create --name "My Group" --users "ou_aaa" --bots "cli_aaa"
+work-cli im +chat-create --name "My Group" --users "ou_aaa" --bots "cli_aaa"
 
 # Make the creating bot a group manager (bot identity only)
-lark-cli im +chat-create --name "My Group" --set-bot-manager --as bot
+work-cli im +chat-create --name "My Group" --set-bot-manager --as bot
 
 # JSON output
-lark-cli im +chat-create --name "My Group" --format json
+work-cli im +chat-create --name "My Group" --format json
 
 # Create a group with bot identity
-lark-cli im +chat-create --name "My Group" --users "ou_aaa" --as bot
+work-cli im +chat-create --name "My Group" --users "ou_aaa" --as bot
 
 # Create a group with user identity
-lark-cli im +chat-create --name "My Group" --users "ou_aaa,ou_bbb" --as user
+work-cli im +chat-create --name "My Group" --users "ou_aaa,ou_bbb" --as user
 
 # Preview the request without creating anything
-lark-cli im +chat-create --name "My Group" --dry-run
+work-cli im +chat-create --name "My Group" --dry-run
 ```
 
 ## Parameters
@@ -73,11 +73,11 @@ lark-cli im +chat-create --name "My Group" --dry-run
 
 Bot may fail to invite users who are mutually invisible to it during group creation (error 232043). To avoid this, use the **two-step flow** below instead of passing other users' open_ids in `--users`.
 
-1. **Get the current user's open_id:** Run `lark-cli contact +search-user --query "<name or email>"` to retrieve it.
+1. **Get the current user's open_id:** Run `work-cli contact +search-user --query "<name or email>"` to retrieve it.
 2. **Create the group — by default include the current user:**
 
    ```bash
-   lark-cli im +chat-create --name "<group name>" \
+   work-cli im +chat-create --name "<group name>" \
      --users "<current user open_id>" --as bot
    ```
 
@@ -86,7 +86,7 @@ Bot may fail to invite users who are mutually invisible to it during group creat
 3. **Add other members via user identity** (requires the current user to be in the group):
 
    ```bash
-   lark-cli im chat.members create \
+   work-cli im chat.members create \
      --params '{"chat_id":"<chat_id from step 2>","member_id_type":"open_id","succeed_type":1}' \
      --data '{"id_list":["ou_aaa","ou_bbb"]}' \
      --as user
@@ -101,7 +101,7 @@ Bot may fail to invite users who are mutually invisible to it during group creat
 User identity does not have the bot visibility limitation, so you can create the group and invite members in one step:
 
 ```bash
-lark-cli im +chat-create --name "<group name>" --users "ou_aaa,ou_bbb" --as user
+work-cli im +chat-create --name "<group name>" --users "ou_aaa,ou_bbb" --as user
 ```
 
 The authorized user is automatically the group creator and member.
@@ -122,13 +122,13 @@ The authorized user is automatically the group creator and member.
 ### Scenario 1: Create a group and specify the owner
 
 ```bash
-lark-cli im +chat-create --name "Project Discussion Group" --owner ou_xxx
+work-cli im +chat-create --name "Project Discussion Group" --owner ou_xxx
 ```
 
 ### Scenario 2: Create a group and invite users and a bot
 
 ```bash
-lark-cli im +chat-create --name "Project Discussion Group" \
+work-cli im +chat-create --name "Project Discussion Group" \
   --owner ou_xxx \
   --users "ou_aaa,ou_bbb" \
   --bots "cli_aaa"
@@ -137,8 +137,8 @@ lark-cli im +chat-create --name "Project Discussion Group" \
 ### Scenario 3: Create a group and send a welcome message
 
 ```bash
-CHAT_ID=$(lark-cli im +chat-create --name "New Group" --format json | jq -r '.data.chat_id')
-lark-cli im +messages-send --chat-id "$CHAT_ID" --text "Welcome, everyone!"
+CHAT_ID=$(work-cli im +chat-create --name "New Group" --format json | jq -r '.data.chat_id')
+work-cli im +messages-send --chat-id "$CHAT_ID" --text "Welcome, everyone!"
 ```
 
 ## Common Errors and Troubleshooting

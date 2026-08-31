@@ -181,7 +181,7 @@ func init() {
 func TestForkMainWiresEmbeddedSkillsWithoutOverlay(t *testing.T) {
 	bin := buildFork(t, "smoke", noopPlugin)
 	t.Setenv("PATH", filepath.Dir(bin)+string(os.PathListSeparator)+os.Getenv("PATH"))
-	const cli = "lark-cli"
+	const cli = "work-cli"
 
 	res := run(t, cli, "skills", "list")
 	if res.exit != 0 || !gjson.Valid(res.stdout) {
@@ -199,7 +199,7 @@ func TestForkMainWiresEmbeddedSkillsWithoutOverlay(t *testing.T) {
 	docsHelp := run(t, cli, "docs", "--help")
 	if docsHelp.exit != 0 ||
 		!strings.Contains(docsHelp.stdout,
-			"Domain guide (concepts, command choice, conventions): lark-cli skills read lark-doc") ||
+			"Domain guide (concepts, command choice, conventions): work-cli skills read lark-doc") ||
 		strings.Contains(docsHelp.stdout, "Domain skills (concepts, command choice, conventions):") {
 		t.Fatalf("docs help canonical skill pointer missing: exit=%d stdout=%s stderr=%s",
 			docsHelp.exit, docsHelp.stdout, docsHelp.stderr)
@@ -229,7 +229,7 @@ func TestForkMainWiresEmbeddedSkillsWithoutOverlay(t *testing.T) {
 		}
 		for _, reference := range tc.references {
 			path := "references/" + reference
-			pointer := "lark-cli skills read lark-doc/" + path
+			pointer := "work-cli skills read lark-doc/" + path
 			if !strings.Contains(help.stdout, pointer) {
 				t.Errorf("docs %s reference pointer %q missing; stdout=%s",
 					tc.shortcut, pointer, help.stdout)
@@ -262,8 +262,8 @@ func TestForkDomainHelpDisplaysConfiguredSkills(t *testing.T) {
 	if !strings.Contains(help.stdout, "Domain skills (concepts, command choice, conventions):") {
 		t.Fatalf("configured domain skills did not render as a list:\n%s", help.stdout)
 	}
-	docAt := strings.Index(help.stdout, "lark-cli skills read lark-doc")
-	aAt := strings.Index(help.stdout, "lark-cli skills read lark-a")
+	docAt := strings.Index(help.stdout, "work-cli skills read lark-doc")
+	aAt := strings.Index(help.stdout, "work-cli skills read lark-a")
 	if docAt < 0 || aAt < 0 || docAt >= aAt {
 		t.Fatalf("domain skill pointers missing or out of order (doc=%d a=%d):\n%s", docAt, aAt, help.stdout)
 	}
@@ -283,7 +283,7 @@ func TestForkDomainHelpDisplaysConfiguredSkills(t *testing.T) {
 		t.Fatalf("docs +create help: exit=%d stdout=%s stderr=%s",
 			commandHelp.exit, commandHelp.stdout, commandHelp.stderr)
 	}
-	if strings.Contains(commandHelp.stdout, "lark-cli skills read lark-a") {
+	if strings.Contains(commandHelp.stdout, "work-cli skills read lark-a") {
 		t.Fatalf("domain-only skill leaked into command help:\n%s", commandHelp.stdout)
 	}
 }
@@ -381,15 +381,15 @@ func TestForkSkillsBaseReplacementAndReferenceRemapWithoutHostBase(t *testing.T)
 			help.exit, help.stdout, help.stderr)
 	}
 	for _, want := range []string{
-		"lark-cli skills read acme-docx/guides/create.md",
-		"lark-cli skills read acme-docx/references/lark-doc-xml.md",
-		"lark-cli skills read acme-docx/references/lark-doc-md.md",
+		"work-cli skills read acme-docx/guides/create.md",
+		"work-cli skills read acme-docx/references/lark-doc-xml.md",
+		"work-cli skills read acme-docx/references/lark-doc-md.md",
 	} {
 		if !strings.Contains(help.stdout, want) {
 			t.Errorf("remapped docs help missing %q:\n%s", want, help.stdout)
 		}
 	}
-	if strings.Contains(help.stdout, "lark-cli skills read lark-doc") {
+	if strings.Contains(help.stdout, "work-cli skills read lark-doc") {
 		t.Errorf("remapped docs help leaked canonical runtime name:\n%s", help.stdout)
 	}
 
@@ -424,16 +424,16 @@ func TestForkSkillsBaseReplacementAndReferenceRemapWithoutHostBase(t *testing.T)
 	}
 	hint := gjson.Get(legacy.stderr, "error.hint").String()
 	for _, want := range []string{
-		"`lark-cli skills read acme-docx`",
-		"`lark-cli skills read acme-docx/references/lark-doc-update.md`",
-		"`lark-cli skills read acme-docx/references/lark-doc-xml.md`",
-		"`lark-cli skills read acme-docx/references/lark-doc-md.md`",
+		"`work-cli skills read acme-docx`",
+		"`work-cli skills read acme-docx/references/lark-doc-update.md`",
+		"`work-cli skills read acme-docx/references/lark-doc-xml.md`",
+		"`work-cli skills read acme-docx/references/lark-doc-md.md`",
 	} {
 		if !strings.Contains(hint, want) {
 			t.Errorf("remapped v2-only hint missing %q: %q", want, hint)
 		}
 	}
-	if strings.Contains(hint, "lark-cli skills read lark-doc") {
+	if strings.Contains(hint, "work-cli skills read lark-doc") {
 		t.Errorf("remapped v2-only hint leaked canonical skill reference: %q", hint)
 	}
 }

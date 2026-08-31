@@ -11,7 +11,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const dbTableGetHint = "verify --app-id and --table are correct; list tables with `lark-cli apps +db-table-list --app-id <app_id>`; if targeting --environment dev, create it first with `lark-cli apps +db-env-create --app-id <app_id> --environment dev`"
+const dbTableGetHint = "verify --app-id and --table are correct; list tables with `work-cli apps +db-table-list --app-id <app_id>`; if targeting --environment dev, create it first with `work-cli apps +db-env-create --app-id <app_id> --environment dev`"
 
 // AppsDBTableGet gets one table's structure (动词对齐 +db-table-list)。
 //
@@ -28,7 +28,7 @@ var AppsDBTableGet = common.Shortcut{
 	Description: "Get a table's structure: columns, indexes and constraints",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-table-get --app-id <app_id> --table <table>",
+		"Example: work-cli apps +db-table-get --app-id <app_id> --table <table>",
 		"Tip: filter fields with --jq (json format), e.g. -q '.data.columns[].name'",
 	},
 	Scopes:    []string{"spark:app:read"},

@@ -34,19 +34,19 @@
 
 ```bash
 # 列出历史版本
-lark-cli docs +history-list --doc "<docx_url_or_token>" --page-size 20
+work-cli docs +history-list --doc "<docx_url_or_token>" --page-size 20
 
 # 翻页
-lark-cli docs +history-list --doc "<docx_url_or_token>" --page-size 20 --page-token "<page_token>"
+work-cli docs +history-list --doc "<docx_url_or_token>" --page-size 20 --page-token "<page_token>"
 
 # 回滚到指定 history_version_id（默认等待 30000ms）
-lark-cli docs +history-revert --doc "<docx_url_or_token>" --history-version-id 42
+work-cli docs +history-revert --doc "<docx_url_or_token>" --history-version-id 42
 
 # 只发起任务，不等待
-lark-cli docs +history-revert --doc "<docx_url_or_token>" --history-version-id 42 --wait-timeout-ms 0
+work-cli docs +history-revert --doc "<docx_url_or_token>" --history-version-id 42 --wait-timeout-ms 0
 
 # 查询回滚任务状态
-lark-cli docs +history-revert-status --doc "<docx_url_or_token>" --task-id "<task_id>"
+work-cli docs +history-revert-status --doc "<docx_url_or_token>" --task-id "<task_id>"
 ```
 
 ## 参数

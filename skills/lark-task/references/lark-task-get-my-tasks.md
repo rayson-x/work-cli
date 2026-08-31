@@ -20,25 +20,25 @@ By default, the command will automatically paginate up to 20 times. Use `--page-
 
 ```bash
 # Search for a specific task by name
-lark-cli task +get-my-tasks --query "Lobster No. 1"
+work-cli task +get-my-tasks --query "Lobster No. 1"
 
 # Get all my tasks, both completed and incomplete (fetches up to 20 pages by default)
-lark-cli task +get-my-tasks
+work-cli task +get-my-tasks
 
 # Pending-only: my incomplete tasks (use this for standup/daily-summary)
-lark-cli task +get-my-tasks --complete=false
+work-cli task +get-my-tasks --complete=false
 
 # Pending-only with a due-date upper bound (e.g. end of today / this week)
-lark-cli task +get-my-tasks --complete=false --due-end "2026-03-27T23:59:59+08:00"
+work-cli task +get-my-tasks --complete=false --due-end "2026-03-27T23:59:59+08:00"
 
 # Fetch all my tasks (up to 40 pages)
-lark-cli task +get-my-tasks --page-all
+work-cli task +get-my-tasks --page-all
 
 # Fetch up to 10 pages
-lark-cli task +get-my-tasks --page-limit 10
+work-cli task +get-my-tasks --page-limit 10
 
 # Resume from a known page token
-lark-cli task +get-my-tasks --page-token "pt_xxx"
+work-cli task +get-my-tasks --page-token "pt_xxx"
 ```
 
 ## Parameters

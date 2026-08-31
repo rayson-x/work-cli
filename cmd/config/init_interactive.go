@@ -258,11 +258,11 @@ func classifyRegistrationError(err error) error {
 	switch {
 	case errors.Is(err, larkauth.ErrRegistrationDenied):
 		return errs.NewAuthenticationError(errs.SubtypeUnknown, "%v", err).
-			WithHint("re-run `lark-cli config init --new` and approve the authorization request").
+			WithHint("re-run `work-cli config init --new` and approve the authorization request").
 			WithCause(err)
 	case errors.Is(err, larkauth.ErrRegistrationExpired), errors.Is(err, larkauth.ErrRegistrationTimedOut):
 		return errs.NewAuthenticationError(errs.SubtypeTokenExpired, "%v", err).
-			WithHint("re-run `lark-cli config init --new` and complete the scan before the code expires").
+			WithHint("re-run `work-cli config init --new` and complete the scan before the code expires").
 			WithCause(err)
 	default:
 		return errs.NewAuthenticationError(errs.SubtypeUnknown, "app registration failed: %v", err).WithCause(err)

@@ -22,7 +22,7 @@ This reference is the shared annotation target for the IM feed-group (tag) APIs:
 | `feed.groups.batch_query_item` | Look up feed cards inside a group by ID list — **CLI: only via `+feed-group-query-item` shortcut** |
 | `feed.groups.list_item` | List feed cards inside one feed group — **CLI: only via `+feed-group-list-item` shortcut** |
 
-> HTTP method and path are not duplicated here. For the six raw methods, inspect them with `lark-cli schema im.feed.groups.<method>` when needed; the three shortcut-only read methods (`list`, `list_item`, `batch_query_item`) use typed flags (see their `--help`).
+> HTTP method and path are not duplicated here. For the six raw methods, inspect them with `work-cli schema im.feed.groups.<method>` when needed; the three shortcut-only read methods (`list`, `list_item`, `batch_query_item`) use typed flags (see their `--help`).
 
 ## Shortcuts
 
@@ -53,12 +53,12 @@ The two `*-item` shortcuts resolve `chat_name` via a follow-up `chats/batch_quer
 ## Inspect Schema
 
 ```bash
-lark-cli schema im.feed.groups
-lark-cli schema im.feed.groups.create --format pretty
-lark-cli schema im.feed.groups.batch_add_item --format pretty
+work-cli schema im.feed.groups
+work-cli schema im.feed.groups.create --format pretty
+work-cli schema im.feed.groups.batch_add_item --format pretty
 ```
 
-> `list`, `list_item`, and `batch_query_item` have no raw method schema (they are shortcut-only). Inspect their flags with `lark-cli im +feed-group-list --help` / `+feed-group-list-item --help` / `+feed-group-query-item --help` instead.
+> `list`, `list_item`, and `batch_query_item` have no raw method schema (they are shortcut-only). Inspect their flags with `work-cli im +feed-group-list --help` / `+feed-group-list-item --help` / `+feed-group-query-item --help` instead.
 
 ## create
 
@@ -68,11 +68,11 @@ Create a new feed group. Returns the new `group_id` on success.
 
 ```bash
 # Normal (empty) group
-lark-cli im feed.groups create --as user \
+work-cli im feed.groups create --as user \
   --data '{"feed_group_creator":{"type":"normal","name":"Releases"}}'
 
 # Rule-based group: auto-add p2p chats with "release" in their name
-lark-cli im feed.groups create --as user \
+work-cli im feed.groups create --as user \
   --data '{
     "feed_group_creator":{
       "type":"rule",
@@ -127,12 +127,12 @@ Update a feed group's name and/or rules. The `update_fields` array tells the ser
 
 ```bash
 # Rename only
-lark-cli im feed.groups update --as user \
+work-cli im feed.groups update --as user \
   --params '{"feed_group_id":"ofg_xxx"}' \
   --data '{"feed_group_updater":{"name":"测试标签名称","update_fields":[1]}}'
 
 # Replace rules only (rules array uses the feed_group_rules shape — see that section)
-lark-cli im feed.groups update --as user \
+work-cli im feed.groups update --as user \
   --params '{"feed_group_id":"ofg_xxx"}' \
   --data '{
     "feed_group_updater":{
@@ -168,7 +168,7 @@ Empty body on success. Inspect the CLI exit code for status.
 Delete one feed group.
 
 ```bash
-lark-cli im feed.groups delete --as user \
+work-cli im feed.groups delete --as user \
   --params '{"feed_group_id":"ofg_xxx"}'
 ```
 
@@ -187,7 +187,7 @@ Empty body on success.
 Look up feed groups by an explicit list of IDs. Returns both live and soft-deleted matches.
 
 ```bash
-lark-cli im feed.groups batch_query --as user \
+work-cli im feed.groups batch_query --as user \
   --params '{"user_id_type":"open_id"}' \
   --data '{"group_ids":["ofg_xxx","ofg_yyy"]}'
 ```
@@ -249,7 +249,7 @@ Shortcut-only: [`+feed-group-list`](lark-im-feed-group-list.md). Lists the calle
 Add feed cards (chats) into one feed group. Partial failures are reported in `failed_items`.
 
 ```bash
-lark-cli im feed.groups batch_add_item --as user \
+work-cli im feed.groups batch_add_item --as user \
   --params '{"feed_group_id":"ofg_xxx"}' \
   --data '{
     "items":[
@@ -296,7 +296,7 @@ lark-cli im feed.groups batch_add_item --as user \
 Remove feed cards from one feed group. Same request and response shape as `batch_add_item`.
 
 ```bash
-lark-cli im feed.groups batch_remove_item --as user \
+work-cli im feed.groups batch_remove_item --as user \
   --params '{"feed_group_id":"ofg_xxx"}' \
   --data '{
     "items":[
@@ -444,7 +444,7 @@ The three read methods are shortcut-only:
 - [`+feed-group-list`](lark-im-feed-group-list.md) — `im:feed_group_v1:read`
 - [`+feed-group-list-item`](lark-im-feed-group-list-item.md) / [`+feed-group-query-item`](lark-im-feed-group-query-item.md) — `im:feed_group_v1:read` **plus** `im:chat:read` (they always resolve `chat_name`)
 
-If a required scope is missing, the CLI surfaces a hint such as `lark-cli auth login --scope "im:feed_group_v1:write"`.
+If a required scope is missing, the CLI surfaces a hint such as `work-cli auth login --scope "im:feed_group_v1:write"`.
 
 ## References
 

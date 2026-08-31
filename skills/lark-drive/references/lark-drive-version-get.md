@@ -7,23 +7,23 @@
 ## 命令
 
 ```bash
-lark-cli drive +version-get \
+work-cli drive +version-get \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --as bot
 
-lark-cli drive +version-get \
+work-cli drive +version-get \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --as user
 
-lark-cli drive +version-get \
+work-cli drive +version-get \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --output ./downloads/ \
   --as bot
 
-lark-cli drive +version-get \
+work-cli drive +version-get \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --output ./artifact.bin \

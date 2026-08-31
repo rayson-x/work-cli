@@ -12,7 +12,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const docsContentPathAnnotation = "lark-cli.docs.content-input-path"
+const docsContentPathAnnotation = "work-cli.docs.content-input-path"
 
 // v1CreateFlags returns hidden parse-only compatibility flags for old v1 commands.
 func v1CreateFlags() []common.Flag {

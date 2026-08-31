@@ -27,7 +27,7 @@ var AppsDBAuditList = common.Shortcut{
 	Description: "List row-change audit events for one or more tables (cursor pagination)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-audit-list --app-id <app_id> --table orders",
+		"Example: work-cli apps +db-audit-list --app-id <app_id> --table orders",
 		"Multiple tables: repeat --table; filter time with --since 7d / --until 2026-04-15.",
 	},
 	Scopes:    []string{"spark:app:read"},

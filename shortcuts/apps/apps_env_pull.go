@@ -36,7 +36,7 @@ var AppsEnvPull = common.Shortcut{
 	Description: "Pull app startup env vars into the local project .env.local",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +env-pull --app-id <app_id>",
+		"Example: work-cli apps +env-pull --app-id <app_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -132,7 +132,7 @@ func envPullAPIErrorHint(err error, appID string) string {
 		if appID == "" {
 			appID = "<app_id>"
 		}
-		return fmt.Sprintf("dev database is not initialized; preview creation with `lark-cli apps +db-env-create --app-id %s --environment dev --dry-run`, then run `lark-cli apps +db-env-create --app-id %s --environment dev --sync-data --yes` after confirming the irreversible split", appID, appID)
+		return fmt.Sprintf("dev database is not initialized; preview creation with `work-cli apps +db-env-create --app-id %s --environment dev --dry-run`, then run `work-cli apps +db-env-create --app-id %s --environment dev --sync-data --yes` after confirming the irreversible split", appID, appID)
 	}
 	return appIDListHint
 }
@@ -406,7 +406,7 @@ func writeEnvPullPretty(w io.Writer, appID, envFile string, databaseInfo envPull
 		fmt.Fprintln(w)
 		fmt.Fprintf(w, "⚠ Skipped %d invalid key(s): %s (key names must match [A-Za-z_][A-Za-z0-9_]*)\n", len(skippedKeys), strings.Join(skippedKeys, ", "))
 	}
-	fmt.Fprintf(w, "Run `lark-cli apps +env-pull --app-id <app_id>` again to refresh it.\n")
+	fmt.Fprintf(w, "Run `work-cli apps +env-pull --app-id <app_id>` again to refresh it.\n")
 }
 
 func ensureTrailingNewline(s string) string {

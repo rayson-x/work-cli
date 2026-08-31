@@ -8,7 +8,7 @@
 当用户提供智能纪要 Docx URL/token，且只需要纪要类型或关联产物链接时，直接执行：
 
 ```bash
-lark-cli docs +fetch --doc "<docx_url_or_token>" --doc-format markdown --as <source_identity>
+work-cli docs +fetch --doc "<docx_url_or_token>" --doc-format markdown --as <source_identity>
 ```
 
 从返回结构中仅提取：
@@ -22,7 +22,7 @@ lark-cli docs +fetch --doc "<docx_url_or_token>" --doc-format markdown --as <sou
 如果没有从 `<vc-transcribe-tab>` 取得明确的 `note_id`，但存在妙记 URL，从 URL 路径最后一段提取 `minute_token`，再查询妙记基础信息：
 
 ```bash
-lark-cli minutes +detail --minute-tokens "<minute_token>" --as <source_identity>
+work-cli minutes +detail --minute-tokens "<minute_token>" --as <source_identity>
 ```
 
 从对应的 `note_id` 继续 Note 查询；该字段为空或未返回时，继续按 Doc 处理。不要把 Doc token 或 `minute_token` 直接传给 Note 命令。
@@ -43,7 +43,7 @@ Note 域只接受明确的 `note_id`：
 ## 查询关联产物标识
 
 ```bash
-lark-cli note +detail --note-id <note_id> --as <source_identity>
+work-cli note +detail --note-id <note_id> --as <source_identity>
 ```
 
 保留以下字段，并按用户目标选择后续操作：
@@ -63,13 +63,13 @@ lark-cli note +detail --note-id <note_id> --as <source_identity>
 用户需要 AI 智能纪要中的总结、待办、章节或正文时，读取 `note_doc_token`：
 
 ```bash
-lark-cli docs +fetch --doc <note_doc_token> --doc-format markdown --as <source_identity>
+work-cli docs +fetch --doc <note_doc_token> --doc-format markdown --as <source_identity>
 ```
 
 读取正文后，检查返回 Markdown 中的第一个 `<whiteboard token="...">`。该画板是智能纪要封面；存在时提取 token，沿用同一身份下载到 `./notes/<note_id>/cover`，与 `note +transcript` 的逐字稿归入同一 Note 目录，并随正文一起展示：
 
 ```bash
-lark-cli docs +media-download --type whiteboard --token <whiteboard_token> --output ./notes/<note_id>/cover --as <source_identity>
+work-cli docs +media-download --type whiteboard --token <whiteboard_token> --output ./notes/<note_id>/cover --as <source_identity>
 ```
 
 没有 `<whiteboard>` 时直接跳过，不视为失败。只有第一个 `<whiteboard>` 按封面处理；不要自动下载正文中的其他画板。
@@ -77,7 +77,7 @@ lark-cli docs +media-download --type whiteboard --token <whiteboard_token> --out
 只需要文档名称或 URL 时不要读取正文，使用 Drive 元信息接口：
 
 ```bash
-lark-cli drive metas batch_query --data '{"request_docs":[{"doc_type":"docx","doc_token":"<note_doc_token>"}],"with_url":true}' --as <source_identity>
+work-cli drive metas batch_query --data '{"request_docs":[{"doc_type":"docx","doc_token":"<note_doc_token>"}],"with_url":true}' --as <source_identity>
 ```
 
 ## 读取逐字稿(文字记录)
@@ -89,13 +89,13 @@ normal Note 逐字稿是 Doc 读取结果，unified Note 可由 `note +transcrip
 ### note_display_type = normal 且 有 verbatim_doc_token
 
 ```bash
-lark-cli docs +fetch --doc <verbatim_doc_token> --doc-format markdown --as <source_identity>
+work-cli docs +fetch --doc <verbatim_doc_token> --doc-format markdown --as <source_identity>
 ```
 
 ### note_display_type = unknown 且 有 verbatim_doc_token
 
 ```bash
-lark-cli docs +fetch --doc <verbatim_doc_token> --doc-format markdown --as <source_identity>
+work-cli docs +fetch --doc <verbatim_doc_token> --doc-format markdown --as <source_identity>
 ```
 
 ### note_display_type = unknown 且 无 verbatim_doc_token
@@ -105,7 +105,7 @@ lark-cli docs +fetch --doc <verbatim_doc_token> --doc-format markdown --as <sour
 ### note_display_type = unified
 
 ```bash
-lark-cli note +transcript --note-id <note_id> --as user
+work-cli note +transcript --note-id <note_id> --as user
 ```
 
 `note +transcript` 会自动获取完整分页并保存文件；目标文件已存在时，只有用户明确要求覆盖才添加 `--overwrite`。

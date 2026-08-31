@@ -7,12 +7,12 @@
 ## 命令
 
 ```bash
-lark-cli drive +version-revert \
+work-cli drive +version-revert \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --as bot
 
-lark-cli drive +version-revert \
+work-cli drive +version-revert \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --as user

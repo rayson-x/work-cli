@@ -94,7 +94,7 @@ func createWikiRootHost(t *testing.T, ctx context.Context) gjson.Result {
 		Data: map[string]any{
 			"node_type": "origin",
 			"obj_type":  "docx",
-			"title":     "lark-cli-e2e-wiki-host",
+			"title":     "work-cli-e2e-wiki-host",
 		},
 	}, clie2e.RetryOptions{})
 	require.NoError(t, err)

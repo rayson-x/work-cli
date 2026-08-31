@@ -39,7 +39,7 @@ func (t *windowsTransport) Dial(addr string) (net.Conn, error) {
 
 // Address: SanitizeAppID prevents corrupt AppID from reshaping the pipe path.
 func (t *windowsTransport) Address(appID string) string {
-	return `\\.\pipe\lark-cli-` + event.SanitizeAppID(appID)
+	return `\\.\pipe\work-cli-` + event.SanitizeAppID(appID)
 }
 
 func (t *windowsTransport) Cleanup(addr string) {}

@@ -12,7 +12,7 @@ import (
 )
 
 func TestCommandFromCobraExportsAliasesAsFirstClassMetadata(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	cmd := &cobra.Command{Use: "+messages"}
 	cmd.Flags().String("order", "desc", "message order")
 	root.AddCommand(cmd)

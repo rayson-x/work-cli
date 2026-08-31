@@ -25,12 +25,12 @@ func TestWiki_MoveToDriveWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	nodeTitle := "lark-cli-e2e-wiki-to-drive-node-" + suffix
+	nodeTitle := "work-cli-e2e-wiki-to-drive-node-" + suffix
 	folderToken := drivee2e.CreateDriveFolder(
 		t,
 		parentT,
 		ctx,
-		"lark-cli-e2e-wiki-to-drive-"+suffix,
+		"work-cli-e2e-wiki-to-drive-"+suffix,
 		"bot",
 		"",
 	)

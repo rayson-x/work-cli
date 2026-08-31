@@ -156,7 +156,7 @@ func TestWriteSuccessEnvelope_JqWarnsWhenSafetyAlertFiltered(t *testing.T) {
 	var out strings.Builder
 	var errOut strings.Builder
 	err := WriteSuccessEnvelope(map[string]interface{}{"id": "1"}, SuccessEnvelopeOptions{
-		CommandPath: "lark-cli im +test",
+		CommandPath: "work-cli im +test",
 		Identity:    "bot",
 		JqExpr:      ".data.id",
 		Out:         &out,
@@ -187,7 +187,7 @@ func TestWriteSuccessEnvelope_BlockModeReturnsTypedErrorWithoutStdout(t *testing
 	var out strings.Builder
 	var errOut strings.Builder
 	err := WriteSuccessEnvelope(map[string]interface{}{"id": "1"}, SuccessEnvelopeOptions{
-		CommandPath: "lark-cli im +test",
+		CommandPath: "work-cli im +test",
 		Identity:    "bot",
 		Out:         &out,
 		ErrOut:      &errOut,

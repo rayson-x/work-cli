@@ -44,7 +44,7 @@ func makeLeaf(use string) *cobra.Command {
 // This is the failure-path observability contract -- After must always
 // run so audit hooks see completion regardless of outcome.
 func TestInstall_observersBeforeAndAfterAlwaysRun(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leaf := &cobra.Command{Use: "+x", RunE: func(*cobra.Command, []string) error {
 		return errors.New("boom")
 	}}
@@ -84,7 +84,7 @@ func TestInstall_observersBeforeAndAfterAlwaysRun(t *testing.T) {
 // that inverts the composition would change which Wrapper short-circuits
 // first for safety-sensitive layers.
 func TestInstall_wrapperChainOrder(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	var order []string
 	leaf := &cobra.Command{Use: "+x", RunE: func(*cobra.Command, []string) error {
 		order = append(order, "RunE")
@@ -135,7 +135,7 @@ func TestInstall_wrapperChainOrder(t *testing.T) {
 // Without this guarantee, any plugin Wrap matching All() could
 // bypass user policy / strict-mode denials.
 func TestInstall_denialGuard_physicalIsolation(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	denyStubCalled := false
 	leaf := &cobra.Command{
 		Use: "+forbidden",
@@ -180,7 +180,7 @@ func TestInstall_denialGuard_physicalIsolation(t *testing.T) {
 // Observer panics must not break the main flow. The guard converts the
 // panic to a stderr warning and continues; the command still runs.
 func TestInstall_observerPanicIsolated(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	runECalled := false
 	leaf := &cobra.Command{Use: "+x", RunE: func(*cobra.Command, []string) error {
 		runECalled = true
@@ -215,7 +215,7 @@ func TestInstall_observerPanicIsolated(t *testing.T) {
 // envelope writer can serialise it. The original AbortError is preserved
 // as the Cause so errors.As consumers still reach HookName / Reason.
 func TestInstall_abortErrorBecomesExitError(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leaf := makeLeaf("+x")
 	root.AddCommand(leaf)
 
@@ -274,7 +274,7 @@ func TestInstall_abortErrorBecomesExitError(t *testing.T) {
 // the framework-namespaced HookName, but the sentinel's own HookName
 // must remain whatever the plugin originally set.
 func TestInstall_namespacedWrap_doesNotMutateSentinel(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leafA := makeLeaf("+a")
 	leafB := makeLeaf("+b")
 	root.AddCommand(leafA)
@@ -347,7 +347,7 @@ func checkHookName(t *testing.T, err error, want string) {
 // A Before observer mutating inv.Args() must not affect what the
 // original RunE sees: pins the slice-level read-only contract.
 func TestInstall_argsNotMutableByObserver(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 
 	var seenByRunE []string
 	leaf := &cobra.Command{
@@ -388,7 +388,7 @@ func TestInstall_argsNotMutableByObserver(t *testing.T) {
 // verify the root's children are wrapped while the root itself remains
 // untouched (RunE stays nil).
 func TestInstall_rootStaysUntouched(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leaf := makeLeaf("+x")
 	root.AddCommand(leaf)
 	reg := hook.NewRegistry()

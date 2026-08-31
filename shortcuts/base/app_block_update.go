@@ -29,8 +29,8 @@ var BaseAppBlockUpdate = common.Shortcut{
 		{Name: "no-validate", Type: "bool", Desc: "skip local data_config normalization; send data_config as-is"},
 	},
 	Tips: []string{
-		`lark-cli base +app-block-update --app-token <app_token> --page-id <page_id> --block-id <block_id> --name "Monthly sales"`,
-		`lark-cli base +app-block-update --app-token <app_token> --page-id <page_id> --block-id <block_id> --data-config '{"base_token":"basxxx","data_sources":[{"table_name":"Orders","count_all":true,"filter":{"conjunction":"and","conditions":[{"field_name":"Status","operator":"is","value":"Closed"}]}}]}'`,
+		`work-cli base +app-block-update --app-token <app_token> --page-id <page_id> --block-id <block_id> --name "Monthly sales"`,
+		`work-cli base +app-block-update --app-token <app_token> --page-id <page_id> --block-id <block_id> --data-config '{"base_token":"basxxx","data_sources":[{"table_name":"Orders","count_all":true,"filter":{"conjunction":"and","conditions":[{"field_name":"Status","operator":"is","value":"Closed"}]}}]}'`,
 		"Do not call this command for a component whose +app-block-list result has type=unsupported; the API will return an error.",
 		"Read lark-base-app-block-data-config.md as the SSOT; do not invent data_config from natural language.",
 		"Use +app-block-get first to inspect the current data_config before replacing nested values.",

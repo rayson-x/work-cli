@@ -24,22 +24,22 @@
 
 ```bash
 # 创建空白 PPT
-lark-cli slides +create --title "项目汇报"
+work-cli slides +create --title "项目汇报"
 
 # 创建 PPT + 添加页面：每页一个 XML 文件，重复 --slide，顺序即页序
-lark-cli slides +create --as user --title "项目汇报" \
+work-cli slides +create --as user --title "项目汇报" \
   --slide @.lark-slides/plan/project/slide-01.xml \
   --slide @.lark-slides/plan/project/slide-02.xml
 
 # 已有组装好的 JSON 数组：从文件或 stdin 读
-lark-cli slides +create --as user --title "项目汇报" --slides @./deck.json
-cat deck.json | lark-cli slides +create --as user --title "项目汇报" --slides -
+work-cli slides +create --as user --title "项目汇报" --slides @./deck.json
+cat deck.json | work-cli slides +create --as user --title "项目汇报" --slides -
 
 # 以应用身份创建（自动授权当前用户）
-lark-cli slides +create --title "项目汇报" --as bot
+work-cli slides +create --title "项目汇报" --as bot
 
 # 预览（不执行）
-lark-cli slides +create --title "项目汇报" --slide @./slide-01.xml --dry-run
+work-cli slides +create --title "项目汇报" --slide @./slide-01.xml --dry-run
 ```
 
 ## 返回值
@@ -60,7 +60,7 @@ lark-cli slides +create --title "项目汇报" --slide @./slide-01.xml --dry-run
 >
 > 带了页面时，CLI 先创建空白演示文稿，再逐页调用 slide 创建接口添加页面。如果某一页添加失败，CLI 会停止并报错，已创建的演示文稿和已添加的页面会保留。
 >
-> 如果演示文稿是**以应用身份（bot）创建**的，如 `lark-cli slides +create --as bot`，CLI 会**尝试为当前 CLI 用户自动授予该演示文稿的 `full_access`（可管理权限）**。
+> 如果演示文稿是**以应用身份（bot）创建**的，如 `work-cli slides +create --as bot`，CLI 会**尝试为当前 CLI 用户自动授予该演示文稿的 `full_access`（可管理权限）**。
 >
 > 以应用身份创建时，结果里会额外返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该演示文稿的可管理权限
@@ -134,7 +134,7 @@ lark-cli slides +create --title "项目汇报" --slide @./slide-01.xml --dry-run
 ```
 
 ```bash
-lark-cli slides +create --as user --title "图测试" --slide @./slide-01.xml
+work-cli slides +create --as user --title "图测试" --slide @./slide-01.xml
 ```
 
 行为：
@@ -155,10 +155,10 @@ lark-cli slides +create --as user --title "图测试" --slide @./slide-01.xml
 
 ```bash
 # 第 1 步：创建空白 PPT
-PRES_ID=$(lark-cli slides +create --title "项目汇报" --jq '.data.xml_presentation_id')
+PRES_ID=$(work-cli slides +create --title "项目汇报" --jq '.data.xml_presentation_id')
 
 # 第 2 步：逐页添加（--slide 支持 @file，复杂 XML 优先走文件）
-lark-cli slides +add-slide --as user \
+work-cli slides +add-slide --as user \
   --presentation "$PRES_ID" \
   --slide @.lark-slides/plan/<deck>/page1.xml
 ```

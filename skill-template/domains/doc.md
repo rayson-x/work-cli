@@ -23,7 +23,7 @@
 
 1. **使用 `wiki.spaces.get_node` 查询节点信息**
    ```bash
-   lark-cli wiki spaces get_node --params '{"token":"wiki_token"}'
+   work-cli wiki spaces get_node --params '{"token":"wiki_token"}'
    ```
 
 2. **从返回结果中提取关键信息**
@@ -47,7 +47,7 @@
 
 ```bash
 # 查询 wiki 节点
-lark-cli wiki spaces get_node --params '{"token":"wiki_token"}'
+work-cli wiki spaces get_node --params '{"token":"wiki_token"}'
 ```
 
 返回结果示例：
@@ -106,8 +106,8 @@ Drive Folder (云空间文件夹)
 - 编辑画板需要使用专门的 [`../lark-whiteboard/SKILL.md`](../lark-whiteboard/SKILL.md)
 
 ## 快速决策
-- 用户说“看一下文档里的图片/附件/素材”“预览素材”，优先用 `lark-cli docs +media-preview`。
-- 用户明确说“下载素材”，再用 `lark-cli docs +media-download`。
-- 如果目标明确是画板 / whiteboard / 画板缩略图，只能用 `lark-cli docs +media-download --type whiteboard`，不要用 `+media-preview`。
+- 用户说“看一下文档里的图片/附件/素材”“预览素材”，优先用 `work-cli docs +media-preview`。
+- 用户明确说“下载素材”，再用 `work-cli docs +media-download`。
+- 如果目标明确是画板 / whiteboard / 画板缩略图，只能用 `work-cli docs +media-download --type whiteboard`，不要用 `+media-preview`。
 - 拿到 spreadsheet URL / token 后，再切到 `lark-sheets` 做对象内部读取、筛选、写入等操作。
 - 用户说“给文档加评论”“查看评论”“回复评论”“给评论加表情 / reaction”“删除评论表情 / reaction”，**不要留在 `lark-doc`**，直接切到 `lark-drive` 处理。

@@ -21,7 +21,7 @@ var AppsSessionGet = common.Shortcut{
 	Description: "Read a session's current status, queued turns, and latest turn",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +session-get --app-id <app_id> --session-id <session_id>",
+		"Example: work-cli apps +session-get --app-id <app_id> --session-id <session_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -47,7 +47,7 @@ var AppsSessionGet = common.Shortcut{
 	Execute: func(ctx context.Context, rctx *common.RuntimeContext) error {
 		data, err := rctx.CallAPITyped("GET", sessionPath(rctx.Str("app-id"), rctx.Str("session-id")), nil, nil)
 		if err != nil {
-			return withAppsHint(err, "if the session_id is unknown or invalid, list this app's sessions with `lark-cli apps +session-list --app-id "+strings.TrimSpace(rctx.Str("app-id"))+"`")
+			return withAppsHint(err, "if the session_id is unknown or invalid, list this app's sessions with `work-cli apps +session-list --app-id "+strings.TrimSpace(rctx.Str("app-id"))+"`")
 		}
 		rctx.OutFormat(data, nil, func(w io.Writer) {
 			fmt.Fprintf(w, "session: %s\n", common.GetString(data, "session_id"))

@@ -32,19 +32,19 @@
 
 ```bash
 # 列出所有模板分类
-lark-cli base +template-categories --as user
+work-cli base +template-categories --as user
 
 # 列出某个分类下的模板（不传 --category-key 则返回“推荐”类目）
-lark-cli base +template-list --category-key template_center_tab_ai --limit 10 --as user
+work-cli base +template-list --category-key template_center_tab_ai --limit 10 --as user
 
 # 按关键词搜索模板
-lark-cli base +template-search --keyword "项目管理" --limit 10 --as user
+work-cli base +template-search --keyword "项目管理" --limit 10 --as user
 
 # 翻页：把上一页返回的 offset 原样传给 --offset
-lark-cli base +template-search --keyword "AI" --limit 10 --offset <上一页返回的 offset> --as user
+work-cli base +template-search --keyword "AI" --limit 10 --offset <上一页返回的 offset> --as user
 
 # 选定模板后，用模板 token 复制成用户自己的新 Base
-lark-cli base +base-copy --base-token <模板 token> --name "<新 Base 名>" --as user
+work-cli base +base-copy --base-token <模板 token> --name "<新 Base 名>" --as user
 ```
 
 ## 工作流
@@ -63,10 +63,10 @@ lark-cli base +base-copy --base-token <模板 token> --name "<新 Base 名>" --a
 
 ```bash
 # 1. 看有哪些分类
-lark-cli base +template-categories --as user
+work-cli base +template-categories --as user
 
 # 2~3. 匹配到“AI 应用”类目后，列出该类目模板
-lark-cli base +template-list --category-key template_center_tab_ai --limit 10 --as user
+work-cli base +template-list --category-key template_center_tab_ai --limit 10 --as user
 ```
 
 匹配不到贴切分类，或用户意图本身就跨类目 / 很具体时，改走路径 B。
@@ -80,7 +80,7 @@ lark-cli base +template-list --category-key template_center_tab_ai --limit 10 --
 3. `+base-copy` 复制。
 
 ```bash
-lark-cli base +template-search --keyword "项目管理" --limit 10 --as user
+work-cli base +template-search --keyword "项目管理" --limit 10 --as user
 ```
 
 关键词不能为空；空搜会被拒绝。用户只有“大方向”而没有具体检索词时，用路径 A 的分类浏览更稳。
@@ -104,7 +104,7 @@ lark-cli base +template-search --keyword "项目管理" --limit 10 --as user
 `--offset` 是服务端返回的不透明游标，不要解析它、不要自己拼造。
 
 ```bash
-lark-cli base +template-search --keyword "AI" --limit 10 --offset <上一页返回的 offset> --as user
+work-cli base +template-search --keyword "AI" --limit 10 --offset <上一页返回的 offset> --as user
 ```
 
 ## 数据结构
@@ -179,7 +179,7 @@ lark-cli base +template-search --keyword "AI" --limit 10 --offset <上一页返�
 模板中心只负责“找到模板”，它本身不创建 Base。选定模板后，用模板的 `token` 复制出用户自己的新 Base：
 
 ```bash
-lark-cli base +base-copy --base-token <模板 token> --name "<新 Base 名>" --as user
+work-cli base +base-copy --base-token <模板 token> --name "<新 Base 名>" --as user
 ```
 
 - `--name` 用用户想要的新 Base 名；不传则沿用模板名。

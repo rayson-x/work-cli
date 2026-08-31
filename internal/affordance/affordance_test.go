@@ -21,14 +21,14 @@ const fixtureMD = "# approval\n" +
 	"### Examples\n\n" +
 	"**抄送给用户**\n" +
 	"```bash\n" +
-	"lark-cli approval instances cc --data '{\"instance_code\":\"x\"}'\n" +
+	"work-cli approval instances cc --data '{\"instance_code\":\"x\"}'\n" +
 	"```\n\n" +
 	"## instances get\n" +
 	"查询某审批实例详情。\n\n" +
 	"### Examples\n\n" +
 	"**按 code 查询**\n" +
 	"```bash\n" +
-	"lark-cli approval instances get --instance-code \"x\"\n" +
+	"work-cli approval instances get --instance-code \"x\"\n" +
 	"```\n"
 
 func TestFor(t *testing.T) {

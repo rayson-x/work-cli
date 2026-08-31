@@ -1,7 +1,7 @@
 # Affordance
 
 Per-command usage guidance for the CLI, authored as one markdown file per domain
-(`<service>.md`). It is surfaced in `lark-cli <command> --help` and in the
+(`<service>.md`). It is surfaced in `work-cli <command> --help` and in the
 `schema` output, and read directly at runtime (lazy, cached) — there is no build
 step. Maintain these files alongside `skills/` and `shortcuts/`.
 
@@ -12,7 +12,7 @@ A small, fixed markdown subset; each file describes one domain:
     # <domain>            optional `> skill: <name>` applies to every command below
     ## Skills             optional bullets shown on the business-domain help;
                           merged after `> skill:` and not inherited by commands
-    ## <command>          the command as typed, minus `lark-cli <domain>`; a
+    ## <command>          the command as typed, minus `work-cli <domain>`; a
                           +-prefixed heading (## +create) targets that shortcut
     <lead paragraph>      when to use this command
     ### Avoid when        when not to use it / which command to use instead
@@ -40,7 +40,7 @@ sets a hand-authored `Tips` list in Go, the overlay's `### Tips` win — they
 replace the Go tips (not merged), so keep tips in one place.
 
 The reserved domain-level `## Skills` section controls the skill pointers on
-`lark-cli <domain> --help`. Its entries use the same name or name/relpath format
+`work-cli <domain> --help`. Its entries use the same name or name/relpath format
 and existence gating as command-level `### Skills`. The canonical `> skill:` is
 shown first automatically; additional domain entries are display-only and do
 not become defaults for every command. If `## Skills` is absent, the existing
@@ -61,7 +61,7 @@ single domain guide behavior is unchanged.
 
     **Fetch one message**
     ```bash
-    lark-cli mail user_mailbox.messages get --message-id "<id>"
+    work-cli mail user_mailbox.messages get --message-id "<id>"
     ```
 
 ## Notes

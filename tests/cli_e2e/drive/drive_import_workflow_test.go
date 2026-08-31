@@ -25,7 +25,7 @@ func TestDrive_ImportWorkflow(t *testing.T) {
 
 	workDir := t.TempDir()
 	fileName := "import-" + clie2e.GenerateSuffix() + ".md"
-	if err := os.WriteFile(filepath.Join(workDir, fileName), []byte("# lark-cli import e2e\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(workDir, fileName), []byte("# work-cli import e2e\n"), 0o644); err != nil {
 		t.Fatalf("write import fixture: %v", err)
 	}
 

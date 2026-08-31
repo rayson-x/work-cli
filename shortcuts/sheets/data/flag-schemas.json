@@ -251,7 +251,7 @@
             },
             "input": {
               "type": "object",
-              "description": "该 shortcut 的入参集——含子表定位 sheet_id（或 sheet_name）。spreadsheet token/url 只需在顶层给一次；如果 input 里重复出现 excel_id / spreadsheet_token / url，CLI 会忽略它们且始终以顶层定位为准。input 的键是该 shortcut 的 flag 展平成 JSON、不是底层 MCP body。基础 flag 跑 `lark-cli sheets <shortcut> --help`，复合 JSON flag 跑 `--print-schema --flag-name <flag>`。不要手填 `operation`（动作由 shortcut 名表达）。"
+              "description": "该 shortcut 的入参集——含子表定位 sheet_id（或 sheet_name）。spreadsheet token/url 只需在顶层给一次；如果 input 里重复出现 excel_id / spreadsheet_token / url，CLI 会忽略它们且始终以顶层定位为准。input 的键是该 shortcut 的 flag 展平成 JSON、不是底层 MCP body。基础 flag 跑 `work-cli sheets <shortcut> --help`，复合 JSON flag 跑 `--print-schema --flag-name <flag>`。不要手填 `operation`（动作由 shortcut 名表达）。"
             }
           }
         }

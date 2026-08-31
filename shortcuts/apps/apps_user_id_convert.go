@@ -89,7 +89,7 @@ var AppsUserIDConvert = common.Shortcut{
 	Description: "Convert Miaoda user IDs ↔ Feishu open platform IDs (open_id / union_id / Feishu user_id)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids ou_abc123,ou_def456",
+		"Example: work-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids ou_abc123,ou_def456",
 		"Unresolved IDs are not an error: they land in data.missed with reason not_found, keyed by input position.",
 		"ID-form/direction mismatch (e.g. an ou_ id under miaoda-to-open-id) is dropped by the server and reported in missed; check the ID prefix matches --convert-type.",
 	},

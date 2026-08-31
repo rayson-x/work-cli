@@ -78,14 +78,14 @@ func NewCmdApiWithContext(ctx context.Context, f *cmdutil.Factory, runF func(*AP
 Prefer the typed domain command when one exists — it validates parameters,
 shows the Risk level, gates destructive calls behind --yes, and carries usage
 guidance that this raw command does not. If a domain command covers your task
-(browse with ` + "`lark-cli <domain> --help`" + `), use it instead of this.
+(browse with ` + "`work-cli <domain> --help`" + `), use it instead of this.
 
 Reach for ` + "`api`" + ` only for endpoints that have no typed command yet (e.g.
 newer/preview APIs), where you already have the HTTP path from the Lark docs.
 
 Examples:
-  lark-cli api GET /open-apis/calendar/v4/calendars
-  lark-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"open_id"}' --data @body.json`,
+  work-cli api GET /open-apis/calendar/v4/calendars
+  work-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"open_id"}' --data @body.json`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Method = strings.ToUpper(args[0])
@@ -138,7 +138,7 @@ func buildAPIRequest(opts *APIOptions) (client.RawApiRequest, *cmdutil.FileUploa
 	if opts.Method == "" {
 		return client.RawApiRequest{}, nil, errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"HTTP method must not be empty").
-			WithHint("pass the verb as the first argument, e.g. lark-cli api GET /open-apis/...").
+			WithHint("pass the verb as the first argument, e.g. work-cli api GET /open-apis/...").
 			WithParam("<method>")
 	}
 	path, err := normalisePath(opts.Path)

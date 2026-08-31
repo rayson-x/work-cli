@@ -9,13 +9,13 @@
 
 ```bash
 # 按实例 Code 查询详情
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 
 # 表格格式输出，便于快速浏览顶层字段
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --format table --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --format table --as user
 
 # 预览 API 调用，不执行
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user --dry-run
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user --dry-run
 ```
 
 ## 参数
@@ -35,17 +35,17 @@ lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' -
 如果你已经有实例 Code，可直接查询：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 如果你还没有实例 Code，可先从以下命令获取：
 
 ```bash
 # 查询我发起的审批实例
-lark-cli approval instances initiated --params '{"page_size":20}' --as user
+work-cli approval instances initiated --params '{"page_size":20}' --as user
 
 # 或从任务列表里拿到关联实例 Code
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 ## 输出重点字段
@@ -135,11 +135,11 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 
 ```bash
 # 同意审批任务
-lark-cli approval tasks approve --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>"}' --as user --yes
+work-cli approval tasks approve --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>"}' --as user --yes
 
 # 撤回审批实例
-lark-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
+work-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
 
 # 催办审批任务
-lark-cli approval tasks remind --data '{"instance_code":"<INSTANCE_CODE>","task_ids":["<TASK_ID>"]}' --as user --yes
+work-cli approval tasks remind --data '{"instance_code":"<INSTANCE_CODE>","task_ids":["<TASK_ID>"]}' --as user --yes
 ```

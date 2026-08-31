@@ -41,8 +41,8 @@ var BaseURLResolve = common.Shortcut{
 		{Name: "url", Aliases: []string{"query"}, Desc: "Base/BaseApp/Wiki/record-share URL to resolve"},
 	},
 	Tips: []string{
-		`Example: lark-cli base +url-resolve --url "https://example.larkoffice.com/base/<base_token>?table=<table_id>&view=<view_id>"`,
-		`BaseApp example: lark-cli base +url-resolve --url "https://example.larkoffice.com/app/<app_token>?pre_pathname=/base/workspace/<workspace_token>&pageId=<page_id>"`,
+		`Example: work-cli base +url-resolve --url "https://example.larkoffice.com/base/<base_token>?table=<table_id>&view=<view_id>"`,
+		`BaseApp example: work-cli base +url-resolve --url "https://example.larkoffice.com/app/<app_token>?pre_pathname=/base/workspace/<workspace_token>&pageId=<page_id>"`,
 		"Only URLs are accepted. For Base titles or keywords, use +title-resolve --title.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
@@ -112,7 +112,7 @@ var BaseTitleResolve = common.Shortcut{
 		{Name: "title", Aliases: []string{"query", "url"}, Desc: "Base title keyword to search via Drive (30 characters or fewer)"},
 	},
 	Tips: []string{
-		`Example: lark-cli base +title-resolve --title "Sales pipeline"`,
+		`Example: work-cli base +title-resolve --title "Sales pipeline"`,
 		"Pass a short keyword from the Base title, 30 characters or fewer. Use +url-resolve for URLs.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {

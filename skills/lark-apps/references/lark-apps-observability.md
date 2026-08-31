@@ -24,18 +24,18 @@ metric / analytics 的 `--environment` 只是 CLI 侧 online-only 校验：`+met
 ## 示例
 
 ```bash
-lark-cli apps +log-list --app-id <app_id> --level error --keyword timeout --since 0.5h
-lark-cli apps +log-get --app-id <app_id> --log-id <log_id>
-lark-cli apps +trace-list --app-id <app_id> --trace-id <trace_id>
-lark-cli apps +trace-get --app-id <app_id> --trace-id <trace_id>
-lark-cli apps +metric-list --app-id <app_id> --metric requests --series total --since 1d
-lark-cli apps +metric-list --app-id <app_id> --metric requests --since 1h
-lark-cli apps +metric-list --app-id <app_id> --metric latency --since 1h
-lark-cli apps +metric-list --app-id <app_id> --metric latency --series p99 --since 1d
-lark-cli apps +metric-list --app-id <app_id> --metric cpu --since 1h
-lark-cli apps +metric-list --app-id <app_id> --metric memory --since 1h
-lark-cli apps +analytics-list --app-id <app_id> --analytics users --series active-users --granularity day
-lark-cli apps +analytics-list --app-id <app_id> --analytics page-view --granularity day
+work-cli apps +log-list --app-id <app_id> --level error --keyword timeout --since 0.5h
+work-cli apps +log-get --app-id <app_id> --log-id <log_id>
+work-cli apps +trace-list --app-id <app_id> --trace-id <trace_id>
+work-cli apps +trace-get --app-id <app_id> --trace-id <trace_id>
+work-cli apps +metric-list --app-id <app_id> --metric requests --series total --since 1d
+work-cli apps +metric-list --app-id <app_id> --metric requests --since 1h
+work-cli apps +metric-list --app-id <app_id> --metric latency --since 1h
+work-cli apps +metric-list --app-id <app_id> --metric latency --series p99 --since 1d
+work-cli apps +metric-list --app-id <app_id> --metric cpu --since 1h
+work-cli apps +metric-list --app-id <app_id> --metric memory --since 1h
+work-cli apps +analytics-list --app-id <app_id> --analytics users --series active-users --granularity day
+work-cli apps +analytics-list --app-id <app_id> --analytics page-view --granularity day
 ```
 
 ## 使用边界

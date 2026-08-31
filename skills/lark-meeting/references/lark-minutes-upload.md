@@ -3,7 +3,7 @@
 
 上传音视频文件到飞书妙记并生成妙记（Minute）。
 
-本 skill 对应 shortcut：`lark-cli minutes +upload`。
+本 skill 对应 shortcut：`work-cli minutes +upload`。
 
 ## 典型触发表达
 
@@ -16,7 +16,7 @@
 
 ```bash
 # 通过已上传到云空间（云盘/云存储）的 file_token 生成妙记
-lark-cli minutes +upload --file-token boxcnxxxxxxxxxxxxxxxx
+work-cli minutes +upload --file-token boxcnxxxxxxxxxxxxxxxx
 
 ```
 

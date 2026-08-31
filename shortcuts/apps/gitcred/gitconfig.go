@@ -38,17 +38,17 @@ const (
 	managedAbsent
 	managedLegacy
 	managedCurrent
-	// managedForeign: the URL-scoped helper list contains only non-lark-cli
-	// helpers (all from the writable origin). lark-cli neither owns nor may
+	// managedForeign: the URL-scoped helper list contains only non-work-cli
+	// helpers (all from the writable origin). work-cli neither owns nor may
 	// overwrite it; UnsetHelper leaves it untouched.
 	managedForeign
-	// managedPartial: a lark-cli-owned residue that is neither the exact legacy
+	// managedPartial: a work-cli-owned residue that is neither the exact legacy
 	// nor current shape (e.g. the reset+helper pair written without useHttpPath,
 	// or a useHttpPath deleted out from under the helper). It is safe to
 	// re-normalize (SetHelper) or fully clean up (UnsetHelper).
 	managedPartial
-	// managedMixed: the URL-scoped helper list mixes lark-cli-owned values with
-	// foreign ones. SetHelper refuses it; UnsetHelper removes only the lark-cli
+	// managedMixed: the URL-scoped helper list mixes work-cli-owned values with
+	// foreign ones. SetHelper refuses it; UnsetHelper removes only the work-cli
 	// values and reports that a foreign helper remains.
 	managedMixed
 )
@@ -109,7 +109,7 @@ func (g GlobalGitConfig) SetHelper(ctx context.Context, gitHTTPURL, appID string
 	}
 	known.UseHTTPPath = []configValue{{Origin: known.WritableOrigin, Value: "true"}}
 
-	// The empty-helper reset only clears helpers that parse BEFORE the lark-cli
+	// The empty-helper reset only clears helpers that parse BEFORE the work-cli
 	// section. A generic credential.helper (or one from a later [include]) that
 	// parses AFTER our section still participates in get/store/erase for the
 	// URL. Detect that and relocate our section to the end of the writable file
@@ -143,7 +143,7 @@ func (g GlobalGitConfig) SetHelper(ctx context.Context, gitHTTPURL, appID string
 }
 
 // setHelperAcceptsState reports whether SetHelper may (re)write the URL-scoped
-// configuration for a state. Absent/Legacy/Current/Partial are lark-cli-owned
+// configuration for a state. Absent/Legacy/Current/Partial are work-cli-owned
 // (or empty) and safe to normalize; Foreign/Mixed/None belong to the user or a
 // third party and must not be overwritten.
 func setHelperAcceptsState(kind managedKind) bool {
@@ -188,14 +188,14 @@ func (g GlobalGitConfig) UnsetHelper(ctx context.Context, gitHTTPURL, appID stri
 	case managedMixed:
 		return unsetMixedHelper(ctx, normalizedURL, helperKey, useHTTPPathKey, canonical, state)
 	default:
-		// Absent, Foreign, or unclassifiable: nothing lark-cli owns to remove.
+		// Absent, Foreign, or unclassifiable: nothing work-cli owns to remove.
 		return nil
 	}
 }
 
-// unsetOwnedHelper removes a fully lark-cli-owned URL-scoped configuration. It
+// unsetOwnedHelper removes a fully work-cli-owned URL-scoped configuration. It
 // deletes useHttpPath FIRST, then the helper list, so that if the second delete
-// fails the residue is still a lark-cli-recoverable state (helper present, no
+// fails the residue is still a work-cli-recoverable state (helper present, no
 // useHttpPath = managedPartial) rather than a useHttpPath-only orphan that
 // SetHelper would refuse to re-init. On helper-delete failure it restores
 // useHttpPath best-effort and annotates the error.
@@ -217,9 +217,9 @@ func unsetOwnedHelper(ctx context.Context, helperKey, useHTTPPathKey string, sta
 	return nil
 }
 
-// unsetMixedHelper removes only the lark-cli-owned values (the empty reset and
+// unsetMixedHelper removes only the work-cli-owned values (the empty reset and
 // the canonical helper) from a helper list that also contains foreign helpers,
-// deletes the lark-cli useHttpPath, and returns a non-nil warning that a
+// deletes the work-cli useHttpPath, and returns a non-nil warning that a
 // foreign helper remains so callers surface it instead of reporting a clean
 // removal.
 func unsetMixedHelper(ctx context.Context, gitHTTPURL, helperKey, useHTTPPathKey, canonical string, state credentialConfigState) error {
@@ -275,7 +275,7 @@ func configValuesOf(values []configValue) []string {
 func gitConfigNotOwnedError(gitHTTPURL string) error {
 	return errs.NewValidationError(
 		errs.SubtypeFailedPrecondition,
-		"git credential configuration for %s is not owned by lark-cli; refusing to overwrite it",
+		"git credential configuration for %s is not owned by work-cli; refusing to overwrite it",
 		gitHTTPURL,
 	).WithHint("inspect the URL-scoped global Git credential.helper and credential.useHttpPath values, including included config files")
 }
@@ -291,7 +291,7 @@ func gitConfigChangedError(gitHTTPURL string) error {
 func gitConfigHelperOrderUnsafeError(gitHTTPURL string) error {
 	return errs.NewValidationError(
 		errs.SubtypeFailedPrecondition,
-		"a generic Git credential.helper is applied after the lark-cli helper for %s, so the credential-helper reset cannot isolate it",
+		"a generic Git credential.helper is applied after the work-cli helper for %s, so the credential-helper reset cannot isolate it",
 		gitHTTPURL,
 	).WithHint("a global credential.helper (possibly from a later included config file) still participates for this URL; move or remove it, then retry")
 }
@@ -301,15 +301,15 @@ func gitConfigSectionHasExtraKeysError(gitHTTPURL string) error {
 		errs.SubtypeFailedPrecondition,
 		"the URL-scoped git credential section for %s holds keys other than helper and useHttpPath, which cannot be safely relocated",
 		gitHTTPURL,
-	).WithHint("the credential-helper reset needs to move this section to the end of the global config, but that would discard the extra keys; remove them (e.g. credential.<url>.username) or move the lark-cli section manually, then retry")
+	).WithHint("the credential-helper reset needs to move this section to the end of the global config, but that would discard the extra keys; remove them (e.g. credential.<url>.username) or move the work-cli section manually, then retry")
 }
 
 func gitConfigForeignRemainsWarning(gitHTTPURL string) error {
 	return errs.NewValidationError(
 		errs.SubtypeFailedPrecondition,
-		"removed the lark-cli credential helper for %s but a third-party credential.helper remains",
+		"removed the work-cli credential helper for %s but a third-party credential.helper remains",
 		gitHTTPURL,
-	).WithHint("the URL-scoped configuration also contained a non-lark-cli helper, which was left in place; remove it manually if it is no longer needed")
+	).WithHint("the URL-scoped configuration also contained a non-work-cli helper, which was left in place; remove it manually if it is no longer needed")
 }
 
 const rollbackFailureHint = "automatic rollback could not restore the previous Git credential configuration; inspect the URL-scoped global Git credential settings before retrying"
@@ -330,7 +330,7 @@ func (g GlobalGitConfig) helperCommand(appID string) string {
 	if g.HelperCommand != "" {
 		return g.HelperCommand
 	}
-	return "!lark-cli apps git-credential-helper --app-id " + shellQuoteArg(appID)
+	return "!work-cli apps git-credential-helper --app-id " + shellQuoteArg(appID)
 }
 
 func gitCredentialKey(gitHTTPURL, name string) string {
@@ -393,8 +393,8 @@ func parseOriginValues(raw []byte) ([]configValue, error) {
 // reset actually isolates the credential chain for gitHTTPURL. Git's empty
 // helper ("") clears only helpers that parse BEFORE it; a generic
 // credential.helper — or one from a later [include] — that parses AFTER the
-// lark-cli section still participates in get/store/erase. It returns true iff
-// the lark-cli canonical helper is the LAST credential helper git would apply
+// work-cli section still participates in get/store/erase. It returns true iff
+// the work-cli canonical helper is the LAST credential helper git would apply
 // for the URL (i.e. no helper parses after it).
 func larkResetDefeatsLaterHelpers(ctx context.Context, gitHTTPURL, canonical string) (bool, error) {
 	order, err := readHelperFillOrder(ctx, gitHTTPURL)
@@ -461,7 +461,7 @@ func readHelperFillOrder(ctx context.Context, gitHTTPURL string) ([]string, erro
 	return order, nil
 }
 
-// repositionLarkSection moves the URL-scoped lark-cli credential section to the
+// repositionLarkSection moves the URL-scoped work-cli credential section to the
 // end of the writable global config file by removing and re-adding it. This
 // makes the empty-helper reset parse AFTER any earlier generic helper (and
 // after earlier [include] directives), so the reset defeats them. Only the
@@ -605,13 +605,13 @@ func classifyManagedState(state credentialConfigState, canonical string) managed
 		}
 		return true
 	}
-	// Cross-origin / include-sourced values are never lark-cli-owned: we can
+	// Cross-origin / include-sourced values are never work-cli-owned: we can
 	// only safely rewrite values that live in the single writable global file.
 	if !valuesFromWritableOrigin(state.Helpers) || !valuesFromWritableOrigin(state.UseHTTPPath) {
 		return managedNone
 	}
 	// useHttpPath must be absent or exactly one "true"; any other shape
-	// (false, duplicates, arbitrary value) is not a shape lark-cli writes.
+	// (false, duplicates, arbitrary value) is not a shape work-cli writes.
 	useHTTPPathOwned := len(state.UseHTTPPath) == 0 ||
 		(len(state.UseHTTPPath) == 1 && strings.EqualFold(state.UseHTTPPath[0].Value, "true"))
 	if !useHTTPPathOwned {
@@ -622,7 +622,7 @@ func classifyManagedState(state credentialConfigState, canonical string) managed
 		if len(state.UseHTTPPath) == 0 {
 			return managedAbsent
 		}
-		// useHttpPath=true with no helper is a lark-cli residue (the helper was
+		// useHttpPath=true with no helper is a work-cli residue (the helper was
 		// deleted but useHttpPath was not yet, or vice versa). Recoverable.
 		return managedPartial
 	}
@@ -646,7 +646,7 @@ func classifyManagedState(state credentialConfigState, canonical string) managed
 		// is not treated as lark-owned): third-party configuration.
 		return managedForeign
 	case larkCanonical == 0:
-		// Helpers present but only bare reset markers: not a shape lark-cli
+		// Helpers present but only bare reset markers: not a shape work-cli
 		// writes on its own; leave it alone.
 		return managedNone
 	case len(state.Helpers) == 1 && larkReset == 0:
@@ -654,7 +654,7 @@ func classifyManagedState(state credentialConfigState, canonical string) managed
 	case len(state.Helpers) == 2 && state.Helpers[0].Value == "" && state.Helpers[1].Value == canonical && len(state.UseHTTPPath) == 1:
 		return managedCurrent
 	default:
-		// Canonical helper present in some other lark-cli arrangement (e.g. the
+		// Canonical helper present in some other work-cli arrangement (e.g. the
 		// reset+canonical pair written without useHttpPath): recoverable.
 		return managedPartial
 	}
@@ -692,7 +692,7 @@ func gitConfigReplaceAllTracked(ctx context.Context, key string, values []string
 // own values leaves such an interloping helper in place, so the readback
 // diverges from `known` and SetHelper fails closed with the foreign value
 // preserved. oldValues comes from a snapshot the ownership gate already accepted
-// (Absent/Legacy/Current/Partial), so it contains only lark-cli-owned values
+// (Absent/Legacy/Current/Partial), so it contains only work-cli-owned values
 // ("" and the canonical helper); deleting them by exact value never removes a
 // third party's helper.
 func gitConfigRewriteHelpersScoped(ctx context.Context, key string, oldValues, newValues []string, known *[]configValue, origin string) error {

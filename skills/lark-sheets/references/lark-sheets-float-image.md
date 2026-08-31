@@ -103,7 +103,7 @@ _公共四件套 · 系统：`--yes`、`--dry-run`_
 ### `+float-image-list`
 
 ```bash
-lark-cli sheets +float-image-list --url "..." --sheet-id "$SID"
+work-cli sheets +float-image-list --url "..." --sheet-id "$SID"
 ```
 
 ### `+float-image-create`
@@ -113,17 +113,17 @@ lark-cli sheets +float-image-list --url "..." --sheet-id "$SID"
 ```bash
 # 首选：直接给本地图片路径，CLI 自动上传（无需手动拿 token）
 # 注意：--image-name 是 required（即使路径 basename 已经是 logo.png 也要显式传）
-lark-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
+work-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
   --image ./logo.png --image-name "logo.png" \
   --position-row 2 --position-col B --size-width 300 --size-height 200 --z-index 1
 
 # 用已有 file_token（从 +float-image-list 的 image_token 或 +cells-set-image 返回的 file_token）
-lark-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
+work-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
   --image-name "logo.png" --image-token "$TOKEN" \
   --position-row 0 --position-col A --size-width 200 --size-height 150
 
 # 用 image URI（上传链路返回的句柄，非表内对象 reference_id；与 --image-token 二选一）
-lark-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
+work-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
   --image-name "logo.png" --image-uri "$IMAGE_URI" \
   --position-row 2 --position-col B --size-width 300 --size-height 200 --z-index 1
 ```
@@ -136,12 +136,12 @@ lark-cli sheets +float-image-create --url "..." --sheet-id "$SID" \
 
 ```bash
 # 调整位置 + 尺寸，保留原图（不传图片源）
-lark-cli sheets +float-image-update --url "..." --sheet-id "$SID" \
+work-cli sheets +float-image-update --url "..." --sheet-id "$SID" \
   --float-image-id "$IMG_ID" --image-name "logo.png" \
   --position-row 5 --position-col C --size-width 300 --size-height 200
 
 # 换图：额外带 --image-token，核心字段同样要给全
-lark-cli sheets +float-image-update --url "..." --sheet-id "$SID" \
+work-cli sheets +float-image-update --url "..." --sheet-id "$SID" \
   --float-image-id "$IMG_ID" --image-name "new-logo.png" --image-token "$NEW_TOKEN" \
   --position-row 5 --position-col C --size-width 300 --size-height 200
 ```
@@ -149,7 +149,7 @@ lark-cli sheets +float-image-update --url "..." --sheet-id "$SID" \
 ### `+float-image-delete`
 
 ```bash
-lark-cli sheets +float-image-delete --url "..." --sheet-id "$SID" --float-image-id "$IMG_ID" --yes
+work-cli sheets +float-image-delete --url "..." --sheet-id "$SID" --float-image-id "$IMG_ID" --yes
 ```
 
 ### Validate / DryRun / Execute 约束

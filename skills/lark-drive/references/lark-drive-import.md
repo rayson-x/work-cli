@@ -7,7 +7,7 @@
 > [!IMPORTANT]
 > 当用户说“把本地 Excel / CSV / `.base` 快照导入成 Base / 多维表格 / bitable 文档”时，第一步必须使用 `drive +import --type bitable`。
 > 这是 Drive 导入场景，不是 `lark-base` 的建表 / 写记录场景。
-> 只有导入完成并拿到新文档的 `token` / `url` 后，后续字段、记录、视图等表内操作才切换到 `lark-cli base +...`。
+> 只有导入完成并拿到新文档的 `token` / `url` 后，后续字段、记录、视图等表内操作才切换到 `work-cli base +...`。
 
 ## 导入后标题确认
 
@@ -25,44 +25,44 @@
 
 ```bash
 # 导入 Word 为新版文档 (docx)
-lark-cli drive +import --file ./report.docx --type docx
-lark-cli drive +import --file ./legacy.doc --type docx
+work-cli drive +import --file ./report.docx --type docx
+work-cli drive +import --file ./legacy.doc --type docx
 
 # 导入 Markdown 为新版文档 (docx)
-lark-cli drive +import --file ./README.md --type docx
+work-cli drive +import --file ./README.md --type docx
 
 # 导入纯文本为新版文档 (docx)
-lark-cli drive +import --file ./notes.txt --type docx
+work-cli drive +import --file ./notes.txt --type docx
 
 # 导入 HTML 为新版文档 (docx)
-lark-cli drive +import --file ./page.html --type docx
+work-cli drive +import --file ./page.html --type docx
 
 # 导入 Excel 为电子表格 (sheet)
-lark-cli drive +import --file ./data.xlsx --type sheet
+work-cli drive +import --file ./data.xlsx --type sheet
 
 # 导入 Excel 97-2003 (.xls) 为电子表格 (sheet)
-lark-cli drive +import --file ./legacy.xls --type sheet
+work-cli drive +import --file ./legacy.xls --type sheet
 
 # 导入 CSV 为电子表格 (sheet)
-lark-cli drive +import --file ./data.csv --type sheet
+work-cli drive +import --file ./data.csv --type sheet
 
 # 导入 Excel 为多维表格 / Base (bitable)
-lark-cli drive +import --file ./crm.xlsx --type bitable --name "客户台账"
+work-cli drive +import --file ./crm.xlsx --type bitable --name "客户台账"
 
 # 导入 .base 快照为多维表格 / Base (bitable)（文件不能超过 20MB）
-lark-cli drive +import --file ./snapshot.base --type bitable --name "快照还原"
+work-cli drive +import --file ./snapshot.base --type bitable --name "快照还原"
 
 # 导入 PPTX 为飞书幻灯片 (slides)（文件不能超过 500MB）
-lark-cli drive +import --file ./deck.pptx --type slides --name "项目汇报"
+work-cli drive +import --file ./deck.pptx --type slides --name "项目汇报"
 
 # 导入到指定文件夹，并指定导入后的文件名
-lark-cli drive +import --file ./data.csv --type bitable --folder-token <FOLDER_TOKEN> --name "导入数据表"
+work-cli drive +import --file ./data.csv --type bitable --folder-token <FOLDER_TOKEN> --name "导入数据表"
 
 # 导入数据到已有的多维表格（不新建，数据挂载到目标多维表格中）
-lark-cli drive +import --file ./data.xlsx --type bitable --target-token <BASE_TOKEN>
+work-cli drive +import --file ./data.xlsx --type bitable --target-token <BASE_TOKEN>
 
 # 预览底层调用链（上传 -> 创建任务 -> 轮询）
-lark-cli drive +import --file ./README.md --type docx --dry-run
+work-cli drive +import --file ./README.md --type docx --dry-run
 ```
 
 ## 参数
@@ -114,15 +114,15 @@ lark-cli drive +import --file ./README.md --type docx --dry-run
 > - 例如：`.csv` 文件不能导入为 `docx`，`.md` 文件不能导入为 `sheet`
 
 > [!IMPORTANT]
-> 如果在线文档是**以应用身份（bot）导入创建**的，如 `lark-cli drive +import --as bot`，当某次结果**已经返回最终在线文档目标**后，CLI 会**尝试为当前 CLI 用户自动授予该资源的 `full_access`（可管理权限）**。
+> 如果在线文档是**以应用身份（bot）导入创建**的，如 `work-cli drive +import --as bot`，当某次结果**已经返回最终在线文档目标**后，CLI 会**尝试为当前 CLI 用户自动授予该资源的 `full_access`（可管理权限）**。
 >
 > 这个自动授权有两种触发时机：
 > - `drive +import` 的内置轮询窗口内已经完成，直接在 `+import` 中进行自动授权
-> - `drive +import` 先返回 `ready=false` / `timed_out=true`，之后你再执行 `lark-cli drive +task_result --scenario import --ticket <TICKET>`，当该查询第一次拿到最终在线文档目标时会自动授权
+> - `drive +import` 先返回 `ready=false` / `timed_out=true`，之后你再执行 `work-cli drive +task_result --scenario import --ticket <TICKET>`，当该查询第一次拿到最终在线文档目标时会自动授权
 >
 > 只有在已经拿到最终在线文档目标的那次结果里，才会返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该导入结果的可管理权限
-> - `status = skipped`：本地没有可用的当前用户 `open_id`，或当前结果还没有可授权目标，因此不会自动授权；可提示用户先完成 `lark-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
+> - `status = skipped`：本地没有可用的当前用户 `open_id`，或当前结果还没有可授权目标，因此不会自动授权；可提示用户先完成 `work-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
 > - `status = failed`：导入已成功返回最终在线文档，但自动授权用户失败；会带上失败原因，并提示稍后重试或继续使用 bot 身份处理该文档
 >
 > `permission_grant.perm = full_access` 表示该资源已授予“可管理权限”。
@@ -154,7 +154,7 @@ lark-cli drive +import --file ./README.md --type docx --dry-run
 - 若内置轮询超时但任务仍在处理中，shortcut 会成功返回，并带上：
   - `ready=false`
   - `timed_out=true`
-  - `next_command`：可直接复制执行的后续查询命令，例如 `lark-cli drive +task_result --scenario import --ticket <TICKET>`
+  - `next_command`：可直接复制执行的后续查询命令，例如 `work-cli drive +task_result --scenario import --ticket <TICKET>`
 - 若使用 `--as bot` 且内置轮询窗口内已经拿到最终在线文档，输出还会额外带上 `permission_grant`，用于说明是否已自动为当前 CLI 用户授予可管理权限。
 - 若使用 `--as bot` 但当前只返回 `ready=false`，此时还不会返回 `permission_grant`；应继续执行返回值里的 `next_command`，等 `drive +task_result --scenario import` 拿到最终文档后再触发自动授权。
 - 如果文件扩展名不被支持，执行时将抛出验证错误。
@@ -164,7 +164,7 @@ lark-cli drive +import --file ./README.md --type docx --dry-run
 当 `+import` 的内置轮询窗口结束但任务尚未完成时，使用返回结果中的 `ticket` 继续查询：
 
 ```bash
-lark-cli drive +task_result --scenario import --ticket <TICKET>
+work-cli drive +task_result --scenario import --ticket <TICKET>
 ```
 
 如果这里最终返回 `ready=true` 且使用的是 `--as bot`，结果还会额外带上 `permission_grant`，用于说明是否已自动为当前 CLI 用户授予可管理权限。

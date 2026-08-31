@@ -22,13 +22,13 @@ List tasks related to the current user.
 
 ```bash
 # List all related tasks
-lark-cli task +get-related-tasks
+work-cli task +get-related-tasks
 
 # List incomplete related tasks starting from a page token
-lark-cli task +get-related-tasks --include-complete=false --page-token "1752730590582902"
+work-cli task +get-related-tasks --include-complete=false --page-token "1752730590582902"
 
 # Show only tasks created by me
-lark-cli task +get-related-tasks --created-by-me
+work-cli task +get-related-tasks --created-by-me
 ```
 
 ## Parameters
@@ -49,5 +49,5 @@ lark-cli task +get-related-tasks --created-by-me
 ## Workflow
 
 1. Determine whether the user needs all related tasks or a filtered subset.
-2. Execute `lark-cli task +get-related-tasks ...`
+2. Execute `work-cli task +get-related-tasks ...`
 3. Report the matching tasks and, if present, the next `page_token`.

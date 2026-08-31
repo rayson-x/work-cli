@@ -9,7 +9,7 @@ import (
 	"reflect"
 )
 
-// HostDefinition is the erased, copied declaration consumed by lark-cli's host adapter.
+// HostDefinition is the erased, copied declaration consumed by work-cli's host adapter.
 // Business command implementations should use Definition and Define instead.
 type HostDefinition struct {
 	Metadata   CommandMetadata
@@ -22,7 +22,7 @@ type HostDefinition struct {
 	PageOutput bool
 }
 
-// HostHooks is the erased hook set consumed by lark-cli's host adapter.
+// HostHooks is the erased hook set consumed by work-cli's host adapter.
 type HostHooks struct {
 	Normalize func(context.Context, CommandContext, any) error
 	Validate  func(context.Context, CommandContext, any) error
@@ -31,14 +31,14 @@ type HostHooks struct {
 	Renderers map[string]func(io.Writer, any) error
 }
 
-// HostResult is the erased result projection consumed by lark-cli's host adapter.
+// HostResult is the erased result projection consumed by work-cli's host adapter.
 type HostResult struct {
 	Data       any
 	Outcome    string
 	Pagination *HostPagination
 }
 
-// HostPagination is the copied pagination metadata consumed by lark-cli's host
+// HostPagination is the copied pagination metadata consumed by work-cli's host
 // adapter. It also appears in ContextOptions and commandtest, which supply the
 // page-collection callback a CommandContext exposes to business commands.
 type HostPagination struct {
@@ -48,7 +48,7 @@ type HostPagination struct {
 	NextToken string
 }
 
-// HostDomain is the copied domain declaration consumed by lark-cli's host adapter.
+// HostDomain is the copied domain declaration consumed by work-cli's host adapter.
 type HostDomain struct {
 	Name string
 }
@@ -162,7 +162,7 @@ func hostResult[Data any](result Result[Data]) HostResult {
 	return host
 }
 
-// InspectCommand returns a deep-copied declaration for lark-cli's host adapter.
+// InspectCommand returns a deep-copied declaration for work-cli's host adapter.
 func InspectCommand(command Command) HostDefinition {
 	definition := command.definition
 	return HostDefinition{
@@ -177,13 +177,13 @@ func InspectCommand(command Command) HostDefinition {
 	}
 }
 
-// InspectDomain returns a copied declaration for lark-cli's host adapter.
+// InspectDomain returns a copied declaration for work-cli's host adapter.
 func InspectDomain(domain Domain) HostDomain {
 	return HostDomain{Name: domain.name}
 }
 
 // CloneSets copies set slices and immutable command declarations for BuildOption
-// capture. It is intended for the lark-cli host adapter, not for business commands.
+// capture. It is intended for the work-cli host adapter, not for business commands.
 func CloneSets(sets []Set) []Set {
 	cloned := make([]Set, len(sets))
 	for index, set := range sets {

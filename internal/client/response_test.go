@@ -305,7 +305,7 @@ func TestHandleResponse_NonJSONFormatsEmitExactStructuredResponseBytes(t *testin
 				Identity:    core.AsBot,
 				Out:         &out,
 				ErrOut:      &errOut,
-				CommandPath: "lark-cli api GET",
+				CommandPath: "work-cli api GET",
 			})
 			if err != nil {
 				t.Fatalf("HandleResponse() error = %v, want nil", err)

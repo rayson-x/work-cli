@@ -6,12 +6,12 @@ description: >
   当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli whiteboard --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli whiteboard --help"
 ---
 
 > [!IMPORTANT]
-> - 运行 `lark-cli --version`，确认可用，无需询问用户。
+> - 运行 `work-cli --version`，确认可用，无需询问用户。
 > - 运行 `npx -y @larksuite/whiteboard-cli@^0.2.13 -v`，确认可用，无需询问用户。
 
 **CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**

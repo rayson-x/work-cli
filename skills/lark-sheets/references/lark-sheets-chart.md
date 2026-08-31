@@ -309,13 +309,13 @@ _创建/更新的图表属性_
 
 ```bash
 # 柱形图：默认放在数据范围右侧
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type column --data-range "'Sheet1'!A1:C10" \
   --title "销售额对比" --x-axis-title "品类" --y-axis-title "销售额" \
   --legend-position bottom --data-labels value
 
 # 双轴组合图：月度目标、实际完成为左轴柱，完成率为右轴折线
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type combo --data-range "'Sheet1'!A1:D13" \
   --dim1-index 1 --dim2-indexes 2,3,4 \
   --series-types column,column,line --series-y-axes left,left,right \
@@ -323,24 +323,24 @@ lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --anchor-cell F2 --width 700 --height 400
 
 # 气泡图：x、y 必填，group、size 可选
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type bubble --data-range "'Sheet1'!A1:E20" \
   --key-index 1 --x-index 2 --y-index 3 --group-index 4 --size-index 5 \
   --title "客户分布"
 
 # 数值散点图：保留真实 X 间距，同时收紧远离 0 的显示范围
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type scatter --data-range "'Sheet1'!A1:B20" \
   --x-axis-numbers-as values --x-axis-min 237 --x-axis-max 239
 
 # 表头与数据分离：data-range 只传纯数据，header-range 按相同维度顺序传表头
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type line \
   --data-range "'Sheet1'!A2:A10,'Sheet1'!K2:L10" \
   --header-range "'Sheet1'!A1,'Sheet1'!K1:L1"
 
 # 横向类别行 + 一行数值：类别行也属于 data-range，不要放进 header-range
-lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
+work-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
   --chart-type line \
   --data-range "'Sheet1'!A1:M1,'Sheet1'!A3:M3" \
   --data-direction row --dim1-index 1 --dim2-indexes 2
@@ -368,8 +368,8 @@ lark-cli sheets +chart-create-basic --url "..." --sheet-name "Sheet1" \
 ```
 
 ```bash
-lark-cli sheets +batch-chart-create --url "..." --operations @ops.json
-lark-cli sheets +chart-list --url "..." --sheet-name "Sheet1"
+work-cli sheets +batch-chart-create --url "..." --operations @ops.json
+work-cli sheets +chart-list --url "..." --sheet-name "Sheet1"
 ```
 
 为了兼容旧调用，CLI 仍能读取历史 `{shortcut:"+chart-create-basic",input:{...}}` 结构，但新任务直接填写上面的扁平 `+chart-create-basic` flags。
@@ -384,7 +384,7 @@ lark-cli sheets +chart-list --url "..." --sheet-name "Sheet1"
 ```
 
 ```bash
-lark-cli sheets +batch-chart-update --url "..." --operations @updates.json
+work-cli sheets +batch-chart-update --url "..." --operations @updates.json
 ```
 
 ### `+chart-data-update`
@@ -393,7 +393,7 @@ lark-cli sheets +batch-chart-update --url "..." --operations @updates.json
 
 ```bash
 # 把遗漏的最后一列纳入原折线图，保留标题、配色、图例和落点
-lark-cli sheets +chart-data-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
+work-cli sheets +chart-data-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
   --data-range "'Sheet1'!A1:M6"
 ```
 
@@ -402,13 +402,13 @@ lark-cli sheets +chart-data-update --url "..." --sheet-id "$SID" --chart-id "chr
 只传需要改的字段，成功后返回更新后的 `viewModel`。`--data-labels` 支持 `value`、`category`、`percentage` 的任意非空组合，组合值按 `value_category_percentage` 顺序拼接；另可用 `series` 显示系列名称、用 `none` 删除数据标签。折线图、面积图、雷达图及组合图中的线性系列可用 `--last-point-label=true` 只开启每个系列最后一个数据点的数值标签，传 `false` 关闭这些单点标签。`--legend-position hidden` 隐藏图例；`--smooth=false` 和 `--smooth false` 都可显式关闭平滑曲线。为减少参数重试，`--stacked` 自动按 `--stack normal` 处理，`percentage,value` 或 `value,percentage` 自动按 `value_percentage` 处理，`--x-axis` / `--y-axis` 自动按 `--x-axis-title` / `--y-axis-title` 处理；新调用仍优先使用规范参数。
 
 ```bash
-lark-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
+work-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
   --title "新标题" --x-axis-label-angle -45 --legend-position right
 
-lark-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
+work-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
   --data-labels value_percentage --stack percent
 
-lark-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
+work-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
   --last-point-label=true
 ```
 
@@ -430,7 +430,7 @@ lark-cli sheets +chart-config-update --url "..." --sheet-id "$SID" --chart-id "c
 
 ```bash
 # 只调整尺寸；无需携带 snapshot
-lark-cli sheets +chart-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
+work-cli sheets +chart-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" \
   --properties '{"size":{"width":640,"height":360}}'
 ```
 
@@ -438,7 +438,7 @@ lark-cli sheets +chart-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" 
 
 - 只查询本次要改的子树，不先打印完整大 schema：
   ```bash
-  lark-cli sheets +chart-update --print-schema \
+  work-cli sheets +chart-update --print-schema \
     --flag-name properties.snapshot.plotArea.axes
   ```
 - `--dry-run` 输出中的 `tool_name` / `operation` / `basic_chart` / `properties` 是 CLI 翻译后的内部请求，只用于检查，不能复制回 operations 或再次当作 MCP body 提交。
@@ -453,11 +453,11 @@ lark-cli sheets +chart-update --url "..." --sheet-id "$SID" --chart-id "chrXXX" 
 
 ```bash
 # dry-run 先看会删什么（sheet 定位必填）
-lark-cli sheets +chart-delete --url "https://example.feishu.cn/sheets/shtXXX" --sheet-id "$SID" \
+work-cli sheets +chart-delete --url "https://example.feishu.cn/sheets/shtXXX" --sheet-id "$SID" \
   --chart-id "chrXXX" --dry-run
 
 # 真正执行
-lark-cli sheets +chart-delete --url "https://example.feishu.cn/sheets/shtXXX" --sheet-id "$SID" \
+work-cli sheets +chart-delete --url "https://example.feishu.cn/sheets/shtXXX" --sheet-id "$SID" \
   --chart-id "chrXXX" --yes
 ```
 

@@ -536,7 +536,7 @@ func TestApplyNeedAuthorizationHint_ServiceMethodUsesLocalScopesWhenNoUAT(t *tes
 		t.Fatalf("expected resource/method command, got %q", target.Command)
 	}
 
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	serviceCmd := &cobra.Command{Use: "calendar"}
 	resourceCmd := &cobra.Command{Use: parts[0]}
 	methodCmd := &cobra.Command{Use: parts[1]}
@@ -605,7 +605,7 @@ func TestApplyNeedAuthorizationHint_ShortcutUsesDeclaredScopesWhenNoUAT(t *testi
 	})
 	f.ResolvedIdentity = core.AsUser
 
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	serviceCmd := &cobra.Command{Use: "docs"}
 	shortcutCmd := &cobra.Command{Use: "+create"}
 	root.AddCommand(serviceCmd)
@@ -646,7 +646,7 @@ func TestApplyNeedAuthorizationHint_ShortcutIncludesConditionalScopes(t *testing
 	})
 	f.ResolvedIdentity = core.AsUser
 
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	serviceCmd := &cobra.Command{Use: "drive"}
 	shortcutCmd := &cobra.Command{Use: "+status"}
 	root.AddCommand(serviceCmd)
@@ -686,7 +686,7 @@ func TestApplyNeedAuthorizationHint_AppendsExistingHint(t *testing.T) {
 	})
 	f.ResolvedIdentity = core.AsUser
 
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	serviceCmd := &cobra.Command{Use: "docs"}
 	shortcutCmd := &cobra.Command{Use: "+create"}
 	root.AddCommand(serviceCmd)

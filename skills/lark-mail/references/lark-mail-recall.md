@@ -17,11 +17,11 @@
 
 ```bash
 # 发起撤回
-lark-cli mail user_mailbox.sent_messages recall --as user \
+work-cli mail user_mailbox.sent_messages recall --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 
 # 查询撤回进度
-lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
+work-cli mail user_mailbox.sent_messages get_recall_detail --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 ```
 
@@ -40,7 +40,7 @@ lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
 具体字段和枚举以 schema 为准：
 
 ```bash
-lark-cli schema mail.user_mailbox.sent_messages.get_recall_detail
+work-cli schema mail.user_mailbox.sent_messages.get_recall_detail
 ```
 
 ## 典型流程
@@ -50,17 +50,17 @@ lark-cli schema mail.user_mailbox.sent_messages.get_recall_detail
 # data.recall_available == true
 
 # 2. 用户确认要撤回后发起
-lark-cli mail user_mailbox.sent_messages recall --as user \
+work-cli mail user_mailbox.sent_messages recall --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 
 # 3. 查询最终结果
-lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
+work-cli mail user_mailbox.sent_messages get_recall_detail --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 ```
 
 ## 相关命令
 
-- `lark-cli mail +send --confirm-send` — 发送新邮件，响应中可能包含 `recall_available`。
-- `lark-cli mail +reply --confirm-send` — 发送回复，响应中可能包含 `recall_available`。
-- `lark-cli mail +forward --confirm-send` — 发送转发，响应中可能包含 `recall_available`。
-- `lark-cli mail user_mailbox.messages send_status` — 查询发送投递状态。
+- `work-cli mail +send --confirm-send` — 发送新邮件，响应中可能包含 `recall_available`。
+- `work-cli mail +reply --confirm-send` — 发送回复，响应中可能包含 `recall_available`。
+- `work-cli mail +forward --confirm-send` — 发送转发，响应中可能包含 `recall_available`。
+- `work-cli mail user_mailbox.messages send_status` — 查询发送投递状态。

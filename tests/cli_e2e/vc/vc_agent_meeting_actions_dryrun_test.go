@@ -18,13 +18,13 @@ func TestVCAgentMeetingActionsDryRun(t *testing.T) {
 	setVCDryRunEnv(t)
 
 	repoRoot := vcContractPath(t)
-	bin := filepath.Join(t.TempDir(), "lark-cli")
+	bin := filepath.Join(t.TempDir(), "work-cli")
 	buildCtx, cancelBuild := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancelBuild()
 	build := exec.CommandContext(buildCtx, "go", "build", "-o", bin, ".")
 	build.Dir = repoRoot
 	if output, err := build.CombinedOutput(); err != nil {
-		t.Fatalf("build lark-cli: %v\n%s", err, output)
+		t.Fatalf("build work-cli: %v\n%s", err, output)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)

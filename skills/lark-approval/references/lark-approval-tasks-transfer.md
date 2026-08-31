@@ -12,28 +12,28 @@
 
 ```bash
 # 先预览请求，不实际执行
-lark-cli approval tasks transfer \
+work-cli approval tasks transfer \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","transfer_user_id":"ou_xxx","comment":"请你继续处理"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --dry-run
 
 # 按 open_id 转交审批任务
-lark-cli approval tasks transfer \
+work-cli approval tasks transfer \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","transfer_user_id":"ou_xxx","comment":"转交给你处理"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 按 user_id 转交审批任务
-lark-cli approval tasks transfer \
+work-cli approval tasks transfer \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","transfer_user_id":"123456789","comment":"请补充审核"}' \
   --params '{"user_id_type":"user_id"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体，适合较长 comment
-lark-cli approval tasks transfer \
+work-cli approval tasks transfer \
   --data @./transfer-body.json \
   --params '{"user_id_type":"open_id"}' \
   --as user \
@@ -61,7 +61,7 @@ lark-cli approval tasks transfer \
 先查到待办任务：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的字段：
@@ -77,7 +77,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需先确认表单、节点、审批流进度，可继续查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

@@ -8,7 +8,7 @@
 
 ```bash
 # 推荐：完整 URL + 评论 ID + 回复 ID + 新内容（整体替换，无局部编辑）
-lark-cli drive +update-reply --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>' --reply-id '<id>' --content '[{"type":"text","text":"新内容"}]'
+work-cli drive +update-reply --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>' --reply-id '<id>' --content '[{"type":"text","text":"新内容"}]'
 ```
 
 ## 参数

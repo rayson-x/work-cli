@@ -1,6 +1,6 @@
 # Base Field Schema
 
-> 适用命令：`lark-cli base +field-create`、`lark-cli base +field-update`
+> 适用命令：`work-cli base +field-create`、`work-cli base +field-update`
 
 本文档定义 `+field-create` / `+field-update` 写字段时 `--json` 的推荐格式，是字段类型与字段 JSON 结构的 source of truth。目标不是复刻完整 schema，而是让 agent 稳定产出正确 payload。
 

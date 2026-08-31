@@ -6,19 +6,19 @@
 
 ```bash
 # 转让给某人（原组织者保留为参与人）
-lark-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --yes
+work-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --yes
 
 # 转让并把原组织者从参与人中移除
-lark-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --remove-original-organizer --yes
+work-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --remove-original-organizer --yes
 
 # 指定日历
-lark-cli calendar +transfer --calendar-id <calendar_id> --event-id <event_id> --to-user-id ou_xxx --yes
+work-cli calendar +transfer --calendar-id <calendar_id> --event-id <event_id> --to-user-id ou_xxx --yes
 
 # 重复性日程：必须显式确认整个序列一起转让
-lark-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --transfer-series --yes
+work-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --transfer-series --yes
 
 # 预览请求，不实际执行
-lark-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --dry-run
+work-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --dry-run
 ```
 
 ## 参数
@@ -51,9 +51,9 @@ lark-cli calendar +transfer --event-id <event_id> --to-user-id ou_xxx --dry-run
 
 ```bash
 # 用户
-lark-cli contact +search-user --query <姓名> --as user
+work-cli contact +search-user --query <姓名> --as user
 # 机器人：从它所在群的成员列表里取 bots[] 中的 open_id
-lark-cli im +chat-members-list --chat-id <chat_id> --member-types bot
+work-cli im +chat-members-list --chat-id <chat_id> --member-types bot
 ```
 
 机器人的 open_id 同样是 `ou_` 开头；不要传 `cli_` 开头的 app_id，那是应用 ID，不是日程参与人身份。

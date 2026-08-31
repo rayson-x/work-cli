@@ -1,6 +1,6 @@
 # 邮件 HTML 写法指南
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解通用安全规则。本文档定义 lark-cli mail 写信场景下的 HTML / CSS / URL 写法、LarkSuite mail-editor 原生格式、可复制片段、3 套场景模板。
+> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解通用安全规则。本文档定义 work-cli mail 写信场景下的 HTML / CSS / URL 写法、LarkSuite mail-editor 原生格式、可复制片段、3 套场景模板。
 
 **CRITICAL 邮件是重要的对外交流渠道，请你保证书写语言凝练扼要**
 **CRITICAL 电子邮件的 HTML 不是 Web 开发的 HTML，请你务必遵守本文档中提及的常用邮件格式书写规范**
@@ -297,7 +297,7 @@
 4. **调写信 shortcut 生成草稿** — 把替换后的 HTML 通过 `--body` 参数交给写信链路（推荐 `+draft-create` 先存草稿、用户复核后再 `+send`）：
 
    ```bash
-   lark-cli mail +draft-create --as user \
+   work-cli mail +draft-create --as user \
      --to alice@example.com --subject 'Q3 团队周报' \
      --body "$(cat skills/lark-mail/assets/templates/weekly--team-report.html)"
    ```
@@ -319,7 +319,7 @@
 需要看 lint 详情时加 `--show-lint-details`：
 
 ```bash
-lark-cli mail +draft-create --show-lint-details \
+work-cli mail +draft-create --show-lint-details \
   --to alice@example.com --subject 'Hi' --body '<p>正文</p>'
 ```
 

@@ -11,7 +11,7 @@ import (
 
 // CanonicalPath returns the rootless slash-separated path used everywhere in
 // the pruning framework. Cobra's CommandPath() yields space-separated
-// segments ("lark-cli docs +update"); doublestar globs ("docs/**") require
+// segments ("work-cli docs +update"); doublestar globs ("docs/**") require
 // slashes, so all internal lookups go through this conversion.
 func CanonicalPath(cmd *cobra.Command) string {
 	if cmd == nil {

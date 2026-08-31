@@ -8,13 +8,13 @@
 
 ```bash
 # 上传图片用于目标的进展记录
-lark-cli okr +upload-image \
+work-cli okr +upload-image \
   --file ./progress_screenshot.png \
   --target-id 1234567890123456789 \
   --target-type objective
 
 # 上传图片用于关键结果的进展记录
-lark-cli okr +upload-image \
+work-cli okr +upload-image \
   --file ./chart.jpg \
   --target-id 9876543210987654321 \
   --target-type key_result
@@ -33,7 +33,7 @@ lark-cli okr +upload-image \
 
 1. 使用 `+cycle-list` 和 `+cycle-detail` 获取目标或关键结果的 ID。
 2. 准备本地图片文件，确保格式受支持。
-3. 执行 `lark-cli okr +upload-image --file ./image.png --target-id "..." --target-type objective`。
+3. 执行 `work-cli okr +upload-image --file ./image.png --target-id "..." --target-type objective`。
 4. 获取返回的 `file_token`，用于构建 ContentBlock 中的图片内容。
 
 ## 输出
@@ -95,7 +95,7 @@ lark-cli okr +upload-image \
 然后在创建或更新进展记录时使用此 ContentBlock：
 
 ```bash
-lark-cli okr +progress-create \
+work-cli okr +progress-create \
   --content @content_with_image.json \
   --target-id 1234567890123456789 \
   --target-type objective

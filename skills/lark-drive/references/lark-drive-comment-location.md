@@ -13,19 +13,19 @@
 分页列出评论时，优先传 URL；Wiki URL / Wiki token 会自动解析到底层真实 token/type：
 
 ```bash
-lark-cli drive +list-comments --url '<docx_or_wiki_url>' --need-relation
+work-cli drive +list-comments --url '<docx_or_wiki_url>' --need-relation
 ```
 
 如果只有 Wiki token，显式传 `--type wiki`：
 
 ```bash
-lark-cli drive +list-comments --token '<wiki_token>' --type wiki --need-relation
+work-cli drive +list-comments --token '<wiki_token>' --type wiki --need-relation
 ```
 
 已知评论 ID 时，用 `drive +batch-query-comments --need-relation` 直接按 ID 取：
 
 ```bash
-lark-cli drive +batch-query-comments --url '<docx_or_wiki_url>' --comment-ids '<comment_id>' --need-relation
+work-cli drive +batch-query-comments --url '<docx_or_wiki_url>' --comment-ids '<comment_id>' --need-relation
 ```
 
 只有在需要 shortcut 未暴露的底层参数时，才直接调 raw OpenAPI（两个 shortcut 已各自处理 `need_relation` 的位置差异：list 在 query params，batch_query 在请求 body）。
@@ -33,7 +33,7 @@ lark-cli drive +batch-query-comments --url '<docx_or_wiki_url>' --comment-ids '<
 同时获取文档内容，并要求返回 block id：
 
 ```bash
-lark-cli docs +fetch --doc '<doc_token_or_url>' --detail with-ids
+work-cli docs +fetch --doc '<doc_token_or_url>' --detail with-ids
 ```
 
 ## 字段含义
@@ -154,7 +154,7 @@ lark-cli docs +fetch --doc '<doc_token_or_url>' --detail with-ids
 - 如果 `quote` 是 `C3`、`A1` 这类单元格坐标，可拆出 `spreadsheet_token` / `sheet_id` 后用 `lark-sheets` 读取该单元格确认：
 
 ```bash
-lark-cli sheets +read \
+work-cli sheets +read \
   --spreadsheet-token '<spreadsheet_token>' \
   --sheet-id '<sheet_id>' \
   --range '<cell>'
@@ -169,9 +169,9 @@ lark-cli sheets +read \
 - 下钻读取时切到 `lark-base`，最少确认表、字段、记录：
 
 ```bash
-lark-cli base +table-list --base-token '<base_token>'
-lark-cli base +field-list --base-token '<base_token>' --table-id '<table_id>'
-lark-cli base +record-list --base-token '<base_token>' --table-id '<table_id>' --limit 200 --format json
+work-cli base +table-list --base-token '<base_token>'
+work-cli base +field-list --base-token '<base_token>' --table-id '<table_id>'
+work-cli base +record-list --base-token '<base_token>' --table-id '<table_id>' --limit 200 --format json
 ```
 
 - 如果 `quote` 是某个稳定业务值，优先用字段/记录数据做精确匹配；如果 `quote` 只是“第 N 条”“第 N 行”这类 UI 序号，只能基于当前记录顺序推断对应记录，必须输出为“推断”，并说明评论接口没有返回 `record_id` / `field_id`。
@@ -184,7 +184,7 @@ lark-cli base +record-list --base-token '<base_token>' --table-id '<table_id>' -
 - 若要定位画板内部节点，切到 `lark-whiteboard` 读取 raw 节点结构：
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token '<whiteboard_token>' \
   --output-type raw
 ```

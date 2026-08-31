@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书即时通讯：收发消息和管理群聊。发送和回复消息、搜索聊天记录、管理群聊成员、上传下载图片和文件、管理表情回复、发送应用内/短信/电话加急、发送和处理交互卡片（Interactive Card）、监听卡片按钮回调（card.action.trigger）。当用户需要发消息、查看或搜索聊天记录、下载聊天中的文件、查看群成员、搜索群、创建群聊或话题群、管理标记数据、管理 Feed 置顶（添加/移除/查询置顶会话）、管理标签数据、处理卡片回调时使用。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli im --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli im --help"
 ---
 
 # im (v1)
@@ -103,7 +103,7 @@ Key limits:
 
 ## Shortcuts（推荐优先使用）
 
-Shortcut 是对常用操作的高级封装（`lark-cli im +<verb> [flags]`）。有 Shortcut 的操作优先使用。
+Shortcut 是对常用操作的高级封装（`work-cli im +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 | Shortcut | 说明 |
 |----------|------|
@@ -135,8 +135,8 @@ Shortcut 是对常用操作的高级封装（`lark-cli im +<verb> [flags]`）。
 ## API Resources
 
 ```bash
-lark-cli schema im.<resource>.<method>   # 调用 API 前必须先查看参数结构
-lark-cli im <resource> <method> [flags] # 调用 API
+work-cli schema im.<resource>.<method>   # 调用 API 前必须先查看参数结构
+work-cli im <resource> <method> [flags] # 调用 API
 ```
 
 > **重要**：使用原生 API 时，必须先运行 `schema` 查看 `--data` / `--params` 参数结构，不要猜测字段格式。

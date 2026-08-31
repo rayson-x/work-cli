@@ -3,7 +3,7 @@
 
 > **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
 
-本 skill 对应 shortcut：`lark-cli drive +apply-permission`。
+本 skill 对应 shortcut：`work-cli drive +apply-permission`。
 
 向云文档 **Owner** 发起 `view` 或 `edit` 权限申请。申请会以卡片形式推送给 Owner，由 Owner 决定是否通过。
 
@@ -19,13 +19,13 @@
 
 ```bash
 # 通过 URL 申请（type 自动从 URL 推断）
-lark-cli drive +apply-permission \
+work-cli drive +apply-permission \
   --token "https://example.larksuite.com/docx/doxcnxxxxxxxxx" \
   --perm view \
   --remark "安全评估：需查看需求文档内容" --as user
 
 # 通过 bare token + 显式 --type
-lark-cli drive +apply-permission \
+work-cli drive +apply-permission \
   --token "doxcnxxxxxxxxx" --type docx \
   --perm edit --as user
 ```

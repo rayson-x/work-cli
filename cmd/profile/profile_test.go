@@ -203,7 +203,7 @@ func TestProfileRemoveRun_AddRecoveryUsesBuildLocalSurface(t *testing.T) {
 	if !errors.As(source, &original) {
 		t.Fatalf("profileRemoveRun() error = %T, want *errs.ValidationError", source)
 	}
-	const visibleHint = "add another profile first: lark-cli profile add"
+	const visibleHint = "add another profile first: work-cli profile add"
 	if original.Hint != visibleHint {
 		t.Fatalf("producer hint = %q, want %q", original.Hint, visibleHint)
 	}

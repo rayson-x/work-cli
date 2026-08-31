@@ -15,10 +15,10 @@
 
 ```bash
 # 预览图片/文件素材
-lark-cli docs +media-preview --token "Z1Fjxxxxxxxx" --output ./asset
+work-cli docs +media-preview --token "Z1Fjxxxxxxxx" --output ./asset
 
 # 指定输出文件名（带扩展名则不会自动补全）
-lark-cli docs +media-preview --token "Z1Fjxxxxxxxx" --output ./asset.png
+work-cli docs +media-preview --token "Z1Fjxxxxxxxx" --output ./asset.png
 ```
 
 ## 参数

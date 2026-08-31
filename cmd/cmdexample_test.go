@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 // This file and its cmdexample_*_test.go siblings implement a test-only check:
-// the example commands embedded in shortcut definitions (the "Example: lark-cli
+// the example commands embedded in shortcut definitions (the "Example: work-cli
 // ..." lines in each shortcut's Tips, shown in --help) must match the real
 // command tree. It lives entirely in _test.go files (package cmd_test) so it
 // ships in no binary and is not importable by product code; the truth source is
@@ -83,7 +83,7 @@ func TestShortcutExampleCommands(t *testing.T) {
 }
 
 // buildCmdExampleCatalog walks the live cobra command tree and records every
-// command path (minus the "lark-cli" root prefix) with its accepted flags and
+// command path (minus the "work-cli" root prefix) with its accepted flags and
 // whether it is a parent group. This is the same Build() the binary uses, so
 // the catalog can never drift from the real commands.
 func buildCmdExampleCatalog() *catalog {
@@ -91,7 +91,7 @@ func buildCmdExampleCatalog() *catalog {
 	cat := newCatalog()
 	var walk func(c *cobra.Command)
 	walk = func(c *cobra.Command) {
-		path := strings.TrimSpace(strings.TrimPrefix(c.CommandPath(), "lark-cli"))
+		path := strings.TrimSpace(strings.TrimPrefix(c.CommandPath(), "work-cli"))
 		var flags []string
 		add := func(fl *pflag.Flag) {
 			flags = append(flags, "--"+fl.Name)

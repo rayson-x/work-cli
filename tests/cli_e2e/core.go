@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package clie2e contains end-to-end tests for lark-cli.
+// Package clie2e contains end-to-end tests for work-cli.
 package clie2e
 
 import (
@@ -23,7 +23,7 @@ import (
 
 const EnvBinaryPath = "LARK_CLI_BIN"
 const projectRootMarkerDir = "tests"
-const cliBinaryName = "lark-cli"
+const cliBinaryName = "work-cli"
 
 const (
 	// CleanupTimeout is the outer teardown budget. Keep it above any
@@ -49,7 +49,7 @@ func SkipWithoutUserToken(t *testing.T) {
 		Args: []string{"auth", "status", "--verify"},
 	})
 	if err != nil {
-		t.Skipf("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and failed to check local user login via `lark-cli auth status --verify`: %v", err)
+		t.Skipf("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and failed to check local user login via `work-cli auth status --verify`: %v", err)
 	}
 	if result.ExitCode != 0 {
 		t.Skipf("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and local user login check failed: exit=%d stderr=%s", result.ExitCode, strings.TrimSpace(result.Stderr))
@@ -57,10 +57,10 @@ func SkipWithoutUserToken(t *testing.T) {
 
 	stdout := strings.TrimSpace(result.Stdout)
 	if stdout == "" {
-		t.Skip("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and `lark-cli auth status --verify` returned empty stdout")
+		t.Skip("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and `work-cli auth status --verify` returned empty stdout")
 	}
 	if !gjson.Valid(stdout) {
-		t.Skipf("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and `lark-cli auth status --verify` returned non-JSON stdout: %s", stdout)
+		t.Skipf("skipped: LARKSUITE_CLI_USER_ACCESS_TOKEN not set and `work-cli auth status --verify` returned non-JSON stdout: %s", stdout)
 	}
 
 	if identity := gjson.Get(stdout, "identity").String(); identity != "user" {
@@ -93,7 +93,7 @@ func SkipWithoutTenantAccessToken(t *testing.T) {
 			Args: []string{"auth", "status", "--verify"},
 		})
 		if err != nil {
-			t.Skipf("skipped: tenant test credentials not set and failed to check local bot config via `lark-cli auth status --verify`: %v", err)
+			t.Skipf("skipped: tenant test credentials not set and failed to check local bot config via `work-cli auth status --verify`: %v", err)
 		}
 		if result.ExitCode != 0 {
 			t.Skipf("skipped: tenant test credentials not set and local bot config check failed: exit=%d stderr=%s", result.ExitCode, strings.TrimSpace(result.Stderr))
@@ -101,10 +101,10 @@ func SkipWithoutTenantAccessToken(t *testing.T) {
 
 		stdout := strings.TrimSpace(result.Stdout)
 		if stdout == "" {
-			t.Skip("skipped: tenant test credentials not set and `lark-cli auth status --verify` returned empty stdout")
+			t.Skip("skipped: tenant test credentials not set and `work-cli auth status --verify` returned empty stdout")
 		}
 		if !gjson.Valid(stdout) {
-			t.Skipf("skipped: tenant test credentials not set and `lark-cli auth status --verify` returned non-JSON stdout: %s", stdout)
+			t.Skipf("skipped: tenant test credentials not set and `work-cli auth status --verify` returned non-JSON stdout: %s", stdout)
 		}
 
 		if status := gjson.Get(stdout, "identities.bot.status").String(); status != "ready" {
@@ -133,9 +133,9 @@ func DryRunData(stdout string) string {
 	return gjson.Get(stdout, "data").Raw
 }
 
-// Request describes one lark-cli invocation.
+// Request describes one work-cli invocation.
 type Request struct {
-	// Args are required and exclude the lark-cli binary name.
+	// Args are required and exclude the work-cli binary name.
 	Args []string
 	// Params is optional and becomes --params '<json>' when non-nil.
 	Params any
@@ -215,7 +215,7 @@ type WaitOptions struct {
 	TimeoutError func() error
 }
 
-// RunCmd executes lark-cli and captures stdout/stderr/exit code.
+// RunCmd executes work-cli and captures stdout/stderr/exit code.
 // Service errors that return {"error":{"retryable":true}} are retried with
 // bounded exponential backoff so individual tests do not need to remember
 // RunCmdWithRetry for normal transient server contention.
@@ -381,7 +381,7 @@ func RunCmdWithRetry(ctx context.Context, req Request, opts RetryOptions) (*Resu
 	return lastResult, nil
 }
 
-// ResultHasRetryableError reports whether lark-cli returned a structured
+// ResultHasRetryableError reports whether work-cli returned a structured
 // service error with error.retryable=true in either output stream.
 func ResultHasRetryableError(result *Result) bool {
 	if result == nil {
@@ -544,7 +544,7 @@ func ResolveBinaryPath(req Request) (string, error) {
 		return normalizeBinaryPath(path)
 	}
 
-	return "", fmt.Errorf("resolve lark-cli binary: not found via request.BinaryPath, %s, project-root ./%s, PATH:%s", EnvBinaryPath, cliBinaryName, cliBinaryName)
+	return "", fmt.Errorf("resolve work-cli binary: not found via request.BinaryPath, %s, project-root ./%s, PATH:%s", EnvBinaryPath, cliBinaryName, cliBinaryName)
 }
 
 func normalizeBinaryPath(path string) (string, error) {
@@ -587,14 +587,14 @@ func BuildArgs(req Request) ([]string, error) {
 	if req.Params != nil {
 		paramsBytes, err := json.Marshal(req.Params)
 		if err != nil {
-			return nil, fmt.Errorf("marshal lark-cli params: %w", err)
+			return nil, fmt.Errorf("marshal work-cli params: %w", err)
 		}
 		args = append(args, "--params", string(paramsBytes))
 	}
 	if req.Data != nil {
 		dataBytes, err := json.Marshal(req.Data)
 		if err != nil {
-			return nil, fmt.Errorf("marshal lark-cli data: %w", err)
+			return nil, fmt.Errorf("marshal work-cli data: %w", err)
 		}
 		args = append(args, "--data", string(dataBytes))
 	}

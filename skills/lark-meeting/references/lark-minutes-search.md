@@ -3,7 +3,7 @@
 
 搜索妙记列表，支持关键词、所有者、参与者以及时间范围等多条件过滤。支持 user 身份和 bot / 应用身份；所有者与参与者都支持传入多个 open\_id，user 身份下也支持传入 `me` 表示当前用户。只读操作，不修改任何妙记数据。
 
-本 skill 对应 shortcut：`lark-cli minutes +search`（调用 `POST /open-apis/minutes/v1/minutes/search`）。
+本 skill 对应 shortcut：`work-cli minutes +search`（调用 `POST /open-apis/minutes/v1/minutes/search`）。
 
 ## 典型触发表达
 
@@ -20,46 +20,46 @@
 
 ```bash
 # 关键词搜索
-lark-cli minutes +search --query "预算复盘"
+work-cli minutes +search --query "预算复盘"
 
 # 查询某一天内的妙记（单日查询时，建议将 start 和 end 都填写为同一天）
-lark-cli minutes +search --start 2026-03-10 --end 2026-03-10
+work-cli minutes +search --start 2026-03-10 --end 2026-03-10
 
 # 按时间范围搜索
-lark-cli minutes +search --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
-lark-cli minutes +search --start 2026-03-10 --end 2026-03-17
+work-cli minutes +search --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
+work-cli minutes +search --start 2026-03-10 --end 2026-03-17
 
 # 关键词 + 时间范围
-lark-cli minutes +search --query "预算复盘" --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
-lark-cli minutes +search --query "预算复盘" --start "2026-03-10T00:00+08:00"
-lark-cli minutes +search --query "预算复盘" --end "2026-03-17T00:00+08:00"
+work-cli minutes +search --query "预算复盘" --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
+work-cli minutes +search --query "预算复盘" --start "2026-03-10T00:00+08:00"
+work-cli minutes +search --query "预算复盘" --end "2026-03-17T00:00+08:00"
 
 # 按参与者过滤（open_id，逗号分隔）
-lark-cli minutes +search --participant-ids "ou_x,ou_y"
+work-cli minutes +search --participant-ids "ou_x,ou_y"
 
 # 按所有者过滤（open_id，逗号分隔）
-lark-cli minutes +search --owner-ids "ou_owner,ou_owner_2"
+work-cli minutes +search --owner-ids "ou_owner,ou_owner_2"
 
 # 严格只查我作为参与者的妙记（不含我拥有）
-lark-cli minutes +search --participant-ids "me"
+work-cli minutes +search --participant-ids "me"
 
 # 查询我拥有的妙记
-lark-cli minutes +search --owner-ids "me"
+work-cli minutes +search --owner-ids "me"
 
 # 广义查询我参与的妙记（自然语言默认：我拥有 ∪ 我参与）
-lark-cli minutes +search --owner-ids "me" --start 2026-03-10 --end 2026-03-10
-lark-cli minutes +search --participant-ids "me" --start 2026-03-10 --end 2026-03-10
+work-cli minutes +search --owner-ids "me" --start 2026-03-10 --end 2026-03-10
+work-cli minutes +search --participant-ids "me" --start 2026-03-10 --end 2026-03-10
 # 然后按 token 去重合并两次结果
 
 # 多条件组合查询
-lark-cli minutes +search --owner-ids "ou_owner" --participant-ids "ou_x" --start "2026-03-10T00:00+08:00"
+work-cli minutes +search --owner-ids "ou_owner" --participant-ids "ou_x" --start "2026-03-10T00:00+08:00"
 
 # 分页查询
-lark-cli minutes +search --query "预算复盘" --page-size 20
-lark-cli minutes +search --query "预算复盘" --page-size 20 --page-token '<PAGE_TOKEN>'
+work-cli minutes +search --query "预算复盘" --page-size 20
+work-cli minutes +search --query "预算复盘" --page-size 20 --page-token '<PAGE_TOKEN>'
 
 # 输出为结构化 JSON
-lark-cli minutes +search --query "预算复盘" --format json
+work-cli minutes +search --query "预算复盘" --format json
 ```
 
 ## 参数
@@ -83,12 +83,12 @@ lark-cli minutes +search --query "预算复盘" --format json
 
 ### 2. 支持 user 和 bot 身份
 
-该接口支持 `--as user` 和 `--as bot`。user 身份需要完成 `lark-cli auth login` 并具备 `minutes:minutes.search:read` 权限；bot 身份使用应用的 tenant access token，需要确认当前应用已开通 `minutes:minutes.search:read` scope，且运行环境能获取有效的 TAT。
+该接口支持 `--as user` 和 `--as bot`。user 身份需要完成 `work-cli auth login` 并具备 `minutes:minutes.search:read` 权限；bot 身份使用应用的 tenant access token，需要确认当前应用已开通 `minutes:minutes.search:read` scope，且运行环境能获取有效的 TAT。
 
 ### 3. `me` 表示当前用户
 
 在 `--owner-ids` 和 `--participant-ids` 中可使用 `me`，表示当前登录用户。该值会在本地解析为当前用户的 `open_id`，无需手动先查询自己的用户 ID。`me` 只适合 user 身份；bot 身份没有“当前用户”，请直接传 `ou_` open_id。
-若当前环境尚未完成用户登录，或 CLI 无法解析出当前用户的 `open_id`，则应先执行 `lark-cli auth login`，再重新执行搜索。该恢复方式只适用于 user 身份和 `me` 解析；bot 身份应检查 tenant access token 与应用 scope，不应通过 `auth login` 修复。
+若当前环境尚未完成用户登录，或 CLI 无法解析出当前用户的 `open_id`，则应先执行 `work-cli auth login`，再重新执行搜索。该恢复方式只适用于 user 身份和 `me` 解析；bot 身份应检查 tenant access token 与应用 scope，不应通过 `auth login` 修复。
 
 ### 4. 自然语言中的“参与的妙记”默认按并集理解
 
@@ -141,10 +141,10 @@ CLI 会先按输入的本地日历日语义解析，再标准化为 RFC3339 时�
 
 ```bash
 # First page
-lark-cli minutes +search --query "预算复盘" --page-size 20
+work-cli minutes +search --query "预算复盘" --page-size 20
 
 # Next page
-lark-cli minutes +search --query "预算复盘" --page-size 20 --page-token '<PAGE_TOKEN>'
+work-cli minutes +search --query "预算复盘" --page-size 20 --page-token '<PAGE_TOKEN>'
 ```
 
 ## 常见错误与排查

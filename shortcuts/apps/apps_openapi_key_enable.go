@@ -21,7 +21,7 @@ var AppsOpenAPIKeyEnable = common.Shortcut{
 	Command:     "+openapi-key-enable",
 	Description: "Enable an open API key",
 	Risk:        "write",
-	Tips:        []string{"Example: lark-cli apps +openapi-key-enable --app-id <app_id> --key-id <key_id>"},
+	Tips:        []string{"Example: work-cli apps +openapi-key-enable --app-id <app_id> --key-id <key_id>"},
 	Scopes:      []string{"spark:app:write"},
 	AuthTypes:   []string{"user"},
 	HasFormat:   true,

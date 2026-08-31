@@ -267,7 +267,7 @@ var ColsResize = common.Shortcut{
 	HasFormat:   true,
 	Flags:       flagsFor("+cols-resize"),
 	Tips: []string{
-		"Example: lark-cli sheets +cols-resize --url <URL> --sheet-name Sheet1 --range A:C --width 120",
+		"Example: work-cli sheets +cols-resize --url <URL> --sheet-name Sheet1 --range A:C --width 120",
 		`Different widths per column in one batch request: --widths '{"A":80,"C:E":120}'. Widths are pixels (px ≈ chars × 8 + 16), not Excel character units.`,
 	},
 	Validate: validateViaResize("column"),

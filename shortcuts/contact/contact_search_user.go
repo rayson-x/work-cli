@@ -150,9 +150,9 @@ var ContactSearchUser = common.Shortcut{
 		{Name: "queries", Desc: "comma-separated keywords searched in parallel; output is a flat users[] with matched_query plus a queries[] sidecar"},
 	},
 	Tips: []string{
-		"Filter-only enumeration — users you've chatted with: lark-cli contact +search-user --has-chatted",
-		"Refine same-name hits: lark-cli contact +search-user --query '张三' --has-chatted --exclude-external-users",
-		"Multi-name fanout: lark-cli contact +search-user --queries 'alice,bob,张三'",
+		"Filter-only enumeration — users you've chatted with: work-cli contact +search-user --has-chatted",
+		"Refine same-name hits: work-cli contact +search-user --query '张三' --has-chatted --exclude-external-users",
+		"Multi-name fanout: work-cli contact +search-user --queries 'alice,bob,张三'",
 		"on has_more=true add filters or tighten --query — there is no auto-pagination.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {

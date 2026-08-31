@@ -43,20 +43,20 @@
 ```bash
 # 1) 建 app，拿 app_id（--app-type 用主路由判定的类型；此例"待办应用"要存待办→full_stack，
 #    若是纯前端交互工具且未提数据库则用 frontend）
-lark-cli apps +create --name "待办应用" --app-type full_stack \
+work-cli apps +create --name "待办应用" --app-type full_stack \
   --description "支持新增、完成、筛选待办"
 
 # 2) 在该 app 下建 session，拿 session_id
-lark-cli apps +session-create --app-id app_xxx
+work-cli apps +session-create --app-id app_xxx
 
 # 3) 发消息发起一轮（异步入队，立即返回，无 turn_id）
-lark-cli apps +chat --app-id app_xxx --session-id sess_xxx --message "做一个待办清单页面"
+work-cli apps +chat --app-id app_xxx --session-id sess_xxx --message "做一个待办清单页面"
 
 # 4) 轮询本轮状态；完成后从 latest_turn.messages 读取结果
-lark-cli apps +session-get --app-id app_xxx --session-id sess_xxx
+work-cli apps +session-get --app-id app_xxx --session-id sess_xxx
 
 # 找该 app 已有的会话（续聊/不确定 session 时用）
-lark-cli apps +session-list --app-id app_xxx
+work-cli apps +session-list --app-id app_xxx
 ```
 
 ## 完成态不等于发布态
@@ -92,8 +92,8 @@ lark-cli apps +session-list --app-id app_xxx
 
 1. 本地存在该 app 的项目目录（已 `+init` 或 clone 过），**且** git commit 数 > 2；
 2. 应用维度（云端）至少有一个已提交的版本，按以下任一信号判断：
-   - `lark-cli apps +session-get --app-id <app_id> --session-id <session_id>` 的返回里出现已提交版本信息；
-   - 在 `lark-cli apps +list`（必要时配 `--keyword <name>` 定位）的目标 app 条目里 `is_published: true`。
+   - `work-cli apps +session-get --app-id <app_id> --session-id <session_id>` 的返回里出现已提交版本信息；
+   - 在 `work-cli apps +list`（必要时配 `--keyword <name>` 定位）的目标 app 条目里 `is_published: true`。
 
 **未初始化**（两个条件同时成立）：
 

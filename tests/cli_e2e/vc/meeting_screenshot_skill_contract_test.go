@@ -41,7 +41,7 @@ func TestMeetingScreenshotSkillKeepsQuickActionFocused(t *testing.T) {
 	visualSection := sectionParts[0]
 	require.Contains(t, visualSection, "必须读取当前会议合成画面中的视觉信息")
 	require.Contains(t, visualSection, "事件、字幕、聊天或可直接读取的共享文档已经足够回答时，不要截图")
-	require.Contains(t, visualSection, "lark-cli vc +meeting-screenshot --as <same_identity> --meeting-id <meeting_id>")
+	require.Contains(t, visualSection, "work-cli vc +meeting-screenshot --as <same_identity> --meeting-id <meeting_id>")
 	require.NotContains(t, visualSection, "+meeting-events")
 	require.NotContains(t, visualSection, "JPEG")
 	require.NotContains(t, visualSection, "重新截图")

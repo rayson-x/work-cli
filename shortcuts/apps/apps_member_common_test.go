@@ -112,12 +112,12 @@ func TestAppsMemberAPIErrorNormalization(t *testing.T) {
 	}{
 		{
 			name: "internal feature not available", code: 40005, wantSubtype: errs.SubtypeFeatureNotAvailable,
-			wantMessage: "Collaborator management is not available for this app via lark-cli.",
+			wantMessage: "Collaborator management is not available for this app via work-cli.",
 			wantHint:    "Open this app in Miaoda and manage collaborators from its permission settings.",
 		},
 		{
 			name: "OpenAPI feature not available", code: 3340005, wantSubtype: errs.SubtypeFeatureNotAvailable,
-			wantMessage: "Collaborator management is not available for this app via lark-cli.",
+			wantMessage: "Collaborator management is not available for this app via work-cli.",
 			wantHint:    "Open this app in Miaoda and manage collaborators from its permission settings.",
 		},
 		{
@@ -133,12 +133,12 @@ func TestAppsMemberAPIErrorNormalization(t *testing.T) {
 		{
 			name: "copy setting unavailable for Miaoda", code: 40007, wantSubtype: errs.SubtypeFeatureNotAvailable,
 			wantMessage: "Copy, print, and download permissions are read-only for Miaoda apps.",
-			wantHint:    "Inspect copy_download_by with +member-settings-get; do not retry this setting through lark-cli.",
+			wantHint:    "Inspect copy_download_by with +member-settings-get; do not retry this setting through work-cli.",
 		},
 		{
 			name: "OpenAPI copy setting unavailable for Miaoda", code: 3340007, wantSubtype: errs.SubtypeFeatureNotAvailable,
 			wantMessage: "Copy, print, and download permissions are read-only for Miaoda apps.",
-			wantHint:    "Inspect copy_download_by with +member-settings-get; do not retry this setting through lark-cli.",
+			wantHint:    "Inspect copy_download_by with +member-settings-get; do not retry this setting through work-cli.",
 		},
 		{name: "internal app not found", code: 40400, wantSubtype: errs.SubtypeNotFound},
 		{name: "OpenAPI app not found", code: 3340400, wantSubtype: errs.SubtypeNotFound},

@@ -26,7 +26,7 @@ var AppsTraceList = common.Shortcut{
 	Description: "Search online app traces with observability filters",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +trace-list --app-id <app_id> --trace-id <trace_id>",
+		"Example: work-cli apps +trace-list --app-id <app_id> --trace-id <trace_id>",
 		"Tip: use --page-token from the response to fetch the next page.",
 	},
 	Scopes:    []string{"spark:app:read"},
@@ -82,7 +82,7 @@ var AppsTraceGet = common.Shortcut{
 	Description: "Get one online app trace by trace ID",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +trace-get --app-id <app_id> --trace-id <trace_id>",
+		"Example: work-cli apps +trace-get --app-id <app_id> --trace-id <trace_id>",
 		"Tip: use +trace-list first if the trace ID is unknown.",
 	},
 	Scopes:    []string{"spark:app:read"},

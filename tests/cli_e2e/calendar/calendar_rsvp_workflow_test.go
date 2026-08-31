@@ -74,7 +74,7 @@ func TestCalendar_RSVPWorkflowAsUser(t *testing.T) {
 		result, err := clie2e.RunCmd(ctx, clie2e.Request{
 			Args: []string{
 				"calendar", "+create",
-				"--summary", "lark-cli-e2e-calendar-rsvp-" + clie2e.GenerateSuffix(),
+				"--summary", "work-cli-e2e-calendar-rsvp-" + clie2e.GenerateSuffix(),
 				"--start", startTime,
 				"--end", endTime,
 				"--calendar-id", calendarID,

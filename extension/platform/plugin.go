@@ -4,7 +4,7 @@
 package platform
 
 // Plugin is the single contract a third-party / embedding integrator
-// implements to extend lark-cli. Four methods, every one mandatory.
+// implements to extend work-cli. Four methods, every one mandatory.
 //
 // Name must match the grammar ^[a-z0-9][a-z0-9-]*$. The "." character
 // is forbidden so plugin-name + hookName namespacing never produces

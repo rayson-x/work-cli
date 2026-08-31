@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书邮箱：Use when user mentions 起草邮件、写邮件、草稿、发送/回复/转发邮件、查阅邮件、看邮件、搜索邮件、邮件文件夹、邮件标签、邮件联系人、监听新邮件、邮件收信规则等；use for mail/email intent only. Do not use for docs/sheets/calendar/auth setup/pure contact lookup/IM chat tasks."
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli mail --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli mail --help"
 ---
 
 # mail (v1)
@@ -85,15 +85,15 @@ metadata:
 
 邮箱是用户的个人资源，**策略上应优先显式使用 `--as user`（用户身份）请求**（CLI 的 `--as` 默认值为 `auto`）。
 
-- **`--as user`（推荐）**：以当前登录用户的身份访问其邮箱。需要先通过 `lark-cli auth login --domain mail` 完成用户授权。
+- **`--as user`（推荐）**：以当前登录用户的身份访问其邮箱。需要先通过 `work-cli auth login --domain mail` 完成用户授权。
 - **`--as bot`**：以应用身份访问邮箱。需要在飞书开发者后台为应用开通相应权限，否则请求会被拒绝。**注意：bot 身份仅适用于读取类操作，所有写操作（发送、回复、转发、草稿编辑等）仅支持 user 身份。**
 
-1. 所有邮件写操作（发送、回复、转发、草稿编辑） → 必须使用 `--as user`，未登录时先使用 `lark-cli auth login --domain mail` 进行登录
+1. 所有邮件写操作（发送、回复、转发、草稿编辑） → 必须使用 `--as user`，未登录时先使用 `work-cli auth login --domain mail` 进行登录
 2. 读取类操作（查看邮件、会话、收件箱列表等） → 推荐使用 `--as user`；如需应用级批量读取（如管理员代操作），可使用 `--as bot`，确保应用已开通对应权限
 
 ## 典型工作流
 
-1. **确认身份** — 首次操作邮箱前先调用 `lark-cli mail user_mailboxes profile --params '{"user_mailbox_id":"me"}'` 获取当前用户的真实邮箱地址（`primary_email_address`），不要通过系统用户名猜测。后续判断"发件人是否为用户本人"时以此地址为准。
+1. **确认身份** — 首次操作邮箱前先调用 `work-cli mail user_mailboxes profile --params '{"user_mailbox_id":"me"}'` 获取当前用户的真实邮箱地址（`primary_email_address`），不要通过系统用户名猜测。后续判断"发件人是否为用户本人"时以此地址为准。
 2. **浏览** — `+triage` 查看收件箱摘要，获取 `message_id` / `thread_id`
 3. **阅读** — `+message` 只读单封邮件；已有多个 `message_id` 时用 `+messages` 批量读取，不要循环调用 `+message`；`+thread` 读整个会话
 4. **整理** — 标签、已读/未读状态和移动文件夹优先用 `+message-modify`；软删除优先用 `+message-trash`
@@ -135,11 +135,11 @@ metadata:
 
 ```bash
 # Shortcut
-lark-cli mail +triage -h
-lark-cli mail +send -h
+work-cli mail +triage -h
+work-cli mail +send -h
 
 # 原生 API（逐级查看）
-lark-cli mail user_mailbox.messages -h
+work-cli mail user_mailbox.messages -h
 ```
 
 `-h` 输出是可用 flag 的权威来源。reference 文档可辅助理解语义，但实际 flag 名称以 `-h` 为准。
@@ -169,11 +169,11 @@ lark-cli mail user_mailbox.messages -h
 
 ```bash
 # ✅ 推荐：HTML 格式
-lark-cli mail +send --to alice@example.com --subject '周报' \
+work-cli mail +send --to alice@example.com --subject '周报' \
   --body '<p>本周进展：</p><ul><li>完成 A 模块</li><li>修复 3 个 bug</li></ul>'
 
 # ⚠️ 仅在内容极简时使用纯文本
-lark-cli mail +reply --message-id <id> --body '收到，谢谢'
+work-cli mail +reply --message-id <id> --body '收到，谢谢'
 ```
 
 ### 读取邮件：按需控制返回内容
@@ -184,18 +184,18 @@ lark-cli mail +reply --message-id <id> --body '收到，谢谢'
 
 ```bash
 # ✅ 验证操作结果：不需要 HTML
-lark-cli mail +message --message-id <id> --html=false
+work-cli mail +message --message-id <id> --html=false
 
 # ✅ 需要阅读完整内容：保持默认
-lark-cli mail +message --message-id <id>
+work-cli mail +message --message-id <id>
 
 # ✅ 已有多个 message_id：批量读取，避免循环调用 +message
-lark-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false
+work-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false
 ```
 
 ## 原生 API 调用规则
 
-没有 Shortcut 覆盖的操作才使用原生 API。标签、已读状态、移动文件夹优先使用 `+message-modify`；软删除优先使用 `+message-trash`。调用步骤以本节为准；资源和 method 用 `lark-cli mail -h` / `lark-cli mail <resource> -h` 发现，不在入口保留完整资源表。
+没有 Shortcut 覆盖的操作才使用原生 API。标签、已读状态、移动文件夹优先使用 `+message-modify`；软删除优先使用 `+message-trash`。调用步骤以本节为准；资源和 method 用 `work-cli mail -h` / `work-cli mail <resource> -h` 发现，不在入口保留完整资源表。
 
 ### Step 1 — 用 `-h` 确定要调用的 API（必须，不可跳过）
 
@@ -203,10 +203,10 @@ lark-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false
 
 ```bash
 # 第一级：查看 mail 下所有资源
-lark-cli mail -h
+work-cli mail -h
 
 # 第二级：查看某个资源下所有方法
-lark-cli mail user_mailbox.messages -h
+work-cli mail user_mailbox.messages -h
 ```
 
 `-h` 输出的就是可执行的命令格式（空格分隔）。**不要跳过此步直接查 schema，不要猜测命令名称。**
@@ -216,11 +216,11 @@ lark-cli mail user_mailbox.messages -h
 确定 `<resource>` 和 `<method>` 后，查 schema 了解参数：
 
 ```bash
-lark-cli schema mail.<resource>.<method>
-# 例如：lark-cli schema mail.user_mailbox.messages.modify_message
+work-cli schema mail.<resource>.<method>
+# 例如：work-cli schema mail.user_mailbox.messages.modify_message
 ```
 
-> **⚠️ 注意**：① 必须精确到 method 级别，禁止查 resource 级别（如 `lark-cli schema mail.user_mailbox.messages`，输出 78K）。② schema 路径用 `.` 分隔（`mail.user_mailbox.messages.modify_message`），但 CLI 命令在 resource 和 method 之间用**空格**（`lark-cli mail user_mailbox.messages modify_message`），不要混淆。
+> **⚠️ 注意**：① 必须精确到 method 级别，禁止查 resource 级别（如 `work-cli schema mail.user_mailbox.messages`，输出 78K）。② schema 路径用 `.` 分隔（`mail.user_mailbox.messages.modify_message`），但 CLI 命令在 resource 和 method 之间用**空格**（`work-cli mail user_mailbox.messages modify_message`），不要混淆。
 
 schema 输出是 JSON，包含两个关键部分：
 
@@ -236,7 +236,7 @@ schema 输出是 JSON，包含两个关键部分：
 按 Step 2 的映射规则，拼接命令：
 
 ```
-lark-cli mail <resource> <method> --params '{...}' [--data '{...}']
+work-cli mail <resource> <method> --params '{...}' [--data '{...}']
 ```
 
 ### 示例
@@ -245,7 +245,7 @@ lark-cli mail <resource> <method> --params '{...}' [--data '{...}']
 
 ```bash
 # schema 中：user_mailbox_id (path, required), page_size (query, required), folder_id (query, optional)
-lark-cli mail user_mailbox.messages list \
+work-cli mail user_mailbox.messages list \
   --params '{"user_mailbox_id":"me","page_size":20,"folder_id":"INBOX"}'
 ```
 
@@ -254,7 +254,7 @@ lark-cli mail user_mailbox.messages list \
 ```bash
 # schema 中：parameters → user_mailbox_id (path, required)
 #            requestBody → name (required), parent_folder_id (required)
-lark-cli mail user_mailbox.folders create \
+work-cli mail user_mailbox.folders create \
   --params '{"user_mailbox_id":"me"}' \
   --data '{"name":"newsletter","parent_folder_id":"0"}'
 ```
@@ -266,7 +266,7 @@ lark-cli mail user_mailbox.folders create \
 
 ## Shortcuts（推荐优先使用）
 
-Shortcut 是对常用操作的高级封装（`lark-cli mail +<verb> [flags]`）。有 Shortcut 的操作优先使用。
+Shortcut 是对常用操作的高级封装（`work-cli mail +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 | Shortcut | 说明 |
 |----------|------|

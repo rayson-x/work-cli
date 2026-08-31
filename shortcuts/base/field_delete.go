@@ -19,7 +19,7 @@ var BaseFieldDelete = common.Shortcut{
 	Flags:       []common.Flag{baseTokenFlag(true), tableRefFlag(true), fieldRefFlag(true)},
 	Tips: []string{
 		baseHighRiskYesTip,
-		`Example: lark-cli base +field-delete --base-token <base_token> --table-id <table_id> --field-id "Status" --yes`,
+		`Example: work-cli base +field-delete --base-token <base_token> --table-id <table_id> --field-id "Status" --yes`,
 	},
 	DryRun: dryRunFieldDelete,
 	Execute: func(ctx context.Context, runtime *common.RuntimeContext) error {

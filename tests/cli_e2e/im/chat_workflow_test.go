@@ -22,7 +22,7 @@ func TestIM_ChatUpdateWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	originalName := "lark-cli-e2e-im-update-" + suffix
+	originalName := "work-cli-e2e-im-update-" + suffix
 	updatedName := originalName + "-updated"
 	updatedDescription := "Updated description for e2e test"
 
@@ -77,7 +77,7 @@ func TestIM_ChatsGetWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	chatName := "lark-cli-e2e-chats-get-" + suffix
+	chatName := "work-cli-e2e-chats-get-" + suffix
 
 	chatID := createChat(t, parentT, ctx, chatName)
 
@@ -108,7 +108,7 @@ func TestIM_ChatsLinkWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	chatName := "lark-cli-e2e-chats-link-" + suffix
+	chatName := "work-cli-e2e-chats-link-" + suffix
 
 	chatID := createChat(t, parentT, ctx, chatName)
 

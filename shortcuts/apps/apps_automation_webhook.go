@@ -73,7 +73,7 @@ func runWebhookURLReset(rctx *common.RuntimeContext) error {
 	if err != nil {
 		return withAppsHint(err, automationNotFoundHint())
 	}
-	fmt.Fprintln(rctx.IO().ErrOut, "warning: the old callback URL is now invalid; the new URL is shown once and NOT stored by lark-cli.")
+	fmt.Fprintln(rctx.IO().ErrOut, "warning: the old callback URL is now invalid; the new URL is shown once and NOT stored by work-cli.")
 	rctx.OutFormat(data, nil, func(w io.Writer) {
 		fmt.Fprintf(w, "new %s URL: %v  (shown once)\n", appEnv, firstNonEmpty(
 			common.GetString(data, appEnv+"_url"), common.GetString(data, "url")))
@@ -122,7 +122,7 @@ func runWebhookTokenReset(rctx *common.RuntimeContext) error {
 // stderr warning; never persisted (mirrors outputIssuedKey in apps_openapi_key_create.go).
 func outputIssuedWebhookToken(rctx *common.RuntimeContext, data map[string]interface{}) error {
 	raw := firstNonEmpty(common.GetString(data, "token_value"), common.GetString(data, "token"))
-	fmt.Fprintln(rctx.IO().ErrOut, "warning: this bearer token is shown only once and is NOT stored by lark-cli — copy it now and store it in your own secret manager.")
+	fmt.Fprintln(rctx.IO().ErrOut, "warning: this bearer token is shown only once and is NOT stored by work-cli — copy it now and store it in your own secret manager.")
 	out := map[string]interface{}{"token_value": raw, "token_enabled": true}
 	rctx.OutFormat(out, nil, func(w io.Writer) {
 		fmt.Fprintf(w, "bearer token: %v  (shown once)\n", raw)

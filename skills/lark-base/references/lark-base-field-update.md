@@ -7,7 +7,7 @@
 ## 推荐命令
 
 ```bash
-lark-cli base +field-update \
+work-cli base +field-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <field_id> \

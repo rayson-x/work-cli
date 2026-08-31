@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书视频会议：查询会议记录与会议产物(纪要/逐字稿/妙记)、妙记搜索/上传/下载/编辑、机器人参与会议；查询进行中的会议、实时会议内容(发言/聊天/共享文档)问答(会上/会里)、发送会中聊天/表情；基于 meeting_id、meeting_no、event_id、note_id、minute_token、vc-node-id 或妙记 URL 查询相关信息。预约会议、忙闲和会议室管理走 lark-calendar。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli vc --help;lark-cli minutes --help;lark-cli note --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli vc --help;work-cli minutes --help;work-cli note --help"
 ---
 
 # lark-meeting
@@ -84,13 +84,13 @@ Calendar 日程 ──meeting_note────────────► Doc（
 
 ```bash
 # 当前用户所在会议
-lark-cli vc +meeting-list-active --as user
+work-cli vc +meeting-list-active --as user
 
 # 应用机器人可见的目标用户会议
-lark-cli vc +meeting-list-active --as bot --user-id <open_id>
+work-cli vc +meeting-list-active --as bot --user-id <open_id>
 
 # 确定唯一 meeting_id 后沿用来源身份
-lark-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --page-all --format pretty
+work-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --page-all --format pretty
 ```
 
 同时有多场会议时，需要先选择要查询的会议；只有一场会议时，直接查询该场会议的会议事件。
@@ -114,7 +114,7 @@ lark-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --p
 |---|---|---|
 | `vc +search` | 搜索历史会议 | [lark-vc-search](references/lark-vc-search.md) |
 | `vc +detail` | 查询会议信息及关联的 Note、Minutes 标识 | [lark-vc-detail](references/lark-vc-detail.md) |
-| `vc meeting get` | 查询会议基础信息和参会人快照 | `lark-cli vc meeting get --help` |
+| `vc meeting get` | 查询会议基础信息和参会人快照 | `work-cli vc meeting get --help` |
 | `vc +recording` | 从会议定位录制及妙记 | [lark-vc-recording](references/lark-vc-recording.md) |
 | `vc +meeting-list-active` | 发现当前可见的进行中会议 | [lark-vc-meeting-list-active](references/lark-vc-meeting-list-active.md) |
 | `vc +meeting-events` | 读取会中事件和共享内容 | [lark-vc-meeting-events](references/lark-vc-meeting-events.md) |
@@ -126,7 +126,7 @@ lark-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --p
 | `vc +meeting-end` | 让当前 Host 应用机器人结束会议 | [lark-vc-agent-meeting-end](references/lark-vc-agent-meeting-end.md) |
 | `vc +meeting-leave` | 让应用机器人离开会议 | [lark-vc-agent-meeting-leave](references/lark-vc-agent-meeting-leave.md) |
 | `minutes +search` | 搜索妙记 | [lark-minutes-search](references/lark-minutes-search.md) |
-| `minutes minutes get` | 查询妙记基础信息 | `lark-cli minutes minutes get --help` |
+| `minutes minutes get` | 查询妙记基础信息 | `work-cli minutes minutes get --help` |
 | `minutes +detail` | 读取妙记信息和指定产物 | [lark-minutes-detail](references/lark-minutes-detail.md) |
 | `minutes +download` | 下载妙记原始音视频 | [lark-minutes-download](references/lark-minutes-download.md) |
 | `minutes +upload` | 从云空间音视频生成妙记 | [lark-minutes-upload](references/lark-minutes-upload.md) |
@@ -137,7 +137,7 @@ lark-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --p
 | `minutes +apply-permission` | 申请妙记查看或编辑权限 | [lark-minutes-apply-permission](references/lark-minutes-apply-permission.md) |
 | `drive +member-list` | 查看妙记协作者及其权限 | [lark-drive-member-list](../lark-drive/references/lark-drive-member-list.md) |
 | `drive +member-add` | 给指定成员分配妙记查看或编辑权限 | [lark-drive-member-add](../lark-drive/references/lark-drive-member-add.md) |
-| `minutes +word-replace` | 批量替换妙记逐字稿关键词 | `lark-cli minutes +word-replace --help` |
+| `minutes +word-replace` | 批量替换妙记逐字稿关键词 | `work-cli minutes +word-replace --help` |
 | `note +detail` | 查询智能纪要及关联文档标识 | [lark-note-detail](references/lark-note-detail.md) |
 | `note +transcript` | 获取 unified 智能纪要逐字稿 | [lark-note-transcript](references/lark-note-transcript.md) |
 
@@ -147,4 +147,4 @@ lark-cli vc +meeting-events --as <source_identity> --meeting-id <meeting_id> --p
 
 1. 用户目标符合“快速行动”的进入条件时，直接执行对应 CLI；不要预读场景手册、命令参考、`--help` 或 schema。
 2. 不符合快速行动条件，或缺少关键标识、需要消歧、涉及写操作时，读取与目标匹配的一个主场景手册；主场景明确转交到下游场景时，只继续读取被引用的场景或章节，并按其中流程执行 CLI。
-3. 仅当缺少具体参数、返回字段、特殊约束或异常处理方式时：有参考手册的命令读取对应文件；没有参考手册的命令运行表中列出的精确 `lark-cli ... --help`。场景或 reference 已给出精确命令时，不再调用 `--help`；仅在参数缺失、命令不识别或文档与运行结果冲突时调用。
+3. 仅当缺少具体参数、返回字段、特殊约束或异常处理方式时：有参考手册的命令读取对应文件；没有参考手册的命令运行表中列出的精确 `work-cli ... --help`。场景或 reference 已给出精确命令时，不再调用 `--help`；仅在参数缺失、命令不识别或文档与运行结果冲突时调用。

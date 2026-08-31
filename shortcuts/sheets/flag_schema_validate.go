@@ -126,7 +126,7 @@ func validateValueAgainstSchema(fv flagView, name string, value interface{}) err
 		if isTypeMismatch && len(tm.enum) == 0 && pathDepth(tm.path) <= skeletonPathDepthLimit {
 			if sk := schemaSkeleton(&schema, skeletonMaxDepth); sk != "" {
 				return sheetsValidationForFlag(name,
-					"--%s: %s; expected shape: %s (run `lark-cli sheets %s --print-schema --flag-name %s` for the full JSON Schema)",
+					"--%s: %s; expected shape: %s (run `work-cli sheets %s --print-schema --flag-name %s` for the full JSON Schema)",
 					name, vErr.Error(), sk, command, name).WithCause(vErr)
 			}
 		}
@@ -140,14 +140,14 @@ func validateValueAgainstSchema(fv flagView, name string, value interface{}) err
 			}
 		}
 		return sheetsValidationForFlag(name,
-			"--%s: %s; run `lark-cli sheets %s --print-schema --flag-name %s` to see the expected JSON Schema",
+			"--%s: %s; run `work-cli sheets %s --print-schema --flag-name %s` to see the expected JSON Schema",
 			name, msg, command, name).WithCause(vErr)
 	}
 	// Multiple failures: report them all at once (numbered, each with its
 	// own inline teaching hint) so the agent fixes the whole payload in one
 	// retry instead of the fail-fast "fix one, hit the next" loop.
 	return sheetsValidationForFlag(name,
-		"--%s: %s; run `lark-cli sheets %s --print-schema --flag-name %s` to see the expected JSON Schema",
+		"--%s: %s; run `work-cli sheets %s --print-schema --flag-name %s` to see the expected JSON Schema",
 		name, formatSchemaErrorList(c.errs), command, name).WithCause(vErr)
 }
 

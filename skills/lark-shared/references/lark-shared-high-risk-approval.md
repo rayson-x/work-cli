@@ -1,6 +1,6 @@
 # 高风险操作的审批协议（exit 10）
 
-lark-cli 对高风险写操作（`risk: "high-risk-write"`）有强制确认门禁。当缺少命令要求的确认 flag（通常是 `--yes`）时，CLI 会退出码 `10`、并在 stderr 返回如下结构化 envelope：
+work-cli 对高风险写操作（`risk: "high-risk-write"`）有强制确认门禁。当缺少命令要求的确认 flag（通常是 `--yes`）时，CLI 会退出码 `10`、并在 stderr 返回如下结构化 envelope：
 
 ```json
 {
@@ -34,5 +34,5 @@ lark-cli 对高风险写操作（`risk: "high-risk-write"`）有强制确认门�
 
 ## 如何识别一条命令是高风险
 
-- shortcut：`lark-cli <service> +<cmd> --help` 顶部会显示 `Risk: high-risk-write`
-- service 命令：`lark-cli schema <service>.<resource>.<method> --format json` 的返回值里 `"risk": "high-risk-write"`
+- shortcut：`work-cli <service> +<cmd> --help` 顶部会显示 `Risk: high-risk-write`
+- service 命令：`work-cli schema <service>.<resource>.<method> --format json` 的返回值里 `"risk": "high-risk-write"`

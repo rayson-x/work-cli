@@ -74,7 +74,7 @@ func runProbe(parent context.Context, factory *cmdutil.Factory, appID, appSecret
 
 	// TAT succeeded — fire the probe call. Any outcome is ignored.
 	url := core.ResolveEndpoints(brand).Open + "/open-apis/application/v6/larksuite_cli_app/probe"
-	body := []byte(fmt.Sprintf(`{"from":"lark-cli/%s"}`, build.Version))
+	body := []byte(fmt.Sprintf(`{"from":"work-cli/%s"}`, build.Version))
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
 	if err != nil {
 		return nil

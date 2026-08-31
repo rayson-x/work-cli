@@ -12,19 +12,19 @@
 
 ```bash
 # 先预览请求，不实际执行
-lark-cli approval tasks reject \
+work-cli approval tasks reject \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","comment":"拒绝"}' \
   --as user \
   --dry-run
 
 # 拒绝审批任务，并附带审批意见
-lark-cli approval tasks reject \
+work-cli approval tasks reject \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","comment":"拒绝，信息不完整"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体，适合较长 comment
-lark-cli approval tasks reject \
+work-cli approval tasks reject \
   --data @./reject-body.json \
   --as user \
   --yes
@@ -48,7 +48,7 @@ lark-cli approval tasks reject \
 先查到待办任务：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的两个字段：
@@ -61,7 +61,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需先确认表单、节点、审批流进度，可继续查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

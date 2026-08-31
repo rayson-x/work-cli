@@ -1,6 +1,6 @@
 # apps +list
 
-列出当前用户可见的妙搭应用，用于从应用名定位 `app_id`。运行时命令事实以 `lark-cli apps +list --help` 为准。
+列出当前用户可见的妙搭应用，用于从应用名定位 `app_id`。运行时命令事实以 `work-cli apps +list --help` 为准。
 
 ## 何时用
 
@@ -16,9 +16,9 @@
 ## 示例
 
 ```bash
-lark-cli apps +list --keyword "审批"
-lark-cli apps +list --ownership mine --app-type full_stack
-lark-cli apps +list --page-token "<cursor>"
+work-cli apps +list --keyword "审批"
+work-cli apps +list --ownership mine --app-type full_stack
+work-cli apps +list --page-token "<cursor>"
 ```
 
 ## 输出契约

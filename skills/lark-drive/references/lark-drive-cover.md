@@ -8,18 +8,18 @@
 
 ```bash
 # 列出内置封面规格
-lark-cli drive +cover \
+work-cli drive +cover \
   --file-token "<FILE_TOKEN>" \
   --list-only
 
 # 下载 square 规格封面
-lark-cli drive +cover \
+work-cli drive +cover \
   --file-token "<FILE_TOKEN>" \
   --spec square \
   --output ./artifacts/report-cover
 
 # 下载默认大图封面，并在文件冲突时覆盖
-lark-cli drive +cover \
+work-cli drive +cover \
   --file-token "<FILE_TOKEN>" \
   --spec default \
   --output ./artifacts/report-cover.png \

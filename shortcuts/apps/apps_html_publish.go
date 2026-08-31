@@ -25,8 +25,8 @@ var AppsHTMLPublish = common.Shortcut{
 	Description: "Publish HTML to an app (returns url or release_id depending on app type)",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +html-publish --app-id <app_id> --path ./dist",
-		"Example: lark-cli apps +html-publish --app-id <app_id> --path ./site --dry-run",
+		"Example: work-cli apps +html-publish --app-id <app_id> --path ./dist",
+		"Example: work-cli apps +html-publish --app-id <app_id> --path ./site --dry-run",
 	},
 	Scopes:    []string{"spark:app:write", "spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -294,7 +294,7 @@ func ensureHTMLPublishable(ctx context.Context, rctx *common.RuntimeContext, app
 		"app %s has app_type %q, which +html-publish cannot deploy (only html and modern_html apps are supported)",
 		appID, appType).
 		WithHint(fmt.Sprintf(
-			"a %s app ships through its own build/deploy chain; publish it with `lark-cli apps +release-create --app-id %s` instead",
+			"a %s app ships through its own build/deploy chain; publish it with `work-cli apps +release-create --app-id %s` instead",
 			appType, appID))
 }
 
@@ -384,7 +384,7 @@ func runHTMLPublishTOS(ctx context.Context, rctx *common.RuntimeContext, spec ap
 		// opaque code — translate it into the actionable +release-create hint.
 		if isAppTypeReleaseError(err) {
 			return nil, withAppsHint(err, fmt.Sprintf(
-				"this app_type cannot be published via +html-publish; use `lark-cli apps +release-create --app-id %s` instead",
+				"this app_type cannot be published via +html-publish; use `work-cli apps +release-create --app-id %s` instead",
 				spec.AppID))
 		}
 		return nil, err

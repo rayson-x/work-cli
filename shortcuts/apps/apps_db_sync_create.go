@@ -27,8 +27,8 @@ var AppsDBSyncCreate = common.Shortcut{
 	Description: "Preview or create a Base data sync task",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-create --app-id <app_id> --config @sync.json --preview --output resolved.json",
-		"Example: lark-cli apps +db-sync-create --app-id <app_id> --config @resolved.json --yes",
+		"Example: work-cli apps +db-sync-create --app-id <app_id> --config @sync.json --preview --output resolved.json",
+		"Example: work-cli apps +db-sync-create --app-id <app_id> --config @resolved.json --yes",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

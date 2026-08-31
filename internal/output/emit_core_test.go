@@ -47,10 +47,10 @@ func TestNormalizeCommandPath(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"lark-cli im +messages-search", "im.messages_search"},
-		{"lark-cli drive upload +file", "drive.upload.file"},
-		{"lark-cli api GET /path", "api.GET./path"},
-		{"lark-cli", ""},
+		{"work-cli im +messages-search", "im.messages_search"},
+		{"work-cli drive upload +file", "drive.upload.file"},
+		{"work-cli api GET /path", "api.GET./path"},
+		{"work-cli", ""},
 		{"", ""},
 	}
 	for _, tt := range tests {

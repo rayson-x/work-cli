@@ -429,7 +429,7 @@ func driveUpdateTitleAppsRedirectError(param string) *errs.ValidationError {
 		errs.SubtypeInvalidArgument,
 		"drive +update-title does not support Miaoda apps",
 	).WithParam(param).WithHint(
-		"rename Miaoda apps in the apps domain: run `lark-cli apps --help`",
+		"rename Miaoda apps in the apps domain: run `work-cli apps --help`",
 	)
 }
 
@@ -534,7 +534,7 @@ func driveUpdateTitleErrorGuidance(code int, spec driveUpdateTitleSpec) string {
 		if spec.Ref.Type == "wiki" {
 			return "the endpoint looks the token up under --type wiki: pass the wiki node token from the /wiki/ URL, not the underlying document token"
 		}
-		return fmt.Sprintf("the endpoint looks the token up under the declared type: confirm the token exists and that --type %s is its real type (resolve both with `lark-cli drive +inspect`)", spec.Ref.Type)
+		return fmt.Sprintf("the endpoint looks the token up under the declared type: confirm the token exists and that --type %s is its real type (resolve both with `work-cli drive +inspect`)", spec.Ref.Type)
 	case 981004:
 		// Distinguished from the scope codes below so the caller stops looking
 		// for a scope to add: the token is authorized, the identity is not.

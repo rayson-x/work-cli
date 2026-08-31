@@ -44,35 +44,35 @@
 
 ```bash
 # 🟢 推荐：从剪切板直接插入（无需先存盘）
-lark-cli docs +media-insert --doc doxcnXXX --from-clipboard
+work-cli docs +media-insert --doc doxcnXXX --from-clipboard
 
 # 从本地文件插入
 # 除了上传本地文件，还可以在 `docs +update` 时直接通过网络 URL 插入图片，无需先下载到本地：
-lark-cli docs +update --doc "<doc_id>" --command block_insert_after \
+work-cli docs +update --doc "<doc_id>" --command block_insert_after \
   --block-id "目标 block_id" \
   --content '<img href="https://example.com/photo.png"/>'
 
 # 插入图片（默认）
-lark-cli docs +media-insert --doc doxcnXXX --file ./image.png
+work-cli docs +media-insert --doc doxcnXXX --file ./image.png
 
 # doc 支持直接传 docx URL（自动提取 document_id）
-lark-cli docs +media-insert --doc "https://xxx.feishu.cn/docx/doxcnXXX" --from-clipboard
+work-cli docs +media-insert --doc "https://xxx.feishu.cn/docx/doxcnXXX" --from-clipboard
 
 # 如果上一步是 create-doc，优先传返回值里的 doc_id
 # 不要把 /wiki/... 形式的 doc_url 直接传给 docs +media-insert
-lark-cli docs +media-insert --doc doxcnReturnedByCreateDoc --file ./image.png
+work-cli docs +media-insert --doc doxcnReturnedByCreateDoc --file ./image.png
 
 # 插入文件（非图片）
-lark-cli docs +media-insert --doc doxcnXXX --file ./spec.pdf --type file
+work-cli docs +media-insert --doc doxcnXXX --file ./spec.pdf --type file
 
 # 图片对齐与描述（caption）
-lark-cli docs +media-insert --doc doxcnXXX --from-clipboard --align center --caption "架构图"
+work-cli docs +media-insert --doc doxcnXXX --from-clipboard --align center --caption "架构图"
 
 # Insert image with explicit display width (height auto-computed from aspect ratio)
-lark-cli docs +media-insert --doc doxcnXXX --file ./banner.png --width 800 --align center
+work-cli docs +media-insert --doc doxcnXXX --file ./banner.png --width 800 --align center
 
 # Insert image with explicit width and height
-lark-cli docs +media-insert --doc doxcnXXX --from-clipboard --width 800 --height 447 --caption "architecture diagram"
+work-cli docs +media-insert --doc doxcnXXX --from-clipboard --width 800 --height 447 --caption "architecture diagram"
 ```
 
 ## 参数

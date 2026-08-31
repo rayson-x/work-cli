@@ -56,7 +56,7 @@ if (args[0] === "install") {
       });
     } catch (_) {
       console.error(
-        `\nFailed to auto-install lark-cli binary.\n` +
+        `\nFailed to auto-install work-cli binary.\n` +
         `To fix, run the install script manually:\n` +
         `  node "${path.join(__dirname, "install.js")}"\n`
       );

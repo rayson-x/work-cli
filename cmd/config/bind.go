@@ -73,7 +73,7 @@ func newCmdConfigBind(
 	cmd := &cobra.Command{
 		Use:   "bind",
 		Short: "Bind Agent config to a workspace (source / app-id / force)",
-		Long: `Bind an AI Agent's (OpenClaw / Hermes / Lark Channel) Feishu credentials to a lark-cli workspace.
+		Long: `Bind an AI Agent's (OpenClaw / Hermes / Lark Channel) Feishu credentials to a work-cli workspace.
 
 --source is auto-detected from env (OPENCLAW_HOME / HERMES_HOME / LARK_CHANNEL); pass it only to override.
 
@@ -89,19 +89,19 @@ overwrite an existing one and locks in an identity policy. Ask the user:
 Default to bot-only if the user is unsure. Only run the command after
 the user confirms both intent and identity preset.
 
-If lark-cli is already bound and the user only wants to change identity
+If work-cli is already bound and the user only wants to change identity
 policy on the SAME app, use 'config strict-mode' — that's the policy
 switch and does not require re-bind. Use 'config bind' only when the
 underlying app itself changes.
 
 Interactive terminal use: run with no flags to enter the TUI form.`,
 		Example: `  # AI flow: confirm intent + identity with user FIRST, then run:
-  lark-cli config bind --source openclaw --app-id <id> --identity bot-only
-  lark-cli config bind --source hermes --identity user-default
-  lark-cli config bind --source lark-channel
+  work-cli config bind --source openclaw --app-id <id> --identity bot-only
+  work-cli config bind --source hermes --identity user-default
+  work-cli config bind --source lark-channel
 
   # Interactive (terminal user) — TUI prompts for everything:
-  lark-cli config bind`,
+  work-cli config bind`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.langExplicit = cmd.Flags().Changed("lang")
 			if runF != nil {

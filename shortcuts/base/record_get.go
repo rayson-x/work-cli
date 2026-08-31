@@ -42,9 +42,9 @@ var BaseRecordGet = common.Shortcut{
 		return validateRecordSelection(runtime)
 	},
 	Tips: []string{
-		"Example: lark-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id>",
-		"Example with projection: lark-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id rec_001 --record-id rec_002 --field-id Name --field-id Status",
-		"Example for analysis input: lark-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <field> --format ndjson --output ./record.ndjson",
+		"Example: work-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id>",
+		"Example with projection: work-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id rec_001 --record-id rec_002 --field-id Name --field-id Status",
+		"Example for analysis input: work-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id> --field-id <field> --format ndjson --output ./record.ndjson",
 		recordAnalysisOutputTip,
 		"Use --field-id as a projection boundary to avoid loading large cell values into context when they are not needed.",
 		"Use +record-get when record_id is already known; otherwise use +record-search or +record-list.",

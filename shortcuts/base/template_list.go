@@ -23,7 +23,7 @@ var BaseTemplateList = common.Shortcut{
 	Tips: []string{
 		"Use --category-key with a key returned by +template-categories; omit it to read the recommended category.",
 		"Returned template.token is the Base template token. To create from it, run +base-copy --base-token <token>.",
-		`Example: lark-cli base +template-list --category-key office --limit 10 --as user`,
+		`Example: work-cli base +template-list --category-key office --limit 10 --as user`,
 	},
 	Validate: validateTemplatePagination,
 	DryRun:   dryRunTemplateList,

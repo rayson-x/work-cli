@@ -8,7 +8,7 @@
 
 ```bash
 # 推荐：完整 URL + 目标评论 ID + 回复内容
-lark-cli drive +add-reply --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>' --content '[{"type":"text","text":"回复内容"}]'
+work-cli drive +add-reply --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>' --content '[{"type":"text","text":"回复内容"}]'
 ```
 
 ## 参数

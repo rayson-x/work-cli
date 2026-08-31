@@ -17,7 +17,7 @@
 详见 [`lark-calendar-suggestion.md`](./lark-calendar-suggestion.md)。
 
 ```bash
-lark-cli calendar +suggestion \
+work-cli calendar +suggestion \
   --start "<range_start>" \
   --end "<range_end>" \
   --attendee-ids "<ids>" \

@@ -420,7 +420,7 @@ func TestDocsUpdateRejectsLegacyFlags(t *testing.T) {
 				"the old v1 interface has been shut down",
 				"legacy v1 flag(s) --mode are no longer supported",
 				"--mode -> use --command",
-				"lark-cli docs +update --help",
+				"work-cli docs +update --help",
 			},
 		},
 	}

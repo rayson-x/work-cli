@@ -9,7 +9,7 @@
 使用 `slides +xml-get` shortcut，可以把 XML 保存到本地文件，避免终端输出被截断。
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --output .lark-slides/plan/slides_example_presentation_id/readback.xml \
   --json
@@ -32,7 +32,7 @@ lark-cli slides +xml-get --as user \
 ### 基础示例
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --output .lark-slides/plan/slides_example_presentation_id/readback.xml \
   --json
@@ -43,7 +43,7 @@ lark-cli slides +xml-get --as user \
 按页面 ID 和按页码二选一：
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --slide-id "slide_example_id" \
   --output .lark-slides/plan/slides_example_presentation_id/slide.xml \
@@ -53,7 +53,7 @@ lark-cli slides +xml-get --as user \
 ### 直接输出 XML 到管道
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --slide-number 1 \
   --raw
@@ -62,7 +62,7 @@ lark-cli slides +xml-get --as user \
 ### 指定版本读取
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --revision-id 10 \
   --output .lark-slides/plan/slides_example_presentation_id/readback-r10.xml \
@@ -72,7 +72,7 @@ lark-cli slides +xml-get --as user \
 ### 移除 XML id 属性后读取
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "slides_example_presentation_id" \
   --remove-attr-id \
   --output .lark-slides/plan/slides_example_presentation_id/readback-no-id.xml \
@@ -83,7 +83,7 @@ lark-cli slides +xml-get --as user \
 ## 底层原生命令形态
 
 ```bash
-lark-cli slides xml_presentations get --as user --params '<json_params>'
+work-cli slides xml_presentations get --as user --params '<json_params>'
 ```
 
 ### 参数说明
@@ -145,7 +145,7 @@ lark-cli slides xml_presentations get --as user --params '<json_params>'
 ### 注意事项
 
 1. lark-slides 工作流默认使用 `slides +xml-get`；只有必须直接调底层 API 时，才使用
-2. 直接调用底层 API 前，使用 `lark-cli schema slides.xml_presentations.get` 查看最新的参数结构
+2. 直接调用底层 API 前，使用 `work-cli schema slides.xml_presentations.get` 查看最新的参数结构
 3. 返回的 XML 在 `data.xml_presentation.content` 字段中
 4. 如果只需要部分信息，可以使用 `jq` 等工具过滤返回结果
 5. 不要在普通工作流中把完整 XML 打到终端；用 `slides +xml-get --output` 保存文件

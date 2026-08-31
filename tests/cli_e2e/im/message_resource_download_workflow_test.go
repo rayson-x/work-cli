@@ -162,7 +162,7 @@ func fileKeyFromMessageContent(content string) (string, bool) {
 // live run does not leave a file message sitting in the test account on every
 // CI cycle.
 //
-// The chat itself stays: lark-cli exposes no chat-delete command, which is why
+// The chat itself stays: work-cli exposes no chat-delete command, which is why
 // createChatAs registers an empty cleanup. Recalling the message is the part of
 // create -> use -> cleanup this suite can actually honour; a cleanup failure is
 // reported rather than failing the run, matching the other suites.

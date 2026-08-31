@@ -20,7 +20,7 @@ func BuildPrompt(f facts.Facts) []Message {
 	data, _ := json.Marshal(view)
 	return []Message{
 		{Role: "system", Content: strings.Join([]string{
-			"You review a projected lark-cli quality-gate semantic input view.",
+			"You review a projected work-cli quality-gate semantic input view.",
 			"Use only the provided JSON view.",
 			"The changed_summary may summarize broad changed surfaces; review only listed facts, not omitted summarized items.",
 			"Use fact_ref values exactly when writing finding evidence.",

@@ -27,7 +27,7 @@ func TestAppsFileUploadLiveWorkflow(t *testing.T) {
 		t.Skip("FIXTURE: Set LARK_CLI_E2E_APPS_FILE_APP_ID to a dedicated app for upload/delete testing")
 	}
 
-	fileName := fmt.Sprintf("lark-cli-host-path-e2e-%d.txt", time.Now().UnixNano())
+	fileName := fmt.Sprintf("work-cli-host-path-e2e-%d.txt", time.Now().UnixNano())
 	absolutePath := filepath.Join(t.TempDir(), fileName)
 	content := []byte("host-path-live-e2e")
 	require.NoError(t, os.WriteFile(absolutePath, content, 0o600))

@@ -180,7 +180,7 @@ func TestPrintDryRun_JSON(t *testing.T) {
 		As:     "user",
 	}, &core.CliConfig{AppID: "app123"}, DryRunOutputOptions{
 		Format:      "json",
-		CommandPath: "lark-cli api",
+		CommandPath: "work-cli api",
 		Identity:    core.AsUser,
 		Out:         &buf,
 		ErrOut:      &errBuf,

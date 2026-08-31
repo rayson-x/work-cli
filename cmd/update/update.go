@@ -101,8 +101,8 @@ func NewCmdUpdate(f *cmdutil.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "update",
-		Short: "Update lark-cli to the latest version",
-		Long: `Update lark-cli to the latest version.
+		Short: "Update work-cli to the latest version",
+		Long: `Update work-cli to the latest version.
 
 Detects the installation method automatically:
   - npm install:  runs npm install -g @larksuite/cli@<version>
@@ -235,7 +235,7 @@ func reportCheckResult(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest s
 			"ok": true, "previous_version": cur, "current_version": cur,
 			"latest_version": latest, "action": "update_available",
 			"auto_update": canAutoUpdate,
-			"message":     fmt.Sprintf("lark-cli %s %s %s available", cur, symArrow(), latest),
+			"message":     fmt.Sprintf("work-cli %s %s %s available", cur, symArrow(), latest),
 			"url":         releaseURL(latest), "changelog": changelogURL(),
 		}
 		applySkillsStatus(out, cur)
@@ -246,7 +246,7 @@ func reportCheckResult(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest s
 	fmt.Fprintf(io.ErrOut, "  Release:   %s\n", releaseURL(latest))
 	fmt.Fprintf(io.ErrOut, "  Changelog: %s\n", changelogURL())
 	if canAutoUpdate {
-		fmt.Fprintf(io.ErrOut, "\nRun `lark-cli update` to install.\n")
+		fmt.Fprintf(io.ErrOut, "\nRun `work-cli update` to install.\n")
 	} else {
 		fmt.Fprintf(io.ErrOut, "\nDownload the release above to update manually.\n")
 	}
@@ -301,7 +301,7 @@ func doAutoUpdate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest string
 	}
 
 	if !opts.JSON {
-		fmt.Fprintf(io.ErrOut, "Updating lark-cli %s %s %s via %s ...\n", cur, symArrow(), latest, pm)
+		fmt.Fprintf(io.ErrOut, "Updating work-cli %s %s %s via %s ...\n", cur, symArrow(), latest, pm)
 	}
 
 	npmResult := install(latest)
@@ -354,12 +354,12 @@ func doAutoUpdate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest string
 		fields := map[string]interface{}{
 			"previous_version": cur, "current_version": latest,
 			"latest_version": latest, "action": "updated",
-			"message": fmt.Sprintf("lark-cli updated from %s to %s, but skills update failed", cur, latest),
+			"message": fmt.Sprintf("work-cli updated from %s to %s, but skills update failed", cur, latest),
 			"url":     releaseURL(latest), "changelog": changelogURL(),
 		}
 		applySkillsResult(fields, skillsResult)
 		if !opts.JSON {
-			fmt.Fprintf(io.ErrOut, "\n%s lark-cli binary updated from %s to %s\n", symOK(), cur, latest)
+			fmt.Fprintf(io.ErrOut, "\n%s work-cli binary updated from %s to %s\n", symOK(), cur, latest)
 			fmt.Fprintf(io.ErrOut, "  Changelog: %s\n", changelogURL())
 		}
 		return reportSkillsFailureWithFields(opts, io, skillsResult, fields)
@@ -369,7 +369,7 @@ func doAutoUpdate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest string
 		result := map[string]interface{}{
 			"ok": true, "previous_version": cur, "current_version": latest,
 			"latest_version": latest, "action": "updated",
-			"message": fmt.Sprintf("lark-cli updated from %s to %s", cur, latest),
+			"message": fmt.Sprintf("work-cli updated from %s to %s", cur, latest),
 			"url":     releaseURL(latest), "changelog": changelogURL(),
 		}
 		applySkillsResult(result, skillsResult)
@@ -377,7 +377,7 @@ func doAutoUpdate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, latest string
 		return nil
 	}
 
-	fmt.Fprintf(io.ErrOut, "\n%s Successfully updated lark-cli from %s to %s\n", symOK(), cur, latest)
+	fmt.Fprintf(io.ErrOut, "\n%s Successfully updated work-cli from %s to %s\n", symOK(), cur, latest)
 	fmt.Fprintf(io.ErrOut, "  Changelog: %s\n", changelogURL())
 	if skillsResult != nil {
 		skillsPM := "npx"
@@ -397,7 +397,7 @@ func permissionHint(pmOutput, pm string) string {
 	if pm == "pnpm" {
 		return "Permission denied. Ensure your pnpm global directory is writable — re-run `pnpm setup`, or see https://pnpm.io/pnpm-cli"
 	}
-	return "Permission denied. Try: sudo lark-cli update, or adjust your npm global prefix: https://docs.npmjs.com/resolving-eacces-permissions-errors"
+	return "Permission denied. Try: sudo work-cli update, or adjust your npm global prefix: https://docs.npmjs.com/resolving-eacces-permissions-errors"
 }
 
 func verificationFailureHint(updater *selfupdate.Updater, latest, pm string) string {
@@ -440,7 +440,7 @@ func reportSkillsFailureWithFields(opts *UpdateOptions, io *cmdutil.IOStreams, r
 		return nil
 	}
 	typedErr := errs.NewInternalError(errs.SubtypeUnknown, "skills update failed: %s", result.Err).
-		WithHint("retry with `lark-cli update --force`").
+		WithHint("retry with `work-cli update --force`").
 		WithCause(result.Err)
 	return reportErrorWithFields(opts, io, "skills_update_error", typedErr, fields)
 }
@@ -455,7 +455,7 @@ func reportAlreadyUpToDate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, late
 		out := map[string]interface{}{
 			"ok": true, "previous_version": cur, "current_version": cur,
 			"latest_version": latest, "action": "already_up_to_date",
-			"message": fmt.Sprintf("lark-cli %s is already up to date", cur),
+			"message": fmt.Sprintf("work-cli %s is already up to date", cur),
 		}
 		if check {
 			applySkillsStatus(out, cur)
@@ -465,7 +465,7 @@ func reportAlreadyUpToDate(opts *UpdateOptions, io *cmdutil.IOStreams, cur, late
 		output.PrintJson(io.Out, out)
 		return nil
 	}
-	fmt.Fprintf(io.ErrOut, "%s lark-cli %s is already up to date\n", symOK(), cur)
+	fmt.Fprintf(io.ErrOut, "%s work-cli %s is already up to date\n", symOK(), cur)
 	if !check {
 		emitSkillsTextHints(io, skillsResult)
 	}
@@ -540,7 +540,7 @@ func emitSkillsTextHints(io *cmdutil.IOStreams, r *skillscheck.SyncResult) {
 		if len(r.Failed) > 0 {
 			fmt.Fprintf(io.ErrOut, "  Failed skills: %s\n", strings.Join(r.Failed, ", "))
 		}
-		fmt.Fprintf(io.ErrOut, "  To retry all official skills: lark-cli update --force\n")
+		fmt.Fprintf(io.ErrOut, "  To retry all official skills: work-cli update --force\n")
 	case r.Warning != "":
 		fmt.Fprintf(io.ErrOut, "%s Skills updated using %s layout\n", symOK(), r.Layout)
 		fmt.Fprintf(io.ErrOut, "%s %s\n", symWarn(), r.Warning)
@@ -549,7 +549,7 @@ func emitSkillsTextHints(io *cmdutil.IOStreams, r *skillscheck.SyncResult) {
 	default:
 		fmt.Fprintf(io.ErrOut, "%s Skills updated using %s layout: %d official, %d updated, %d added, %d skipped because deleted locally\n", symOK(), r.Layout, len(r.Official), len(r.Updated), len(r.Added), len(r.SkippedDeleted))
 		if len(r.SkippedDeleted) > 0 {
-			fmt.Fprintf(io.ErrOut, "  To restore all official skills: lark-cli update --force\n")
+			fmt.Fprintf(io.ErrOut, "  To restore all official skills: work-cli update --force\n")
 		}
 	}
 }

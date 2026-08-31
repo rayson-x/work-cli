@@ -24,7 +24,7 @@ func TestBaseShareWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
 	t.Cleanup(cancel)
 
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-base-share-"+clie2e.GenerateSuffix())
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-base-share-"+clie2e.GenerateSuffix())
 	tableID, _, _ := createTableWithRetry(
 		t,
 		parentT,

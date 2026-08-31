@@ -11,7 +11,7 @@ Use this when a new group or topic chat is needed. Choose the calling identity d
 
 **Create a private group with the configured identity**
 ```bash
-lark-cli im +chat-create --name "My Group"
+work-cli im +chat-create --name "My Group"
 ```
 
 ### Skills
@@ -28,7 +28,7 @@ Use this to enumerate chats the current identity has joined.
 
 **List joined group chats**
 ```bash
-lark-cli im +chat-list
+work-cli im +chat-list
 ```
 
 ### Skills
@@ -46,7 +46,7 @@ Use this instead of the raw member methods when you need users and bots separate
 
 **List one page of users and bots**
 ```bash
-lark-cli im +chat-members-list --chat-id oc_xxx
+work-cli im +chat-members-list --chat-id oc_xxx
 ```
 
 ### Skills
@@ -63,7 +63,7 @@ Use this for message history when the conversation is already known.
 
 **List messages in a group chat**
 ```bash
-lark-cli im +chat-messages-list --chat-id oc_xxx
+work-cli im +chat-messages-list --chat-id oc_xxx
 ```
 
 ### Skills
@@ -76,7 +76,7 @@ Use this to resolve a visible group name or member set to a stable chat_id befor
 
 **Search visible groups by keyword**
 ```bash
-lark-cli im +chat-search --query "project"
+work-cli im +chat-search --query "project"
 ```
 
 ### Skills
@@ -89,7 +89,7 @@ Use this for name or description changes after identifying the group and an owne
 
 **Rename a group**
 ```bash
-lark-cli im +chat-update --chat-id oc_xxx --name "New Group Name"
+work-cli im +chat-update --chat-id oc_xxx --name "New Group Name"
 ```
 
 ### Skills
@@ -103,7 +103,7 @@ Use this to list the users who have read one known message. Select user or bot i
 
 **List readers for one message**
 ```bash
-lark-cli im +message-read-users --message-id om_xxx
+work-cli im +message-read-users --message-id om_xxx
 ```
 
 ### Skills
@@ -128,7 +128,7 @@ Use this to edit an already-sent **text or rich-text (post)** message, including
 
 **Edit a message to a post with an attachment zone**
 ```bash
-lark-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --set-attachments file_xxx
+work-cli im +messages-edit --as bot --message-id om_xxx --markdown "Updated content" --set-attachments file_xxx
 ```
 
 ### Skills
@@ -144,7 +144,7 @@ Use this when one or more message_ids are already known and full message details
 
 **Fetch one known message**
 ```bash
-lark-cli im +messages-mget --message-ids om_xxx
+work-cli im +messages-mget --message-ids om_xxx
 ```
 
 ### Skills
@@ -157,7 +157,7 @@ Use this to query whether the current user has read one or more known messages. 
 
 **Query the current user's read status**
 ```bash
-lark-cli im +messages-read-status --as user --message-ids om_xxx,om_yyy
+work-cli im +messages-read-status --as user --message-ids om_xxx,om_yyy
 ```
 
 ### Skills
@@ -173,7 +173,7 @@ Use this when the response must remain attached to a specific message or thread.
 
 **Reply with plain text using the configured identity**
 ```bash
-lark-cli im +messages-reply --message-id om_xxx --text "Received"
+work-cli im +messages-reply --message-id om_xxx --text "Received"
 ```
 
 ### Skills
@@ -186,7 +186,7 @@ Use this after a read command exposes a message_id and matching file_key and the
 
 **Download an image resource to the current directory**
 ```bash
-lark-cli im +messages-resources-download --message-id om_xxx --file-key img_v3_xxx --type image
+work-cli im +messages-resources-download --message-id om_xxx --file-key img_v3_xxx --type image
 ```
 
 ### Skills
@@ -199,7 +199,7 @@ Use this to find messages across conversations by keyword or structured filters.
 
 **Search messages by keyword**
 ```bash
-lark-cli im +messages-search --query "project progress"
+work-cli im +messages-search --query "project progress"
 ```
 
 ### Skills
@@ -218,7 +218,7 @@ Use this for new outbound content. Select text, markdown, exact JSON, or one med
 
 **Send plain text using the configured identity**
 ```bash
-lark-cli im +messages-send --chat-id oc_xxx --text "Hello"
+work-cli im +messages-send --chat-id oc_xxx --text "Hello"
 ```
 
 ### Skills
@@ -231,7 +231,7 @@ Use this when a message or thread id is known and the replies inside that thread
 
 **List replies in a thread**
 ```bash
-lark-cli im +threads-messages-list --thread omt_xxx
+work-cli im +threads-messages-list --thread omt_xxx
 ```
 
 ### Skills
@@ -244,7 +244,7 @@ Use this for a personal bookmark, not a chat-visible pin.
 
 **Bookmark a message at the default message layer**
 ```bash
-lark-cli im +flag-create --as user --message-id om_xxx
+work-cli im +flag-create --as user --message-id om_xxx
 ```
 
 ### Skills
@@ -257,7 +257,7 @@ Use this to remove a personal bookmark. Omitting --flag-type performs the skill'
 
 **Remove both bookmark layers when discoverable**
 ```bash
-lark-cli im +flag-cancel --as user --message-id om_xxx
+work-cli im +flag-cancel --as user --message-id om_xxx
 ```
 
 ### Skills
@@ -273,7 +273,7 @@ Use this to inspect the current user's bookmarks.
 
 **Fetch the first page of bookmarks**
 ```bash
-lark-cli im +flag-list --as user
+work-cli im +flag-list --as user
 ```
 
 ### Skills
@@ -289,7 +289,7 @@ Use this to pin one or more chats in the current user's feed sidebar.
 
 **Pin one chat at the top of the feed**
 ```bash
-lark-cli im +feed-shortcut-create --as user --chat-id oc_xxx
+work-cli im +feed-shortcut-create --as user --chat-id oc_xxx
 ```
 
 ### Skills
@@ -302,7 +302,7 @@ Use this to unpin one or more chats from the current user's feed sidebar.
 
 **Unpin one chat**
 ```bash
-lark-cli im +feed-shortcut-remove --as user --chat-id oc_xxx
+work-cli im +feed-shortcut-remove --as user --chat-id oc_xxx
 ```
 
 ### Skills
@@ -318,7 +318,7 @@ Use this to inspect the current user's feed shortcuts.
 
 **Fetch the first page**
 ```bash
-lark-cli im +feed-shortcut-list --as user
+work-cli im +feed-shortcut-list --as user
 ```
 
 ### Skills
@@ -331,7 +331,7 @@ Use this to discover the current user's feed-group ids; --page-all merges both l
 
 **Fetch the first page of feed groups**
 ```bash
-lark-cli im +feed-group-list --as user
+work-cli im +feed-group-list --as user
 ```
 
 ### Skills
@@ -344,7 +344,7 @@ Use this to enumerate every feed card in a known group and enrich chat cards wit
 
 **List one feed group's first page**
 ```bash
-lark-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx
+work-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx
 ```
 
 ### Skills
@@ -360,7 +360,7 @@ Use this lightweight lookup when the feed-group id and chat ids are already know
 
 **Look up two known chat cards**
 ```bash
-lark-cli im +feed-group-query-item --as user --feed-group-id ofg_xxx --feed-id oc_a,oc_b
+work-cli im +feed-group-query-item --as user --feed-group-id ofg_xxx --feed-id oc_a,oc_b
 ```
 
 ### Skills
@@ -376,7 +376,7 @@ Use this raw method for the skill's two-step recovery flow when a bot-created gr
 
 **Add reachable users and report invalid ids separately**
 ```bash
-lark-cli im chat.members create --params '{"chat_id":"oc_xxx","member_id_type":"open_id","succeed_type":1}' --data '{"id_list":["ou_aaa","ou_bbb"]}' --as user
+work-cli im chat.members create --params '{"chat_id":"oc_xxx","member_id_type":"open_id","succeed_type":1}' --data '{"id_list":["ou_aaa","ou_bbb"]}' --as user
 ```
 
 ### Skills
@@ -390,7 +390,7 @@ Use this raw method to create a feed group; prefer a normal group unless members
 
 **Create an empty normal feed group**
 ```bash
-lark-cli im feed.groups create --as user --data '{"feed_group_creator":{"type":"normal","name":"Releases"}}'
+work-cli im feed.groups create --as user --data '{"feed_group_creator":{"type":"normal","name":"Releases"}}'
 ```
 
 ### Skills
@@ -403,7 +403,7 @@ Use this raw method to rename a feed group or replace its rules; restrict update
 
 **Rename only, leaving rules untouched**
 ```bash
-lark-cli im feed.groups update --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"feed_group_updater":{"name":"测试标签名称","update_fields":[1]}}'
+work-cli im feed.groups update --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"feed_group_updater":{"name":"测试标签名称","update_fields":[1]}}'
 ```
 
 ### Skills
@@ -419,7 +419,7 @@ Use this raw method only when the user intends to delete the identified feed gro
 
 **Delete one feed group**
 ```bash
-lark-cli im feed.groups delete --as user --params '{"feed_group_id":"ofg_xxx"}'
+work-cli im feed.groups delete --as user --params '{"feed_group_id":"ofg_xxx"}'
 ```
 
 ### Skills
@@ -432,7 +432,7 @@ Use this instead of listing when the feed-group ids are already known; consume b
 
 **Look up two feed groups by id**
 ```bash
-lark-cli im feed.groups batch_query --as user --params '{"user_id_type":"open_id"}' --data '{"group_ids":["ofg_xxx","ofg_yyy"]}'
+work-cli im feed.groups batch_query --as user --params '{"user_id_type":"open_id"}' --data '{"group_ids":["ofg_xxx","ofg_yyy"]}'
 ```
 
 ### Skills
@@ -445,7 +445,7 @@ Use this raw method to add known chat cards to a normal feed group.
 
 **Add two chats to a feed group**
 ```bash
-lark-cli im feed.groups batch_add_item --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"items":[{"feed_id":"oc_xxx","feed_type":"chat"},{"feed_id":"oc_yyy","feed_type":"chat"}]}'
+work-cli im feed.groups batch_add_item --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"items":[{"feed_id":"oc_xxx","feed_type":"chat"},{"feed_id":"oc_yyy","feed_type":"chat"}]}'
 ```
 
 ### Skills
@@ -458,7 +458,7 @@ Use this raw method to remove known chat cards from a normal feed group.
 
 **Remove one chat from a feed group**
 ```bash
-lark-cli im feed.groups batch_remove_item --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"items":[{"feed_id":"oc_xxx","feed_type":"chat"}]}'
+work-cli im feed.groups batch_remove_item --as user --params '{"feed_group_id":"ofg_xxx"}' --data '{"items":[{"feed_id":"oc_xxx","feed_type":"chat"}]}'
 ```
 
 ### Skills
@@ -474,7 +474,7 @@ Use this raw upload when an image_key must be reused.
 
 **Upload a local message image**
 ```bash
-lark-cli im images create --data '{"image_type":"message"}' --file ./diagram.png
+work-cli im images create --data '{"image_type":"message"}' --file ./diagram.png
 ```
 
 ### Skills
@@ -487,7 +487,7 @@ Use this raw method to add an emoji reaction, not a text reply.
 
 **Add a smile reaction**
 ```bash
-lark-cli im reactions create --params '{"message_id":"om_xxx"}' --data '{"reaction_type":{"emoji_type":"SMILE"}}'
+work-cli im reactions create --params '{"message_id":"om_xxx"}' --data '{"reaction_type":{"emoji_type":"SMILE"}}'
 ```
 
 ### Skills
@@ -500,7 +500,7 @@ Use this raw method for reaction records on one standalone message; message-read
 
 **List reactions on one message**
 ```bash
-lark-cli im reactions list --params '{"message_id":"om_xxx"}'
+work-cli im reactions list --params '{"message_id":"om_xxx"}'
 ```
 
 ### Skills
@@ -516,7 +516,7 @@ Use this raw method only for a reaction created by the calling identity.
 
 **Delete one reaction record**
 ```bash
-lark-cli im reactions delete --params '{"message_id":"om_xxx","reaction_id":"ZCaCIjUBVVWSrm5L-3ZTw_xxx"}'
+work-cli im reactions delete --params '{"message_id":"om_xxx","reaction_id":"ZCaCIjUBVVWSrm5L-3ZTw_xxx"}'
 ```
 
 ### Skills
@@ -529,7 +529,7 @@ Use this raw method only for standalone message ids; message-reading shortcuts a
 
 **Query the first page of reactions for two messages**
 ```bash
-lark-cli im reactions batch_query --params '{"user_id_type":"open_id"}' --data '{"queries":[{"message_id":"om_xxx"},{"message_id":"om_yyy"}],"page_size_per_message":10,"reaction_type":"LAUGH"}'
+work-cli im reactions batch_query --params '{"user_id_type":"open_id"}' --data '{"queries":[{"message_id":"om_xxx"},{"message_id":"om_yyy"}],"page_size_per_message":10,"reaction_type":"LAUGH"}'
 ```
 
 ### Skills

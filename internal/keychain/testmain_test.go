@@ -10,7 +10,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	root, err := os.MkdirTemp("", "lark-cli-keychain-test-*")
+	root, err := os.MkdirTemp("", "work-cli-keychain-test-*")
 	if err != nil {
 		panic(err)
 	}

@@ -25,7 +25,7 @@ var BaseAppBlockGetData = common.Shortcut{
 		{Name: "block-id", Desc: "chart_token (cht… prefix) returned by +app-block-create, +app-block-list, or +app-block-get", Required: true},
 	},
 	Tips: []string{
-		"lark-cli base +app-block-get-data --app-token <app_token> --base-token <base_token> --block-id <chart_token>",
+		"work-cli base +app-block-get-data --app-token <app_token> --base-token <base_token> --block-id <chart_token>",
 		"Do not call this command for a component whose +app-block-list result has type=unsupported; the API will return an error.",
 		"--block-id must be a chart_token, not a widget_id.",
 		"Read --base-token from the chart block data_config.base_token; do not choose an arbitrary +app-get ref key when the app references multiple Bases.",

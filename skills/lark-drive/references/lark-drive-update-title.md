@@ -8,18 +8,18 @@
 
 ```bash
 # 推荐：传 URL（自动识别类型和 token）
-lark-cli drive +update-title \
+work-cli drive +update-title \
   --url 'https://example.larksuite.com/docx/<DOCX_TOKEN>' \
   --title '<NEW_TITLE>'
 
 # 裸 token 必须显式传 --type
-lark-cli drive +update-title \
+work-cli drive +update-title \
   --token <FILE_TOKEN> \
   --type file \
   --title '<NEW_TITLE>.xlsx'
 
 # 知识库节点：传 /wiki/ URL 里的 node_token
-lark-cli drive +update-title \
+work-cli drive +update-title \
   --url 'https://example.larksuite.com/wiki/<NODE_TOKEN>' \
   --title '<NEW_TITLE>'
 ```

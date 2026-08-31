@@ -8,55 +8,55 @@
 
 ```bash
 # 添加一个文本必填问题
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"text","title":"您的姓名是？","required":true}]'
 
 # 添加多个问题（按顺序排列）
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"text","title":"您的姓名是？","required":true},{"type":"text","title":"您的联系方式是？","required":false}]'
 
 # 添加单选题（带选项）
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"select","title":"满意度评价","required":true,"multiple":false,"options":[{"name":"非常满意","hue":"Green"},{"name":"满意","hue":"Blue"},{"name":"一般","hue":"Yellow"}]}]'
 
 # 添加评分题
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"number","title":"服务评分","style":{"type":"rating","icon":"star","min":1,"max":5}}]'
   
 # 添加带描述的问题（纯文本）
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"text","title":"您的姓名","description":"请填写真实姓名"}]'
 # 添加带描述的问题（含链接）
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"text","title":"反馈建议","description":"更多详情请查看[帮助文档](https://example.com/help)"}]'  
 
 # 添加带显隐条件（visible_rule）的问题：当「是否需要发票」选择「是」时才显示「发票抬头」
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"type":"select","title":"是否需要发票","required":true,"options":[{"name":"是","hue":"Blue"},{"name":"否","hue":"Gray"}]},{"type":"text","title":"发票抬头","visible_rule":{"logic":"and","conditions":[["是否需要发票","==","是"]]}}]'
 
 # 把已有字段作为题目加到表单中，不新建字段
-lark-cli base +form-questions-create \
+work-cli base +form-questions-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \

@@ -53,7 +53,7 @@ func TestApply_emptyFieldsSkipped(t *testing.T) {
 //	  group
 //	    leaf
 func TestGet_inheritsFromAncestor(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	group := &cobra.Command{Use: "docs"}
 	leaf := &cobra.Command{Use: "fetch"}
 	root.AddCommand(group)
@@ -78,7 +78,7 @@ func TestGet_inheritsFromAncestor(t *testing.T) {
 
 // Closest ancestor wins -- a mid-level override is preferred over root.
 func TestGet_nearestAncestorWins(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	group := &cobra.Command{Use: "docs"}
 	leaf := &cobra.Command{Use: "fetch"}
 	root.AddCommand(group)

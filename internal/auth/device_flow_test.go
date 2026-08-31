@@ -79,7 +79,7 @@ func TestRequestDeviceAuthorization_LogsResponse(t *testing.T) {
 	restore := keychain.SetAuthLogHooksForTest(log.New(&buf, "", 0), func() time.Time {
 		return time.Date(2026, 4, 2, 3, 4, 5, 0, time.UTC)
 	}, func() []string {
-		return []string{"lark-cli", "auth", "login", "--device-code", "device-code-secret", "--app-secret=top-secret"}
+		return []string{"work-cli", "auth", "login", "--device-code", "device-code-secret", "--app-secret=top-secret"}
 	})
 	t.Cleanup(restore)
 
@@ -101,7 +101,7 @@ func TestRequestDeviceAuthorization_LogsResponse(t *testing.T) {
 	if !strings.Contains(got, "x-tt-logid=device-log-id") {
 		t.Fatalf("expected x-tt-logid in log, got %q", got)
 	}
-	if !strings.Contains(got, "cmdline=lark-cli auth login ...") {
+	if !strings.Contains(got, "cmdline=work-cli auth login ...") {
 		t.Fatalf("expected cmdline in log, got %q", got)
 	}
 }
@@ -109,7 +109,7 @@ func TestRequestDeviceAuthorization_LogsResponse(t *testing.T) {
 // TestFormatAuthCmdline_TruncatesExtraArgs verifies that long command lines are truncated.
 func TestFormatAuthCmdline_TruncatesExtraArgs(t *testing.T) {
 	got := keychain.FormatAuthCmdline([]string{
-		"lark-cli",
+		"work-cli",
 		"auth",
 		"login",
 		"--device-code", "device-code-secret",
@@ -117,7 +117,7 @@ func TestFormatAuthCmdline_TruncatesExtraArgs(t *testing.T) {
 		"--scope", "contact:read",
 	})
 
-	want := "lark-cli auth login ..."
+	want := "work-cli auth login ..."
 	if got != want {
 		t.Fatalf("formatAuthCmdline() = %q, want %q", got, want)
 	}
@@ -143,7 +143,7 @@ func TestLogAuthResponse_HandlesNilSDKResponse(t *testing.T) {
 	restore := keychain.SetAuthLogHooksForTest(log.New(&buf, "", 0), func() time.Time {
 		return time.Date(2026, 4, 2, 3, 4, 5, 0, time.UTC)
 	}, func() []string {
-		return []string{"lark-cli", "auth", "status", "--verify"}
+		return []string{"work-cli", "auth", "status", "--verify"}
 	})
 	t.Cleanup(restore)
 
@@ -163,7 +163,7 @@ func TestLogAuthError_RecordsStructuredEntry(t *testing.T) {
 	restore := keychain.SetAuthLogHooksForTest(log.New(&buf, "", 0), func() time.Time {
 		return time.Date(2026, 4, 2, 3, 4, 5, 0, time.UTC)
 	}, func() []string {
-		return []string{"lark-cli", "auth", "login", "--device-code", "secret"}
+		return []string{"work-cli", "auth", "login", "--device-code", "secret"}
 	})
 	t.Cleanup(restore)
 
@@ -182,7 +182,7 @@ func TestLogAuthError_RecordsStructuredEntry(t *testing.T) {
 	if !strings.Contains(got, "error=\"keychain Set error: net/http: use last response\"") {
 		t.Fatalf("expected quoted error in log, got %q", got)
 	}
-	if !strings.Contains(got, "cmdline=lark-cli auth login ...") {
+	if !strings.Contains(got, "cmdline=work-cli auth login ...") {
 		t.Fatalf("expected truncated cmdline in log, got %q", got)
 	}
 }

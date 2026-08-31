@@ -36,11 +36,11 @@
 
 ### 布局与高度
 
-只使用 `auto` 或 `viewport`：正文需要在文档中完整展开时使用 `auto`；内容需要在 HTML Block 内滚动或单屏呈现时使用 `viewport`。`lark-cli` 会将 HTML 原样写入 `reference_map`，不会校验该字段，因此创建或更新前必须在 `<head>` 中显式声明。
+只使用 `auto` 或 `viewport`：正文需要在文档中完整展开时使用 `auto`；内容需要在 HTML Block 内滚动或单屏呈现时使用 `viewport`。`work-cli` 会将 HTML 原样写入 `reference_map`，不会校验该字段，因此创建或更新前必须在 `<head>` 中显式声明。
 
 - `auto`：使用普通文档流，不给根容器设置固定高度或 `overflow: hidden`。需要固定操作区时，在业务容器上设置 CSS `height` 和 `overflow: auto`，不要把像素值写入 meta。
 - `viewport`：使用 `100vh` 和内部滚动、切页或缩放，适用于游戏、幻灯片、Dashboard、canvas 编辑器。
-- 页面加载后的内容追加或展开不会由 `lark-cli` 刷新高度，不要臆造相关 CLI flag。
+- 页面加载后的内容追加或展开不会由 `work-cli` 刷新高度，不要臆造相关 CLI flag。
 - 文档常见可用宽度约 `820px`；根容器使用 `width: 100%`、`max-width: 100%`、`box-sizing: border-box`。
 
 ### 内容限制

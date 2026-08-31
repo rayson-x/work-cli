@@ -70,11 +70,11 @@ _公共四件套 · 系统：`--dry-run`_
 
 ```bash
 # 普通查找
-lark-cli sheets +cells-search --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +cells-search --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --find "张三"
 
 # 正则 + 范围限定
-lark-cli sheets +cells-search --spreadsheet-token shtXXX --sheet-id "$SID" \
+work-cli sheets +cells-search --spreadsheet-token shtXXX --sheet-id "$SID" \
   --find "^[A-Z]{2}-\\d{4}$" --regex --range "A2:A1000"
 ```
 
@@ -90,15 +90,15 @@ lark-cli sheets +cells-search --spreadsheet-token shtXXX --sheet-id "$SID" \
 
 ```bash
 # 先 dry-run 预览
-lark-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --find "v1" --replacement "v2" --dry-run
 
 # 确认后执行
-lark-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --find "v1" --replacement "v2"
 
 # 正则捕获组：把 "2026-03" 重排成 "03/2026"（$1/$2 引用 --find 的捕获组）
-lark-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +cells-replace --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --regex --find "(\\d{4})-(\\d{2})" --replacement "$2/$1" --dry-run
 ```
 

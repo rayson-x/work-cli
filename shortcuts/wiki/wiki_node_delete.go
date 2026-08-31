@@ -389,7 +389,7 @@ func wikiDeleteNodeTaskResultCommand(taskID string, identity core.Identity) stri
 	if asFlag == "" {
 		asFlag = "user"
 	}
-	return fmt.Sprintf("lark-cli drive +task_result --scenario wiki_delete_node --task-id %s --as %s", taskID, asFlag)
+	return fmt.Sprintf("work-cli drive +task_result --scenario wiki_delete_node --task-id %s --as %s", taskID, asFlag)
 }
 
 // wrapWikiNodeDeleteAPIError attaches actionable hints to the two Lark error

@@ -48,7 +48,7 @@ func TestInterceptor_PreRoundTrip(t *testing.T) {
 	body := []byte(`{"msg":"hello"}`)
 	req, _ := http.NewRequest("POST", "https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=chat_id", io.NopCloser(bytes.NewReader(body)))
 	req.Header.Set("Authorization", "Bearer "+sidecar.SentinelUAT)
-	req.Header.Set("X-Cli-Source", "lark-cli")
+	req.Header.Set("X-Cli-Source", "work-cli")
 
 	post := interceptor.PreRoundTrip(req)
 
@@ -95,7 +95,7 @@ func TestInterceptor_PreRoundTrip(t *testing.T) {
 	}
 
 	// Non-proxy headers should be preserved
-	if src := req.Header.Get("X-Cli-Source"); src != "lark-cli" {
+	if src := req.Header.Get("X-Cli-Source"); src != "work-cli" {
 		t.Errorf("X-Cli-Source should be preserved, got %q", src)
 	}
 

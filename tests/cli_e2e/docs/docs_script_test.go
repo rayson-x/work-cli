@@ -369,7 +369,7 @@ func TestDocsScriptParseDoesNotSupportLegacyQAImage(t *testing.T) {
 func TestDocsScriptParseAcceptsServerSDKAttributeAmpersand(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	t.Cleanup(cancel)
-	input := `<block_insert><parameter><block_id>-1</block_id><content><img href="https://picsum.photos/320/200?seed=lark-cli&raw=1"/></content></parameter></block_insert>`
+	input := `<block_insert><parameter><block_id>-1</block_id><content><img href="https://picsum.photos/320/200?seed=work-cli&raw=1"/></content></parameter></block_insert>`
 	result, err := clie2e.RunCmd(ctx, clie2e.Request{
 		Args:      []string{"docs", "+script", "--command", "parse", "--content", input},
 		DefaultAs: "bot",

@@ -40,7 +40,7 @@ var AppsLogList = common.Shortcut{
 	Description: "Search online app logs with observability filters",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +log-list --app-id <app_id> --level error --keyword timeout --since 1h",
+		"Example: work-cli apps +log-list --app-id <app_id> --level error --keyword timeout --since 1h",
 		"Tip: use --page-token from the response to fetch the next page.",
 	},
 	Scopes:    []string{"spark:app:read"},
@@ -102,7 +102,7 @@ var AppsLogGet = common.Shortcut{
 	Description: "Get one online app log by log ID",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +log-get --app-id <app_id> --log-id <log_id>",
+		"Example: work-cli apps +log-get --app-id <app_id> --log-id <log_id>",
 		"Tip: +log-get searches online logs with limit=1; use +log-list first if the log ID is unknown.",
 	},
 	Scopes:    []string{"spark:app:read"},

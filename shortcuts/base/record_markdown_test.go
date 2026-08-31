@@ -32,7 +32,7 @@ func (p *recordMarkdownCSTestProvider) Scan(_ context.Context, _ extcs.ScanReque
 }
 
 func newRecordMarkdownTestRuntime(stdout, stderr *bytes.Buffer) *common.RuntimeContext {
-	parentCmd := &cobra.Command{Use: "lark-cli"}
+	parentCmd := &cobra.Command{Use: "work-cli"}
 	baseCmd := &cobra.Command{Use: "base"}
 	cmd := &cobra.Command{Use: "+record-list"}
 	cmd.Flags().String("format", "markdown", "")

@@ -18,14 +18,14 @@ import (
 // POST /apps/{app_id}/storage/file_batch_remove，body {paths:[...]}。网关把该路由注册为 POST
 // （DELETE-with-body 不被网关支持，实测 DELETE→404 / POST→200）。后端 results[] 与请求 paths
 // 顺序一一对应：成功项带 file，失败项带 error_code（CLI 据下标回填 path）。
-// 部分失败整体仍 ok:true —— 失败项落在 data.results[].error，不翻成非 0 退出码（lark-cli 信封语义）。
+// 部分失败整体仍 ok:true —— 失败项落在 data.results[].error，不翻成非 0 退出码（work-cli 信封语义）。
 var AppsFileDelete = common.Shortcut{
 	Service:     appsService,
 	Command:     "+file-delete",
 	Description: "Delete one or more files by remote path (batch)",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +file-delete --app-id <app_id> --path /1858537546760216.png --yes",
+		"Example: work-cli apps +file-delete --app-id <app_id> --path /1858537546760216.png --yes",
 		"Repeat --path for batch delete.",
 	},
 	Scopes:    []string{"spark:app:write"},

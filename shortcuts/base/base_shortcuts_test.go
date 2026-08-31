@@ -492,8 +492,8 @@ func TestBaseRecordReadHelpGuidesAgents(t *testing.T) {
 				"preferred analysis output: relative .ndjson output path",
 			},
 			wantTips: []string{
-				"lark-cli base +record-list --base-token <base_token> --table-id <table_id> --limit 50",
-				"lark-cli base +record-list --base-token <base_token> --table-id <table_id> --field-id Name --field-id Status --limit 50",
+				"work-cli base +record-list --base-token <base_token> --table-id <table_id> --limit 50",
+				"work-cli base +record-list --base-token <base_token> --table-id <table_id> --field-id Name --field-id Status --limit 50",
 				"Text equality filter",
 				"Option intersection filter",
 				"Query priority",
@@ -519,7 +519,7 @@ func TestBaseRecordReadHelpGuidesAgents(t *testing.T) {
 				"preferred analysis output: relative .ndjson output path",
 			},
 			wantTips: []string{
-				"Example: lark-cli base +record-search",
+				"Example: work-cli base +record-search",
 				"Example with filter/sort JSON",
 				"Text equality filter",
 				"Query priority",
@@ -542,8 +542,8 @@ func TestBaseRecordReadHelpGuidesAgents(t *testing.T) {
 				"preferred analysis output: relative .ndjson output path",
 			},
 			wantTips: []string{
-				"lark-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id>",
-				"lark-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id rec_001 --record-id rec_002 --field-id Name --field-id Status",
+				"work-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id <record_id>",
+				"work-cli base +record-get --base-token <base_token> --table-id <table_id> --record-id rec_001 --record-id rec_002 --field-id Name --field-id Status",
 				"Example for analysis input",
 				"prefer --format ndjson --output ./records.ndjson",
 				"keep long user data out of model context",
@@ -801,7 +801,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard delete",
 			shortcut: BaseDashboardDelete,
 			wantTips: []string{
-				"lark-cli base +dashboard-delete --base-token <base_token> --dashboard-id <dashboard_id> --yes",
+				"work-cli base +dashboard-delete --base-token <base_token> --dashboard-id <dashboard_id> --yes",
 				"also deletes its blocks",
 				"pass --yes",
 			},
@@ -817,7 +817,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block list",
 			shortcut: BaseDashboardBlockList,
 			wantTips: []string{
-				"lark-cli base +dashboard-block-list --base-token <base_token> --dashboard-id <dashboard_id>",
+				"work-cli base +dashboard-block-list --base-token <base_token> --dashboard-id <dashboard_id>",
 				"Use returned block_id and type values",
 				"--page-size 100",
 				"until has_more=false",
@@ -827,7 +827,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block get",
 			shortcut: BaseDashboardBlockGet,
 			wantTips: []string{
-				"lark-cli base +dashboard-block-get --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id>",
+				"work-cli base +dashboard-block-get --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id>",
 				"metadata such as name, type, layout, and data_config",
 				"Text block content is stored in data_config.text",
 				"computed chart result",
@@ -837,7 +837,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block get data",
 			shortcut: BaseDashboardBlockGetData,
 			wantTips: []string{
-				"lark-cli base +dashboard-block-get-data --base-token <base_token> --block-id <block_id>",
+				"work-cli base +dashboard-block-get-data --base-token <base_token> --block-id <block_id>",
 				"does not need --dashboard-id",
 				"computed chart protocol JSON",
 				"complete dashboard export",
@@ -851,7 +851,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block create",
 			shortcut: BaseDashboardBlockCreate,
 			wantTips: []string{
-				`lark-cli base +dashboard-block-create --base-token <base_token> --dashboard-id <dashboard_id> --name "Order Count" --type statistics --data-config '{"table_name":"Orders","count_all":true}'`,
+				`work-cli base +dashboard-block-create --base-token <base_token> --dashboard-id <dashboard_id> --name "Order Count" --type statistics --data-config '{"table_name":"Orders","count_all":true}'`,
 				`--type text --data-config '{"text":"# Sales Dashboard"}'`,
 				"+table-list and +field-list",
 				"not table_id or field_id",
@@ -866,7 +866,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block update",
 			shortcut: BaseDashboardBlockUpdate,
 			wantTips: []string{
-				`lark-cli base +dashboard-block-update --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id> --name "Total Sales"`,
+				`work-cli base +dashboard-block-update --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id> --name "Total Sales"`,
 				`--data-config '{"series":[{"field_name":"Amount","rollup":"SUM"}]}'`,
 				"lark-base-dashboard-block-config.md as the SSOT",
 				"do not invent data_config from natural language",
@@ -878,7 +878,7 @@ func TestBaseDashboardHelpGuidesAgents(t *testing.T) {
 			name:     "dashboard block delete",
 			shortcut: BaseDashboardBlockDelete,
 			wantTips: []string{
-				"lark-cli base +dashboard-block-delete --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id> --yes",
+				"work-cli base +dashboard-block-delete --base-token <base_token> --dashboard-id <dashboard_id> --block-id <block_id> --yes",
 				"pass --yes",
 			},
 		},
@@ -928,7 +928,7 @@ func TestBaseWorkflowHelpGuidesAgents(t *testing.T) {
 			name:     "workflow create",
 			shortcut: BaseWorkflowCreate,
 			wantTips: []string{
-				"lark-cli base +workflow-create --base-token <base_token> --json @workflow.json",
+				"work-cli base +workflow-create --base-token <base_token> --json @workflow.json",
 				"client_token is required",
 				"New workflows are created disabled",
 				"+table-list and +field-list",
@@ -942,7 +942,7 @@ func TestBaseWorkflowHelpGuidesAgents(t *testing.T) {
 			name:     "workflow update",
 			shortcut: BaseWorkflowUpdate,
 			wantTips: []string{
-				"lark-cli base +workflow-update --base-token <base_token> --workflow-id <workflow_id> --json @workflow.json",
+				"work-cli base +workflow-update --base-token <base_token> --workflow-id <workflow_id> --json @workflow.json",
 				"PUT uses full replacement semantics",
 				"Use +workflow-get first",
 				"keep title/status/steps fields",
@@ -1244,9 +1244,9 @@ func TestBaseBlockHelpGuidesAgents(t *testing.T) {
 			name:     "list",
 			shortcut: BaseBaseBlockList,
 			wantTips: []string{
-				"lark-cli base +base-block-list --base-token <base_token>",
-				"lark-cli base +base-block-list --base-token <base_token> --type table",
-				"lark-cli base +base-block-list --base-token <base_token> --parent-id <folder_block_id>",
+				"work-cli base +base-block-list --base-token <base_token>",
+				"work-cli base +base-block-list --base-token <base_token> --type table",
+				"work-cli base +base-block-list --base-token <base_token> --parent-id <folder_block_id>",
 				`jq '.blocks[] | {type, name, block_id: .id, parent_id}'`,
 				`--type docx | jq '.blocks[] | {name, docx_token}'`,
 				"returned id is the table-id, dashboard-id, or workflow-id",
@@ -1257,35 +1257,35 @@ func TestBaseBlockHelpGuidesAgents(t *testing.T) {
 			name:     "create",
 			shortcut: BaseBaseBlockCreate,
 			wantTips: []string{
-				`lark-cli base +base-block-create --base-token <base_token> --type folder --name "Project Docs"`,
-				`lark-cli base +base-block-create --base-token <base_token> --type table --name "Tasks"`,
-				`lark-cli base +base-block-create --base-token <base_token> --type docx --name "Spec" --parent-id <folder_block_id>`,
-				`lark-cli base +base-block-create --base-token <base_token> --type dashboard --name "Metrics"`,
-				`lark-cli base +base-block-create --base-token <base_token> --type workflow --name "Approval Flow"`,
+				`work-cli base +base-block-create --base-token <base_token> --type folder --name "Project Docs"`,
+				`work-cli base +base-block-create --base-token <base_token> --type table --name "Tasks"`,
+				`work-cli base +base-block-create --base-token <base_token> --type docx --name "Spec" --parent-id <folder_block_id>`,
+				`work-cli base +base-block-create --base-token <base_token> --type dashboard --name "Metrics"`,
+				`work-cli base +base-block-create --base-token <base_token> --type workflow --name "Approval Flow"`,
 			},
 		},
 		{
 			name:     "move",
 			shortcut: BaseBaseBlockMove,
 			wantTips: []string{
-				"lark-cli base +base-block-move --base-token <base_token> --block-id <block_id> --parent-id <folder_block_id>",
-				"lark-cli base +base-block-move --base-token <base_token> --block-id <block_id> --after-id <sibling_block_id>",
-				"lark-cli base +base-block-move --base-token <base_token> --block-id <block_id> --before-id <sibling_block_id>",
-				"lark-cli base +base-block-move --base-token <base_token> --block-id <block_id>",
+				"work-cli base +base-block-move --base-token <base_token> --block-id <block_id> --parent-id <folder_block_id>",
+				"work-cli base +base-block-move --base-token <base_token> --block-id <block_id> --after-id <sibling_block_id>",
+				"work-cli base +base-block-move --base-token <base_token> --block-id <block_id> --before-id <sibling_block_id>",
+				"work-cli base +base-block-move --base-token <base_token> --block-id <block_id>",
 			},
 		},
 		{
 			name:     "rename",
 			shortcut: BaseBaseBlockRename,
 			wantTips: []string{
-				`lark-cli base +base-block-rename --base-token <base_token> --block-id <block_id> --name "New name"`,
+				`work-cli base +base-block-rename --base-token <base_token> --block-id <block_id> --name "New name"`,
 			},
 		},
 		{
 			name:     "delete",
 			shortcut: BaseBaseBlockDelete,
 			wantTips: []string{
-				"lark-cli base +base-block-delete --base-token <base_token> --block-id <block_id> --yes",
+				"work-cli base +base-block-delete --base-token <base_token> --block-id <block_id> --yes",
 				"Recursive folder deletion is not supported.",
 			},
 		},
@@ -1327,9 +1327,9 @@ func TestBaseFieldUpdateHelpGuidesAgents(t *testing.T) {
 
 	tips := strings.Join(cmdutil.GetTips(cmd), "\n")
 	wantTips := []string{
-		`lark-cli base +field-update --base-token <base_token> --table-id <table_id> --field-id "Status" --json '{"name":"Status","type":"text"}' --yes`,
+		`work-cli base +field-update --base-token <base_token> --table-id <table_id> --field-id "Status" --json '{"name":"Status","type":"text"}' --yes`,
 		`"type":"select","multiple":false,"options":[{"name":"Todo"},{"name":"Done"}]`,
-		`Example auto_number update: lark-cli base +field-update`,
+		`Example auto_number update: work-cli base +field-update`,
 		`When --json.type is "auto_number", updating the numbering rules also reapplies them to existing numbers`,
 		"just submit the target field definition and do not add extra low-level parameters",
 		"full field-definition PUT semantics",
@@ -1397,7 +1397,7 @@ func TestBaseAttachmentHelpGuidesAgents(t *testing.T) {
 				"max 50 files, max 2GB each",
 			},
 			wantTips: []string{
-				"lark-cli base +record-upload-attachment",
+				"work-cli base +record-upload-attachment",
 				"Repeat --file to append multiple attachments",
 				"Reuse returned file_token values for download/remove",
 			},
@@ -1411,7 +1411,7 @@ func TestBaseAttachmentHelpGuidesAgents(t *testing.T) {
 				"with multiple or omitted file tokens this must be an existing directory",
 			},
 			wantTips: []string{
-				"lark-cli base +record-download-attachment",
+				"work-cli base +record-download-attachment",
 				"Omit --file-token to download every attachment in the record",
 				"Base attachments should be downloaded with this command",
 				"other download commands may fail",
@@ -1425,7 +1425,7 @@ func TestBaseAttachmentHelpGuidesAgents(t *testing.T) {
 				"max 50 tokens",
 			},
 			wantTips: []string{
-				"lark-cli base +record-remove-attachment",
+				"work-cli base +record-remove-attachment",
 				"Repeat --file-token",
 				"requires --yes",
 			},

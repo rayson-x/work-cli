@@ -246,7 +246,7 @@ func RegisterAppWithDiscovery(ctx context.Context, httpClient *http.Client, resp
 
 		data, err := pollOnce(ctx, httpClient, currentBrand, resp.DeviceCode)
 		if err != nil {
-			fmt.Fprintf(errOut, "[lark-cli] [WARN] app-registration: %v\n", err)
+			fmt.Fprintf(errOut, "[work-cli] [WARN] app-registration: %v\n", err)
 			interval = minInt(interval+1, maxPollIntervalSeconds)
 			continue
 		}
@@ -299,7 +299,7 @@ func RegisterAppWithDiscovery(ctx context.Context, httpClient *http.Client, resp
 			continue
 		case "slow_down":
 			interval = minInt(interval+5, maxPollIntervalSeconds)
-			fmt.Fprintf(errOut, "[lark-cli] app-registration: slow_down, interval increased to %ds\n", interval)
+			fmt.Fprintf(errOut, "[work-cli] app-registration: slow_down, interval increased to %ds\n", interval)
 			continue
 		case "access_denied":
 			return nil, effectiveBrand, ErrRegistrationDenied

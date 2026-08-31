@@ -7,7 +7,7 @@ Copy one Wiki node, including that node's content, to a target space or under a 
 ## Usage
 
 ```bash
-lark-cli wiki +node-copy \
+work-cli wiki +node-copy \
   --space-id <source_space_id> \
   --node-token <source_node_token> \
   (--target-space-id <target_space_id> | --target-parent-node-token <token>) \

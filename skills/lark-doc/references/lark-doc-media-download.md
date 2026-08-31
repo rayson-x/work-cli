@@ -15,13 +15,13 @@
 
 ```bash
 # 下载图片/文件素材（默认 type=media）
-lark-cli docs +media-download --token "Z1Fjxxxxxxxx" --output ./asset
+work-cli docs +media-download --token "Z1Fjxxxxxxxx" --output ./asset
 
 # 指定输出文件名（带扩展名则不会自动补全）
-lark-cli docs +media-download --token "Z1Fjxxxxxxxx" --output ./asset.png
+work-cli docs +media-download --token "Z1Fjxxxxxxxx" --output ./asset.png
 
 # 下载画板缩略图（whiteboard token）
-lark-cli docs +media-download --type whiteboard --token "wbcnxxxxxxxx" --output ./whiteboard
+work-cli docs +media-download --type whiteboard --token "wbcnxxxxxxxx" --output ./whiteboard
 ```
 
 ## 参数

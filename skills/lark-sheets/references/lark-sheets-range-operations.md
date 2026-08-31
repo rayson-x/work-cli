@@ -223,18 +223,18 @@ _排序条件列表（仅 sort 操作）_
 
 ```bash
 # dry-run 先看
-lark-cli sheets +cells-clear --url "..." --sheet-id "$SID" --range "A2:Z1000" --scope all --dry-run
+work-cli sheets +cells-clear --url "..." --sheet-id "$SID" --range "A2:Z1000" --scope all --dry-run
 # 执行
-lark-cli sheets +cells-clear --url "..." --sheet-id "$SID" --range "A2:Z1000" --scope all --yes
+work-cli sheets +cells-clear --url "..." --sheet-id "$SID" --range "A2:Z1000" --scope all --yes
 ```
 
 ### `+cells-merge` / `+cells-unmerge`
 
 ```bash
 # 合并 A1:C1（可选 --merge-type all/rows/columns）
-lark-cli sheets +cells-merge   --url "..." --sheet-id "$SID" --range "A1:C1"
+work-cli sheets +cells-merge   --url "..." --sheet-id "$SID" --range "A1:C1"
 # 取消合并：传大 range 一次性取消其中所有合并区域
-lark-cli sheets +cells-unmerge --url "..." --sheet-id "$SID" --range "A1:C100"
+work-cli sheets +cells-unmerge --url "..." --sheet-id "$SID" --range "A1:C100"
 ```
 
 ### `+rows-resize` / `+cols-resize`
@@ -246,24 +246,24 @@ lark-cli sheets +cells-unmerge --url "..." --sheet-id "$SID" --range "A1:C100"
 
 ```bash
 # 统一尺寸：把第 2-10 行设为固定 30 px
-lark-cli sheets +rows-resize --url "..." --sheet-id "$SID" --range "2:10" --height 30
+work-cli sheets +rows-resize --url "..." --sheet-id "$SID" --range "2:10" --height 30
 
 # 统一尺寸：把 A-C 列设为固定 120 px
-lark-cli sheets +cols-resize --url "..." --sheet-id "$SID" --range "A:C" --width 120
+work-cli sheets +cols-resize --url "..." --sheet-id "$SID" --range "A:C" --width 120
 
 # 差异化尺寸：多列不同宽，一次调用（值可混用 "standard" 重置某列）
-lark-cli sheets +cols-resize --url "..." --sheet-id "$SID" \
+work-cli sheets +cols-resize --url "..." --sheet-id "$SID" \
   --widths '{"A": 100, "B": 358, "C:E": 120, "G": "standard"}'
 
 # 差异化尺寸：多行不同高，值可混用 "auto" / "standard"
-lark-cli sheets +rows-resize --url "..." --sheet-id "$SID" \
+work-cli sheets +rows-resize --url "..." --sheet-id "$SID" \
   --heights '{"1": 50, "2:20": 30, "21": "auto"}'
 
 # 第 1 行行高自动适应内容（列宽不支持 auto）
-lark-cli sheets +rows-resize --url "..." --sheet-id "$SID" --range "1" --type auto
+work-cli sheets +rows-resize --url "..." --sheet-id "$SID" --range "1" --type auto
 
 # 重置 A-E 列为默认列宽
-lark-cli sheets +cols-resize --url "..." --sheet-id "$SID" --range "A:E" --type standard
+work-cli sheets +cols-resize --url "..." --sheet-id "$SID" --range "A:E" --type standard
 ```
 
 **⚠️ 单位是像素，不是 Excel 字符单位 / 磅**：列宽常见 60~400px；如果你按 Excel 字符单位（openpyxl / xlsxwriter 的 `width`）心算，先换算 `px ≈ 字符数 × 8 + 16`——写 `{"A": 10}` 得到的是 10px 的不可用窄列（CLI 会拒绝 < 20px 的列宽并提示换算）。行高是像素不是磅（points），默认行高约 24px。
@@ -280,14 +280,14 @@ lark-cli sheets +cols-resize --url "..." --sheet-id "$SID" --range "A:E" --type 
 
 ```bash
 # 用 A1:A2 的序列规律向下填充到 A3:A100（target 区域不能与 source 重叠，否则后端报 source overlaps destination）
-lark-cli sheets +range-fill --url "..." --sheet-id "$SID" --source-range "A1:A2" --target-range "A3:A100" --series-type auto
+work-cli sheets +range-fill --url "..." --sheet-id "$SID" --source-range "A1:A2" --target-range "A3:A100" --series-type auto
 ```
 
 ### `+range-sort`
 
 ```bash
 # 按 C 列降序排 A1:E100（首行为表头不参与）
-lark-cli sheets +range-sort --url "..." --sheet-id "$SID" --range "A1:E100" --has-header --sort-keys '[{"column":"C","ascending":false}]'
+work-cli sheets +range-sort --url "..." --sheet-id "$SID" --range "A1:E100" --has-header --sort-keys '[{"column":"C","ascending":false}]'
 ```
 
 ### Validate / DryRun / Execute 约束

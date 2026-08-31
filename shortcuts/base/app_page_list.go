@@ -22,7 +22,7 @@ var BaseAppPageList = common.Shortcut{
 		{Name: "page-token", Desc: "pagination token"},
 	},
 	Tips: []string{
-		"lark-cli base +app-page-list --app-token <app_token>",
+		"work-cli base +app-page-list --app-token <app_token>",
 		"Use the returned page_id for +app-page-get/update/delete and every +app-block-* command.",
 		"If a returned page has name=\"\", the current user has no permission to that page; do not treat it as an untitled page or use it as an operation target.",
 	},

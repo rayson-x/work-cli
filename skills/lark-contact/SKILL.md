@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书 / Lark 通讯录:按姓名 / 邮箱解析成 open_id,或按 open_id 反查姓名 / 部门 / 邮箱 / 联系方式 / 个人状态 / 签名,以及按关键词搜索当前用户可见的机器人 / 智能体(agent)。当用户提到一个名字要下一步发消息 / 排日程,或拿到 open_id 想查具体信息时使用。不负责部门树遍历、按部门列员工、组织架构图,这类需求走原生 OpenAPI。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli contact --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli contact --help"
 ---
 
 ## 选哪个命令
@@ -33,15 +33,15 @@ metadata:
 找张三给他发消息:先搜,确认 open_id,再发:
 
 ```bash
-lark-cli contact +search-user --query "张三" --has-chatted --as user
-lark-cli im +messages-send --user-id ou_xxx --text "Hi!"
+work-cli contact +search-user --query "张三" --has-chatted --as user
+work-cli im +messages-send --user-id ou_xxx --text "Hi!"
 ```
 
 批量查同事的个人状态 / 个性签名(先用 schema 看参数)。
 
 ```bash
-lark-cli schema contact.user_profiles.batch_query
-lark-cli contact user_profiles batch_query \
+work-cli schema contact.user_profiles.batch_query
+work-cli contact user_profiles batch_query \
   --params '{"user_id_type":"open_id"}' \
   --data '{"user_ids":["ou_xxx","ou_yyy"],"query_option":{"include_personal_status":true,"include_description":true}}' \
   --as user
@@ -54,8 +54,8 @@ lark-cli contact user_profiles batch_query \
 `+search-bot` 使用 user 身份按关键词搜索当前用户可见的机器人,返回 `ou_` 开头的机器人 open_id。参数细节等见 [`lark-contact-search-bot.md`](references/lark-contact-search-bot.md)。
 
 ```bash
-lark-cli contact +search-bot --query '会议助手' --as user
-lark-cli contact +search-bot --queries '会议助手,日报助手,审批助手' --as user
+work-cli contact +search-bot --query '会议助手' --as user
+work-cli contact +search-bot --queries '会议助手,日报助手,审批助手' --as user
 ```
 
 ## 注意事项

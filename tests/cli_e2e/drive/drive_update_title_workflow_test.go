@@ -24,7 +24,7 @@ func TestDrive_UpdateTitleWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-update-title-"+suffix, "")
+	folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-update-title-"+suffix, "")
 	workDir := t.TempDir()
 
 	sourceName := "update-title-source.txt"
@@ -138,7 +138,7 @@ func TestDrive_UpdateTitleWorkflow(t *testing.T) {
 
 	// Renaming the folder keeps its token, so the cleanup hook registered above
 	// still resolves it.
-	renamedFolderName := "lark-cli-e2e-drive-update-title-renamed-" + suffix
+	renamedFolderName := "work-cli-e2e-drive-update-title-renamed-" + suffix
 	renameFolderResult, err := clie2e.RunCmd(ctx, clie2e.Request{
 		Args: []string{
 			"drive", "+update-title",

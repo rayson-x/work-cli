@@ -119,7 +119,7 @@ _创建/更新的透视表属性_
 ### `+pivot-list`
 
 ```bash
-lark-cli sheets +pivot-list --url "..." --sheet-id "$SID"
+work-cli sheets +pivot-list --url "..." --sheet-id "$SID"
 ```
 
 > **返回值含 `info`（展开后的占用区域与状态）**：每个透视表对象除 `position` / `snapshot` 外，还返回 `info`，标明它在 sheet 上的平铺区域与状态——`info.page_range`（筛选/分页区 A1）、`info.content_range`（主体数据区 A1）、`info.span_range`（空表合并区 A1）、`info.error_state`（错误状态，如 `None`/`Cover`/`Shrink`/`Loading`）、`info.is_empty` / `info.is_hidden`、`info.row`/`info.col`（锚点）等。
@@ -145,11 +145,11 @@ lark-cli sheets +pivot-list --url "..." --sheet-id "$SID"
 
 ```bash
 # 策略 1（强烈推荐）：不传任何落点 flag → 后端自动新建子表，零覆盖风险
-lark-cli sheets +pivot-create --url "..." \
+work-cli sheets +pivot-create --url "..." \
   --source "'Sheet1'!A1:D100" --properties @pivot.json
 
 # 策略 2：落进指定的已有目标子表（注意目标 sheet ≠ 源 sheet，否则要配 --target-position 避开源数据）
-lark-cli sheets +pivot-create --url "..." \
+work-cli sheets +pivot-create --url "..." \
   --source "'Sheet1'!A1:D100" --target-sheet-id "$DEST_SID" --target-position "A1" --properties @pivot.json
 ```
 
@@ -160,7 +160,7 @@ lark-cli sheets +pivot-create --url "..." \
 ### `+pivot-delete`
 
 ```bash
-lark-cli sheets +pivot-delete --url "..." --sheet-id "$SHEET_ID" --pivot-table-id "$PIVOT_TABLE_ID" --yes
+work-cli sheets +pivot-delete --url "..." --sheet-id "$SHEET_ID" --pivot-table-id "$PIVOT_TABLE_ID" --yes
 ```
 
 ### Validate / DryRun / Execute 约束

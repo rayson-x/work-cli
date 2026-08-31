@@ -108,7 +108,7 @@ go build -tags authsidecar_multi_tenant_demo \
 ### 1. Configure the Lark app (trusted side only)
 
 ```bash
-lark-cli config init --new   # set app_id / app_secret
+work-cli config init --new   # set app_id / app_secret
 ```
 
 ### 2. Prepare the keys directory
@@ -144,11 +144,11 @@ keys/
 | `--key-file` | `~/.lark-sidecar/proxy.key` | Shared HMAC key path (created if absent) |
 | `--keys-dir` | *(parent of `--key-file`)* | Directory containing per-client `*.key` files |
 | `--log-file` | *(stderr)* | Audit log output path |
-| `--profile` | *(active profile)* | lark-cli profile name for credential lookup |
+| `--profile` | *(active profile)* | work-cli profile name for credential lookup |
 
 ## Client setup
 
-**No changes to `lark-cli` itself are required.** The standard sidecar env
+**No changes to `work-cli` itself are required.** The standard sidecar env
 vars are all that's needed — the multi-tenant isolation is entirely
 server-side.
 
@@ -206,7 +206,7 @@ All management requests are signed with the **shared `proxy.key`** (not the
 client-specific key). The `client_id` in the body tells the sidecar which
 client→user mapping to update.
 
-After login, `lark-cli` commands (`lark api ...`, `lark doc ...`, etc.) work
+After login, `work-cli` commands (`lark api ...`, `lark doc ...`, etc.) work
 immediately — the sidecar injects the correct user token based on the
 client's HMAC key, with no additional configuration needed.
 
@@ -226,7 +226,7 @@ export LARKSUITE_CLI_BRAND="feishu"
 #    (using a helper script that calls the management endpoints)
 lark-auth login
 
-# 4. Client uses lark-cli as normal — identity is automatically resolved
+# 4. Client uses work-cli as normal — identity is automatically resolved
 lark api GET /open-apis/authen/v1/user_info --as user
 # → returns alice's Feishu identity, not another user's
 ```

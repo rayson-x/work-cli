@@ -31,7 +31,7 @@ func TestSheets_CRUDE2EWorkflow(t *testing.T) {
 	sheetID := ""
 
 	t.Run("create spreadsheet with +create as bot", func(t *testing.T) {
-		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-sheets-"+suffix, "bot")
+		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "work-cli-e2e-sheets-"+suffix, "bot")
 	})
 
 	t.Run("get spreadsheet info with +info as bot", func(t *testing.T) {
@@ -185,12 +185,12 @@ func TestSheets_SpreadsheetsResource(t *testing.T) {
 	const defaultAs = "bot"
 
 	t.Run("create spreadsheet with spreadsheets create as bot", func(t *testing.T) {
-		folderToken := drive.CreateDriveFolder(t, parentT, ctx, "lark-cli-e2e-sheets-resource-folder-"+suffix, defaultAs, "")
+		folderToken := drive.CreateDriveFolder(t, parentT, ctx, "work-cli-e2e-sheets-resource-folder-"+suffix, defaultAs, "")
 		result, err := clie2e.RunCmd(ctx, clie2e.Request{
 			Args:      []string{"sheets", "spreadsheets", "create"},
 			DefaultAs: defaultAs,
 			Data: map[string]any{
-				"title":        "lark-cli-e2e-sheets-resource-" + suffix,
+				"title":        "work-cli-e2e-sheets-resource-" + suffix,
 				"folder_token": folderToken,
 			},
 		})
@@ -229,7 +229,7 @@ func TestSheets_SpreadsheetsResource(t *testing.T) {
 	t.Run("patch spreadsheet with spreadsheets patch as bot", func(t *testing.T) {
 		require.NotEmpty(t, spreadsheetToken, "spreadsheet token is required")
 
-		updatedTitle := "lark-cli-e2e-sheets-patched-" + suffix
+		updatedTitle := "work-cli-e2e-sheets-patched-" + suffix
 		result, err := clie2e.RunCmd(ctx, clie2e.Request{
 			Args:      []string{"sheets", "spreadsheets", "patch"},
 			DefaultAs: "bot",

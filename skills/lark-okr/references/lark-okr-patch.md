@@ -8,19 +8,19 @@
 
 ```bash
 # 更新目标的 content（默认 simple 风格，半纯文本格式）
-lark-cli okr +patch \
+work-cli okr +patch \
   --level objective \
   --target-id 1234567890123456789 \
   --content '{"text":"更新后的目标内容","mention":["ou_123"]}'
 
 # 更新关键结果的分数（0.0-1.0 的一位小数）
-lark-cli okr +patch \
+work-cli okr +patch \
   --level key-result \
   --target-id 2345678901234567890 \
   --score 0.7
 
 # 同时更新目标的多个字段（richtext 风格，完整 ContentBlock 格式）
-lark-cli okr +patch \
+work-cli okr +patch \
   --level objective \
   --target-id 1234567890123456789 \
   --style richtext \
@@ -30,7 +30,7 @@ lark-cli okr +patch \
   --deadline 1735776000000
 
 # 预览 API 调用而不实际执行
-lark-cli okr +patch \
+work-cli okr +patch \
   --level objective \
   --target-id 1234567890123456789 \
   --content '{"text":"测试更新"}' \
@@ -63,7 +63,7 @@ lark-cli okr +patch \
      - 如需复杂格式：使用 `richtext` 风格，构造 ContentBlock JSON。请参考 [ContentBlock 格式](lark-okr-contentblock.md)。
    - **score**：0-1 之间的数字，最多一位小数（如 0.3、0.7、1.0）
    - **deadline**：毫秒级时间戳
-3. 执行 `lark-cli okr +patch --level objective --target-id "..." --content "..."`。
+3. 执行 `work-cli okr +patch --level objective --target-id "..." --content "..."`。
 4. 报告结果：更新的级别、目标 ID、以及哪些字段被更新。
 
 ## 输出

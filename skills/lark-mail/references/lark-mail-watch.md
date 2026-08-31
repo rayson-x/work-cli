@@ -11,34 +11,34 @@
 
 ```bash
 # 默认：表格输出 message 元数据
-lark-cli mail +watch
+work-cli mail +watch
 
 # 仅输出 message 数据（jq 友好）
-lark-cli mail +watch --msg-format metadata --format data
+work-cli mail +watch --msg-format metadata --format data
 
 # 输出精简元数据（message_id / thread_id / folder_id / label_ids / internal_date / message_state）
-lark-cli mail +watch --msg-format minimal --format data
+work-cli mail +watch --msg-format minimal --format data
 
 # 输出纯文本全文
-lark-cli mail +watch --msg-format plain_text_full --format data
+work-cli mail +watch --msg-format plain_text_full --format data
 
 # 输出完整 message（含正文相关字段）
-lark-cli mail +watch --msg-format full --format data
+work-cli mail +watch --msg-format full --format data
 
 # 输出原始事件体
-lark-cli mail +watch --msg-format event --format data
+work-cli mail +watch --msg-format event --format data
 
 # 监听指定邮箱
-lark-cli mail +watch --mailbox alice@company.com
+work-cli mail +watch --mailbox alice@company.com
 
 # 按文件夹/标签过滤（客户端过滤，支持名称或 ID）
-lark-cli mail +watch --folders '["收件箱项目"]' --label-ids '["FLAGGED"]'
+work-cli mail +watch --folders '["收件箱项目"]' --label-ids '["FLAGGED"]'
 
 # 写入文件
-lark-cli mail +watch --msg-format metadata --output-dir ./mail-events
+work-cli mail +watch --msg-format metadata --output-dir ./mail-events
 
 # 查看各 --msg-format 的输出字段说明（解析前先运行）
-lark-cli mail +watch --print-output-schema
+work-cli mail +watch --print-output-schema
 ```
 
 ## 参数

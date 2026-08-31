@@ -18,8 +18,8 @@
 |---------|---------|
 | 本地文件 | 直接使用 |
 | 网络 URL | `curl -L -o photo.jpg "<URL>"` |
-| 文档中的图片 token | `lark-cli docs +media-download --token <token> --output ./photo.png` |
-| 其他域的 Drive token | `lark-cli docs +media-download --token <token> --output ./photo.png` |
+| 文档中的图片 token | `work-cli docs +media-download --token <token> --output ./photo.png` |
+| 其他域的 Drive token | `work-cli docs +media-download --token <token> --output ./photo.png` |
 
 **图片源选择（需要搜索图片时）**：
 
@@ -51,16 +51,16 @@ ls -l *.jpg   # 确认每张文件大小不同；若大小相同则内容可能�
 **必须**使用 `docs +media-upload --parent-type whiteboard` 上传：
 
 ```bash
-lark-cli docs +media-upload --file ./photo1.jpg --parent-type whiteboard --parent-node <whiteboard_token>
+work-cli docs +media-upload --file ./photo1.jpg --parent-type whiteboard --parent-node <whiteboard_token>
 # 响应: { "file_token": "<media_token>", ... }
 ```
 
 逐张上传，收集每个 media token：
 
 ```bash
-lark-cli docs +media-upload --file ./photo1.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_1>
-lark-cli docs +media-upload --file ./photo2.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_2>
-lark-cli docs +media-upload --file ./photo3.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_3>
+work-cli docs +media-upload --file ./photo1.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_1>
+work-cli docs +media-upload --file ./photo2.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_2>
+work-cli docs +media-upload --file ./photo3.jpg --parent-type whiteboard --parent-node <whiteboard_token>  # → <media_token_3>
 ```
 
 ### 4. 在 DSL 中引用

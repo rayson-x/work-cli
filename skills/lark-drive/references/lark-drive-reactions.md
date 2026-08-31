@@ -27,13 +27,13 @@
 
 ```bash
 # 遍历评论卡片，并把 reaction 一起拿回来
-lark-cli drive +list-comments --url '<DOC_URL>' --need-reaction
+work-cli drive +list-comments --url '<DOC_URL>' --need-reaction
 
 # 已知 comment_id，批量查询评论卡片 reaction
-lark-cli drive +batch-query-comments --url '<DOC_URL>' --comment-ids '<COMMENT_ID>' --need-reaction
+work-cli drive +batch-query-comments --url '<DOC_URL>' --comment-ids '<COMMENT_ID>' --need-reaction
 
 # 继续翻某张评论卡片下的 replies，并把 reaction 一起拿回来
-lark-cli drive +list-replies --url '<DOC_URL>' --comment-id '<COMMENT_ID>' --need-reaction
+work-cli drive +list-replies --url '<DOC_URL>' --comment-id '<COMMENT_ID>' --need-reaction
 ```
 
 ## 写入规则
@@ -49,15 +49,15 @@ lark-cli drive +list-replies --url '<DOC_URL>' --comment-id '<COMMENT_ID>' --nee
 
 ```bash
 # 给某条 reply 添加一个点赞 reaction
-lark-cli drive +react-reply --url '<DOC_URL>' \
+work-cli drive +react-reply --url '<DOC_URL>' \
   --reply-id '<REPLY_ID>' --emoji THUMBSUP --action add
 
 # 删除某条 reply 上已有的 DONE reaction（wiki URL 自动解包）
-lark-cli drive +react-reply --url '<WIKI_URL>' \
+work-cli drive +react-reply --url '<WIKI_URL>' \
   --reply-id '<REPLY_ID>' --emoji DONE --action delete
 
 # 原生命令兜底（注意：原生路径没有本地枚举校验）
-lark-cli drive file.comment.reply.reactions update_reaction \
+work-cli drive file.comment.reply.reactions update_reaction \
   --params '{"file_token":"<DOC_TOKEN>","file_type":"docx"}' \
   --data '{"action":"add","reply_id":"<REPLY_ID>","reaction_type":"THUMBSUP"}'
 ```

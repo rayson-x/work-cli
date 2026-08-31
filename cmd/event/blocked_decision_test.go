@@ -61,7 +61,7 @@ func blockedDecisionFixture(t *testing.T) (*catalog.Entry, *appconsume.Service, 
 	blockErr := errs.NewPermissionError(errs.SubtypeMissingScope,
 		"missing scopes for %s", blockedTestKey).
 		WithMissingScopes("im:message", "im:chat:readonly").
-		WithHint("run `lark-cli auth login --scope im:message` and retry")
+		WithHint("run `work-cli auth login --scope im:message` and retry")
 
 	svc := &appconsume.Service{
 		Strategies: appconsume.DefaultRegistry(),

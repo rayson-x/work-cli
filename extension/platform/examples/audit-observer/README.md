@@ -1,6 +1,6 @@
 # Example: audit observer
 
-The simplest possible lark-cli plugin: one After observer that logs
+The simplest possible work-cli plugin: one After observer that logs
 every dispatched command to stderr (success or failure).
 
 ## Build & run

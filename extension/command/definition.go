@@ -6,7 +6,7 @@
 // Business command authors use Definition, Define, the CommandContext helpers,
 // and high-level effects such as Download. The Host* types, InspectCommand,
 // InspectDomain and CloneSets are the
-// erased read side that lark-cli's host adapter and commandtest consume. They
+// erased read side that work-cli's host adapter and commandtest consume. They
 // stay exported because a Command holds its declaration unexported and Go gives
 // a sibling package no way to reach it; business commands never call them.
 package command

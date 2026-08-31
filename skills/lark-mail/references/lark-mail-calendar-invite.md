@@ -8,7 +8,7 @@
 
 ```bash
 # 发送带日程邀请的新邮件
-lark-cli mail +send --as user \
+work-cli mail +send --as user \
   --to alice@example.com --cc bob@example.com \
   --subject '产品评审' \
   --body '<p>请参加本次产品评审会议。</p>' \

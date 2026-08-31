@@ -203,7 +203,7 @@ func composePendingNotice(plan *surface.Plan) map[string]interface{} {
 				"current": stale.Current,
 				"target":  stale.Target,
 				"message": stale.Message(),
-				"command": "lark-cli update",
+				"command": "work-cli update",
 			}
 			if stale.OfficialUnknown {
 				entry["official_unknown"] = true
@@ -218,7 +218,7 @@ func composePendingNotice(plan *surface.Plan) map[string]interface{} {
 		}
 		if canUpdate {
 			entry["message"] = dep.Message()
-			entry["action"] = "lark-cli update"
+			entry["action"] = "work-cli update"
 		}
 		if dep.Replacement != "" {
 			entry["replacement"] = dep.Replacement
@@ -519,7 +519,7 @@ func flagKnownOnGroup(cmd *cobra.Command, name string) bool {
 // a subcommand of cmd but not on cmd itself/inherited — flags supplied while
 // omitting the subcommand they belong to (`im --format json`). Global flags
 // valid on the bare group (e.g. --profile) are excluded so
-// `lark-cli --profile p im` still prints help rather than erroring.
+// `work-cli --profile p im` still prints help rather than erroring.
 func subcommandOnlyFlagTokens(cmd *cobra.Command, rawArgs []string) []string {
 	var misplaced []string
 	for _, a := range flagTokensInArgs(rawArgs) {
@@ -768,7 +768,7 @@ func visibleFlagNames(c *cobra.Command) []string {
 }
 
 // installHelpCommand upgrades Cobra's default help command so that
-// `lark-cli help <plugin-restricted-cmd>` returns a typed error (exit 2)
+// `work-cli help <plugin-restricted-cmd>` returns a typed error (exit 2)
 // instead of printing an envelope and exiting 0 — cobra's stock help
 // command has no error channel.
 func installHelpCommand(root *cobra.Command) {
@@ -802,7 +802,7 @@ func installHelpCommand(root *cobra.Command) {
 // when a command has tips set via cmdutil.SetTips. It also force-shows global
 // flags that are normally hidden in single-app mode (currently --profile)
 // when rendering the root command's own help, so users discovering the CLI
-// still see them at `lark-cli --help`.
+// still see them at `work-cli --help`.
 //
 // skillContent is read lazily at help-render time (not captured up front) so
 // the domain-guide pointer reflects the resolved skill tree -- the same

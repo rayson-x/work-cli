@@ -10,13 +10,13 @@ Search tasklists by keyword and optional filters.
 
 ```bash
 # Search by keyword
-lark-cli task +tasklist-search --query "测试"
+work-cli task +tasklist-search --query "测试"
 
 # Search tasklists created by specific users
-lark-cli task +tasklist-search --creator "ou_xxx,ou_yyy"
+work-cli task +tasklist-search --creator "ou_xxx,ou_yyy"
 
 # Search by creation time range
-lark-cli task +tasklist-search --query "Q2" --create-time "-30d,+0d"
+work-cli task +tasklist-search --query "Q2" --create-time "-30d,+0d"
 ```
 
 ## Parameters
@@ -33,6 +33,6 @@ lark-cli task +tasklist-search --query "Q2" --create-time "-30d,+0d"
 ## Workflow
 
 1. Build the search keyword and filters from the user's request.
-2. Execute `lark-cli task +tasklist-search ...`
+2. Execute `work-cli task +tasklist-search ...`
 3. Report the matched tasklists and the next `page_token` if more results exist.
 

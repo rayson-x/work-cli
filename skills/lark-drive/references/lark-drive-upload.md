@@ -13,45 +13,45 @@
 
 ```bash
 # 上传到 Drive 文件夹
-lark-cli drive +upload --file ./report.pdf --folder-token fldbc_xxx
+work-cli drive +upload --file ./report.pdf --folder-token fldbc_xxx
 
 # 上传到 wiki 节点
-lark-cli drive +upload --file ./report.pdf --wiki-token wikcn_xxx
+work-cli drive +upload --file ./report.pdf --wiki-token wikcn_xxx
 
 # 不指定目标时，上传到调用者的 Drive 根目录
-lark-cli drive +upload --file ./report.pdf
+work-cli drive +upload --file ./report.pdf
 
 # 自定义上传后的文件名
-lark-cli drive +upload --file ./report.pdf --name "季度总结.pdf"
+work-cli drive +upload --file ./report.pdf --name "季度总结.pdf"
 
 # 覆盖已存在文件（原地覆盖，保留 file_token）
-lark-cli drive +upload --file ./report.pdf --file-token boxcn_existing_file
+work-cli drive +upload --file ./report.pdf --file-token boxcn_existing_file
 
 # 原生命令（高级/分片上传）：预上传 + 完成上传
-lark-cli drive files upload_prepare --data '{
+work-cli drive files upload_prepare --data '{
   "file_name": "report.pdf",
   "parent_type": "explorer",
   "parent_node": "fldbc_xxx",
   "size": 1048576,
   "file_token": "boxcn_existing_file"
 }'
-lark-cli drive files upload_finish --data '{
+work-cli drive files upload_finish --data '{
   "upload_id": "<UPLOAD_ID>",
   "block_num": 1
 }'
 
 # 查看完整参数定义
-lark-cli schema drive.files.upload_prepare
+work-cli schema drive.files.upload_prepare
 ```
 
 > [!IMPORTANT]
-> 如果文件是**以应用身份（bot）新建上传**的，如 `lark-cli drive +upload --as bot` 在上传成功后，CLI 会**尝试为当前 CLI 用户自动授予该文件的 `full_access`（可管理权限）**。
+> 如果文件是**以应用身份（bot）新建上传**的，如 `work-cli drive +upload --as bot` 在上传成功后，CLI 会**尝试为当前 CLI 用户自动授予该文件的 `full_access`（可管理权限）**。
 >
 > 如果这次调用传了 `--file-token`，表示是在**覆盖已有文件**，CLI **不会**额外修改该文件权限。
 >
 > 以应用身份上传时，结果里会额外返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该文件的可管理权限
-> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `lark-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
+> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `work-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
 > - `status = failed`：文件已上传成功，但自动授权用户失败；会带上失败原因，并提示稍后重试或继续使用 bot 身份处理该文件
 >
 > `permission_grant.perm = full_access` 表示该资源已授予“可管理权限”。

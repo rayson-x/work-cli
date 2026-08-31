@@ -46,8 +46,8 @@ func TestBuild_ExternalAPI(t *testing.T) {
 	if rootCmd == nil {
 		t.Fatal("Build returned nil root command")
 	}
-	if rootCmd.Use != "lark-cli" {
-		t.Errorf("rootCmd.Use = %q, want %q", rootCmd.Use, "lark-cli")
+	if rootCmd.Use != "work-cli" {
+		t.Errorf("rootCmd.Use = %q, want %q", rootCmd.Use, "work-cli")
 	}
 	if len(rootCmd.Commands()) == 0 {
 		t.Error("Build produced a root command with no subcommands")
@@ -62,7 +62,7 @@ func TestBuild_NoOptions(t *testing.T) {
 	if rootCmd == nil {
 		t.Fatal("Build returned nil root command")
 	}
-	if rootCmd.Use != "lark-cli" {
-		t.Errorf("rootCmd.Use = %q, want %q", rootCmd.Use, "lark-cli")
+	if rootCmd.Use != "work-cli" {
+		t.Errorf("rootCmd.Use = %q, want %q", rootCmd.Use, "work-cli")
 	}
 }

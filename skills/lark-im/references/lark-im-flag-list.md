@@ -2,7 +2,7 @@
 
 > **Prerequisite:** Read [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) for authentication, global parameters, and security rules.
 
-This skill maps to shortcut: `lark-cli im +flag-list`. Underlying API: `GET /open-apis/im/v1/flags`.
+This skill maps to shortcut: `work-cli im +flag-list`. Underlying API: `GET /open-apis/im/v1/flags`.
 
 ## Sorting Rules (Important)
 
@@ -14,25 +14,25 @@ The API returns data sorted by `update_time` in **ascending order**, meaning **o
 
 ```bash
 # Fetch first page (default page-size=50)
-lark-cli im +flag-list --as user
+work-cli im +flag-list --as user
 
 # Manual pagination with custom page size
-lark-cli im +flag-list --as user --page-size 30 --page-token <page_token>
+work-cli im +flag-list --as user --page-size 30 --page-token <page_token>
 
 # Auto-paginate, capped at the default 20 pages
-lark-cli im +flag-list --as user --page-all
+work-cli im +flag-list --as user --page-all
 
 # Auto-paginate + get the latest flag
-lark-cli im +flag-list --as user --page-all -q '.data.flag_items[-1]'
+work-cli im +flag-list --as user --page-all -q '.data.flag_items[-1]'
 
 # Auto-paginate + get only item_id list
-lark-cli im +flag-list --as user --page-all -q '.data.flag_items[].item_id'
+work-cli im +flag-list --as user --page-all -q '.data.flag_items[].item_id'
 
 # Disable auto-enrichment of message content (enabled by default)
-lark-cli im +flag-list --as user --page-all --enrich-feed-thread=false
+work-cli im +flag-list --as user --page-all --enrich-feed-thread=false
 
 # Use the largest supported page limit for a broader scan
-lark-cli im +flag-list --as user --page-all --page-limit 1000
+work-cli im +flag-list --as user --page-all --page-limit 1000
 ```
 
 ## Parameters

@@ -316,7 +316,7 @@ func TestWithHint_PrintfFormat(t *testing.T) {
 func TestPermissionError_FullChain(t *testing.T) {
 	got := errs.NewPermissionError(errs.SubtypeMissingScope,
 		"--confirm-send requires scope: %s", "mail:user_mailbox.message:send").
-		WithHint("run: lark-cli auth login --scope %q", "mail:user_mailbox.message:send").
+		WithHint("run: work-cli auth login --scope %q", "mail:user_mailbox.message:send").
 		WithMissingScopes("mail:user_mailbox.message:send").
 		WithIdentity("user").
 		WithConsoleURL("https://open.feishu.cn/page/scope-apply?clientID=cli_xxx&scopes=mail:user_mailbox.message:send")
@@ -416,7 +416,7 @@ func TestBuilder_WireFormat(t *testing.T) {
 	e := errs.NewPermissionError(errs.SubtypeMissingScope, "missing scope %s", "calendar:event:create").
 		WithCode(99991679).
 		WithLogID("20260520-0a1b2c3d").
-		WithHint("run lark-cli auth login --scope calendar:event:create").
+		WithHint("run work-cli auth login --scope calendar:event:create").
 		WithMissingScopes("calendar:event:create").
 		WithIdentity("user").
 		WithConsoleURL("https://open.feishu.cn/page/scope-apply?clientID=cli_xxx&scopes=calendar:event:create")
@@ -436,7 +436,7 @@ func TestBuilder_WireFormat(t *testing.T) {
 		"subtype":        "missing_scope",
 		"code":           float64(99991679),
 		"message":        "missing scope calendar:event:create",
-		"hint":           "run lark-cli auth login --scope calendar:event:create",
+		"hint":           "run work-cli auth login --scope calendar:event:create",
 		"log_id":         "20260520-0a1b2c3d",
 		"identity":       "user",
 		"console_url":    "https://open.feishu.cn/page/scope-apply?clientID=cli_xxx&scopes=calendar:event:create",

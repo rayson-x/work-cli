@@ -1,6 +1,6 @@
 # apps db 域命令
 
-管理妙搭应用数据库：看表与结构、初始化与发布多环境、数据搬运、变更治理、时间点恢复、用量。逐条跑 SQL（SELECT/DML/DDL）走 [`+db-execute`](lark-apps-db-execute.md)（单独一篇）。运行时命令事实以 `lark-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
+管理妙搭应用数据库：看表与结构、初始化与发布多环境、数据搬运、变更治理、时间点恢复、用量。逐条跑 SQL（SELECT/DML/DDL）走 [`+db-execute`](lark-apps-db-execute.md)（单独一篇）。运行时命令事实以 `work-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
 
 ## 何时用
 
@@ -49,15 +49,15 @@
 **`+db-table-list`**：列出某环境的数据表。分页 `--page-size`（默认 20）/ `--page-token`（上一页 cursor）。每项给表名、描述、估算行数、大小、列数；要完整列定义 / 索引 / 约束用 `+db-table-get`。只知道业务对象名时，先用它定位可能的表名。
 
 ```bash
-lark-cli apps +db-table-list --app-id app_xxx
-lark-cli apps +db-table-list --app-id app_xxx --environment dev --page-size 50
+work-cli apps +db-table-list --app-id app_xxx
+work-cli apps +db-table-list --app-id app_xxx --environment dev --page-size 50
 ```
 
 **`+db-table-get`**：看单张表的结构。默认 JSON 给结构化的字段 / 索引 / 约束 / 估算行数 / 大小；`--format pretty` 直接输出建表 DDL 文本（给用户看建表语句或做迁移参照时用）。
 
 ```bash
-lark-cli apps +db-table-get --app-id app_xxx --table orders
-lark-cli apps +db-table-get --app-id app_xxx --table orders --environment dev --format pretty
+work-cli apps +db-table-get --app-id app_xxx --table orders
+work-cli apps +db-table-get --app-id app_xxx --table orders --environment dev --format pretty
 ```
 
 ### 多环境数据库（初始化 + 发布）
@@ -65,8 +65,8 @@ lark-cli apps +db-table-get --app-id app_xxx --table orders --environment dev --
 **`+db-env-create`（高危）**：把存量单库应用初始化为 dev/online 两套库，不可逆，必须带 `--yes`。`--environment` 目前只支持 `dev`（默认 `dev`）；`--sync-data` 把现有 online 数据复制到新环境（不传则不复制）。注意：`+create --app-type full_stack` 新建的应用通常已自带多环境，重复初始化会返回冲突错误（应用已是多环境）——按 `error.hint` 转述状态即可，别重复初始化。
 
 ```bash
-lark-cli apps +db-env-create --app-id app_xxx --environment dev --dry-run
-lark-cli apps +db-env-create --app-id app_xxx --environment dev --sync-data --yes
+work-cli apps +db-env-create --app-id app_xxx --environment dev --dry-run
+work-cli apps +db-env-create --app-id app_xxx --environment dev --sync-data --yes
 ```
 
 **`+db-env-diff`**：预览开发环境里待发布到线上的表结构变更，不落地。发布前先看这个。无待发布变更时明确返回「无变更」。
@@ -76,8 +76,8 @@ lark-cli apps +db-env-create --app-id app_xxx --environment dev --sync-data --ye
 > 预览与发布同一端点，故 `+db-env-diff` 也需 `spark:app:write` scope（不是纯只读权限）。
 
 ```bash
-lark-cli apps +db-env-diff --app-id app_xxx
-lark-cli apps +db-env-migrate --app-id app_xxx --yes
+work-cli apps +db-env-diff --app-id app_xxx
+work-cli apps +db-env-migrate --app-id app_xxx --yes
 ```
 
 ### 数据导入导出
@@ -90,14 +90,14 @@ lark-cli apps +db-env-migrate --app-id app_xxx --yes
 超大表别硬导：先用 `+db-execute` 加 `WHERE` / `LIMIT` 缩小范围、分批导。
 
 ```bash
-lark-cli apps +db-data-export --app-id app_xxx --table orders --output ./orders.csv
-lark-cli apps +db-data-export --app-id app_xxx --table orders --output ./orders.json --environment dev
+work-cli apps +db-data-export --app-id app_xxx --table orders --output ./orders.csv
+work-cli apps +db-data-export --app-id app_xxx --table orders --output ./orders.json --environment dev
 ```
 
 **`+db-data-import`（高危）**：把本地 csv/json 文件的数据导进表。文件需是 `.csv`/`.json`、≤1 MB，必须带 `--yes`。目标表缺省取文件名去掉**最后一个**扩展名（如 `orders.csv`→`orders`，`orders.2026.csv`→`orders.2026`）；文件名带点号时建议显式传 `--table` 以免落到意外的表名。
 
 ```bash
-lark-cli apps +db-data-import --app-id app_xxx --table orders --file ./orders.csv --environment dev --yes
+work-cli apps +db-data-import --app-id app_xxx --table orders --file ./orders.csv --environment dev --yes
 ```
 
 **导入/导出限额**：体积 ≤ **1 MB**、行数 ≤ **5000**，导入导出都一样，超限会被拒。超限就分批——导入拆成 ≤1 MB / ≤5000 行的多个文件，导出用 `WHERE` / `LIMIT` 缩小范围。
@@ -114,7 +114,7 @@ Base 数据同步走 `+db-sync-*`，和本地文件导入不同：`+db-data-impo
 
 **配置格式**：只通过 `--config` 传完整 JSON，支持内联 JSON、`@file`、`-` stdin。配置 key 使用复数：`field_maps`、`option_mappings`、`syncable_source_fields`。不要写单数 `field_map` / `option_mapping`，CLI 会直接报 validation 错。正式 create 时 `field_maps` **可省略或传空数组**：服务端会使用与 preview 相同的逻辑自动匹配字段并直接创建任务；若显式传了映射，则至少要有一项未写成 `"enabled": false`，写了却全部关闭会被 CLI 拒绝。`+db-sync-update` 仍要求至少一个启用的 `field_maps`，因为 update 的语义是修改既有映射。`target.table.action` 只能是 `create` 或 `use_existing`：建表时 `pg_field` 需要完整字段定义；写已有表时通常只需目标列名。`source.base_url`（源 Base 表完整 URL）在 `+db-sync-create` 必填、由服务端强制；`+db-sync-update` 可选——省略时服务端复用原任务的源 URL，仅在换源 / 替换成另一张 Base 表时才需要传新的 `base_url`。`source.table.name` 是要同步的 Base 表名。`base_url` 形如 `https://.../base/<token>?table=<tableId>`：`token` 定位 Base，`table=` 参数（tableId）定位表。填了 `source.table.name` 就以 name 为准——服务端用 `token + name` 反查 tableId（覆盖 url 里的 `table=` 参数）；不填才用 url 的 `table=` 参数定位。所以用户自然语言里说「同步 xxx 表」「把 xxx 表同步过去」时，一定要把「xxx」填进 `source.table.name`，不要只给 `base_url`——尤其当 `base_url` 不带 `table=` 参数（指向不带具体表的 Base）时，漏了 name 服务端无从定位表。
 
-**不知道要同步哪张表**：若 `base_url` 只有域名+token、不带 `?table=` 参数，又不确定表名，别硬猜。先用 `lark-cli base +table-list --base-token <token>` 列出该 Base 的所有表（`<token>` 就是 `base_url` 里 `/base/` 后面那段），把表名给用户选定，再填进 `source.table.name`（或改用带 `?table=<table_id>` 的完整 URL）。`+db-sync-create` 会在本地就拦下「`base_url` 无 `?table=` 且 `source.table.name` 空」的配置（提交前即报 validation 错，不送到服务端）。
+**不知道要同步哪张表**：若 `base_url` 只有域名+token、不带 `?table=` 参数，又不确定表名，别硬猜。先用 `work-cli base +table-list --base-token <token>` 列出该 Base 的所有表（`<token>` 就是 `base_url` 里 `/base/` 后面那段），把表名给用户选定，再填进 `source.table.name`（或改用带 `?table=<table_id>` 的完整 URL）。`+db-sync-create` 会在本地就拦下「`base_url` 无 `?table=` 且 `source.table.name` 空」的配置（提交前即报 validation 错，不送到服务端）。
 
 **单数 key 恢复**：如果用户说配置里 `field_map` 是单数、`option_mapping` 是单数、或字段映射可能不生效，不要把原配置直接提交。先找到用户这份同步配置，做这三步：
 
@@ -123,21 +123,21 @@ Base 数据同步走 `+db-sync-*`，和本地文件导入不同：`+db-data-impo
 3. 修好后先重新 preview，或复用最近一次 preview `--output` 产出的 `data.config`，再继续 create / update。
 
 ```bash
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @sync.json --preview --output ./resolved-sync.json
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @resolved-sync.json --yes
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @sync.json --preview --output ./resolved-sync.json
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @resolved-sync.json --yes
 ```
 
 如果本地找不到配置文件，不要只停在“请提供文件”。先说明恢复来源：让用户贴失败时传入的 JSON，或查找最近 preview 的 `--output` 文件；如果是已有任务的修改，先用 `+db-sync-get` 取回当前任务配置，再基于它修正后 update：
 
 ```bash
-lark-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123 -q '.data | {mode, source, target, field_maps}' > sync.json
-lark-cli apps +db-sync-update --app-id app_xxx --task-id streaming_123 --environment dev --config @sync.json --yes
+work-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123 -q '.data | {mode, source, target, field_maps}' > sync.json
+work-cli apps +db-sync-update --app-id app_xxx --task-id streaming_123 --environment dev --config @sync.json --yes
 ```
 
 **推荐流程（最佳实践，不是强制）**：优先先 preview，再让用户确认映射，最后用 preview 输出的完整 config 正式创建；这样最稳，也避免手写复杂 `field_maps`。若用户明确要求直接执行、不需要 preview，也可以在 create config 中省略 `field_maps`（或传空数组），由服务端自动匹配并直接创建任务；CLI 不应为了拿 mapping 强制用户先 preview。
 
 ```bash
-lark-cli apps +db-sync-create \
+work-cli apps +db-sync-create \
   --app-id app_xxx \
   --environment dev \
   --config - \
@@ -161,16 +161,16 @@ JSON
 preview 返回 `data.config`、`syncable_source_fields` 和 `summary`。`--output` 只把 `data.config` 写入文件，文件可直接作为正式输入：
 
 ```bash
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @resolved-sync.json --yes
-lark-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @resolved-sync.json --yes
+work-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123
 ```
 
 **多表 Base**：本命令一次只处理一张表。用户要同步整个 Base 时，先把计划说清楚：不是一个“整库同步任务”，而是按表拆成 N 个单表任务。每张表各有一份配置文件、一次 `+db-sync-create --preview`、一次用户确认后的 `+db-sync-create --yes`，并记录各自 `task_id`。
 
 ```bash
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @customers-sync.json --preview --output ./customers-resolved.json
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @orders-sync.json --preview --output ./orders-resolved.json
-lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @payments-sync.json --preview --output ./payments-resolved.json
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @customers-sync.json --preview --output ./customers-resolved.json
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @orders-sync.json --preview --output ./orders-resolved.json
+work-cli apps +db-sync-create --app-id app_xxx --environment dev --config @payments-sync.json --preview --output ./payments-resolved.json
 ```
 
 配置也必须是单表粒度：每份 JSON 只有一个 `source.table` 和一个 `target.table`，字段名保持 `field_maps`、`option_mappings`、`syncable_source_fields` 这些复数 key。
@@ -182,17 +182,17 @@ lark-cli apps +db-sync-create --app-id app_xxx --environment dev --config @payme
 `+db-sync-update` 也遵循 db-sync 家族「省略 `--environment` 落 online」的规则，所以改 dev 上的任务必须显式带该任务所在环境的 `--environment`（多环境应用的 streaming 任务通常在 `dev`），否则会错落 online、找不到任务或改错分支。
 
 ```bash
-lark-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123 -q '.data | {mode, source, target, field_maps}' > sync.json
-lark-cli apps +db-sync-update --app-id app_xxx --task-id streaming_123 --environment dev --config @sync.json --yes
+work-cli apps +db-sync-get --app-id app_xxx --task-id streaming_123 -q '.data | {mode, source, target, field_maps}' > sync.json
+work-cli apps +db-sync-update --app-id app_xxx --task-id streaming_123 --environment dev --config @sync.json --yes
 ```
 
 **列表与生命周期**：
 
 ```bash
-lark-cli apps +db-sync-list --app-id app_xxx --mode streaming --table customers
-lark-cli apps +db-sync-disable --app-id app_xxx --task-id streaming_123
-lark-cli apps +db-sync-enable --app-id app_xxx --task-id streaming_123
-lark-cli apps +db-sync-delete --app-id app_xxx --task-id streaming_123 --yes
+work-cli apps +db-sync-list --app-id app_xxx --mode streaming --table customers
+work-cli apps +db-sync-disable --app-id app_xxx --task-id streaming_123
+work-cli apps +db-sync-enable --app-id app_xxx --task-id streaming_123
+work-cli apps +db-sync-delete --app-id app_xxx --task-id streaming_123 --yes
 ```
 
 `+db-sync-enable`、`+db-sync-disable`、`+db-sync-update`、`+db-sync-delete` 只适用于 `streaming_...` task。对 `batch_...` 执行这些操作会返回 failed-precondition。
@@ -200,7 +200,7 @@ lark-cli apps +db-sync-delete --app-id app_xxx --task-id streaming_123 --yes
 **batch 任务 operation-not-allowed 恢复**：用户说“批量任务重新启用”“导入历史订单表的任务重新 enable”“系统说操作不允许”时，先给生命周期结论：batch / import 类任务是一次性任务，完成或失败后不能重新启用，也不要反复调用 `+db-sync-enable`。下一步改为查状态和结果：
 
 ```bash
-lark-cli apps +db-sync-get --app-id app_xxx --task-id batch_123
+work-cli apps +db-sync-get --app-id app_xxx --task-id batch_123
 ```
 
 把 `status`、`result`、`warnings` 和目标表写入情况告诉用户。若用户要的是后续持续同步，不是“重启这个 batch”，应新建 `mode=streaming` 任务：先 `+db-sync-create --preview` 给用户确认映射和影响，再带 `--yes` 创建；不要强行 enable 已完成的 batch 任务。若此时 CLI 还缺授权，仍要先解释这个生命周期边界，再提示授权完成后用 `+db-sync-get` 查结果。
@@ -221,7 +221,7 @@ lark-cli apps +db-sync-get --app-id app_xxx --task-id batch_123
 **`+db-changelog-list`**：查表结构变更（DDL）历史——谁、什么时候、改了哪张表、做了什么。可按 `--table` 过滤、按 `--change-id` 精确定位某条、用 `--since`/`--until` 圈时间区间，分页 `--page-size`/`--page-token`。
 
 ```bash
-lark-cli apps +db-changelog-list --app-id app_xxx --table orders --since 7d
+work-cli apps +db-changelog-list --app-id app_xxx --table orders --since 7d
 ```
 
 **`+db-audit-status`**：看审计开关状态。给 `--table` 看单表，不给则列出所有已配置的表（开没开、保留期）。
@@ -229,8 +229,8 @@ lark-cli apps +db-changelog-list --app-id app_xxx --table orders --since 7d
 **`+db-audit-enable` / `+db-audit-disable`**：开 / 关某张表的行级变更审计。`--retention` 设保留期，取值 `7d`/`30d`/`180d`/`360d`/`forever`（默认 `7d`）。不要对已经开启审计的表重复 enable——不确定就先用 `+db-audit-status` 查。
 
 ```bash
-lark-cli apps +db-audit-enable --app-id app_xxx --table orders --retention 30d
-lark-cli apps +db-audit-disable --app-id app_xxx --table orders
+work-cli apps +db-audit-enable --app-id app_xxx --table orders --retention 30d
+work-cli apps +db-audit-disable --app-id app_xxx --table orders
 ```
 
 **`+db-audit-list`**：列出表的行级变更事件（INSERT/UPDATE/DELETE 的前后值与操作人）。`--table` 必填、可重复传多张表；`--since`/`--until` 圈时间。
@@ -238,8 +238,8 @@ lark-cli apps +db-audit-disable --app-id app_xxx --table orders
 - **单表查询**：不预过滤，表不存在 / 未开审计会直接报错（按 `error.hint` 转述给用户，引导先 `+db-audit-enable`）。
 
 ```bash
-lark-cli apps +db-audit-list --app-id app_xxx --table orders --since 24h
-lark-cli apps +db-audit-list --app-id app_xxx --table orders --table users
+work-cli apps +db-audit-list --app-id app_xxx --table orders --since 24h
+work-cli apps +db-audit-list --app-id app_xxx --table orders --table users
 ```
 
 ### 时间点恢复（PITR）
@@ -253,8 +253,8 @@ lark-cli apps +db-audit-list --app-id app_xxx --table orders --table users
 - 动手前务必先 `+db-recovery-diff` 给用户确认。
 
 ```bash
-lark-cli apps +db-recovery-diff --app-id app_xxx --target 2h
-lark-cli apps +db-recovery-apply --app-id app_xxx --target 2026-04-15T10:00:00Z --yes
+work-cli apps +db-recovery-diff --app-id app_xxx --target 2h
+work-cli apps +db-recovery-apply --app-id app_xxx --target 2026-04-15T10:00:00Z --yes
 ```
 
 ### 配额
@@ -262,7 +262,7 @@ lark-cli apps +db-recovery-apply --app-id app_xxx --target 2026-04-15T10:00:00Z 
 **`+db-quota-get`**：查数据库存储用量（已用量、表数、视图数；配额接入后还会给总配额与使用率）。
 
 ```bash
-lark-cli apps +db-quota-get --app-id app_xxx --environment dev
+work-cli apps +db-quota-get --app-id app_xxx --environment dev
 ```
 
 ## 时间格式（`--since` / `--until` / `--target`）

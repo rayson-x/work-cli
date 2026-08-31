@@ -15,7 +15,7 @@ import (
 )
 
 // TestAuthListRun_NotConfigured_ReturnsExitZero pins the contract that
-// `lark-cli auth list` is a read-only probe and must not fail-hard when no
+// `work-cli auth list` is a read-only probe and must not fail-hard when no
 // config exists yet — scripts and AI agents use it as an idempotent "do I
 // have any users?" check, so the exit code carries semantic weight. Pair
 // that with the existing "configured but no logged-in users" branch (also

@@ -25,18 +25,18 @@
 
 ```bash
 # 基础用法 —— 两个必填参数
-lark-cli drive +status \
+work-cli drive +status \
   --local-dir ./repo \
   --folder-token fldcnxxxxxxxxx
 
 # 快速模式 —— 只比较 modified_time，不下载远端文件内容
-lark-cli drive +status \
+work-cli drive +status \
   --local-dir ./repo \
   --folder-token fldcnxxxxxxxxx \
   --quick
 
 # 只看判定为 modified 的项（exact=hash 不一致；quick=mtime 不一致）（结合 --jq 过滤）
-lark-cli drive +status \
+work-cli drive +status \
   --local-dir ./repo \
   --folder-token fldcnxxxxxxxxx \
   --jq '.modified'

@@ -7,7 +7,7 @@ Remove a member from a wiki space. OpenAPI: `DELETE /open-apis/wiki/v2/spaces/:s
 ## Usage
 
 ```bash
-lark-cli wiki +member-remove \
+work-cli wiki +member-remove \
   --space-id <space_id> \
   --member-id <open_id|email|user_id|app_id|...> \
   --member-type <openid|email|userid|unionid|openchat|opendepartmentid|appid> \
@@ -15,13 +15,13 @@ lark-cli wiki +member-remove \
   [--as user|bot]
 
 # Personal library (resolves my_library first)
-lark-cli wiki +member-remove \
+work-cli wiki +member-remove \
   --space-id my_library \
   --member-id ou_xxx --member-type openid --member-role member \
   --as user
 
 # Preview the call chain without deleting
-lark-cli wiki +member-remove \
+work-cli wiki +member-remove \
   --space-id <id> --member-id <id> --member-type openid --member-role admin \
   --dry-run
 ```

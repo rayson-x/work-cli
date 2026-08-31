@@ -981,7 +981,7 @@ var CellsBatchSetStyle = common.Shortcut{
 	Flags:       flagsFor("+cells-batch-set-style"),
 	Tips: []string{
 		"DEPRECATED: superseded by +styles-put, whose one spec also covers merges, row/col sizes and freeze — prefer it for new work.",
-		`Example: lark-cli sheets +cells-batch-set-style --url <URL> --ranges '["Sheet1!A1:B2","汇总!C1:C9"]' --font-weight bold`,
+		`Example: work-cli sheets +cells-batch-set-style --url <URL> --ranges '["Sheet1!A1:B2","汇总!C1:C9"]' --font-weight bold`,
 		"Every range carries its sheet-NAME prefix (Sheet1!A1:B2, not a sheet_id) — there is no --sheet-id / --sheet-name flag here.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {

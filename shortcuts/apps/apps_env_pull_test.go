@@ -326,7 +326,7 @@ func TestAppsEnvPull_PrettyOutput_WithDatabaseLine(t *testing.T) {
 	if !strings.Contains(got, "\n\nDATABASE_URL is valid until "+wantExpiry+".\n") {
 		t.Fatalf("missing blank-line separated expiry block: %q", got)
 	}
-	if !strings.Contains(got, "Run `lark-cli apps +env-pull --app-id <app_id>` again to refresh it.") {
+	if !strings.Contains(got, "Run `work-cli apps +env-pull --app-id <app_id>` again to refresh it.") {
 		t.Fatalf("missing refresh hint line: %q", got)
 	}
 	if strings.Contains(got, "postgres://db") {
@@ -826,7 +826,7 @@ func TestWriteEnvPullPretty(t *testing.T) {
 	if strings.Contains(got, "Skipped") {
 		t.Fatalf("no skipped warning when skippedKeys is nil: %q", got)
 	}
-	if !strings.Contains(got, "Run `lark-cli apps +env-pull --app-id <app_id>` again to refresh it.") {
+	if !strings.Contains(got, "Run `work-cli apps +env-pull --app-id <app_id>` again to refresh it.") {
 		t.Fatalf("missing refresh hint line: %q", got)
 	}
 }

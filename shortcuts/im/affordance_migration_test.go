@@ -33,7 +33,7 @@ func TestAllIMShortcutsUseAffordanceExamples(t *testing.T) {
 	for _, sc := range shortcuts {
 		t.Run(sc.Command, func(t *testing.T) {
 			for _, tip := range sc.Tips {
-				if strings.Contains(tip, "lark-cli im ") {
+				if strings.Contains(tip, "work-cli im ") {
 					t.Fatalf("copyable example is still mixed into Go Tips: %q", tip)
 				}
 			}
@@ -47,7 +47,7 @@ func TestAllIMShortcutsUseAffordanceExamples(t *testing.T) {
 				t.Fatalf("%s examples = %#v, want exactly one", sc.Command, parsed.Examples)
 			}
 			example := parsed.Examples[0].Command
-			if !strings.HasPrefix(example, "lark-cli im "+sc.Command) {
+			if !strings.HasPrefix(example, "work-cli im "+sc.Command) {
 				t.Fatalf("example does not invoke its shortcut: %q", example)
 			}
 			assertIMExampleFlagsExist(t, sc, example)

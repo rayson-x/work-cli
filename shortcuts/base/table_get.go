@@ -18,7 +18,7 @@ var BaseTableGet = common.Shortcut{
 	AuthTypes:   authTypes(),
 	Flags:       []common.Flag{baseTokenFlag(true), tableRefFlag(true)},
 	Tips: []string{
-		`Example: lark-cli base +table-get --base-token <base_token> --table-id "Tasks"`,
+		`Example: work-cli base +table-get --base-token <base_token> --table-id "Tasks"`,
 		"table-id accepts a table ID (tbl...) or the table name in the current Base.",
 	},
 	DryRun: dryRunTableGet,

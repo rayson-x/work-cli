@@ -213,7 +213,7 @@ func TestResolveDriveUpdateTitleInputRedirectsApps(t *testing.T) {
 				t.Fatalf("message = %q, want the apps limitation named", validationErr.Message)
 			}
 			// The hint stops at the owning domain: apps-domain flags would drift.
-			if !strings.Contains(validationErr.Hint, "apps domain") || !strings.Contains(validationErr.Hint, "lark-cli apps --help") {
+			if !strings.Contains(validationErr.Hint, "apps domain") || !strings.Contains(validationErr.Hint, "work-cli apps --help") {
 				t.Fatalf("hint = %q, want the apps-domain redirect", validationErr.Hint)
 			}
 			// The rejected token is never echoed next to a runnable command.
@@ -308,7 +308,7 @@ func TestResolveDriveUpdateTitleInputNeverEchoesTokenIntoCommands(t *testing.T) 
 					t.Fatalf("type %s: hint %q must not embed the caller token %q", docType, problem.Hint, token)
 				}
 				// Messages may quote the input, but never unquoted next to a command.
-				if strings.Contains(problem.Message, "lark-cli") && strings.Contains(problem.Message, token) {
+				if strings.Contains(problem.Message, "work-cli") && strings.Contains(problem.Message, token) {
 					t.Fatalf("type %s: message %q pastes the token into a command", docType, problem.Message)
 				}
 			}

@@ -38,7 +38,7 @@ func TestSheets_CallCompatWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-sheets-callcompat-"+suffix, "bot")
+	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "work-cli-e2e-sheets-callcompat-"+suffix, "bot")
 
 	sheetName := "cli e2e " + suffix
 	qualified := func(rng string) string { return "'" + sheetName + "'!" + rng }

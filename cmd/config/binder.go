@@ -370,7 +370,7 @@ func resolveHermesEnvPath() string {
 
 // resolveLarkChannelConfigPath returns the path to lark-channel-bridge's
 // source config. LARK_CHANNEL_CONFIG lets a host point bind at a projected
-// single-account config without changing lark-cli's target config directory.
+// single-account config without changing work-cli's target config directory.
 func resolveLarkChannelConfigPath() string {
 	if p := os.Getenv("LARK_CHANNEL_CONFIG"); strings.TrimSpace(p) != "" {
 		return expandHome(p)

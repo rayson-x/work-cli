@@ -20,7 +20,7 @@ var AppsOpenAPIKeyGet = common.Shortcut{
 	Description: "Get an open API key detail (secret redacted)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +openapi-key-get --app-id <app_id> --key-id <key_id>",
+		"Example: work-cli apps +openapi-key-get --app-id <app_id> --key-id <key_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -55,7 +55,7 @@ func oapiKeyItemURL(rctx *common.RuntimeContext) string {
 
 // oapiKeyNotFoundHint points a failed per-key call at +openapi-key-list.
 func oapiKeyNotFoundHint(rctx *common.RuntimeContext) string {
-	return "verify --key-id; list keys with `lark-cli apps +openapi-key-list --app-id " +
+	return "verify --key-id; list keys with `work-cli apps +openapi-key-list --app-id " +
 		strings.TrimSpace(rctx.Str("app-id")) + "`"
 }
 

@@ -8,7 +8,7 @@
 
 ```bash
 # 调整 Objective 顺位
-lark-cli okr +reorder \
+work-cli okr +reorder \
   --cycle-id 7000000000000000001 \
   --level objective \
   --ops '[
@@ -18,7 +18,7 @@ lark-cli okr +reorder \
   --as user
 
 # 调整 KR 顺位（需指定 --objective-id）
-lark-cli okr +reorder \
+work-cli okr +reorder \
   --cycle-id 7000000000000000001 \
   --level key-result \
   --objective-id 7000000000000000002 \
@@ -29,7 +29,7 @@ lark-cli okr +reorder \
   --as user
 
 # 从文件读取 ops
-lark-cli okr +reorder \
+work-cli okr +reorder \
   --cycle-id 7000000000000000001 \
   --level objective \
   --ops @reorder_ops.json \

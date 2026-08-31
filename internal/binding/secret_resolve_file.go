@@ -24,7 +24,7 @@ func resolveFileRef(ref *SecretRef, pc *ProviderConfig) (string, error) {
 	}
 
 	// OpenClaw preserves user-authored `~/...` paths verbatim on disk for
-	// portability and resolves them at read time. lark-cli reads the file
+	// portability and resolves them at read time. work-cli reads the file
 	// raw, so we mirror that resolution here before the audit — otherwise
 	// an unambiguous home-relative path would be rejected by
 	// requireAbsolutePath, which is meant to guard against cwd-relative

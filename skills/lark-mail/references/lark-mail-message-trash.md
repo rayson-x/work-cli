@@ -7,9 +7,9 @@ Use it after obtaining real `message_id` values from `+triage`, `+message`, or `
 ## Common Commands
 
 ```bash
-lark-cli mail +message-trash --message-ids <id1>,<id2> --yes
-lark-cli mail +message-trash --mailbox shared@example.com --message-ids <id> --yes
-lark-cli mail +message-trash --message-ids <id1> --message-ids <id2> --dry-run
+work-cli mail +message-trash --message-ids <id1>,<id2> --yes
+work-cli mail +message-trash --mailbox shared@example.com --message-ids <id> --yes
+work-cli mail +message-trash --message-ids <id1> --message-ids <id2> --dry-run
 ```
 
 ## Flags

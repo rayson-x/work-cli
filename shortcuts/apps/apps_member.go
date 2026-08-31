@@ -13,14 +13,14 @@ import (
 )
 
 const (
-	memberReadHint  = "verify --app-id identifies a Miaoda app you can access; list apps with `lark-cli apps +list`"
+	memberReadHint  = "verify --app-id identifies a Miaoda app you can access; list apps with `work-cli apps +list`"
 	memberWriteHint = "verify the app, external member ID, and current collaborator policy; read the latest state before retrying"
 )
 
 var AppsMemberList = common.Shortcut{
 	Service: appsService, Command: "+member-list", Description: "List application collaborators",
 	Risk: "read", Scopes: []string{"spark:app:read"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-list --app-id <app_id>"},
+	Tips:      []string{"Example: work-cli apps +member-list --app-id <app_id>"},
 	HasFormat: true,
 	Flags: []common.Flag{
 		{Name: "app-id", Desc: "Miaoda app ID (app_...)"},
@@ -62,7 +62,7 @@ var AppsMemberList = common.Shortcut{
 var AppsMemberAdd = common.Shortcut{
 	Service: appsService, Command: "+member-add", Description: "Add an application collaborator",
 	Risk: "high-risk-write", Scopes: []string{"spark:app:write"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-add --app-id <app_id> --member-type openid --member-id <open_id> --perm view --yes"},
+	Tips:      []string{"Example: work-cli apps +member-add --app-id <app_id> --member-type openid --member-id <open_id> --perm view --yes"},
 	HasFormat: true,
 	Flags: []common.Flag{
 		{Name: "app-id", Desc: "Miaoda app ID (app_...)"},
@@ -102,7 +102,7 @@ var AppsMemberAdd = common.Shortcut{
 var AppsMemberUpdate = common.Shortcut{
 	Service: appsService, Command: "+member-update", Description: "Update an application collaborator",
 	Risk: "high-risk-write", Scopes: []string{"spark:app:write"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-update --app-id <app_id> --member-type openid --member-id <open_id> --perm edit --yes"},
+	Tips:      []string{"Example: work-cli apps +member-update --app-id <app_id> --member-type openid --member-id <open_id> --perm edit --yes"},
 	HasFormat: true,
 	Flags: []common.Flag{
 		{Name: "app-id", Desc: "Miaoda app ID (app_...)"},
@@ -144,7 +144,7 @@ var AppsMemberUpdate = common.Shortcut{
 var AppsMemberRemove = common.Shortcut{
 	Service: appsService, Command: "+member-remove", Description: "Remove an application collaborator",
 	Risk: "high-risk-write", Scopes: []string{"spark:app:write"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-remove --app-id <app_id> --member-type openid --member-id <open_id> --yes"},
+	Tips:      []string{"Example: work-cli apps +member-remove --app-id <app_id> --member-type openid --member-id <open_id> --yes"},
 	HasFormat: true,
 	Flags: []common.Flag{
 		{Name: "app-id", Desc: "Miaoda app ID (app_...)"},
@@ -182,7 +182,7 @@ var AppsMemberRemove = common.Shortcut{
 var AppsMemberSettingsGet = common.Shortcut{
 	Service: appsService, Command: "+member-settings-get", Description: "Get application collaborator settings",
 	Risk: "read", Scopes: []string{"spark:app:read"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-settings-get --app-id <app_id>"},
+	Tips:      []string{"Example: work-cli apps +member-settings-get --app-id <app_id>"},
 	HasFormat: true,
 	Flags:     []common.Flag{{Name: "app-id", Desc: "Miaoda app ID (app_...)"}},
 	Validate: func(ctx context.Context, rctx *common.RuntimeContext) error {
@@ -210,7 +210,7 @@ var AppsMemberSettingsGet = common.Shortcut{
 var AppsMemberSettingsSet = common.Shortcut{
 	Service: appsService, Command: "+member-settings-set", Description: "Update application collaborator settings",
 	Risk: "high-risk-write", Scopes: []string{"spark:app:write"}, AuthTypes: []string{"user"},
-	Tips:      []string{"Example: lark-cli apps +member-settings-set --app-id <app_id> --external-access enabled --yes"},
+	Tips:      []string{"Example: work-cli apps +member-settings-set --app-id <app_id> --external-access enabled --yes"},
 	HasFormat: true,
 	Flags:     memberSettingsSetFlags(),
 	Validate: func(ctx context.Context, rctx *common.RuntimeContext) error {

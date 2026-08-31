@@ -24,7 +24,7 @@ func requireParamValidationError(t *testing.T, err error) {
 		t.Errorf("subtype/param = %s/%q, want %s/%q", ve.Subtype, ve.Param, errs.SubtypeInvalidArgument, "--param")
 	}
 	if ve.Hint == "" {
-		t.Error("param validation error should hint at `lark-cli event schema`")
+		t.Error("param validation error should hint at `work-cli event schema`")
 	}
 }
 

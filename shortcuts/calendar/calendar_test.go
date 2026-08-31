@@ -4470,7 +4470,7 @@ func TestApprovalReasonHint_ByMode(t *testing.T) {
 			},
 			mustNotContain: []string{
 				"the CLI cannot submit approvals",
-				"lark-cli calendar event.attendees create",
+				"work-cli calendar event.attendees create",
 			},
 		},
 		{
@@ -4482,7 +4482,7 @@ func TestApprovalReasonHint_ByMode(t *testing.T) {
 				"current duration is 2 hours",
 			},
 			mustNotContain: []string{
-				"lark-cli calendar event.attendees create",
+				"work-cli calendar event.attendees create",
 			},
 		},
 		{
@@ -4607,7 +4607,7 @@ func TestUpdate_RoomCheck_NeedApproval_Blocks(t *testing.T) {
 	if strings.Contains(ve.Message, "the CLI cannot submit approvals inline") {
 		t.Errorf("recovery clause should live in the hint (not repeated per line in the message), got message: %q", ve.Message)
 	}
-	if strings.Contains(ve.Message, "lark-cli calendar event.attendees create --as user") {
+	if strings.Contains(ve.Message, "work-cli calendar event.attendees create --as user") {
 		t.Errorf("attendees-create recovery clause should live in the hint (not per line), got message: %q", ve.Message)
 	}
 	if !strings.Contains(ve.Hint, "the CLI cannot submit approvals") {
@@ -4619,7 +4619,7 @@ func TestUpdate_RoomCheck_NeedApproval_Blocks(t *testing.T) {
 	if !strings.Contains(ve.Hint, "ask the user first") {
 		t.Errorf("hint should require asking the user before picking a recovery path, got: %q", ve.Hint)
 	}
-	if !strings.Contains(ve.Hint, "lark-cli calendar event.attendees create --as user") {
+	if !strings.Contains(ve.Hint, "work-cli calendar event.attendees create --as user") {
 		t.Errorf("hint should point at the attendees-create recovery path, got: %q", ve.Hint)
 	}
 	if !strings.Contains(ve.Hint, "update through the client") {

@@ -28,7 +28,7 @@ SVG 导出是**纯视觉快照**，再次导入后画板语义（思维导图层
 ### 1. 导出当前画板 SVG
 
 ```bash
-lark-cli whiteboard +export \
+work-cli whiteboard +export \
   --whiteboard-token <TOKEN> \
   --output-type svg \
   --output <dir>/original.svg \
@@ -71,7 +71,7 @@ npx -y @larksuite/whiteboard-cli@^0.2.13 -i <dir>/edited.svg -f svg --check
 
 ```bash
 # dry-run 探测
-lark-cli whiteboard +update \
+work-cli whiteboard +update \
   --whiteboard-token <TOKEN> \
   --source @<dir>/edited.svg \
   --input_format svg \
@@ -79,7 +79,7 @@ lark-cli whiteboard +update \
   --overwrite --dry-run --as user
 
 # 用户确认后执行
-lark-cli whiteboard +update \
+work-cli whiteboard +update \
   --whiteboard-token <TOKEN> \
   --source @<dir>/edited.svg \
   --input_format svg \

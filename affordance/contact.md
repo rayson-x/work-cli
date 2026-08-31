@@ -15,12 +15,12 @@ The primary user lookup for user identity: search by keyword or email, resolve k
 
 **Find a user by name**
 ```bash
-lark-cli contact +search-user --query "alice" --as user
+work-cli contact +search-user --query "alice" --as user
 ```
 
 **Fetch known users by open_id (me = yourself)**
 ```bash
-lark-cli contact +search-user --user-ids "ou_3a8b****6a7b,me" --as user
+work-cli contact +search-user --user-ids "ou_3a8b****6a7b,me" --as user
 ```
 
 ## +search-bot
@@ -40,22 +40,22 @@ Search bots (apps) by keyword. Pass `--query` or `--queries`; use `--chat-ids` t
 
 **Find bots by keyword**
 ```bash
-lark-cli contact +search-bot --query "会议助手" --as user
+work-cli contact +search-bot --query "会议助手" --as user
 ```
 
 **Search inside one chat**
 ```bash
-lark-cli contact +search-bot --query "助手" --chat-ids "oc_3a8b****6a7b" --as user
+work-cli contact +search-bot --query "助手" --chat-ids "oc_3a8b****6a7b" --as user
 ```
 
 **Find bots you've chatted with**
 ```bash
-lark-cli contact +search-bot --query "助手" --has-chatted --as user
+work-cli contact +search-bot --query "助手" --has-chatted --as user
 ```
 
 **Search several bot keywords in one call**
 ```bash
-lark-cli contact +search-bot --queries "会议助手,日报助手,审批助手" --as user
+work-cli contact +search-bot --queries "会议助手,日报助手,审批助手" --as user
 ```
 
 ## +get-user
@@ -86,5 +86,5 @@ Bulk-fetch personal status and signature for user ids you already have.
 
 **Bulk-query status and signature**
 ```bash
-lark-cli contact user_profiles batch_query --data '{"user_ids":["ou_3a8b****6a7b"],"query_option":{"include_personal_status":true,"include_description":true}}'
+work-cli contact user_profiles batch_query --data '{"user_ids":["ou_3a8b****6a7b"],"query_option":{"include_personal_status":true,"include_description":true}}'
 ```

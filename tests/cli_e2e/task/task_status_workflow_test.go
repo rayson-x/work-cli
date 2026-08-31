@@ -25,7 +25,7 @@ func TestTask_StatusWorkflow(t *testing.T) {
 		Args:      []string{"task", "+create"},
 		DefaultAs: "bot",
 		Data: map[string]any{
-			"summary":     "lark-cli-e2e-summary-" + suffix,
+			"summary":     "work-cli-e2e-summary-" + suffix,
 			"description": "created by tests/cli_e2e/task status workflow",
 		},
 	})

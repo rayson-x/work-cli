@@ -4,7 +4,7 @@ version: 1.0.0
 description: "日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。"
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
 ---
 
 # 日程待办摘要工作流
@@ -24,7 +24,7 @@ metadata:
 仅支持 **user 身份**。执行前确保已授权：
 
 ```bash
-lark-cli auth login --domain calendar,task
+work-cli auth login --domain calendar,task
 ```
 
 ## 工作流
@@ -41,10 +41,10 @@ lark-cli auth login --domain calendar,task
 
 ```bash
 # 今天（默认，无需额外参数）
-lark-cli calendar +agenda
+work-cli calendar +agenda
 
 # 指定日期范围（必须使用 ISO 8601 格式，不支持 "tomorrow" 等自然语言）
-lark-cli calendar +agenda --start "2026-03-26T00:00:00+08:00" --end "2026-03-26T23:59:59+08:00"
+work-cli calendar +agenda --start "2026-03-26T00:00:00+08:00" --end "2026-03-26T23:59:59+08:00"
 ```
 
 > **注意**：`--start` / `--end` 仅支持 ISO 8601 格式（如 `2026-01-01` 或 `2026-01-01T15:04:05+08:00`）和 Unix timestamp，**不支持** `"tomorrow"`、`"next monday"` 等自然语言。需要 AI 根据当前日期自行计算目标日期。
@@ -55,13 +55,13 @@ lark-cli calendar +agenda --start "2026-03-26T00:00:00+08:00" --end "2026-03-26T
 
 ```bash
 # 默认 pending 摘要：必须显式过滤未完成任务（最多 20 条）
-lark-cli task +get-my-tasks --complete=false
+work-cli task +get-my-tasks --complete=false
 
 # 只看指定日期前到期的未完成任务（推荐用于摘要场景，减少数据量）
-lark-cli task +get-my-tasks --complete=false --due-end "2026-03-27T23:59:59+08:00"
+work-cli task +get-my-tasks --complete=false --due-end "2026-03-27T23:59:59+08:00"
 
 # 获取全部未完成任务（超过 20 条时）
-lark-cli task +get-my-tasks --complete=false --page-all
+work-cli task +get-my-tasks --complete=false --page-all
 ```
 
 > **注意**：`+get-my-tasks` 不带 `--complete` 时会**同时返回已完成和未完成任务**，会把已完成任务当成"待办"展示进摘要里。站会/日报这种 pending 汇总场景**必须**显式带上 `--complete=false`，不要省略。

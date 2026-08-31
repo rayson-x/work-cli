@@ -6,7 +6,7 @@
 
 不要用此命令处理回复或转发场景。回复和转发应使用对应的专用 shortcut（它们默认也是创建草稿而不发送）。
 
-如需修改已有草稿，不要使用此命令，请使用 `lark-cli mail +draft-edit`。
+如需修改已有草稿，不要使用此命令，请使用 `work-cli mail +draft-edit`。
 
 **CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](references/lark-mail-html.md)，其中包含邮件书写规范**
 
@@ -24,20 +24,20 @@
 
 ```bash
 # 创建 HTML 草稿（推荐）
-lark-cli mail +draft-create --to 'alice@example.com' --subject '周报' \
+work-cli mail +draft-create --to 'alice@example.com' --subject '周报' \
   --body '<p>本周进展：</p><ul><li>完成 A 模块</li></ul>'
 
 # 不带收件人的 HTML 草稿（用户之后可自行添加）
-lark-cli mail +draft-create --subject '周报' --body '<p>草稿内容</p>'
+work-cli mail +draft-create --subject '周报' --body '<p>草稿内容</p>'
 
 # 带附件和内嵌图片的 HTML 草稿（推荐：直接用相对路径，自动解析）
-lark-cli mail +draft-create --to 'alice@example.com' --subject '预览图' --body '<p>见附件和图：<img src="./logo.png" /></p>' --attach './report.pdf'
+work-cli mail +draft-create --to 'alice@example.com' --subject '预览图' --body '<p>见附件和图：<img src="./logo.png" /></p>' --attach './report.pdf'
 
 # 纯文本草稿（仅在内容极简时使用）
-lark-cli mail +draft-create --to 'alice@example.com' --subject '简短通知' --body '收到，谢谢'
+work-cli mail +draft-create --to 'alice@example.com' --subject '简短通知' --body '收到，谢谢'
 
 # Dry Run（仅打印请求，不执行）
-lark-cli mail +draft-create --to 'alice@example.com' --subject '测试' --body 'test' --dry-run
+work-cli mail +draft-create --to 'alice@example.com' --subject '测试' --body 'test' --dry-run
 ```
 
 ## 参数
@@ -94,10 +94,10 @@ lark-cli mail +draft-create --to 'alice@example.com' --subject '测试' --body '
 
 ```bash
 # 1. 创建草稿
-lark-cli mail +draft-create --to 'alice@example.com' --subject 'Q1 报告' --body '请查收附件中的报告。' --attach './q1-report.pdf' --format json
+work-cli mail +draft-create --to 'alice@example.com' --subject 'Q1 报告' --body '请查收附件中的报告。' --attach './q1-report.pdf' --format json
 
 # 2. 发送草稿
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 ### 创建带内嵌图片的 HTML 草稿
@@ -106,13 +106,13 @@ lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_
 
 ```bash
 # 推荐：直接使用相对路径，自动解析为内嵌图片
-lark-cli mail +draft-create \
+work-cli mail +draft-create \
   --to 'alice@example.com' \
   --subject '通讯稿' \
   --body '<h1>你好</h1><img src="./banner.png" />'
 
 # 高级用法：手动指定 CID（CID 为唯一标识符，可用随机十六进制字符串）
-lark-cli mail +draft-create \
+work-cli mail +draft-create \
   --to 'alice@example.com' \
   --subject '通讯稿' \
   --body '<h1>你好</h1><img src="cid:c7d8e9f0a1b2c3d4e5f6">' \
@@ -121,7 +121,7 @@ lark-cli mail +draft-create \
 
 ## 相关命令
 
-- `lark-cli mail +draft-edit` — 编辑已有草稿
-- `lark-cli mail user_mailbox.drafts send` — 发送已有草稿
-- `lark-cli mail user_mailbox.drafts get` — 获取草稿内容
-- `lark-cli mail +reply` / `+reply-all` / `+forward` — 创建回复/转发草稿（默认），或加 `--confirm-send` 发送
+- `work-cli mail +draft-edit` — 编辑已有草稿
+- `work-cli mail user_mailbox.drafts send` — 发送已有草稿
+- `work-cli mail user_mailbox.drafts get` — 获取草稿内容
+- `work-cli mail +reply` / `+reply-all` / `+forward` — 创建回复/转发草稿（默认），或加 `--confirm-send` 发送

@@ -92,13 +92,13 @@
 - 编辑 → [`+update`](./lark-calendar-update.md)
 
 ```bash
-lark-cli calendar +create \
+work-cli calendar +create \
   --summary "..." \
   --start "<start>" \
   --end "<end>" \
   --attendee-ids "ou_xxx,oc_xxx,omm_xxx"
 
-lark-cli calendar +update \
+work-cli calendar +update \
   --event-id "<event_id>" \
   --start "<start>" \
   --end "<end>" \

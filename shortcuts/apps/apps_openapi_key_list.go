@@ -20,8 +20,8 @@ var AppsOpenAPIKeyList = common.Shortcut{
 	Description: "List an app's open API keys (secrets redacted)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +openapi-key-list --app-id <app_id>",
-		"Example: lark-cli apps +openapi-key-list --app-id <app_id> --limit 10",
+		"Example: work-cli apps +openapi-key-list --app-id <app_id>",
+		"Example: work-cli apps +openapi-key-list --app-id <app_id> --limit 10",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -86,7 +86,7 @@ func buildOpenAPIKeyListParams(rctx *common.RuntimeContext) map[string]interface
 func oapiKeyValidateAppID(rctx *common.RuntimeContext) error {
 	if strings.TrimSpace(rctx.Str("app-id")) == "" {
 		return appsValidationParamError("--app-id", "--app-id is required").
-			WithHint("list your apps with `lark-cli apps +list`")
+			WithHint("list your apps with `work-cli apps +list`")
 	}
 	return nil
 }
@@ -98,7 +98,7 @@ func oapiKeyValidateKeyID(rctx *common.RuntimeContext) error {
 	}
 	if strings.TrimSpace(rctx.Str("key-id")) == "" {
 		return appsValidationParamError("--key-id", "--key-id is required").
-			WithHint("find key ids with `lark-cli apps +openapi-key-list --app-id <app_id>`")
+			WithHint("find key ids with `work-cli apps +openapi-key-list --app-id <app_id>`")
 	}
 	return nil
 }

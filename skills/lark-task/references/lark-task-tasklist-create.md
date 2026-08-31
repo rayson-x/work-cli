@@ -8,13 +8,13 @@ Create a new tasklist, and optionally batch create tasks within it.
 
 ```bash
 # Create an empty tasklist
-lark-cli task +tasklist-create --name "Q1 Goals"
+work-cli task +tasklist-create --name "Q1 Goals"
 
 # Create a tasklist and add members
-lark-cli task +tasklist-create --name "Project A" --member "ou_xxx,ou_yyy"
+work-cli task +tasklist-create --name "Project A" --member "ou_xxx,ou_yyy"
 
 # Create a tasklist and batch create tasks within it
-lark-cli task +tasklist-create --name "Launch Checklist" --data '[{"summary": "Code Review", "assignee": "ou_aaa"}, {"summary": "Deploy", "assignee": "ou_bbb"}]'
+work-cli task +tasklist-create --name "Launch Checklist" --data '[{"summary": "Code Review", "assignee": "ou_aaa"}, {"summary": "Deploy", "assignee": "ou_bbb"}]'
 ```
 
 ## Parameters
@@ -28,7 +28,7 @@ lark-cli task +tasklist-create --name "Launch Checklist" --data '[{"summary": "C
 ## Workflow
 
 1. Confirm the tasklist name, members, and tasks (if any).
-2. Execute the command `lark-cli task +tasklist-create ...`.
+2. Execute the command `work-cli task +tasklist-create ...`.
 3. Report success, including the new tasklist ID and the result of the batch task creation.
 
 > [!CAUTION]

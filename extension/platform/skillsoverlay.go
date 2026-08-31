@@ -70,7 +70,7 @@ type SkillsOverlay struct {
 
 	// ReferenceRemaps maps CLI-authored canonical skill references to the
 	// runtime names and files this distribution ships. References use the
-	// same "name[/relative/path]" form accepted by `lark-cli skills read`.
+	// same "name[/relative/path]" form accepted by `work-cli skills read`.
 	//
 	// A bare source remaps the whole skill name while preserving the
 	// referenced relative path:

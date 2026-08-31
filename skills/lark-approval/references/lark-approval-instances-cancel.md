@@ -12,19 +12,19 @@
 
 ```bash
 # 先预览请求，不实际执行
-lark-cli approval instances cancel \
+work-cli approval instances cancel \
   --data '{"instance_code":"<INSTANCE_CODE>"}' \
   --as user \
   --dry-run
 
 # 撤回一个审批实例
-lark-cli approval instances cancel \
+work-cli approval instances cancel \
   --data '{"instance_code":"<INSTANCE_CODE>"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体
-lark-cli approval instances cancel \
+work-cli approval instances cancel \
   --data @./cancel-body.json \
   --as user \
   --yes
@@ -46,13 +46,13 @@ lark-cli approval instances cancel \
 如果你要找“我发起的审批实例”，可先查询已发起列表：
 
 ```bash
-lark-cli approval instances initiated --params '{"page_size":20}' --as user
+work-cli approval instances initiated --params '{"page_size":20}' --as user
 ```
 
 如果你已经在任务列表中定位到某个审批，也可以从任务里拿到实例 Code：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的字段：
@@ -66,7 +66,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需先确认审批表单、当前节点、流转状态，可继续查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

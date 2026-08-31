@@ -2,7 +2,7 @@
 
 > **Prerequisite:** Read [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) for authentication, global parameters, and security rules.
 
-This skill maps to shortcut: `lark-cli im +feed-shortcut-list`. Underlying API: `GET /open-apis/im/v2/feed_shortcuts`.
+This skill maps to shortcut: `work-cli im +feed-shortcut-list`. Underlying API: `GET /open-apis/im/v2/feed_shortcuts`.
 
 ## What it does
 
@@ -17,13 +17,13 @@ Lists **one page** of the **current user's** feed shortcuts.
 
 ```bash
 # First page (the only call most users ever need — --page-token omitted)
-lark-cli im +feed-shortcut-list --as user
+work-cli im +feed-shortcut-list --as user
 
 # Continue from the previous response's page_token
-lark-cli im +feed-shortcut-list --as user --page-token <token-from-previous-response>
+work-cli im +feed-shortcut-list --as user --page-token <token-from-previous-response>
 
 # Skip detail enrichment when only IDs are needed; avoids the extra im:chat:read lookup
-lark-cli im +feed-shortcut-list --as user --no-detail -q '.data.shortcuts[].feed_card_id'
+work-cli im +feed-shortcut-list --as user --no-detail -q '.data.shortcuts[].feed_card_id'
 ```
 
 > If you need to walk every page, write the loop yourself: read `data.page_token` from each response and pass it back in until `has_more=false`. The shortcut intentionally does not auto-walk because page-token errors require the caller to decide whether to restart from the first page.

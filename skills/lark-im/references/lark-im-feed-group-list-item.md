@@ -1,6 +1,6 @@
 # +feed-group-list-item
 
-> Shortcut for `lark-cli im +feed-group-list-item`. List the feed cards inside one feed group (tag), enriched with a readable `chat_name`.
+> Shortcut for `work-cli im +feed-group-list-item`. List the feed cards inside one feed group (tag), enriched with a readable `chat_name`.
 
 `+feed-group-list-item` is the only CLI surface for the `feed.groups.list_item` read API — there is no raw `feed.groups list_item` command. It resolves a human-readable `chat_name` for every feed card it returns: a v1 feed card's `feed_id` is always a chat ID (`oc_xxx`), so the shortcut issues a follow-up `POST /open-apis/im/v1/chats/batch_query` and injects `chat_name` into each entry of both `items[]` and `deleted_items[]`.
 
@@ -21,10 +21,10 @@ Because chat-name resolution always runs, this shortcut needs **two** user scope
 
 ```bash
 # First page, enriched with chat names
-lark-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx
+work-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx
 
 # Auto-paginate through everything within a time window
-lark-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx \
+work-cli im +feed-group-list-item --as user --feed-group-id ofg_xxx \
   --page-all --start-time 1767196800000 --end-time 1767200000000
 ```
 

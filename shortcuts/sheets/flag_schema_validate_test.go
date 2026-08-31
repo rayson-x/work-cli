@@ -1164,7 +1164,7 @@ func TestValidateValueAgainstSchema_PrintSchemaHint(t *testing.T) {
 	ve := requireValidation(t, err, `expected type "array"`)
 	// And the actionable --print-schema hint is appended with the exact
 	// command + flag, so a copy-paste fetches the schema for this pair.
-	if !strings.Contains(ve.Message, "lark-cli sheets +cells-set --print-schema --flag-name cells") {
+	if !strings.Contains(ve.Message, "work-cli sheets +cells-set --print-schema --flag-name cells") {
 		t.Errorf("want --print-schema hint with command+flag; got %q", ve.Message)
 	}
 	if ve.Param != "--cells" {

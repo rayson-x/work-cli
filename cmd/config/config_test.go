@@ -606,7 +606,7 @@ func TestConfigShowRun_ProfileHintUsesBuildLocalSurface(t *testing.T) {
 	if original.Subtype != errs.SubtypeNotConfigured {
 		t.Fatalf("subtype = %q, want not_configured", original.Subtype)
 	}
-	if !strings.Contains(original.Hint, "lark-cli profile list") {
+	if !strings.Contains(original.Hint, "work-cli profile list") {
 		t.Fatalf("producer hint = %q, want profile list", original.Hint)
 	}
 
@@ -627,10 +627,10 @@ func TestConfigShowRun_ProfileHintUsesBuildLocalSurface(t *testing.T) {
 
 	var visible *errs.ConfigError
 	if !errors.As(recovery.Render(source, nil), &visible) ||
-		!strings.Contains(visible.Hint, "lark-cli profile list") {
+		!strings.Contains(visible.Hint, "work-cli profile list") {
 		t.Errorf("visible render must keep profile list, got %+v", visible)
 	}
-	if !strings.Contains(original.Hint, "lark-cli profile list") {
+	if !strings.Contains(original.Hint, "work-cli profile list") {
 		t.Errorf("concealed render mutated source hint: %q", original.Hint)
 	}
 }

@@ -62,7 +62,7 @@ var MinutesTodo = common.Shortcut{
 		"Update: `--operation update --todo-id <id> --todo \"...\" --is-done`.",
 		"Delete: `--operation delete --todo-id <id>`.",
 		"`content` is plain text only; markdown formatting is not supported.",
-		"Use `lark-cli minutes +detail --minute-tokens <token> --todo` to read current todos before writing.",
+		"Use `work-cli minutes +detail --minute-tokens <token> --todo` to read current todos before writing.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
 		minuteToken := runtime.Str("minute-token")

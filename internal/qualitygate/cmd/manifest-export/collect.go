@@ -82,7 +82,7 @@ func walkCommands(root *cobra.Command, visit func(*cobra.Command)) {
 }
 
 func commandFromCobra(c *cobra.Command, defaultFields map[string][]string) manifest.Command {
-	path := strings.TrimPrefix(c.CommandPath(), "lark-cli ")
+	path := strings.TrimPrefix(c.CommandPath(), "work-cli ")
 	source := manifest.SourceBuiltin
 	if s, ok := cmdmeta.SourceOf(c); ok {
 		source = manifest.Source(s)

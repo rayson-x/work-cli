@@ -30,8 +30,8 @@ func TestDocs_MediaDownloadWorkflow(t *testing.T) {
 
 	const defaultAs = "bot"
 	suffix := clie2e.GenerateSuffix()
-	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "lark-cli-e2e-docs-media-"+suffix, defaultAs, "")
-	docToken := createDocWithRetry(t, parentT, ctx, folderToken, "lark-cli-e2e-docs-media-"+suffix, "media fixture "+suffix, defaultAs)
+	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "work-cli-e2e-docs-media-"+suffix, defaultAs, "")
+	docToken := createDocWithRetry(t, parentT, ctx, folderToken, "work-cli-e2e-docs-media-"+suffix, "media fixture "+suffix, defaultAs)
 	workDir := t.TempDir()
 
 	imageBytes := buildMediaDownloadFixture(t)

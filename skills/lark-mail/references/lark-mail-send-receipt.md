@@ -4,7 +4,7 @@
 
 响应收到的已读回执请求。**本命令仅在对方邮件请求了已读回执（`READ_RECEIPT_REQUEST` 标签，系统 ID `-607`）时使用**，用于向原发件人发送一封短回复以告知"已阅读"。
 
-本 skill 对应 shortcut：`lark-cli mail +send-receipt`。
+本 skill 对应 shortcut：`work-cli mail +send-receipt`。
 
 ## CRITICAL — 工作流与安全规则
 
@@ -17,13 +17,13 @@
 
 ```bash
 # 标准用法：对指定 message-id 发回执
-lark-cli mail +send-receipt --message-id <message-id> --yes
+work-cli mail +send-receipt --message-id <message-id> --yes
 
 # 指定邮箱（公共邮箱场景）
-lark-cli mail +send-receipt --mailbox shared@example.com --message-id <message-id> --yes
+work-cli mail +send-receipt --mailbox shared@example.com --message-id <message-id> --yes
 
 # Dry Run（不真发）
-lark-cli mail +send-receipt --message-id <message-id> --dry-run
+work-cli mail +send-receipt --message-id <message-id> --dry-run
 ```
 
 ## 参数
@@ -78,7 +78,7 @@ lark-cli mail +send-receipt --message-id <message-id> --dry-run
 
 ```bash
 # 1. 拉信
-lark-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
+work-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
 # 输出 ["UNREAD", "READ_RECEIPT_REQUEST"] → 原邮件请求了已读回执
 
 # 2. 向用户提示：
@@ -86,14 +86,14 @@ lark-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
 #     要不要回一封告诉对方你已阅读？"
 
 # 3. 用户确认后发回执
-lark-cli mail +send-receipt --message-id msg-1 --yes
+work-cli mail +send-receipt --message-id msg-1 --yes
 ```
 
 ### 场景 2：批量拉信中发现多封请求回执
 
 ```bash
 # 1. 筛出带 -607 标签的邮件
-lark-cli mail +triage --folder INBOX --format json \
+work-cli mail +triage --folder INBOX --format json \
   | jq '.data.messages[] | select(.label_ids | index("READ_RECEIPT_REQUEST")) | {message_id, subject, from}'
 
 # 2. 对每封分别问用户 → 用户确认后再发
@@ -103,7 +103,7 @@ lark-cli mail +triage --folder INBOX --format json \
 
 ```bash
 # 公共邮箱收到的回执请求，用 --mailbox 指定
-lark-cli mail +send-receipt --mailbox support@example.com --message-id <id> --yes
+work-cli mail +send-receipt --mailbox support@example.com --message-id <id> --yes
 ```
 
 ## 不要这样做
@@ -115,6 +115,6 @@ lark-cli mail +send-receipt --mailbox support@example.com --message-id <id> --ye
 
 ## 相关命令
 
-- `lark-cli mail +message` — 拉单封邮件（在 `label_ids` 里检查 `READ_RECEIPT_REQUEST`）
-- `lark-cli mail +send --request-receipt` — 反向：**请求**别人回执
-- `lark-cli mail user_mailbox.messages send_status` — 查询回执邮件的投递状态
+- `work-cli mail +message` — 拉单封邮件（在 `label_ids` 里检查 `READ_RECEIPT_REQUEST`）
+- `work-cli mail +send --request-receipt` — 反向：**请求**别人回执
+- `work-cli mail user_mailbox.messages send_status` — 查询回执邮件的投递状态

@@ -71,15 +71,15 @@
 
 邮箱是用户的个人资源，**策略上应优先显式使用 `--as user`（用户身份）请求**（CLI 的 `--as` 默认值为 `auto`）。
 
-- **`--as user`（推荐）**：以当前登录用户的身份访问其邮箱。需要先通过 `lark-cli auth login --domain mail` 完成用户授权。
+- **`--as user`（推荐）**：以当前登录用户的身份访问其邮箱。需要先通过 `work-cli auth login --domain mail` 完成用户授权。
 - **`--as bot`**：以应用身份访问邮箱。需要在飞书开发者后台为应用开通相应权限，否则请求会被拒绝。**注意：bot 身份仅适用于读取类操作，所有写操作（发送、回复、转发、草稿编辑等）仅支持 user 身份。**
 
-1. 所有邮件写操作（发送、回复、转发、草稿编辑） → 必须使用 `--as user`，未登录时先使用 `lark-cli auth login --domain mail` 进行登录
+1. 所有邮件写操作（发送、回复、转发、草稿编辑） → 必须使用 `--as user`，未登录时先使用 `work-cli auth login --domain mail` 进行登录
 2. 读取类操作（查看邮件、会话、收件箱列表等） → 推荐使用 `--as user`；如需应用级批量读取（如管理员代操作），可使用 `--as bot`，确保应用已开通对应权限
 
 ## 典型工作流
 
-1. **确认身份** — 首次操作邮箱前先调用 `lark-cli mail user_mailboxes profile --params '{"user_mailbox_id":"me"}'` 获取当前用户的真实邮箱地址（`primary_email_address`），不要通过系统用户名猜测。后续判断"发件人是否为用户本人"时以此地址为准。
+1. **确认身份** — 首次操作邮箱前先调用 `work-cli mail user_mailboxes profile --params '{"user_mailbox_id":"me"}'` 获取当前用户的真实邮箱地址（`primary_email_address`），不要通过系统用户名猜测。后续判断"发件人是否为用户本人"时以此地址为准。
 2. **浏览** — `+triage` 查看收件箱摘要，获取 `message_id` / `thread_id`
 3. **阅读** — `+message` 读单封邮件，`+thread` 读整个会话
 4. **整理** — 标签、已读/未读状态和移动文件夹优先用 `+message-modify`；软删除优先用 `+message-trash`
@@ -104,11 +104,11 @@
 
 ```bash
 # Shortcut
-lark-cli mail +triage -h
-lark-cli mail +send -h
+work-cli mail +triage -h
+work-cli mail +send -h
 
 # 原生 API（逐级查看）
-lark-cli mail user_mailbox.messages -h
+work-cli mail user_mailbox.messages -h
 ```
 
 `-h` 输出即可用 flag 的权威来源。reference 文档中的参数表可辅助理解语义，但实际 flag 名称以 `-h` 为准。
@@ -121,7 +121,7 @@ lark-cli mail user_mailbox.messages -h
 - **按群名搜索**：如"发给项目群" → query="项目群"
 
 ```bash
-lark-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
+work-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
 ```
 
 搜索结果包含多种实体类型：
@@ -180,17 +180,17 @@ lark-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
 
 ```bash
 # 查询可访问的邮箱（主邮箱 + 公共邮箱）
-lark-cli mail user_mailboxes accessible_mailboxes --params '{"user_mailbox_id":"me"}'
+work-cli mail user_mailboxes accessible_mailboxes --params '{"user_mailbox_id":"me"}'
 
 # 查询某个邮箱的可用发信地址（主地址、别名、邮件组）
-lark-cli mail user_mailbox.settings send_as --params '{"user_mailbox_id":"me"}'
+work-cli mail user_mailbox.settings send_as --params '{"user_mailbox_id":"me"}'
 ```
 
 **公共邮箱发信：**
 
 ```bash
 # --mailbox 指定公共邮箱，From 头自动使用该邮箱地址
-lark-cli mail +send --mailbox shared@example.com \
+work-cli mail +send --mailbox shared@example.com \
   --to bob@example.com --subject '通知' --body '<p>你好</p>'
 ```
 
@@ -198,7 +198,7 @@ lark-cli mail +send --mailbox shared@example.com \
 
 ```bash
 # --mailbox 指定所属邮箱，--from 指定别名地址
-lark-cli mail +send --mailbox me --from alias@example.com \
+work-cli mail +send --mailbox me --from alias@example.com \
   --to bob@example.com --subject '测试' --body '<p>你好</p>'
 ```
 
@@ -209,7 +209,7 @@ lark-cli mail +send --mailbox me --from alias@example.com \
 **立即发送（无 `--send-time`）**：邮件发送成功后（收到 `message_id`），**必须**调用 `send_status` API 查询投递状态并向用户报告：
 
 ```bash
-lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
+work-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
 ```
 
 返回每个收件人的投递状态（`status`）：1=正在投递, 2=投递失败重试, 3=退信, 4=投递成功, 5=待审批, 6=审批拒绝。向用户简要报告结果，如有异常状态（退信/审批拒绝）需重点提示。
@@ -217,7 +217,7 @@ lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me
 **定时发送（指定了 `--send-time`）**：定时发送不会立即产生 `message_id`，`send_status` 在定时发送成功后会返回"待发送"状态，**不建议在定时发送后立即查询**。可在预定发送时间后再查询。如需取消定时发送：
 
 ```bash
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 **取消后邮件会变回草稿**，可继续编辑或在之后重新发送。
@@ -228,7 +228,7 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 
 **撤回操作：**
 ```bash
-lark-cli mail user_mailbox.sent_messages recall --as user \
+work-cli mail user_mailbox.sent_messages recall --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 ```
 
@@ -237,7 +237,7 @@ lark-cli mail user_mailbox.sent_messages recall --as user \
 
 **查询撤回进度：**
 ```bash
-lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
+work-cli mail user_mailbox.sent_messages get_recall_detail --as user \
   --params '{"user_mailbox_id":"me","message_id":"<message_id>"}'
 ```
 
@@ -254,22 +254,22 @@ lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
 
 1. 分享单封邮件到群聊（默认 `--receive-id-type chat_id`）：
    ```bash
-   lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
+   work-cli mail +share-to-chat --message-id <邮件ID> --receive-id oc_xxx
    ```
 
 2. 分享整个会话到群聊：
    ```bash
-   lark-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
+   work-cli mail +share-to-chat --thread-id <会话ID> --receive-id oc_xxx
    ```
 
 3. 通过邮箱分享给个人：
    ```bash
-   lark-cli mail +share-to-chat --message-id <邮件ID> --receive-id user@example.com --receive-id-type email
+   work-cli mail +share-to-chat --message-id <邮件ID> --receive-id user@example.com --receive-id-type email
    ```
 
 4. 如果不知道群聊 ID，先搜索：
    ```bash
-   lark-cli im +chat-search --query "群名关键词"
+   work-cli im +chat-search --query "群名关键词"
    ```
    从结果中获取 `chat_id`，然后执行分享。
 
@@ -284,7 +284,7 @@ lark-cli mail user_mailbox.sent_messages get_recall_detail --as user \
 
 ```bash
 # 发送带日程邀请的新邮件（先保存草稿，确认后发送）
-lark-cli mail +send --as user \
+work-cli mail +send --as user \
     --to alice@example.com --cc bob@example.com \
     --subject '产品评审' \
     --body '<p>请参加本次产品评审会议。</p>' \
@@ -316,11 +316,11 @@ lark-cli mail +send --as user \
 
 ```bash
 # ✅ 推荐：HTML 格式
-lark-cli mail +send --to alice@example.com --subject '周报' \
+work-cli mail +send --to alice@example.com --subject '周报' \
   --body '<p>本周进展：</p><ul><li>完成 A 模块</li><li>修复 3 个 bug</li></ul>'
 
 # ⚠️ 仅在内容极简时使用纯文本
-lark-cli mail +reply --message-id <id> --body '收到，谢谢'
+work-cli mail +reply --message-id <id> --body '收到，谢谢'
 ```
 
 **HTML 写法、风格指引、场景模板请参考两份配套文档：**
@@ -343,7 +343,7 @@ lark-cli mail +reply --message-id <id> --body '收到，谢谢'
 
 > **CRITICAL：严禁手拼 raw EML 直传 `drafts.create`，必须走 compose 5 shortcut（`+send` / `+draft-create` / `+reply` / `+reply-all` / `+forward`）或 `+draft-edit` 的 body op。**
 
-`emlbuilder` 已内置 RFC 合规处理（base64 / boundary / header folding / 附件 RFC 2231 等），AI **无需自学 RFC**。手拼 raw EML 几乎一定会踩坑（编码错误 / 边界冲突 / 收件端不渲染），且绕开了 lark-cli 的统一安全和兼容性兜底——本仓库的 `+send` / `+draft-create` 等 shortcut 已封装好所有发信细节，AI 只需关注业务字段（收件人 / 主题 / HTML 正文 / 附件路径）即可。
+`emlbuilder` 已内置 RFC 合规处理（base64 / boundary / header folding / 附件 RFC 2231 等），AI **无需自学 RFC**。手拼 raw EML 几乎一定会踩坑（编码错误 / 边界冲突 / 收件端不渲染），且绕开了 work-cli 的统一安全和兼容性兜底——本仓库的 `+send` / `+draft-create` 等 shortcut 已封装好所有发信细节，AI 只需关注业务字段（收件人 / 主题 / HTML 正文 / 附件路径）即可。
 
 ### 写入路径内置 HTML lint
 
@@ -382,10 +382,10 @@ lark-cli mail +reply --message-id <id> --body '收到，谢谢'
 
 ```bash
 # ✅ 验证操作结果：不需要 HTML
-lark-cli mail +message --message-id <id> --html=false
+work-cli mail +message --message-id <id> --html=false
 
 # ✅ 需要阅读完整内容：保持默认
-lark-cli mail +message --message-id <id>
+work-cli mail +message --message-id <id>
 ```
 
 ### 邮件模板（`+template-create` / `+template-update` / `--template-id`）
@@ -396,7 +396,7 @@ lark-cli mail +message --message-id <id>
 
 - [`+template-create`](references/lark-mail-template-create.md) — 创建新模板。`--name` 必填；正文通过 `--template-content` 或 `--template-content-file` 二选一；支持 HTML 内嵌图片自动上传到 Drive。
 - [`+template-update`](references/lark-mail-template-update.md) — 全量替换式更新（**后端无乐观锁，last-write-wins**）。支持 `--inspect`（只读 projection）/ `--print-patch-template`（patch 骨架）/ `--patch-file`（结构化 patch）/ 扁平 `--set-*` flag。
-- 列表 / 获取 / 删除 走原生 API：`lark-cli mail user_mailbox.templates {list|get|delete} ...`。
+- 列表 / 获取 / 删除 走原生 API：`work-cli mail user_mailbox.templates {list|get|delete} ...`。
 
 **套用模板（5 个发信 shortcut）**：`+send` / `+draft-create` / `+reply` / `+reply-all` / `+forward` 均支持 `--template-id <id>`。`--template-id` 必须是**十进制整数字符串**。
 
@@ -426,10 +426,10 @@ lark-cli mail +message --message-id <id>
 
 ```bash
 # 第一级：查看 mail 下所有资源
-lark-cli mail -h
+work-cli mail -h
 
 # 第二级：查看某个资源下所有方法
-lark-cli mail user_mailbox.messages -h
+work-cli mail user_mailbox.messages -h
 ```
 
 `-h` 输出的就是可执行的命令格式（空格分隔）。**不要跳过此步直接查 schema，不要猜测命令名称。**
@@ -439,11 +439,11 @@ lark-cli mail user_mailbox.messages -h
 确定 `<resource>` 和 `<method>` 后，查 schema 了解参数：
 
 ```bash
-lark-cli schema mail.<resource>.<method>
-# 例如：lark-cli schema mail.user_mailbox.messages.modify_message
+work-cli schema mail.<resource>.<method>
+# 例如：work-cli schema mail.user_mailbox.messages.modify_message
 ```
 
-> **⚠️ 注意**：① 必须精确到 method 级别，禁止查 resource 级别（如 `lark-cli schema mail.user_mailbox.messages`，输出 78K）。② schema 路径用 `.` 分隔（`mail.user_mailbox.messages.modify_message`），但 CLI 命令在 resource 和 method 之间用**空格**（`lark-cli mail user_mailbox.messages modify_message`），不要混淆。
+> **⚠️ 注意**：① 必须精确到 method 级别，禁止查 resource 级别（如 `work-cli schema mail.user_mailbox.messages`，输出 78K）。② schema 路径用 `.` 分隔（`mail.user_mailbox.messages.modify_message`），但 CLI 命令在 resource 和 method 之间用**空格**（`work-cli mail user_mailbox.messages modify_message`），不要混淆。
 
 schema 输出是 JSON，包含两个关键部分：
 
@@ -459,7 +459,7 @@ schema 输出是 JSON，包含两个关键部分：
 按 Step 2 的映射规则，拼接命令：
 
 ```
-lark-cli mail <resource> <method> --params '{...}' [--data '{...}']
+work-cli mail <resource> <method> --params '{...}' [--data '{...}']
 ```
 
 ### 示例
@@ -468,7 +468,7 @@ lark-cli mail <resource> <method> --params '{...}' [--data '{...}']
 
 ```bash
 # schema 中：user_mailbox_id (path, required), page_size (query, required), folder_id (query, optional)
-lark-cli mail user_mailbox.messages list \
+work-cli mail user_mailbox.messages list \
   --params '{"user_mailbox_id":"me","page_size":20,"folder_id":"INBOX"}'
 ```
 
@@ -477,7 +477,7 @@ lark-cli mail user_mailbox.messages list \
 ```bash
 # schema 中：parameters → user_mailbox_id (path, required)
 #            requestBody → name (required), parent_folder_id (required)
-lark-cli mail user_mailbox.folders create \
+work-cli mail user_mailbox.folders create \
   --params '{"user_mailbox_id":"me"}' \
   --data '{"name":"newsletter","parent_folder_id":"0"}'
 ```

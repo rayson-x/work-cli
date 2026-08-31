@@ -390,7 +390,7 @@ func TestPermissionErrorEnvelopeShape(t *testing.T) {
 		`"retryable":`, // Retryable defaults false, omitempty → key absent
 		// console_url is gated to SubtypeAppScopeNotApplied (bot-perspective
 		// dev-action recovery). For user-perspective missing_scope the only
-		// actionable recovery is `lark-cli auth login --scope ...` (already
+		// actionable recovery is `work-cli auth login --scope ...` (already
 		// in Hint), so the URL is dropped from the wire to avoid pointing an
 		// end user at a console they cannot modify.
 		`"console_url":`,
@@ -456,7 +456,7 @@ func TestConsoleURL_EmptyAppID(t *testing.T) {
 // the developer-console deep-link only rides on the wire for
 // SubtypeAppScopeNotApplied (where the recovery is "developer applies the
 // scope"). User-perspective subtypes such as SubtypeMissingScope recover via
-// `lark-cli auth login --scope ...`, so the URL is dead weight on those
+// `work-cli auth login --scope ...`, so the URL is dead weight on those
 // envelopes and is intentionally omitted to avoid pointing an end user at a
 // console they cannot modify.
 func TestConsoleURL_AttachedOnlyForAppScopeNotApplied(t *testing.T) {
@@ -724,8 +724,8 @@ func TestBuildPermissionHint_MissingScopeRoutesToAuthLogin(t *testing.T) {
 	// retains the historical user default.
 	for _, identity := range []string{"user", ""} {
 		got := errclass.PermissionHint([]string{"docx:document", "im:message"}, identity, errs.SubtypeMissingScope, "")
-		if !strings.Contains(got, "lark-cli auth login") {
-			t.Errorf("identity=%q: hint should suggest `lark-cli auth login`; got %q", identity, got)
+		if !strings.Contains(got, "work-cli auth login") {
+			t.Errorf("identity=%q: hint should suggest `work-cli auth login`; got %q", identity, got)
 		}
 		if !strings.Contains(got, "docx:document") || !strings.Contains(got, "im:message") {
 			t.Errorf("identity=%q: hint should include missing scopes; got %q", identity, got)
@@ -739,7 +739,7 @@ func TestBuildPermissionHint_MissingScopeRoutesToAuthLogin(t *testing.T) {
 func TestBuildPermissionHint_NoScopes(t *testing.T) {
 	// missing_scope with empty list — still suggests auth login even
 	// without the explicit --scope argument.
-	if got := errclass.PermissionHint(nil, "user", errs.SubtypeMissingScope, ""); !strings.Contains(got, "lark-cli auth login") {
+	if got := errclass.PermissionHint(nil, "user", errs.SubtypeMissingScope, ""); !strings.Contains(got, "work-cli auth login") {
 		t.Errorf("missing_scope no-scope hint should still suggest auth login; got %q", got)
 	}
 	// app_scope_not_applied without console URL — still points at the
@@ -1014,7 +1014,7 @@ func TestCanonicalPermissionMessage_EmptyAppIDStillReadable(t *testing.T) {
 
 func TestBuildAPIError_AppMissingScope_UserIdentityHintRoutesToConsole(t *testing.T) {
 	// Regression: code 99991672 with user identity previously emitted
-	// `lark-cli auth login --scope ...` which sends agents into a re-auth
+	// `work-cli auth login --scope ...` which sends agents into a re-auth
 	// loop because the missing scope is not yet enabled at the app level.
 	resp := map[string]any{
 		"code":  99991672,

@@ -182,7 +182,7 @@ func normalizeMarkdownWikiToken(token string) (string, error) {
 			return "", markdownValidationParamError("--wiki-token",
 				"--wiki-token must identify a wiki node; got a %s URL",
 				ref.Type,
-			).WithHint("Resolve document URLs with `lark-cli wiki +node-get --node-token <url>` and use the returned node_token.")
+			).WithHint("Resolve document URLs with `work-cli wiki +node-get --node-token <url>` and use the returned node_token.")
 		}
 		if err := validateMarkdownTargetTokenName(ref.Token, "--wiki-token"); err != nil {
 			return "", err

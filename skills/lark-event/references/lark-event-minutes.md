@@ -42,13 +42,13 @@ The Process hook calls `GET /open-apis/minutes/v1/minutes/{minute_token}` to enr
 ### Example
 
 ```bash
-lark-cli event consume minutes.minute.generated_v1 --as user
+work-cli event consume minutes.minute.generated_v1 --as user
 
 # Project title and token only (skip events where enrichment failed)
-lark-cli event consume minutes.minute.generated_v1 --as user \
+work-cli event consume minutes.minute.generated_v1 --as user \
   --jq 'select(.title != "") | {minute_token, title}'
 
 # Filter by source type
-lark-cli event consume minutes.minute.generated_v1 --as user \
+work-cli event consume minutes.minute.generated_v1 --as user \
   --jq 'select(.minute_source.source_type == "meeting") | {minute_token, title}'
 ```

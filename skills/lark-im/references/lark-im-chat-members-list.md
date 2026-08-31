@@ -4,30 +4,30 @@
 
 List the members of a chat. Users and bots are returned in **separate buckets** — `users[]` and `bots[]` — with per-bucket totals (`user_total` / `bot_total`). Use `--member-types` to return only one kind.
 
-This skill maps to the shortcut: `lark-cli im +chat-members-list` (internally calls `GET /open-apis/im/v1/chats/{chat_id}/members/list`).
+This skill maps to the shortcut: `work-cli im +chat-members-list` (internally calls `GET /open-apis/im/v1/chats/{chat_id}/members/list`).
 
 ## Commands
 
 ```bash
 # Single page (default)
-lark-cli im +chat-members-list --chat-id oc_xxx
+work-cli im +chat-members-list --chat-id oc_xxx
 
 # Only users, or only bots
-lark-cli im +chat-members-list --chat-id oc_xxx --member-types user
-lark-cli im +chat-members-list --chat-id oc_xxx --member-types user,bot
+work-cli im +chat-members-list --chat-id oc_xxx --member-types user
+work-cli im +chat-members-list --chat-id oc_xxx --member-types user,bot
 
 # Walk every page (capped by --page-limit; 0 = unlimited)
-lark-cli im +chat-members-list --chat-id oc_xxx --page-all --page-limit 0
+work-cli im +chat-members-list --chat-id oc_xxx --page-all --page-limit 0
 
 # Fetch one page starting at a specific cursor
-lark-cli im +chat-members-list --chat-id oc_xxx --page-token "xxx"
+work-cli im +chat-members-list --chat-id oc_xxx --page-token "xxx"
 
 # Continue automatically from a specific cursor
-lark-cli im +chat-members-list --chat-id oc_xxx --page-token "xxx" --page-all
+work-cli im +chat-members-list --chat-id oc_xxx --page-token "xxx" --page-all
 
 # JSON output / preview the request
-lark-cli im +chat-members-list --chat-id oc_xxx --format json
-lark-cli im +chat-members-list --chat-id oc_xxx --dry-run
+work-cli im +chat-members-list --chat-id oc_xxx --format json
+work-cli im +chat-members-list --chat-id oc_xxx --dry-run
 ```
 
 ## Parameters
@@ -83,4 +83,4 @@ A truncated result is *not* fixable by paging further — it is a server-side ca
 | `--chat-id is required` | `--chat-id` omitted |   | Provide the `oc_xxx` chat ID |
 | `invalid --page-size 101: must be between 1 and 100` | out of range |   | Use 1-100 |
 | `--member-types contains invalid value` | value other than `user`/`bot` |   | Use `user`, `bot`, or both |
-| Permission denied | missing `im:chat.members:read` |   | Bot: enable the scope in the console. User: `lark-cli auth login --scope "im:chat.members:read"` |
+| Permission denied | missing `im:chat.members:read` |   | Bot: enable the scope in the console. User: `work-cli auth login --scope "im:chat.members:read"` |

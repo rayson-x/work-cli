@@ -15,47 +15,47 @@
 
 ```bash
 # 查看文件内容
-lark-cli drive +preview \
+work-cli drive +preview \
   --file-token "<FILE_TOKEN>" \
   --type source_file \
   --output ./artifacts/source
 
 # 推荐：直接传 URL，CLI 自动解析类型和 token
-lark-cli drive +preview \
+work-cli drive +preview \
   --url "https://example.feishu.cn/file/<FILE_TOKEN>" \
   --list-only
 
 # Wiki URL 也可直接传，CLI 会先解析到底层 obj_token/obj_type（obj_type 必须是 file）
-lark-cli drive +preview \
+work-cli drive +preview \
   --url "https://example.feishu.cn/wiki/<WIKI_NODE_TOKEN>" \
   --type source_file \
   --output ./artifacts/source
 
 # 只有裸 Wiki node token 时，显式传 --wiki-token
-lark-cli drive +preview \
+work-cli drive +preview \
   --wiki-token "<WIKI_NODE_TOKEN>" \
   --list-only
 
 # 列出可用预览候选项
-lark-cli drive +preview \
+work-cli drive +preview \
   --file-token "<FILE_TOKEN>" \
   --list-only
 
 # 下载 PDF 预览
-lark-cli drive +preview \
+work-cli drive +preview \
   --file-token "<FILE_TOKEN>" \
   --type pdf \
   --output ./artifacts/report
 
 # 下载文本预览，并在目标已存在时自动改名
-lark-cli drive +preview \
+work-cli drive +preview \
   --file-token "<FILE_TOKEN>" \
   --type text \
   --output ./artifacts/report \
   --if-exists rename
 
 # 指定版本号查询/下载
-lark-cli drive +preview \
+work-cli drive +preview \
   --file-token "<FILE_TOKEN>" \
   --version "12" \
   --type html \

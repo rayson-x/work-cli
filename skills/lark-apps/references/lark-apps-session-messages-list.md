@@ -1,6 +1,6 @@
 # apps +session-messages-list
 
-按 page_token 分页读取某个会话轮次（turn）的回复消息。运行时命令事实以 `lark-cli apps +session-messages-list --help` 为准。
+按 page_token 分页读取某个会话轮次（turn）的回复消息。运行时命令事实以 `work-cli apps +session-messages-list --help` 为准。
 
 ## 何时用
 
@@ -9,7 +9,7 @@
 ## 命令骨架
 
 ```bash
-lark-cli apps +session-messages-list --app-id <app_id> --session-id <session_id> --turn-id <turn_id> [--page-token <token>]
+work-cli apps +session-messages-list --app-id <app_id> --session-id <session_id> --turn-id <turn_id> [--page-token <token>]
 ```
 
 | 旗标 | 必填 | 说明 |
@@ -29,13 +29,13 @@ lark-cli apps +session-messages-list --app-id <app_id> --session-id <session_id>
 
 ```bash
 # 1. 从 +session-get 提取 latest_turn.turn_id
-TURN_ID=$(lark-cli apps +session-get --app-id app_xxx --session-id conv_xxx -q '.data.latest_turn.turn_id')
+TURN_ID=$(work-cli apps +session-get --app-id app_xxx --session-id conv_xxx -q '.data.latest_turn.turn_id')
 
 # 2. 拉第一页（省略 --page-token）
-lark-cli apps +session-messages-list --app-id app_xxx --session-id conv_xxx --turn-id "$TURN_ID"
+work-cli apps +session-messages-list --app-id app_xxx --session-id conv_xxx --turn-id "$TURN_ID"
 
 # 3. has_more=true 时，把上一页的 next_page_token 作为 --page-token 续拉
-lark-cli apps +session-messages-list --app-id app_xxx --session-id conv_xxx --turn-id "$TURN_ID" --page-token tok_next
+work-cli apps +session-messages-list --app-id app_xxx --session-id conv_xxx --turn-id "$TURN_ID" --page-token tok_next
 ```
 
 ## 输出契约

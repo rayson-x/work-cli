@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书日历：管理日历日程和会议室。查看/搜索日程、创建/更新日程、管理参会人、查询忙闲和推荐时段、预定会议室。当用户需要查看日程安排、创建/修改会议、查询/预定会议室时使用。不负责：查询过去的视频会议记录（走 lark-meeting）、待办任务（走 lark-task）。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli calendar --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli calendar --help"
 ---
 
 # calendar (v4)
@@ -25,9 +25,9 @@ metadata:
 
 ```bash
 # 用户本人日程 → user
-lark-cli calendar +agenda --as user
+work-cli calendar +agenda --as user
 # bot 自建或参与的日程 → bot
-lark-cli calendar +agenda --as bot
+work-cli calendar +agenda --as bot
 ```
 
 ## Shortcuts
@@ -51,7 +51,7 @@ lark-cli calendar +agenda --as bot
 
 ```bash
 # calendar_id不传，默认primary
-lark-cli calendar +get --calendar-id <calendar_id> --event-id <event_id>
+work-cli calendar +get --calendar-id <calendar_id> --event-id <event_id>
 ```
 
 日程描述统一使用 `description` 一个字段，按 **Markdown** 富文本处理。读取日程时 `description` 返回 Markdown 富文本（仅有纯文本描述时返回该纯文本）；创建/更新日程时也通过 `--description` 传入 Markdown。
@@ -66,7 +66,7 @@ lark-cli calendar +get --calendar-id <calendar_id> --event-id <event_id>
 # attendee-ids 按参会人（自动识别 ou_ 用户 / oc_ 群聊 / omm_ 会议室前缀）可选
 # page-token 分页游标，用于继续翻页 可选
 # page-size 每页数量，默认 30 可选
-lark-cli calendar +search-event --query "周会" --start 2026-04-20 --end 2026-04-27 --attendee-ids "ou_user1,oc_chat1,omm_room1" --page-token <page_token> --page-size 30
+work-cli calendar +search-event --query "周会" --start 2026-04-20 --end 2026-04-27 --attendee-ids "ou_user1,oc_chat1,omm_room1" --page-token <page_token> --page-size 30
 ```
 
 ### `+agenda` — 查看近期日程安排
@@ -76,7 +76,7 @@ lark-cli calendar +search-event --query "周会" --start 2026-04-20 --end 2026-0
 ```bash
 # start/end 时间范围（ISO 8601 / YYYY-MM-DD / Unix 秒），均可选；默认当天
 # calendar-id 日历 ID（默认primary）可选
-lark-cli calendar +agenda --start 2026-03-10 --end 2026-03-17 --calendar-id <calendar_id>
+work-cli calendar +agenda --start 2026-03-10 --end 2026-03-17 --calendar-id <calendar_id>
 ```
 
 注意：
@@ -90,7 +90,7 @@ lark-cli calendar +agenda --start 2026-03-10 --end 2026-03-17 --calendar-id <cal
 ```bash
 # start/end 时间范围（ISO 8601 / YYYY-MM-DD / Unix 秒），均可选；默认当天
 # user-id 目标用户 open_id（ou_ 前缀）可选；默认当前登录用户，bot 身份必须显式指定
-lark-cli calendar +freebusy --start 2026-03-11 --end 2026-03-12 --user-id ou_xxx
+work-cli calendar +freebusy --start 2026-03-11 --end 2026-03-12 --user-id ou_xxx
 ```
 
 用法提示：
@@ -165,40 +165,40 @@ lark-cli calendar +freebusy --start 2026-03-11 --end 2026-03-12 --user-id ou_xxx
 
 ```bash
 # 通用调用格式
-lark-cli calendar <resource> <method> [flags]
+work-cli calendar <resource> <method> [flags]
 
 # 查询用户主日历
-lark-cli calendar calendars primary
+work-cli calendar calendars primary
 
 # 获取日程详情及 app_link
-lark-cli calendar events get --calendar-id <calendar_id> --event-id <event_id>
+work-cli calendar events get --calendar-id <calendar_id> --event-id <event_id>
 
 # 获取日程分享链接（分享给他人/群前必须先拿到）
 # 返回形如 {{domain}}/calendar/share?token=<token> 的分享链接，不是 applink；直接把该链接发给对方（对方可凭链接中的 token 走 +join-event 加入）
-lark-cli calendar events share_info --calendar-id <calendar_id> --event-id <event_id>
+work-cli calendar events share_info --calendar-id <calendar_id> --event-id <event_id>
 
 # 删除日程
-lark-cli calendar events delete --calendar-id <calendar_id> --event-id <event_id>
+work-cli calendar events delete --calendar-id <calendar_id> --event-id <event_id>
 ```
 
 > `calendar_id` 可以直接传 `primary`，代表当前调用身份的主日历 ID。
 
 ### 查询资源的方法列表以及方法的使用方式
 
-- 列出某资源下的方法：`lark-cli calendar <resource> -h`
-- 查看方法的cli flag：`lark-cli calendar <resource> <method> -h`
-- 查看方法API参数：`lark-cli schema calendar.<resource>.<method>`
+- 列出某资源下的方法：`work-cli calendar <resource> -h`
+- 查看方法的cli flag：`work-cli calendar <resource> <method> -h`
+- 查看方法API参数：`work-cli schema calendar.<resource>.<method>`
 
-`<resource>` 为 `calendars`（日历本身）/ `events`（日程）/ `event.attendees`（参与人）/ `freebusys`（忙闲）。例：`lark-cli schema calendar.events.delete`。
+`<resource>` 为 `calendars`（日历本身）/ `events`（日程）/ `event.attendees`（参与人）/ `freebusys`（忙闲）。例：`work-cli schema calendar.events.delete`。
 
 ## 常用其他域命令
 
 ```bash
 # 搜索用户，更多参数详见 lark-contact
-lark-cli contact +search-user --query <query> --as user
+work-cli contact +search-user --query <query> --as user
 
 # 搜索群聊，更多参数详见 lark-im
-lark-cli im +chat-search --query <query> --as user
+work-cli im +chat-search --query <query> --as user
 ```
 
 > 搜索用户/群不支持 bot 身份，必须用 `--as user`。**解析不到或类型不明确时，向用户澄清该参会人类型，不要靠名字形态硬猜类型。**

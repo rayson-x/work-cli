@@ -289,7 +289,7 @@ func normalizeSecureLabelID(raw string) (string, error) {
 		if r < '0' || r > '9' {
 			return "", errs.NewValidationError(errs.SubtypeInvalidArgument, "--label-id must be a numeric secure label ID, not a display name: %q", raw).
 				WithParam("--label-id").
-				WithHint("run `lark-cli drive +secure-label-list` and pass the numeric `id` value; do not pass label names like `Public(D)`")
+				WithHint("run `work-cli drive +secure-label-list` and pass the numeric `id` value; do not pass label names like `Public(D)`")
 		}
 	}
 	return labelID, nil
@@ -337,7 +337,7 @@ func secureLabelErrorGuidance(code int, operation secureLabelOperation) string {
 		return "the current user lacks permission to list secure labels; use a user with security-label read permission"
 	case 1063001, 99992402, 9499:
 		if operation == secureLabelOperationUpdate {
-			return "check --token/--type and pass a secure label ID from `lark-cli drive +secure-label-list`, not the display name"
+			return "check --token/--type and pass a secure label ID from `work-cli drive +secure-label-list`, not the display name"
 		}
 		return "check secure label list parameters such as --page-size, --page-token, and --lang"
 	}

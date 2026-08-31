@@ -1,6 +1,6 @@
 # CLI E2E Tests
 
-This directory contains end-to-end tests for `lark-cli`.
+This directory contains end-to-end tests for `work-cli`.
 
 The purpose of this module is to verify real CLI workflows from a user-facing perspective: run the compiled binary, execute commands end to end, and catch regressions that are not obvious from unit tests alone.
 
@@ -23,7 +23,7 @@ Then follow `tests/cli_e2e/cli-e2e-testcase-writer/SKILL.md`.
 Example prompt:
 
 ```text
-Use $cli-e2e-testcase-writer to write lark-cli xxx domain related testcases.
+Use $cli-e2e-testcase-writer to write work-cli xxx domain related testcases.
 Put them under tests/cli_e2e/xxx.
 ```
 

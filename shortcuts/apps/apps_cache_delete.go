@@ -21,7 +21,7 @@ var AppsCacheDelete = common.Shortcut{
 	Description: "Delete a single business cache key (idempotent)",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +cache-delete --app-id <app_id> --environment dev --key <key>",
+		"Example: work-cli apps +cache-delete --app-id <app_id> --environment dev --key <key>",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Command readonly-policy is a runnable fork of lark-cli that
+// Command readonly-policy is a runnable fork of work-cli that
 // installs a Rule permitting only docs/* and im/* read commands.
 // Any write command is rejected with the established Restrict policy
 // envelope.

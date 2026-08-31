@@ -13,7 +13,7 @@ import (
 )
 
 // TestAppsEnvPull_4xxFailureCarriesListHint verifies that a 4xx failure from the
-// env_vars endpoint surfaces an actionable hint pointing at `lark-cli apps +list`.
+// env_vars endpoint surfaces an actionable hint pointing at `work-cli apps +list`.
 func TestAppsEnvPull_4xxFailureCarriesListHint(t *testing.T) {
 	factory, stdout, reg := newAppsExecuteFactory(t)
 	reg.Register(&httpmock.Stub{
@@ -42,7 +42,7 @@ func TestAppsEnvPull_4xxFailureCarriesListHint(t *testing.T) {
 }
 
 // TestAppsAccessScopeGet_4xxFailureCarriesListHint verifies the access-scope-get
-// 4xx failure points at `lark-cli apps +list`.
+// 4xx failure points at `work-cli apps +list`.
 func TestAppsAccessScopeGet_4xxFailureCarriesListHint(t *testing.T) {
 	factory, stdout, reg := newAppsExecuteFactory(t)
 	reg.Register(&httpmock.Stub{

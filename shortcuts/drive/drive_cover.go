@@ -110,7 +110,7 @@ func wrapDriveCoverDownloadError(err error, requestedSpec string) error {
 		return err
 	}
 	hint := fmt.Sprintf(
-		"This may mean no artifact exists for --spec %q, or that the file token/version is invalid. Verify the inputs, or rerun with `lark-cli drive +cover --file-token <file-token> --list-only`. Available cover specs: %s",
+		"This may mean no artifact exists for --spec %q, or that the file token/version is invalid. Verify the inputs, or rerun with `work-cli drive +cover --file-token <file-token> --list-only`. Available cover specs: %s",
 		requestedSpec,
 		strings.Join(availableDriveCoverSpecs(), ", "),
 	)

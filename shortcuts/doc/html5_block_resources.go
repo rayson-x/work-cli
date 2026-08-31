@@ -411,7 +411,7 @@ func readWhiteboardPath(runtime *common.RuntimeContext, pathValue string, typ st
 	}
 	data, err := cmdutil.ReadInputFile(runtime.FileIO(), clean)
 	if err != nil {
-		return "", common.ValidationErrorf("whiteboard %s path %q cannot be read from the current working directory; check that the file exists relative to where lark-cli is running: %v", typ, clean, err).
+		return "", common.ValidationErrorf("whiteboard %s path %q cannot be read from the current working directory; check that the file exists relative to where work-cli is running: %v", typ, clean, err).
 			WithParam("path").
 			WithParams(errs.InvalidParam{Name: clean, Reason: fmt.Sprintf("whiteboard %s path cannot be read", typ)}).
 			WithCause(err)
@@ -677,7 +677,7 @@ func readHTML5BlockPath(runtime *common.RuntimeContext, pathValue string, label 
 	}
 	data, err := cmdutil.ReadInputFile(runtime.FileIO(), clean)
 	if err != nil {
-		return "", common.ValidationErrorf("%s %q cannot be read from the current working directory; check that the file exists relative to where lark-cli is running: %v", label, clean, err).WithParam("path").WithCause(err)
+		return "", common.ValidationErrorf("%s %q cannot be read from the current working directory; check that the file exists relative to where work-cli is running: %v", label, clean, err).WithParam("path").WithCause(err)
 	}
 	return string(data), nil
 }

@@ -18,7 +18,7 @@ type RenderContext struct {
 // is a code-owned argument fragment (for example "--device-code <code>"); the
 // invocation profile is always emitted as one shell-safe argv value.
 func (c RenderContext) AuthLoginCommand(suffix string) string {
-	command := "lark-cli auth login"
+	command := "work-cli auth login"
 	if c.Profile != "" {
 		// The equals form keeps a leading-dash profile value attached to its flag;
 		// single-quote escaping prevents shell expansion or argument splitting.

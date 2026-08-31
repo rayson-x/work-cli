@@ -8,7 +8,7 @@
 
 ```bash
 # 在指定周期下创建一个 Objective（默认 simple 风格）
-lark-cli okr +create \
+work-cli okr +create \
   --level objective \
   --cycle-id 7000000000000000001 \
   --content '{"text":"提升北极星指标","mention":["ou_xxxxxxxx"]}' \
@@ -16,14 +16,14 @@ lark-cli okr +create \
   --as user
 
 # 在已有 Objective 下创建一个 KR
-lark-cli okr +create \
+work-cli okr +create \
   --level key-result \
   --objective-id 7000000000000000002 \
   --content '{"text":"季度留存率提升到 45%"}' \
   --as user
 
 # 使用 richtext 风格创建 Objective（完整 ContentBlock JSON）
-lark-cli okr +create \
+work-cli okr +create \
   --level objective \
   --cycle-id 7000000000000000001 \
   --style richtext \
@@ -31,7 +31,7 @@ lark-cli okr +create \
   --as user
 
 # 预览 API 调用而不实际执行
-lark-cli okr +create \
+work-cli okr +create \
   --level key-result \
   --objective-id 7000000000000000002 \
   --content '{"text":"完成 3 次核心流程优化"}' \
@@ -54,7 +54,7 @@ lark-cli okr +create \
 | `--dry-run`      | 否  | —         | 预览 API 调用而不实际执行。                                                                                                   |
 | `--format`       | 否  | `json`    | 输出格式。                                                                                                              |
 
-> **分类提示**：当用户明确要求设置 Objective 分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时，可以配置 --category-id 参数进行创建。先运行 `lark-cli okr categories list --as user` 查看可用分类，然后选择一个语义合适且 `enabled=true` 的分类 ID 作为 `--category-id`。分类创建后可以再调整；不必因为分类选择停下等待用户确认。
+> **分类提示**：当用户明确要求设置 Objective 分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时，可以配置 --category-id 参数进行创建。先运行 `work-cli okr categories list --as user` 查看可用分类，然后选择一个语义合适且 `enabled=true` 的分类 ID 作为 `--category-id`。分类创建后可以再调整；不必因为分类选择停下等待用户确认。
 
 ## 输入格式
 
@@ -113,7 +113,7 @@ lark-cli okr +create \
 3. 选择输入风格：
    - **推荐**：`simple`，适合普通文本和 mention。
    - 需要复杂富文本时：`richtext`。
-4. 执行 `lark-cli okr +create ...`。
+4. 执行 `work-cli okr +create ...`。
 5. 报告结果：
    - 创建 Objective 时返回新的 `objective_id`
    - 创建 KR 时返回新的 `key_result_id`，并附带父 `objective_id`

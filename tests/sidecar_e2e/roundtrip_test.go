@@ -18,7 +18,7 @@
 //
 //  1. sidecar/server-demo/handler.go:171 resolves a REAL token via
 //     h.cred.ResolveToken(...), which errors out unless the machine has run
-//     `lark-cli auth login` — there is no way to make it return a token
+//     `work-cli auth login` — there is no way to make it return a token
 //     without live credentials.
 //  2. sidecar/server-demo/main.go builds handler.allowedHosts from
 //     core.ResolveEndpoints(BrandFeishu/BrandLark) only — real feishu/lark
@@ -126,7 +126,7 @@ func TestSidecarHMACRoundTrip(t *testing.T) {
 	upstream := startMockUpstream(t)
 	sc := startInTestSidecar(t, []byte(testProxyKey), upstream.URL)
 
-	// One real external process: lark-cli built with -tags authsidecar, run
+	// One real external process: work-cli built with -tags authsidecar, run
 	// fully offline against the in-test sidecar.
 	bin := buildAuthsidecarFork(t)
 	res := runFork(t, bin, sc.URL)
@@ -467,7 +467,7 @@ func parseTargetHost(target string) (string, error) {
 
 // --- fork build + run ------------------------------------------------------
 
-// buildAuthsidecarFork builds the REAL lark-cli with -tags authsidecar (the
+// buildAuthsidecarFork builds the REAL work-cli with -tags authsidecar (the
 // production interceptor) and returns the binary path.
 func buildAuthsidecarFork(t *testing.T) string {
 	t.Helper()
@@ -542,7 +542,7 @@ func runFork(t *testing.T, binPath, sidecarURL string) forkResult {
 	return forkResult{exit: exit, stdout: stdout.String(), stderr: stderr.String()}
 }
 
-// repoRoot resolves the lark-cli module root from the test's working
+// repoRoot resolves the work-cli module root from the test's working
 // directory (which `go test` sets to the package dir, tests/sidecar_e2e).
 func repoRoot(t *testing.T) string {
 	t.Helper()

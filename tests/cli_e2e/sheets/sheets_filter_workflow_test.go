@@ -27,7 +27,7 @@ func TestSheets_FilterWorkflow(t *testing.T) {
 	sheetID := ""
 
 	t.Run("create spreadsheet with initial data as bot", func(t *testing.T) {
-		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-sheets-filter-"+suffix, "bot")
+		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "work-cli-e2e-sheets-filter-"+suffix, "bot")
 	})
 
 	t.Run("get sheet info as bot", func(t *testing.T) {

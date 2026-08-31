@@ -60,7 +60,7 @@ func TestEmbeddedDocsAffordanceComplementsShortcutMetadata(t *testing.T) {
 			},
 			tips: []string{
 				"Prefer `str_replace` or `block_*` commands for targeted edits. Use `overwrite` only when replacing the entire document is intended; it can discard unrelated rich content.",
-				"Before a `block_*` edit, fetch the target with `lark-cli docs +fetch --detail with-ids` and a narrow `--scope`; refetch after structural changes before reusing block IDs.",
+				"Before a `block_*` edit, fetch the target with `work-cli docs +fetch --detail with-ids` and a narrow `--scope`; refetch after structural changes before reusing block IDs.",
 				contentGuideTip,
 				"Match `--doc-format` to `--content`; for multiline content, prefer `@file` or `-` (stdin).",
 			},

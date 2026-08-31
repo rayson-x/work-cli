@@ -245,7 +245,7 @@ func TestDriveDeleteTaskCheckOutcomes(t *testing.T) {
 			wantStdout: []string{
 				`"ready": false`,
 				`"timed_out": true`,
-				`"next_command": "lark-cli drive +task_result --scenario task_check --task-id task_123 --as bot"`,
+				`"next_command": "work-cli drive +task_result --scenario task_check --task-id task_123 --as bot"`,
 			},
 		},
 		{
@@ -361,7 +361,7 @@ func TestDriveDeleteTimedOutTaskCanBeResumedWithTaskResult(t *testing.T) {
 	if !bytes.Contains(stdout.Bytes(), []byte(`"ready": false`)) {
 		t.Fatalf("stdout missing ready=false: %s", stdout.String())
 	}
-	if !bytes.Contains(stdout.Bytes(), []byte(`"next_command": "lark-cli drive +task_result --scenario task_check --task-id task_resume_123 --as bot"`)) {
+	if !bytes.Contains(stdout.Bytes(), []byte(`"next_command": "work-cli drive +task_result --scenario task_check --task-id task_resume_123 --as bot"`)) {
 		t.Fatalf("stdout missing next_command: %s", stdout.String())
 	}
 

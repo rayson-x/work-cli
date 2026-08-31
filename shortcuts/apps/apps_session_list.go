@@ -19,7 +19,7 @@ var AppsSessionList = common.Shortcut{
 	Description: "List sessions under an app (cursor pagination)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +session-list --app-id <app_id>",
+		"Example: work-cli apps +session-list --app-id <app_id>",
 		"Tip: filter fields with --jq, e.g. -q '.data.sessions[].session_id'",
 	},
 	Scopes:    []string{"spark:app:read"},

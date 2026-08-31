@@ -31,8 +31,8 @@ func TestCalendar_UpdateEventWorkflow(t *testing.T) {
 	updatedStartAt := startAt.Add(30 * time.Minute)
 	updatedEndAt := updatedStartAt.Add(45 * time.Minute)
 
-	createdSummary := "lark-cli-e2e-update-before-" + suffix
-	updatedSummary := "lark-cli-e2e-update-after-" + suffix
+	createdSummary := "work-cli-e2e-update-before-" + suffix
+	updatedSummary := "work-cli-e2e-update-after-" + suffix
 	updatedDescription := "updated by calendar update workflow"
 
 	var eventID string

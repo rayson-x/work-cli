@@ -15,19 +15,19 @@
 ## 推荐命令
 
 ```bash
-lark-cli base +record-history-list \
+work-cli base +record-history-list \
   --base-token <base_token> \
   --table-id <table_id> \
   --record-id <record_id>
 
-lark-cli base +record-history-list \
+work-cli base +record-history-list \
   --base-token <base_token> \
   --table-id <table_id> \
   --record-id <record_id> \
   --page-size 30 \
   --max-version <next_max_version>
 
-lark-cli base +record-history-list \
+work-cli base +record-history-list \
   --base-token <base_token> \
   --table-id <table_id> \
   --record-id <record_id> \

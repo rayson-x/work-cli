@@ -41,8 +41,8 @@ func TestInputViewKeepsChangedReviewCandidatesWithOriginalRefs(t *testing.T) {
 			{Command: "docs list", Changed: true, IsList: true},
 		},
 		Examples: []facts.CommandExample{
-			{Raw: "lark-cli old noisy command", SourceFile: "skills/lark-old/SKILL.md", Line: 12},
-			{Raw: "lark-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 13, Changed: true},
+			{Raw: "work-cli old noisy command", SourceFile: "skills/lark-old/SKILL.md", Line: 12},
+			{Raw: "work-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 13, Changed: true},
 		},
 	}
 

@@ -2,7 +2,7 @@
 
 发送会中文本消息或会中 reaction emoji。
 
-本 skill 对应 shortcut：`lark-cli vc +meeting-message-send`（调用 `POST /open-apis/vc/v1/bots/message`）。
+本 skill 对应 shortcut：`work-cli vc +meeting-message-send`（调用 `POST /open-apis/vc/v1/bots/message`）。
 
 ## 适用场景
 
@@ -38,7 +38,7 @@ CLI 会把 `--text` 或 `--emoji-type` 统一映射到 OpenAPI 请求体的 `con
 ## 文本消息
 
 ```bash
-lark-cli vc +meeting-message-send --as user --meeting-id <meeting_id> --text "稍等，我在看文档"
+work-cli vc +meeting-message-send --as user --meeting-id <meeting_id> --text "稍等，我在看文档"
 ```
 
 文本消息会出现在会议内的文本互动区。不要把它当成绑定群消息发送能力；如果用户明确要求发到群聊，路由到 `lark-im`。
@@ -68,8 +68,8 @@ lark-cli vc +meeting-message-send --as user --meeting-id <meeting_id> --text "�
 | 会议画面效果不错、画面看起来可以 | `VC_LooksGood` |
 
 ```bash
-lark-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type LOVE
-lark-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type VC_NoSound
+work-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type LOVE
+work-cli vc +meeting-message-send --as bot --meeting-id <meeting_id> --msg-type reaction --emoji-type VC_NoSound
 ```
 
 不要编造列表外的 `emoji_type`，也不要把 mixed-case 值改成全大写，例如 `EatingFood`、`CheckMark`、`StatusInFlight` 都要按原值传。

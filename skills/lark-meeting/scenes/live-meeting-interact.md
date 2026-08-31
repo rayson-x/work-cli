@@ -10,10 +10,10 @@
 
 ```bash
 # 当前登录用户正在参加的会议
-lark-cli vc +meeting-list-active --as user --format json
+work-cli vc +meeting-list-active --as user --format json
 
 # 目标用户正在参加、且应用机器人也在会中的会议
-lark-cli vc +meeting-list-active --as bot --user-id <open_id> --format json
+work-cli vc +meeting-list-active --as bot --user-id <open_id> --format json
 ```
 
 - `--user-id` 必须是目标用户的 `ou_` open_id。
@@ -27,7 +27,7 @@ lark-cli vc +meeting-list-active --as bot --user-id <open_id> --format json
 ## 读取最新会中事件
 
 ```bash
-lark-cli vc +meeting-events --as <same_identity> --meeting-id <meeting_id> --page-all --format pretty
+work-cli vc +meeting-events --as <same_identity> --meeting-id <meeting_id> --page-all --format pretty
 ```
 
 - 默认使用 `--page-all` 获取当前完整事件流，并保留返回的 `page_token` 供下次增量查询。
@@ -57,7 +57,7 @@ lark-cli vc +meeting-events --as <same_identity> --meeting-id <meeting_id> --pag
 需要读取时执行：
 
 ```bash
-lark-cli vc +meeting-screenshot --as <same_identity> --meeting-id <meeting_id>
+work-cli vc +meeting-screenshot --as <same_identity> --meeting-id <meeting_id>
 ```
 
 身份、会议 ID、输出文件和失败处理见 [`lark-vc-meeting-screenshot`](../references/lark-vc-meeting-screenshot.md)。
@@ -67,7 +67,7 @@ lark-cli vc +meeting-screenshot --as <same_identity> --meeting-id <meeting_id>
 只有用户明确要求发送并确认目标会议与内容时执行：
 
 ```bash
-lark-cli vc +meeting-message-send --as <same_identity> --meeting-id <meeting_id> --msg-type text --text <message>
+work-cli vc +meeting-message-send --as <same_identity> --meeting-id <meeting_id> --msg-type text --text <message>
 ```
 
 - 发送沿用 `meeting_id` 的来源身份；不要为了发送自动入会或先查会议详情。
@@ -82,7 +82,7 @@ lark-cli vc +meeting-message-send --as <same_identity> --meeting-id <meeting_id>
 只有用户明确要求设置、延长、提前结束或关闭倒计时时执行：
 
 ```bash
-lark-cli vc +meeting-countdown --as <same_identity> --meeting-id <meeting_id> --action set --duration <minutes>
+work-cli vc +meeting-countdown --as <same_identity> --meeting-id <meeting_id> --action set --duration <minutes>
 ```
 
 - 这是会中可见的写操作；执行前确认目标会议和动作。

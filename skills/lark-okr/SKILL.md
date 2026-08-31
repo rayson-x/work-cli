@@ -4,8 +4,8 @@ version: 1.0.0
 description: "飞书 OKR：管理目标与关键结果。查看和编辑 OKR 周期、目标、关键结果、对齐关系、量化指标和进展记录。当用户需要查看或创建 OKR、管理目标和关键结果、查看对齐关系时使用。不负责：待办任务管理（lark-task）、日程/会议安排（lark-calendar）、绩效评估"
 metadata:
   requires:
-    bins: [ "lark-cli" ]
-  cliHelp: "lark-cli okr --help"
+    bins: [ "work-cli" ]
+  cliHelp: "work-cli okr --help"
 ---
 
 # okr (v2)
@@ -28,29 +28,29 @@ metadata:
 | 写文字进展          | 用 `+progress-create`；如果文本和数字都有，百分比或默认单位可使用 `--progress-percent` 统一改，非百分比单位更新量化指标 | [`progress-create`](references/lark-okr-progress-create.md), [`progress-list`](references/lark-okr-progress-list.md), [`progress-update`](references/lark-okr-progress-update.md)                                    |
 | 对齐目标           | 直接按对齐关系工作流处理                                                                     | [`alignments`](references/lark-okr-alignments.md)                                                                                                                                                                    |
 
-分类只在用户明确要求分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时处理：用 `lark-cli okr categories list --params '{"owner_type":"user","page_size":100}' --as user` 查可用分类，选择语义合适且 `enabled=true` 的分类 ID；分类可后续调整，不必停下等待用户确认。
+分类只在用户明确要求分类，或创建 Objective 返回 `invalid parameters` 且怀疑租户强制开启分类时处理：用 `work-cli okr categories list --params '{"owner_type":"user","page_size":100}' --as user` 查可用分类，选择语义合适且 `enabled=true` 的分类 ID；分类可后续调整，不必停下等待用户确认。
 
 获取当前用户用 `contact +get-user`；按姓名/邮箱查他人用 `contact +search-user`，拿到 `open_id` 后再查 OKR。
 
 ```bash
-lark-cli contact +search-user --query "张三" --has-chatted --as user
+work-cli contact +search-user --query "张三" --has-chatted --as user
 ```
 
 最常用 OKR 命令示例：
 
 ```bash
 # 查用户周期，再用周期 ID 查详情
-lark-cli okr +cycle-list --user-id "ou_xxx" --as user
-lark-cli okr +cycle-detail --cycle-id 7000000000000000001 --as user
+work-cli okr +cycle-list --user-id "ou_xxx" --as user
+work-cli okr +cycle-detail --cycle-id 7000000000000000001 --as user
 
 # 批量创建 Objective/KR
-lark-cli okr +batch-create \
+work-cli okr +batch-create \
   --cycle-id 7000000000000000001 \
   --input '[{"text":"提升产品用户体验","notes":"关注核心流程和用户反馈","krs":[{"text":"核心流程满意度达到 4.8 分"}]}]' \
   --as user
 
 # 更新数字进度/完成度
-lark-cli okr +indicator-update \
+work-cli okr +indicator-update \
   --level key-result \
   --id 7000000000000000003 \
   --value 75 \
@@ -63,7 +63,7 @@ lark-cli okr +indicator-update \
 
 ## Shortcuts（推荐优先使用）
 
-Shortcut 是对常用操作的高级封装（`lark-cli okr +<verb> [flags]`）。有 Shortcut 的操作优先使用。
+Shortcut 是对常用操作的高级封装（`work-cli okr +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 | Shortcut                                                       | 说明                                                                                |
 |----------------------------------------------------------------|-----------------------------------------------------------------------------------|

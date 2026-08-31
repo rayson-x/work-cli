@@ -18,14 +18,14 @@
 
 ```bash
 # 读取当前插件配置
-lark-cli base +field-extension-get \
+work-cli base +field-extension-get \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <target_field_id> \
   --as user
 
 # 安装或更新 LLM Completion 插件
-lark-cli base +field-extension-update \
+work-cli base +field-extension-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <target_field_id> \
@@ -34,7 +34,7 @@ lark-cli base +field-extension-update \
   --yes
 
 # 清空字段插件配置
-lark-cli base +field-extension-update \
+work-cli base +field-extension-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <target_field_id> \
@@ -43,7 +43,7 @@ lark-cli base +field-extension-update \
   --yes
 
 # 按视图范围触发整列更新
-lark-cli base +field-extension-update-cells \
+work-cli base +field-extension-update-cells \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <target_field_id> \
@@ -53,7 +53,7 @@ lark-cli base +field-extension-update-cells \
   --yes
 
 # 只更新指定记录
-lark-cli base +field-extension-update-cells \
+work-cli base +field-extension-update-cells \
   --base-token <base_token> \
   --table-id <table_id> \
   --field-id <target_field_id> \

@@ -31,7 +31,7 @@ The project is forked from the official [larksuite/cli](https://github.com/larks
 
 [Install](#installation--quick-start) · [AI Agent Skills](#agent-skills) · [Auth](#authentication) · [Commands](#three-layer-command-system) · [Advanced](#advanced-usage) · [Enterprise](#personal-or-enterprise) · [Security](#security--risk-warnings-read-before-use) · [Contributing](#contributing)
 
-## Why lark-cli?
+## Why work-cli?
 
 - **Agent-Native Design** — 24 structured [Skills](./skills/) out of the box, compatible with popular AI tools — Agents can operate Lark with zero extra setup
 - **Wide Coverage** — 18 business domains, 200+ curated commands, 26 AI Agent [Skills](./skills/)
@@ -45,8 +45,8 @@ The project is forked from the official [larksuite/cli](https://github.com/larks
 
 | You are... | Recommended path |
 | ---------- | ---------------- |
-| **An individual developer** — using lark-cli in your terminal or with your own AI Agent | Follow the [Quick Start](#installation--quick-start) below |
-| **Enterprise IT / ISV** — embedding lark-cli into your own Agent or platform, with centralized credentials (database / Vault / config center), unified audit logging, and a restricted command surface | Read [Embed lark-cli in your Agent](https://open.larksuite.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent) and the [`extension/`](./extension/) packages — extend via a wrapper `main`, no need to modify CLI source |
+| **An individual developer** — using work-cli in your terminal or with your own AI Agent | Follow the [Quick Start](#installation--quick-start) below |
+| **Enterprise IT / ISV** — embedding work-cli into your own Agent or platform, with centralized credentials (database / Vault / config center), unified audit logging, and a restricted command surface | Read [Embed work-cli in your Agent](https://open.larksuite.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent) and the [`extension/`](./extension/) packages — extend via a wrapper `main`, no need to modify CLI source |
 
 > 💡 **For AI Agents:** append `.md` to any Open Platform doc URL to fetch it as raw Markdown, e.g. [`embed-feishu-cli-in-agent.md`](https://open.larksuite.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent.md).
 
@@ -113,13 +113,13 @@ npx skills add larksuite/cli -y -g
 
 ```bash
 # 1. Configure app credentials (one-time, interactive guided setup)
-lark-cli config init
+work-cli config init
 
 # 2. Log in (--recommend auto-selects commonly used scopes)
-lark-cli auth login --recommend
+work-cli auth login --recommend
 
 # 3. Start using
-lark-cli calendar +agenda
+work-cli calendar +agenda
 ```
 
 ## Quick Start (AI Agent)
@@ -137,7 +137,7 @@ npx @larksuite/cli@latest install
 > Run this command in the background. It will output an authorization URL — extract it and send it to the user. The command exits automatically after the user completes the setup in the browser.
 
 ```bash
-lark-cli config init --new
+work-cli config init --new
 ```
 
 **Step 3 — Login**
@@ -145,13 +145,13 @@ lark-cli config init --new
 > Same as above: run in the background, extract the authorization URL and send it to the user.
 
 ```bash
-lark-cli auth login --recommend
+work-cli auth login --recommend
 ```
 
 **Step 4 — Verify**
 
 ```bash
-lark-cli auth status
+work-cli auth status
 ```
 
 ## Agent Skills
@@ -195,25 +195,25 @@ lark-cli auth status
 
 ```bash
 # Interactive login (TUI guides domain and permission level selection)
-lark-cli auth login
+work-cli auth login
 
 # Filter by domain
-lark-cli auth login --domain calendar,task
+work-cli auth login --domain calendar,task
 
 # Recommended auto-approval scopes
-lark-cli auth login --recommend
+work-cli auth login --recommend
 
 # Exact scope
-lark-cli auth login --scope "calendar:calendar:read"
+work-cli auth login --scope "calendar:calendar:read"
 
 # Agent mode: return verification URL immediately, non-blocking
-lark-cli auth login --domain calendar --no-wait
+work-cli auth login --domain calendar --no-wait
 # Resume polling later
-lark-cli auth login --device-code <DEVICE_CODE>
+work-cli auth login --device-code <DEVICE_CODE>
 
 # Identity switching: execute commands as user or bot
-lark-cli calendar +agenda --as user
-lark-cli im +messages-send --as bot --chat-id "oc_xxx" --text "Hello"
+work-cli calendar +agenda --as user
+work-cli im +messages-send --as bot --chat-id "oc_xxx" --text "Hello"
 ```
 
 ## Three-Layer Command System
@@ -225,20 +225,20 @@ The CLI provides three levels of granularity, covering everything from quick ope
 Prefixed with `+`, designed to be friendly for both humans and AI, with smart defaults, table output, and dry-run previews.
 
 ```bash
-lark-cli calendar +agenda
-lark-cli im +messages-send --chat-id "oc_xxx" --text "Hello"
-lark-cli docs +create --doc-format markdown --content $'<title>Weekly Report</title>\n# Progress\n- Completed feature X'
+work-cli calendar +agenda
+work-cli im +messages-send --chat-id "oc_xxx" --text "Hello"
+work-cli docs +create --doc-format markdown --content $'<title>Weekly Report</title>\n# Progress\n- Completed feature X'
 ```
 
-Run `lark-cli <service> --help` to see all shortcut commands.
+Run `work-cli <service> --help` to see all shortcut commands.
 
 ### 2. API Commands
 
 Auto-generated from Lark OAPI metadata, curated through evaluation and quality gates — 100+ commands mapped 1:1 to platform endpoints.
 
 ```bash
-lark-cli calendar calendars list
-lark-cli calendar events instance_view --params '{"calendar_id":"primary","start_time":"1700000000","end_time":"1700086400"}'
+work-cli calendar calendars list
+work-cli calendar events instance_view --params '{"calendar_id":"primary","start_time":"1700000000","end_time":"1700086400"}'
 ```
 
 ### 3. Raw API Calls
@@ -246,8 +246,8 @@ lark-cli calendar events instance_view --params '{"calendar_id":"primary","start
 Call any Lark Open Platform endpoint directly, covering 2500+ APIs.
 
 ```bash
-lark-cli api GET /open-apis/calendar/v4/calendars
-lark-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"chat_id"}' --data '{"receive_id":"oc_xxx","msg_type":"text","content":"{\"text\":\"Hello\"}"}'
+work-cli api GET /open-apis/calendar/v4/calendars
+work-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"chat_id"}' --data '{"receive_id":"oc_xxx","msg_type":"text","content":"{\"text\":\"Hello\"}"}'
 ```
 
 ## Advanced Usage
@@ -293,7 +293,7 @@ To check whether a command succeeded, test `ok == true` (or the exit code) — *
 For commands that may have side effects, preview the request with --dry-run first:
 
 ```bash
-lark-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
+work-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
 ```
 
 ### Schema Introspection
@@ -301,9 +301,9 @@ lark-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
 Use schema to inspect any API method's parameters, request body, response structure, supported identities, and scopes:
 
 ```bash
-lark-cli schema
-lark-cli schema calendar.events.instance_view
-lark-cli schema im.messages.delete
+work-cli schema
+work-cli schema calendar.events.instance_view
+work-cli schema im.messages.delete
 ```
 
 ## Security & Risk Warnings (Read Before Use)
@@ -322,19 +322,19 @@ To reduce the security risks associated with access token theft, the CLI sends a
 To disable this protection for the current workspace, run:
 
 ```bash
-lark-cli config risk-control off
+work-cli config risk-control off
 ```
 
 To enable this protection for the current workspace, run:
 
 ```bash
-lark-cli config risk-control on
+work-cli config risk-control on
 ```
 
 To restore the default policy for the current workspace, run:
 
 ```bash
-lark-cli config risk-control default
+work-cli config risk-control default
 ```
 
 Please fully understand all usage risks. By using this tool, you are deemed to voluntarily assume all related responsibilities.

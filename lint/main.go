@@ -7,11 +7,11 @@
 //
 // lintcheck lives in its own Go module under lint/ so its build-time
 // dependency on golang.org/x/tools/go/packages does not leak into the
-// shipped lark-cli binary's module graph.
+// shipped work-cli binary's module graph.
 //
 // Usage (from repo root):
 //
-//	go run -C lint . .                # scan the lark-cli repo
+//	go run -C lint . .                # scan the work-cli repo
 //	go run -C lint . /path/to/repo    # scan another path
 //
 // Exit codes:

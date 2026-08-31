@@ -3,7 +3,7 @@
 
 通过 9 位会议号让应用机器人加入一场正在进行的视频会议。这是一次**写操作**，会实际让应用机器人加入会议。
 
-本 skill 对应 shortcut：`lark-cli vc +meeting-join`（调用 `POST /open-apis/vc/v1/bots/join`）。
+本 skill 对应 shortcut：`work-cli vc +meeting-join`（调用 `POST /open-apis/vc/v1/bots/join`）。
 
 > **不要把 9 位会议号等同于入会意图。** 用户给出 9 位会议号并询问“会议讲了什么 / 查会中事件”时，先用 `vc +meeting-list-active` 查当前 active meetings 并按 `meeting_no` 匹配；只有用户明确要求“入会 / 让应用机器人旁听 / 代我参会”时才调用本命令。
 
@@ -11,10 +11,10 @@
 
 ```bash
 # 仅指定会议号（无密码）
-lark-cli vc +meeting-join --as bot --meeting-number 123456789
+work-cli vc +meeting-join --as bot --meeting-number 123456789
 
 # 发起日程会议（仅应用身份）
-lark-cli vc +meeting-join --as bot --meeting-number 123456789 --action start
+work-cli vc +meeting-join --as bot --meeting-number 123456789 --action start
 ```
 
 ## 参数

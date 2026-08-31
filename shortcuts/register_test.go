@@ -285,7 +285,7 @@ func TestRegisterShortcutsDocsShortcutSurfaceIsV2Only(t *testing.T) {
 				"+get-skill",
 				"Docs shortcuts are v2-only",
 				"Start here (required for AI agents):",
-				"lark-cli skills read",
+				"work-cli skills read",
 			} {
 				if strings.Contains(out.String(), unwanted) {
 					t.Fatalf("docs %s help should not include %q:\n%s", tt.shortcut, unwanted, out.String())
@@ -586,7 +586,7 @@ func TestWrapSheetsBackwardDeprecationValidateHook(t *testing.T) {
 // while the shipped CLI silently reverts to generic ranked suggestions
 // (AGENTS.md: a contract test must fail if the implementation is reverted).
 func TestRegisterShortcutsInstallsSheetsSubcommandHints(t *testing.T) {
-	program := &cobra.Command{Use: "lark-cli"}
+	program := &cobra.Command{Use: "work-cli"}
 	RegisterShortcuts(program, newRegisterTestFactory(t))
 
 	svc, _, err := program.Find([]string{"sheets"})

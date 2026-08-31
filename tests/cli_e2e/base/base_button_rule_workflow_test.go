@@ -22,7 +22,7 @@ func TestBaseButtonRuleWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-button-rule-"+suffix)
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-button-rule-"+suffix)
 	tableName := "Button Rule " + suffix
 	tableID, _, _ := createTableWithRetry(
 		t,
@@ -67,7 +67,7 @@ func TestBaseButtonRuleWorkflow(t *testing.T) {
 	}
 
 	workflowBody, err := json.Marshal(map[string]interface{}{
-		"client_token": "lark-cli-e2e-button-rule-" + suffix,
+		"client_token": "work-cli-e2e-button-rule-" + suffix,
 		"title":        "Button Rule " + suffix,
 		"steps": []map[string]interface{}{
 			{

@@ -22,7 +22,7 @@ func TestCalendar_PersonalEventWorkflowAsUser(t *testing.T) {
 	clie2e.SkipWithoutUserToken(t)
 
 	suffix := clie2e.GenerateSuffix()
-	eventSummary := "lark-cli-e2e-personal-event-" + suffix
+	eventSummary := "work-cli-e2e-personal-event-" + suffix
 	eventDescription := "created by calendar personal event workflow"
 	startAt := time.Now().UTC().Add(24 * time.Hour).Truncate(time.Minute)
 	endAt := startAt.Add(30 * time.Minute)

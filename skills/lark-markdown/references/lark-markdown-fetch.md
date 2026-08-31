@@ -8,26 +8,26 @@
 
 ```bash
 # 直接返回 Markdown 文本
-lark-cli markdown +fetch --file-token boxcnxxxx
+work-cli markdown +fetch --file-token boxcnxxxx
 
 # 保存到本地
-lark-cli markdown +fetch \
+work-cli markdown +fetch \
   --file-token boxcnxxxx \
   --output ./README.md
 
 # 传目录时，使用远端文件名保存到该目录下
-lark-cli markdown +fetch \
+work-cli markdown +fetch \
   --file-token boxcnxxxx \
   --output ./downloads/
 
 # 覆盖已存在文件
-lark-cli markdown +fetch \
+work-cli markdown +fetch \
   --file-token boxcnxxxx \
   --output ./README.md \
   --overwrite
 
 # 预览底层请求
-lark-cli markdown +fetch \
+work-cli markdown +fetch \
   --file-token boxcnxxxx \
   --output ./README.md \
   --dry-run

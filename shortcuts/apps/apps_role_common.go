@@ -46,8 +46,8 @@ const (
 var optionalRoleIDPattern = regexp.MustCompile(`^[A-Za-z0-9_-]{1,64}$`)
 
 const (
-	roleAppHint    = "verify --app-id is a Miaoda app_id you can access; list apps with `lark-cli apps +list`"
-	roleItemHint   = "verify --role-id belongs to the app; if you only know a role name, resolve it with `lark-cli apps +role-list --app-id <app_id> --name <exact_name>` and use the unique returned role_id"
+	roleAppHint    = "verify --app-id is a Miaoda app_id you can access; list apps with `work-cli apps +list`"
+	roleItemHint   = "verify --role-id belongs to the app; if you only know a role name, resolve it with `work-cli apps +role-list --app-id <app_id> --name <exact_name>` and use the unique returned role_id"
 	roleCreateHint = "verify --app-id and role fields; omit --role-id unless you need a caller-provided role ID"
 	roleMemberHint = "verify --role-id and member IDs; use user open_id, open_department_id, or open_chat_id values"
 	roleMatchHint  = "use --user-id with a user open_id; do not pass role_id or enumerate roles manually"
@@ -102,15 +102,15 @@ func validateRoleAppID(rctx *common.RuntimeContext) error {
 	appID := roleAppID(rctx)
 	if appID == "" {
 		return appsValidationParamError("--app-id", "--app-id is required").
-			WithHint("list your apps with `lark-cli apps +list`")
+			WithHint("list your apps with `work-cli apps +list`")
 	}
 	if strings.HasPrefix(appID, "cli_") {
 		return appsValidationParamError("--app-id", "--app-id must be a Miaoda app_id, not a Lark app_id").
-			WithHint("pass the app_... value from `lark-cli apps +list`, not the cli_... credential app id")
+			WithHint("pass the app_... value from `work-cli apps +list`, not the cli_... credential app id")
 	}
 	if !strings.HasPrefix(appID, "app_") || len(appID) == len("app_") {
 		return appsValidationParamError("--app-id", "--app-id must be a Miaoda app_id starting with app_").
-			WithHint("list Miaoda apps with `lark-cli apps +list`, then pass the returned app_id")
+			WithHint("list Miaoda apps with `work-cli apps +list`, then pass the returned app_id")
 	}
 	// app-id must not contain forward slashes (apps are identified by app_xxx IDs).
 	for _, r := range appID {
@@ -132,7 +132,7 @@ func validateRoleID(rctx *common.RuntimeContext) error {
 	roleID := roleID(rctx)
 	if roleID == "" {
 		return appsValidationParamError("--role-id", "--role-id is required").
-			WithHint("list roles with `lark-cli apps +role-list --app-id <app_id>`")
+			WithHint("list roles with `work-cli apps +role-list --app-id <app_id>`")
 	}
 	return validateExistingRoleIDValue(roleID)
 }
@@ -173,7 +173,7 @@ func validateCreateRoleIDValue(roleID string) error {
 func validateExistingRoleIDValue(roleID string) error {
 	if !optionalRoleIDPattern.MatchString(roleID) {
 		return appsValidationParamError("--role-id", "--role-id must match [A-Za-z0-9_-]{1,64}").
-			WithHint("resolve the role with `lark-cli apps +role-list --app-id <app_id> --name <exact_name>` and pass its role_id")
+			WithHint("resolve the role with `work-cli apps +role-list --app-id <app_id> --name <exact_name>` and pass its role_id")
 	}
 	return nil
 }

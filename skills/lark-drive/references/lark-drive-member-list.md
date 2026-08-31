@@ -1,17 +1,17 @@
 # drive +member-list（查询协作者/授权成员列表）
 
-本 skill 对应 shortcut：`lark-cli drive +member-list`。它读取 Drive 文档、文件、文件夹或 wiki 节点的协作者/授权成员列表。
+本 skill 对应 shortcut：`work-cli drive +member-list`。它读取 Drive 文档、文件、文件夹或 wiki 节点的协作者/授权成员列表。
 
 ## 命令
 
 ```bash
 #  URL 自动推断 type
-lark-cli drive +member-list \
+work-cli drive +member-list \
   --token 'https://example.feishu.cn/drive/folder/<folder_token>' \
   --as user --format json
 
 # 查询附加字段
-lark-cli drive +member-list \
+work-cli drive +member-list \
   --token '<token>' \
   --type docx \
   --fields 'name,type,external_label' \

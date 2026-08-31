@@ -26,7 +26,7 @@
 
 1. **使用 `wiki.spaces.get_node` 查询节点信息**
    ```bash
-   lark-cli wiki spaces get_node --params '{"token":"wiki_token"}'
+   work-cli wiki spaces get_node --params '{"token":"wiki_token"}'
    ```
 
 2. **从返回结果中提取关键信息**
@@ -50,7 +50,7 @@
 
 ```bash
 # 查询 wiki 节点
-lark-cli wiki spaces get_node --params '{"token":"wiki_token"}'
+work-cli wiki spaces get_node --params '{"token":"wiki_token"}'
 ```
 
 返回结果示例：
@@ -108,16 +108,16 @@ Drive Folder (云空间文件夹)
 
 ```bash
 # 1. 删除现有筛选（如有）
-lark-cli sheets spreadsheet.sheet.filters delete \
+work-cli sheets spreadsheet.sheet.filters delete \
   --params '{"spreadsheet_token":"<spreadsheet_token>","sheet_id":"<sheet_id>"}'
 
 # 2. 创建第一个筛选，range 覆盖所有要筛选的列
-lark-cli sheets spreadsheet.sheet.filters create \
+work-cli sheets spreadsheet.sheet.filters create \
   --params '{"spreadsheet_token":"<spreadsheet_token>","sheet_id":"<sheet_id>"}' \
   --data '{"col":"B","condition":{"expected":["xx"],"filter_type":"multiValue"},"range":"<sheet_id>!B1:E200"}'
 
 # 3. 添加第二个筛选条件
-lark-cli sheets spreadsheet.sheet.filters update \
+work-cli sheets spreadsheet.sheet.filters update \
   --params '{"spreadsheet_token":"<spreadsheet_token>","sheet_id":"<sheet_id>"}' \
   --data '{"col":"E","condition":{"expected":["xx"],"filter_type":"multiValue"}}'
 ```
@@ -147,11 +147,11 @@ lark-cli sheets spreadsheet.sheet.filters update \
 
 ```bash
 # ✅ 正确：使用对象格式
-lark-cli sheets +write --url "URL" --sheet-id "sheetId" --range "C6" \
+work-cli sheets +write --url "URL" --sheet-id "sheetId" --range "C6" \
   --values '[[{"type":"formula","text":"=SUM(C2:C5)"}]]'
 
 # ❌ 错误：直接传字符串，会被存为纯文本
-lark-cli sheets +write --url "URL" --sheet-id "sheetId" --range "C6" \
+work-cli sheets +write --url "URL" --sheet-id "sheetId" --range "C6" \
   --values '[["=SUM(C2:C5)"]]'
 ```
 

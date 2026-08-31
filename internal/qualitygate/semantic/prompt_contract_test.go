@@ -70,8 +70,8 @@ func TestBuildInputViewSelectsChangedReviewCandidatesWithStableRefs(t *testing.T
 			{Command: "base +new", Changed: true, IsList: true, HasDefaultLimit: false, HasDecisionField: true},
 		},
 		Examples: []facts.CommandExample{
-			{Raw: "lark-cli base +old", SourceFile: "skills/lark-base/SKILL.md", Line: 30, Executable: true},
-			{Raw: "lark-cli base +new", SourceFile: "skills/lark-base/SKILL.md", Line: 40, CommandPath: "base +new", Changed: true, Executable: true},
+			{Raw: "work-cli base +old", SourceFile: "skills/lark-base/SKILL.md", Line: 30, Executable: true},
+			{Raw: "work-cli base +new", SourceFile: "skills/lark-base/SKILL.md", Line: 40, CommandPath: "base +new", Changed: true, Executable: true},
 		},
 	})
 

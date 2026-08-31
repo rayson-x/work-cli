@@ -109,7 +109,7 @@ func TestServicePaginate_DefaultAggregatesAllPages(t *testing.T) {
 	}
 
 	err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-		output.FormatJSON, "", out, errOut, "lark-cli test items list", client.PaginationOptions{
+		output.FormatJSON, "", out, errOut, "work-cli test items list", client.PaginationOptions{
 			PageLimit: 10,
 			PageDelay: -1,
 		}, ac.CheckResponse)
@@ -192,7 +192,7 @@ func TestServicePaginate_StreamingFormatsEmitExactMultiPageBytes(t *testing.T) {
 			})
 
 			err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-				tt.format, "", out, errOut, "lark-cli test items list", client.PaginationOptions{
+				tt.format, "", out, errOut, "work-cli test items list", client.PaginationOptions{
 					PageLimit: 10,
 					PageDelay: -1,
 				}, ac.CheckResponse)
@@ -238,7 +238,7 @@ func TestServicePaginate_StreamingWriteFailureStopsFurtherPages(t *testing.T) {
 	}
 
 	err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli test items list",
+		output.FormatNDJSON, "", out, errOut, "work-cli test items list",
 		client.PaginationOptions{PageLimit: 10, PageDelay: -1}, ac.CheckResponse)
 
 	if !errors.Is(err, sentinel) {
@@ -271,7 +271,7 @@ func TestServicePaginate_StreamingFormatFallsBackToJSONWithoutList(t *testing.T)
 	})
 
 	err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli test items get",
+		output.FormatNDJSON, "", out, errOut, "work-cli test items get",
 		client.PaginationOptions{PageDelay: -1}, ac.CheckResponse)
 
 	if err != nil {
@@ -315,7 +315,7 @@ func TestServicePaginate_BusinessErrorsWriteRawAndRemainUnmarked(t *testing.T) {
 			})
 
 			err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-				tt.format, tt.jqExpr, out, errOut, "lark-cli test items list",
+				tt.format, tt.jqExpr, out, errOut, "work-cli test items list",
 				client.PaginationOptions{PageDelay: -1}, ac.CheckResponse)
 
 			if err == nil {
@@ -351,7 +351,7 @@ func TestServicePaginate_TransportErrorsRemainUnmarked(t *testing.T) {
 			ac, out, errOut, _ := newServicePaginateTestHarness(t)
 
 			err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-				tt.format, tt.jqExpr, out, errOut, "lark-cli test items list",
+				tt.format, tt.jqExpr, out, errOut, "work-cli test items list",
 				client.PaginationOptions{PageDelay: -1}, ac.CheckResponse)
 
 			if err == nil {
@@ -382,7 +382,7 @@ func TestServicePaginate_StreamBusinessErrorRemainsUnmarked(t *testing.T) {
 	})
 
 	err := servicePaginate(context.Background(), ac, servicePaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli test items list",
+		output.FormatNDJSON, "", out, errOut, "work-cli test items list",
 		client.PaginationOptions{PageDelay: -1}, ac.CheckResponse)
 
 	if err == nil {

@@ -14,10 +14,10 @@
 
 ```bash
 # 推荐：直接传用户给出的完整 URL。默认只查未解决评论。
-lark-cli drive +list-comments --url "<DOCUMENT_URL>"
+work-cli drive +list-comments --url "<DOCUMENT_URL>"
 
 # 只有用户明确要求包含已解决评论时，才传 --solved-status all。
-lark-cli drive +list-comments --url "<DOCUMENT_URL>" --solved-status all
+work-cli drive +list-comments --url "<DOCUMENT_URL>" --solved-status all
 ```
 
 ## 参数

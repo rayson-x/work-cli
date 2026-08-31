@@ -9,7 +9,7 @@
 - 没有 token 时，用标题/关键词、所有者、参与者或时间范围执行搜索：
 
   ```bash
-  lark-cli minutes +search --query <query> --start <start> --end <end> --as user
+  work-cli minutes +search --query <query> --start <start> --end <end> --as user
   ```
 
 - `minutes +search` 支持用户身份和应用身份。默认使用用户身份；只有用户明确要求应用视角或上下文已经是应用身份时才使用 `--as bot`。
@@ -27,17 +27,17 @@
 用户只要标题、时长、封面、所有者或 URL 时，使用基础信息命令：
 
 ```bash
-lark-cli minutes minutes get --params '{"minute_token":"<minute_token>"}' --as <source_identity>
+work-cli minutes minutes get --params '{"minute_token":"<minute_token>"}' --as <source_identity>
 ```
 
-基础信息已经满足目标时，不继续读取 AI 产物或逐字稿。命令参数不足时运行 `lark-cli minutes minutes get --help`。
+基础信息已经满足目标时，不继续读取 AI 产物或逐字稿。命令参数不足时运行 `work-cli minutes minutes get --help`。
 
 ## 获取 AI 产物和逐字稿
 
 使用 `minutes +detail`，只传用户需要的产物 flag：
 
 ```bash
-lark-cli minutes +detail --minute-tokens <minute_token> --summary --todo --chapter --keyword --transcript --as <source_identity>
+work-cli minutes +detail --minute-tokens <minute_token> --summary --todo --chapter --keyword --transcript --as <source_identity>
 ```
 
 - 可选 `--summary`、`--todo`、`--chapter`、`--keyword`、`--transcript`。
@@ -58,7 +58,7 @@ lark-cli minutes +detail --minute-tokens <minute_token> --summary --todo --chapt
 从 `minutes +detail` 顶层读取 `note_id`，直接执行 `note +detail`：
 
 ```bash
-lark-cli note +detail --note-id <note_id> --as <source_identity>
+work-cli note +detail --note-id <note_id> --as <source_identity>
 ```
 
 - 不要把 `minute_token` 当作 `note_id`，也不要绕回 VC。

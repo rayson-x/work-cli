@@ -13,7 +13,7 @@ import (
 var universalFlags = map[string]bool{"--help": true, "-h": true, "--version": true}
 
 // catalog is the source-of-truth command catalog: command path -> accepted flag
-// tokens. A path is the command words WITHOUT the "lark-cli" root prefix, e.g.
+// tokens. A path is the command words WITHOUT the "work-cli" root prefix, e.g.
 // "contact +search-user". The root command is the empty path "".
 type catalog struct {
 	flagsByPath map[string]map[string]bool

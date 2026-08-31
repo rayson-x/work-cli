@@ -293,8 +293,8 @@ func TestBind_ConfigShow_UnboundWorkspace(t *testing.T) {
 	// The openclaw config error is constructed typed at its origin with
 	// subtype=not_configured; CategoryConfig → exit 3.
 	assertStderrError(t, result, 3, "config",
-		"openclaw context detected but lark-cli is not bound to it",
-		"read `lark-cli config bind --help`, then ask the user to confirm intent and identity preset (bot-only or user-default); only after both are confirmed, run `lark-cli config bind`")
+		"openclaw context detected but work-cli is not bound to it",
+		"read `work-cli config bind --help`, then ask the user to confirm intent and identity preset (bot-only or user-default); only after both are confirmed, run `work-cli config bind`")
 }
 
 func TestBind_OpenClaw_MissingFile(t *testing.T) {

@@ -54,7 +54,7 @@ func TestBaseAppWorkflow(t *testing.T) {
 	workspaceList.AssertExitCode(t, 0)
 	workspaceList.AssertStdoutStatus(t, true)
 
-	appName := "lark-cli-e2e-app-" + clie2e.GenerateSuffix()
+	appName := "work-cli-e2e-app-" + clie2e.GenerateSuffix()
 	createApp, err := runBaseAppLive(ctx, "base", "+app-create", "--workspace-token", workspaceToken, "--name", appName)
 	require.NoError(t, err)
 	createApp.AssertExitCode(t, 0)

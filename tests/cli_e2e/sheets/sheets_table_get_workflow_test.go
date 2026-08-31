@@ -38,7 +38,7 @@ func TestSheets_TableGetUsedRangeWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-tableget-"+suffix, "bot")
+	spreadsheetToken := createSpreadsheet(t, parentT, ctx, "work-cli-e2e-tableget-"+suffix, "bot")
 
 	infoRes, err := clie2e.RunCmd(ctx, clie2e.Request{
 		Args:      []string{"sheets", "+info", "--spreadsheet-token", spreadsheetToken},

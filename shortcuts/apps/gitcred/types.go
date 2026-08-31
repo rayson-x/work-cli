@@ -11,7 +11,7 @@ const (
 
 	// KeychainService intentionally reuses the CLI-wide internal keychain
 	// service, so Git PAT .enc files stay under Application Support/lark-cli.
-	KeychainService = "lark-cli"
+	KeychainService = "work-cli"
 
 	StatusPending   = "pending"
 	StatusConfirmed = "confirmed"

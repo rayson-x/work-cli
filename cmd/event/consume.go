@@ -111,7 +111,7 @@ func runConsume(cmd *cobra.Command, f *cmdutil.Factory, snap *catalog.Snapshot, 
 			return errs.NewValidationError(errs.SubtypeInvalidArgument, "%s", err).
 				WithParam("--jq").
 				WithCause(err).
-				WithHint("see `lark-cli event consume --help` EXAMPLES for common patterns, or `lark-cli event schema %s` for valid field paths", eventKey)
+				WithHint("see `work-cli event consume --help` EXAMPLES for common patterns, or `work-cli event schema %s` for valid field paths", eventKey)
 		}
 	}
 

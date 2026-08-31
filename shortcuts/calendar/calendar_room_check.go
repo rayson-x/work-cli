@@ -784,7 +784,7 @@ func blockOnUnavailableRooms(results []roomAvailability, eventDurationSec int64)
 	hint := fmt.Sprintf("do NOT auto-retry: relay the room IDs and reasons above to the user and get explicit confirmation before re-running with --%s.",
 		flagSkipRoomCheck)
 	if hasNeedApproval {
-		hint += " Rooms flagged need_approval: the CLI cannot submit approvals; DO NOT auto-run any recovery — ask the user first, then pick one: (a) newly added room → after the user confirms and provides `approval_reason`, run `lark-cli calendar event.attendees create --as user`; (b) time/rrule change re-triggers approval on an existing room → ask the user to update through the client; (c) shorten the meeting below the threshold or pick a different room."
+		hint += " Rooms flagged need_approval: the CLI cannot submit approvals; DO NOT auto-run any recovery — ask the user first, then pick one: (a) newly added room → after the user confirms and provides `approval_reason`, run `work-cli calendar event.attendees create --as user`; (b) time/rrule change re-triggers approval on an existing room → ask the user to update through the client; (c) shorten the meeting below the threshold or pick a different room."
 	}
 	return errs.NewValidationError(errs.SubtypeFailedPrecondition, "%s", msg).WithHint("%s", hint)
 }

@@ -11,7 +11,7 @@ approval.task.status_changed_v4                 user      1       Triggered afte
 board.whiteboard.updated_v1                     user|bot  1       Pushed when the whiteboard content is updated.
 
 ── card ──
-card.action.trigger                             bot       0       Triggered when a user interacts with an interactive card (button click, form submit, dropdown select, etc.). Output includes: token (valid 30 min, max 2 updates), action details (tag, value, name, form_value), and card_content (original card in userDSL text format, auto-fetched at consume time). To update the card: parse card_content to understand the current state, construct the new card JSON, then call `lark-cli api POST /open-apis/interactive/v1/card/update` with the token (see lark-im-card-action-reply.md).
+card.action.trigger                             bot       0       Triggered when a user interacts with an interactive card (button click, form submit, dropdown select, etc.). Output includes: token (valid 30 min, max 2 updates), action details (tag, value, name, form_value), and card_content (original card in userDSL text format, auto-fetched at consume time). To update the card: parse card_content to understand the current state, construct the new card JSON, then call `work-cli api POST /open-apis/interactive/v1/card/update` with the token (see lark-im-card-action-reply.md).
 
 ── im ──
 im.chat.disbanded_v1                            bot       0       Triggered after a chat is disbanded

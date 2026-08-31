@@ -290,7 +290,7 @@ var SheetExport = common.Shortcut{
 		if fileToken == "" {
 			return errs.NewNetworkError(errs.SubtypeNetworkTimeout, "export task timed out").
 				WithRetryable().
-				WithHint(fmt.Sprintf("the export task was created (ticket=%s); check it with: lark-cli drive +task_result --scenario export --ticket %s --file-token %s",
+				WithHint(fmt.Sprintf("the export task was created (ticket=%s); check it with: work-cli drive +task_result --scenario export --ticket %s --file-token %s",
 					ticket, ticket, token))
 		}
 
@@ -308,7 +308,7 @@ var SheetExport = common.Shortcut{
 		// used to be visible only through the removed "Export complete" stderr
 		// line.
 		downloadRecovery := fmt.Sprintf(
-			"the export artifact is ready (ticket=%s, file_token=%s)\nretry the download alone with: lark-cli drive +export-download --file-token %q",
+			"the export artifact is ready (ticket=%s, file_token=%s)\nretry the download alone with: work-cli drive +export-download --file-token %q",
 			ticket, fileToken, fileToken)
 
 		resp, err := runtime.DoAPIStream(ctx, &larkcore.ApiReq{

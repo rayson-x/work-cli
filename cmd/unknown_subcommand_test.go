@@ -17,7 +17,7 @@ import (
 )
 
 func newGroupTree() (root, drive, files *cobra.Command) {
-	root = &cobra.Command{Use: "lark-cli"}
+	root = &cobra.Command{Use: "work-cli"}
 	drive = &cobra.Command{Use: "drive", Short: "drive ops"}
 	root.AddCommand(drive)
 
@@ -51,7 +51,7 @@ func TestInstallUnknownSubcommandGuard_InstallsOnGroupsOnly(t *testing.T) {
 }
 
 func TestInstallUnknownSubcommandGuard_PreservesExistingRunE(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	called := false
 	custom := &cobra.Command{
 		Use: "custom",
@@ -113,7 +113,7 @@ func TestUnknownSubcommandRunE_FlagBeforeSubcommandIsStructured(t *testing.T) {
 	_, drive, _ := newGroupTree()
 	installUnknownSubcommandGuard(drive.Root())
 
-	// Simulate `lark-cli drive --badflag`: the UnknownFlags whitelist swallows
+	// Simulate `work-cli drive --badflag`: the UnknownFlags whitelist swallows
 	// --badflag, so RunE sees no args; the guard must recover it from
 	// rawInvocationArgs and fail structured rather than print help + exit 0.
 	rawInvocationArgs = []string{"drive", "--badflag"}
@@ -177,7 +177,7 @@ func TestUnknownSubcommandRunE_ValidFlagWithoutSubcommandIsStructured(t *testing
 	if len(verr.Params) != 1 || verr.Params[0].Name != "--query" {
 		t.Errorf("params = %v, want one entry named --query", verr.Params)
 	}
-	if !strings.Contains(verr.Message, "lark-cli drive") {
+	if !strings.Contains(verr.Message, "work-cli drive") {
 		t.Errorf("message = %q, want it to name the group path", verr.Message)
 	}
 }
@@ -239,7 +239,7 @@ func TestUnknownSubcommandRunE_UnknownReturnsStructuredError(t *testing.T) {
 	if !strings.Contains(verr.Message, `"+bogus"`) {
 		t.Errorf("message should echo the unknown token, got %q", verr.Message)
 	}
-	if !strings.Contains(verr.Message, "lark-cli drive") {
+	if !strings.Contains(verr.Message, "work-cli drive") {
 		t.Errorf("message should name the group path, got %q", verr.Message)
 	}
 	// "+bogus" has no close neighbor among drive's subcommands, so the hint falls
@@ -258,13 +258,13 @@ func TestUnknownSubcommandRunE_NestedResourceGroup(t *testing.T) {
 	if !errors.As(err, &verr) {
 		t.Fatalf("expected *errs.ValidationError on nested group, got %T", err)
 	}
-	if !strings.Contains(verr.Message, "lark-cli drive files") {
+	if !strings.Contains(verr.Message, "work-cli drive files") {
 		t.Errorf("message should reflect the nested resource path, got %q", verr.Message)
 	}
 }
 
 func TestAvailableSubcommandNames_FiltersHelpAndCompletion(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddCommand(
 		&cobra.Command{Use: "alpha", RunE: func(*cobra.Command, []string) error { return nil }},
 		&cobra.Command{Use: "help", RunE: func(*cobra.Command, []string) error { return nil }},
@@ -286,7 +286,7 @@ func TestAvailableSubcommandNames_FiltersHelpAndCompletion(t *testing.T) {
 }
 
 func TestAvailableSubcommandNames_SplitsDeprecatedGroup(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddGroup(&cobra.Group{ID: cmdutil.DeprecatedGroupID, Title: "Deprecated"})
 	root.AddCommand(
 		&cobra.Command{Use: "+new-cmd", RunE: func(*cobra.Command, []string) error { return nil }},

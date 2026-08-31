@@ -25,7 +25,7 @@ var AppsFileSign = common.Shortcut{
 	Description: "Generate a temporary signed download URL for a file",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +file-sign --app-id <app_id> --path /1858537546760216.png",
+		"Example: work-cli apps +file-sign --app-id <app_id> --path /1858537546760216.png",
 		"Tip: curl the signed_url directly to download.",
 	},
 	Scopes:    []string{"spark:app:read"},

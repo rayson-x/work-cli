@@ -8,16 +8,16 @@
 
 ```bash
 # 获取指定 ID 的进展记录（默认 simple 风格，半纯文本格式）
-lark-cli okr +progress-get --progress-id 1234567890123456789
+work-cli okr +progress-get --progress-id 1234567890123456789
 
 # 获取指定 ID 的进展记录（richtext 风格，原始 ContentBlock JSON）
-lark-cli okr +progress-get --progress-id 1234567890123456789 --style richtext
+work-cli okr +progress-get --progress-id 1234567890123456789 --style richtext
 
 # 使用特定的用户 ID 类型
-lark-cli okr +progress-get --progress-id 1234567890123456789 --user-id-type open_id
+work-cli okr +progress-get --progress-id 1234567890123456789 --user-id-type open_id
 
 # 预览 API 调用而不实际执行
-lark-cli okr +progress-get --progress-id 1234567890123456789 --dry-run
+work-cli okr +progress-get --progress-id 1234567890123456789 --dry-run
 ```
 
 ## 参数
@@ -33,7 +33,7 @@ lark-cli okr +progress-get --progress-id 1234567890123456789 --dry-run
 ## 工作流程
 
 1. 获取目标进展记录的 ID。可通过 `+cycle-detail` 获取目标和关键结果后，从中获取进展记录 ID。
-2. 执行 `lark-cli okr +progress-get --progress-id "1234567890123456789"`。
+2. 执行 `work-cli okr +progress-get --progress-id "1234567890123456789"`。
 3. 报告结果：进展记录的 ID、修改时间、进度百分比和内容。
 
 ## 输出

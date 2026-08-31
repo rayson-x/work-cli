@@ -32,7 +32,7 @@ func parseTimeValue(s string) error {
 }
 
 func TestCollectErrorFactsCountsHintActions(t *testing.T) {
-	hint := "run `lark-cli docs +fetch --doc abc` with --api-version v2"
+	hint := "run `work-cli docs +fetch --doc abc` with --api-version v2"
 	if got := HintActionCount(hint); got < 2 {
 		t.Fatalf("HintActionCount() = %d, want at least 2", got)
 	}
@@ -81,7 +81,7 @@ var WikiMove = common.Shortcut{
 }
 
 func executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error {
-	return output.ErrWithHint("invalid_input", "validation", "missing token", "run lark-cli wiki +move --help")
+	return output.ErrWithHint("invalid_input", "validation", "missing token", "run work-cli wiki +move --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -404,7 +404,7 @@ var demoCmd = &cobra.Command{
 }
 
 func runDemo(cmd *cobra.Command, args []string) error {
-	return errs.NewValidationError("missing demo id").WithHint("run lark-cli demo --help")
+	return errs.NewValidationError("missing demo id").WithHint("run work-cli demo --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -491,7 +491,7 @@ var demoCmd = &cobra.Command{
 }
 
 func runDemo(cmd *cobra.Command, args []string) error {
-	err := errs.NewValidationError("missing demo id").WithHint("run lark-cli demo --help")
+	err := errs.NewValidationError("missing demo id").WithHint("run work-cli demo --help")
 	return err
 }
 `
@@ -539,7 +539,7 @@ var WikiMove = common.Shortcut{
 }
 
 func executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error {
-	return errs.NewValidationError("missing token").WithParam("node_token").WithHint("run lark-cli wiki +move --help")
+	return errs.NewValidationError("missing token").WithParam("node_token").WithHint("run work-cli wiki +move --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -592,7 +592,7 @@ func executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error 
 }
 
 func (executor) executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error {
-	return errs.NewValidationError("missing token").WithHint("run lark-cli wiki +move --help")
+	return errs.NewValidationError("missing token").WithHint("run work-cli wiki +move --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -636,7 +636,7 @@ var WikiMove = common.Shortcut{
 
 func executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error {
 	base := errs.NewValidationError("missing token").WithParam("node_token")
-	return base.WithHint("run lark-cli wiki +move --help")
+	return base.WithHint("run work-cli wiki +move --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {
@@ -673,7 +673,7 @@ func TestCollectErrorFactsDoesNotTreatUnknownWithHintAsStructured(t *testing.T) 
 	src := `package demo
 
 func helper(base customError) error {
-	return base.WithHint("run lark-cli docs +fetch --doc abc")
+	return base.WithHint("run work-cli docs +fetch --doc abc")
 }
 `
 	errorFacts, _ := CollectErrorFacts("cmd/demo.go", src, BoundaryIndex{})
@@ -693,7 +693,7 @@ func other() error {
 }
 
 func helper(base customError) error {
-	return base.WithHint("run lark-cli docs +fetch --doc abc")
+	return base.WithHint("run work-cli docs +fetch --doc abc")
 }
 `
 	errorFacts, _ := CollectErrorFacts("cmd/demo.go", src, BoundaryIndex{})
@@ -712,7 +712,7 @@ func helper(base customError) error {
 		base := errs.NewValidationError("missing token")
 		_ = base
 	}
-	return base.WithHint("run lark-cli docs +fetch --doc abc")
+	return base.WithHint("run work-cli docs +fetch --doc abc")
 }
 `
 	errorFacts, _ := CollectErrorFacts("cmd/demo.go", src, BoundaryIndex{})
@@ -748,7 +748,7 @@ var WikiMove = common.Shortcut{
 func executeWikiMove(ctx context.Context, runtime *common.RuntimeContext) error {
 	base := errs.NewValidationError("missing token")
 	wrapped := base.WithParam("node_token")
-	return wrapped.WithHint("run lark-cli wiki +move --help")
+	return wrapped.WithHint("run work-cli wiki +move --help")
 }
 `
 	if err := vfs.WriteFile(path, []byte(src), 0o644); err != nil {

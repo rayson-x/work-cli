@@ -11,47 +11,47 @@
 
 ```bash
 # 先读取现有题目配置，作为 read-modify-write 的基线
-lark-cli base +form-questions-list \
+work-cli base +form-questions-list \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id>
 
 # 更新一个问题的标题，同时带回要保留的 required / description / visible_rule 等字段
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"id":"q_001","title":"您的真实姓名是？","description":"请填写真实姓名","required":true,"visible_rule":null}]'
 
 # 同时更新多个问题；每个对象都应是该题目的目标完整配置
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"id":"q_001","title":"姓名（必填）","required":true},{"id":"q_002","title":"联系方式","required":false}]'
   
 # 更新问题描述（纯文本），同时带回要保留的 title / required / visible_rule
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"id":"q_001","title":"您的姓名","description":"请填写您的真实姓名","required":true,"visible_rule":null}]'
 # 更新问题描述（含链接），同时带回要保留的 title / required / visible_rule
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"id":"q_001","title":"反馈建议","description":"更多说明请参考[帮助文档](https://example.com/help)","required":false,"visible_rule":null}]'
 
 # 更新题目显隐条件（visible_rule），同时带回要保留的 title / description / required
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \
   --questions '[{"id":"q_002","title":"发票抬头","description":"","required":false,"visible_rule":{"logic":"and","conditions":[["q_001","==","是"]]}}]'
 
 # 清空题目显隐条件（使题目始终显示），同时带回要保留的 title / description / required
-lark-cli base +form-questions-update \
+work-cli base +form-questions-update \
   --base-token <base_token> \
   --table-id <table_id> \
   --form-id <form_id> \

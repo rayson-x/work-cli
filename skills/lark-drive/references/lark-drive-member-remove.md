@@ -5,7 +5,7 @@
 ## 命令
 
 ```bash
-lark-cli drive +member-remove \
+work-cli drive +member-remove \
   --token "<bare_token_or_url>" \
   --type docx \
   --member-id "ou_xxx" \

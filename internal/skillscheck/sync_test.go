@@ -22,7 +22,7 @@ func TestParseSkillsListIgnoresUnsupportedFormat(t *testing.T) {
 lark-im
 custom-skill
 lark-base@1.0.0
-lark-cli-harness:dev@0.1.0
+work-cli-harness:dev@0.1.0
 `
 	got := ParseSkillsList(input)
 	if len(got) != 0 {

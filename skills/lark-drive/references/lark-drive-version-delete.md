@@ -7,13 +7,13 @@
 ## 命令
 
 ```bash
-lark-cli drive +version-delete \
+work-cli drive +version-delete \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --yes \
   --as bot
 
-lark-cli drive +version-delete \
+work-cli drive +version-delete \
   --file-token boxcnxxxxxxxx \
   --version 7633658129540910621 \
   --yes \

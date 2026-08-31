@@ -45,7 +45,7 @@ func TestRootErrorPresenterCompletesDirectPermissionRecoveryWithoutMutatingProdu
 	if !errors.Is(visible, cause) {
 		t.Errorf("visible error lost cause %v: %v", cause, visible)
 	}
-	const wantVisible = "run `lark-cli auth login --scope \"docx:document\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `lark-cli auth login --device-code <device_code>` in a later turn to finish login"
+	const wantVisible = "run `work-cli auth login --scope \"docx:document\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `work-cli auth login --device-code <device_code>` in a later turn to finish login"
 	if got, want := visibleProblem.Hint, wantVisible; got != want {
 		t.Fatalf("visible recovery = %q, want exact split-flow recovery %q", got, want)
 	}
@@ -72,7 +72,7 @@ func TestRootErrorPresenterUsesDeclaredScopesForCanonicalPermissionRecovery(t *t
 	const declaredScope = "calendar:calendar.event:read"
 
 	f := &cmdutil.Factory{ResolvedIdentity: core.AsUser}
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	calendar := &cobra.Command{Use: "calendar"}
 	agenda := &cobra.Command{Use: "+agenda"}
 	root.AddCommand(calendar)
@@ -362,7 +362,7 @@ func factoryWithDeclaredServiceScope(t *testing.T) *cmdutil.Factory {
 	if len(parts) != 2 {
 		t.Fatalf("service command = %q, want resource and method", target.Command)
 	}
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	domain := &cobra.Command{Use: "calendar"}
 	resource := &cobra.Command{Use: parts[0]}
 	method := &cobra.Command{Use: parts[1]}

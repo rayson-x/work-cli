@@ -9,7 +9,7 @@
 
 > **默认草稿**：`+reply-all` 默认保存为草稿，不会立即发送。如需立即发送，添加 `--confirm-send` 参数（仅在用户明确确认后使用）。
 
-本 skill 对应 shortcut：`lark-cli mail +reply-all`。
+本 skill 对应 shortcut：`work-cli mail +reply-all`。
 
 ## CRITICAL — 发送工作流（必须遵循）
 
@@ -19,7 +19,7 @@
 
 **方式 A（推荐）** — 创建回复全部草稿（不带 `--confirm-send`）：
 ```bash
-lark-cli mail +reply-all --message-id <邮件ID> --body '<回复正文>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<回复正文>'
 ```
 → 返回 `draft_id`
 
@@ -27,7 +27,7 @@ lark-cli mail +reply-all --message-id <邮件ID> --body '<回复正文>'
 
 用户明确同意后，发送该草稿：
 ```bash
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
 ```
 
 **方式 B（允许）** — 用户已经明确确认完整收件人列表和内容时，可直接使用 `--confirm-send` 立即发送。
@@ -38,25 +38,25 @@ lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_
 
 ```bash
 # 回复全部（默认保存为草稿）— HTML 推荐
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p><b>已完成</b>，详见下方说明。</p>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p><b>已完成</b>，详见下方说明。</p>'
 
 # 回复全部并追加收件人/抄送（草稿）
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>同步更新</p>' --to 'lead@example.com' --cc 'pm@example.com'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>同步更新</p>' --to 'lead@example.com' --cc 'pm@example.com'
 
 # 从回复名单中排除某些地址（草稿）
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>见上</p>' --remove 'bot@example.com' --remove 'noreply@example.com'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>见上</p>' --remove 'bot@example.com' --remove 'noreply@example.com'
 
 # 回复全部时插入内嵌图片（推荐：直接用相对路径，自动解析）
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>详见图示：<img src="./logo.png" /></p>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>详见图示：<img src="./logo.png" /></p>'
 
 # 纯文本回复全部（仅在内容极简时使用）
-lark-cli mail +reply-all --message-id <邮件ID> --body '收到，已处理。'
+work-cli mail +reply-all --message-id <邮件ID> --body '收到，已处理。'
 
 # 确认发送（用户明确确认后才可使用）
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>收到，已处理。</p>' --confirm-send
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>收到，已处理。</p>' --confirm-send
 
 # Dry Run（仅打印请求，不发送）
-lark-cli mail +reply-all --message-id <邮件ID> --body '测试' --dry-run
+work-cli mail +reply-all --message-id <邮件ID> --body '测试' --dry-run
 ```
 
 ## 参数
@@ -95,7 +95,7 @@ lark-cli mail +reply-all --message-id <邮件ID> --body '测试' --dry-run
   "ok": true,
   "data": {
     "draft_id": "草稿ID",
-    "tip": "draft saved. To send: lark-cli mail user_mailbox.drafts send --params '{...}'"
+    "tip": "draft saved. To send: work-cli mail user_mailbox.drafts send --params '{...}'"
   }
 }
 ```
@@ -126,41 +126,41 @@ lark-cli mail +reply-all --message-id <邮件ID> --body '测试' --dry-run
 
 ### 场景 1：用户说"帮我回复全部说同意"（只创建草稿）
 ```bash
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>同意，没有问题。</p>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>同意，没有问题。</p>'
 ```
 → 返回 `draft_id`，告诉用户回复全部草稿已创建。
 
 ### 场景 2：用户说"回复全部说已确认"（需要发送）
 ```bash
 # 方式 A: 创建回复全部草稿
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>'
 # → 返回 draft_id
 
 # 向用户确认 "收件人 alice@, bob@, carol@，内容「已确认。」如果你想先看效果，也可以先去飞书邮件里查看草稿。确认发送吗？"
 
 # 用户确认后发送
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 
 # 方式 B: 用户已明确确认时，直接发送
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>' --confirm-send
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>' --confirm-send
 ```
 
 ### 场景 3：用户说"下午 3 点回复全部说已确认"（定时发送）
 ```bash
 # Step 1: 创建回复全部草稿
-lark-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>'
+work-cli mail +reply-all --message-id <邮件ID> --body '<p>已确认。</p>'
 # → 返回 draft_id
 
 # Step 2: 向用户确认 "回复全部草稿已创建：收件人 alice@, bob@, carol@，内容「已确认。」定时 <目标时间> 发送。确认吗？"
 
 # Step 3: 用户确认后定时发送（send_time 为 Unix 时间戳，需至少当前时间 + 5 分钟）
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
 ```
 
 ### 场景 4：用户说"等等，先不回复了"（取消定时发送）
 ```bash
 # 取消定时发送（取消后邮件变回草稿）
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 → 取消成功后邮件恢复为草稿状态，用户可重新编辑或在之后重新发送。
 
@@ -183,7 +183,7 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 用返回的 `message_id` 查询投递状态：
 
 ```bash
-lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
+work-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
 ```
 
 状态码：1=正在投递, 2=投递失败重试, 3=退信, 4=投递成功, 5=待审批, 6=审批拒绝。向用户简要报告投递结果，异常状态需重点提示。
@@ -195,7 +195,7 @@ lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me
 如需取消定时发送：
 
 ```bash
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 **取消后邮件会变回草稿**，可继续编辑或在之后重新发送。
@@ -203,11 +203,11 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 **2. 标记已读**（可选）— 询问用户是否需要将原邮件标记为已读。如果用户同意：
 
 ```bash
-lark-cli mail +message-modify --message-ids <原邮件ID> --remove-label-ids UNREAD
+work-cli mail +message-modify --message-ids <原邮件ID> --remove-label-ids UNREAD
 ```
 
 ## 相关命令
 
-- `lark-cli mail +reply` — 仅回复发件人
-- `lark-cli mail +forward` — 转发邮件
-- `lark-cli mail user_mailbox.messages get` — 查看邮件详情
+- `work-cli mail +reply` — 仅回复发件人
+- `work-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.messages get` — 查看邮件详情

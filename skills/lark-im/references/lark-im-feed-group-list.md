@@ -1,6 +1,6 @@
 # +feed-group-list
 
-> Shortcut for `lark-cli im +feed-group-list`. List the caller's feed groups (tags) with auto-pagination that correctly merges both the live and soft-deleted lists.
+> Shortcut for `work-cli im +feed-group-list`. List the caller's feed groups (tags) with auto-pagination that correctly merges both the live and soft-deleted lists.
 
 `+feed-group-list` is the only CLI surface for listing feed groups — there is no raw `feed.groups list` command. The list response carries two parallel arrays — `groups` (live) and `deleted_groups` (soft-deleted). The shortcut paginates this dual-list response correctly: its `--page-all` merges **both** arrays across pages (a naive single-array pager would silently drop one list's later pages). It adds no enrichment.
 
@@ -16,13 +16,13 @@ User-only. Run with `--as user`.
 
 ```bash
 # First page
-lark-cli im +feed-group-list --as user
+work-cli im +feed-group-list --as user
 
 # Auto-paginate through all your feed groups (both live and deleted)
-lark-cli im +feed-group-list --as user --page-all
+work-cli im +feed-group-list --as user --page-all
 
 # Within an update-time window
-lark-cli im +feed-group-list --as user --page-all \
+work-cli im +feed-group-list --as user --page-all \
   --start-time 1767196800000 --end-time 1767200000000
 ```
 

@@ -1,6 +1,6 @@
 # +feed-group-query-item
 
-> Shortcut for `lark-cli im +feed-group-query-item`. Look up specific feed cards inside one feed group (tag) by ID, enriched with a readable `chat_name`.
+> Shortcut for `work-cli im +feed-group-query-item`. Look up specific feed cards inside one feed group (tag) by ID, enriched with a readable `chat_name`.
 
 `+feed-group-query-item` is the only CLI surface for the `feed.groups.batch_query_item` read API — there is no raw `feed.groups batch_query_item` command. It resolves a human-readable `chat_name` for every feed card it returns: a v1 feed card's `feed_id` is always a chat ID (`oc_xxx`), so the shortcut issues a follow-up `POST /open-apis/im/v1/chats/batch_query` and injects `chat_name` into each entry of both `items[]` and `deleted_items[]`.
 
@@ -20,7 +20,7 @@ Because chat-name resolution always runs, this shortcut needs **two** user scope
 ## Usage
 
 ```bash
-lark-cli im +feed-group-query-item --as user \
+work-cli im +feed-group-query-item --as user \
   --feed-group-id ofg_xxx --feed-id oc_a,oc_b
 ```
 

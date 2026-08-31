@@ -6,7 +6,7 @@
 
 > **⚠️ 后端无乐观锁 → last-write-wins**。并发更新可能丢失最近的改动；CLI 在每次成功更新时会在 stderr 打印一条 warning 提示。
 
-如需创建新模板，使用 [`lark-cli mail +template-create`](./lark-mail-template-create.md)。
+如需创建新模板，使用 [`work-cli mail +template-create`](./lark-mail-template-create.md)。
 
 ## 工作模式
 
@@ -21,22 +21,22 @@
 
 ```bash
 # 查看当前状态（不修改）
-lark-cli mail +template-update --as user --template-id 712345 --inspect
+work-cli mail +template-update --as user --template-id 712345 --inspect
 
 # 打印 patch 骨架并保存
-lark-cli mail +template-update --as user --print-patch-template > /tmp/tpl-patch.json
+work-cli mail +template-update --as user --print-patch-template > /tmp/tpl-patch.json
 
 # 用扁平 flag 改 subject + cc
-lark-cli mail +template-update --as user --template-id 712345 \
+work-cli mail +template-update --as user --template-id 712345 \
   --set-subject '每周五发布' \
   --set-cc 'manager@example.com'
 
 # 用 patch 文件做结构化更新（支持 is_plain_text_mode 翻回 false 等 tri-state 场景）
-lark-cli mail +template-update --as user --template-id 712345 \
+work-cli mail +template-update --as user --template-id 712345 \
   --patch-file /tmp/tpl-patch.json
 
 # 追加新附件
-lark-cli mail +template-update --as user --template-id 712345 \
+work-cli mail +template-update --as user --template-id 712345 \
   --attach './appendix.pdf'
 ```
 
@@ -148,4 +148,4 @@ patch-file 字段（全部可选，未提供的字段保持当前模板原值）
 
 - 创建模板：[`+template-create`](./lark-mail-template-create.md)
 - 套用模板发信：在 `+send` / `+draft-create` / `+reply` / `+reply-all` / `+forward` 中使用 `--template-id`
-- 删除模板（原生 API）：`lark-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'`
+- 删除模板（原生 API）：`work-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'`

@@ -124,10 +124,10 @@ func TestConcealedForkProjectsFrameworkOwnedRootHelp(t *testing.T) {
 		t.Fatalf("--help exit=%d stdout=%s stderr=%s", res.exit, res.stdout, res.stderr)
 	}
 	for _, dead := range []string{
-		"lark-cli api ",
-		"lark-cli schema ",
-		"lark-cli calendar +agenda",
-		"lark-cli mail user_mailbox.messages list",
+		"work-cli api ",
+		"work-cli schema ",
+		"work-cli calendar +agenda",
+		"work-cli mail user_mailbox.messages list",
 	} {
 		if strings.Contains(res.stdout, dead) {
 			t.Errorf("concealed fork root help retained %q:\n%s", dead, res.stdout)
@@ -146,7 +146,7 @@ func TestConcealedForkProjectsSchemaFromGeneratedMethodHelp(t *testing.T) {
 	catalog := strings.ReplaceAll(seededCatalogJSON, "plugine2e", "im")
 	assertUnavailableEnvelope(t, runWithSeededCatalog(t, bin, catalog, "schema"))
 	rootHelp := runWithSeededCatalog(t, bin, catalog, "--help")
-	if rootHelp.exit != 0 || strings.Contains(rootHelp.stdout, "lark-cli schema ") {
+	if rootHelp.exit != 0 || strings.Contains(rootHelp.stdout, "work-cli schema ") {
 		t.Fatalf("seeded root help did not project schema: exit=%d stdout=%s stderr=%s",
 			rootHelp.exit, rootHelp.stdout, rootHelp.stderr)
 	}
@@ -159,7 +159,7 @@ func TestConcealedForkProjectsSchemaFromGeneratedMethodHelp(t *testing.T) {
 	if res.exit != 0 {
 		t.Fatalf("generated method --help exit=%d stdout=%s stderr=%s", res.exit, res.stdout, res.stderr)
 	}
-	if strings.Contains(res.stdout, "lark-cli schema") ||
+	if strings.Contains(res.stdout, "work-cli schema") ||
 		strings.Contains(res.stdout, "Full parameter schema:") {
 		t.Fatalf("concealed schema left a generated-method dead pointer:\n%s", res.stdout)
 	}

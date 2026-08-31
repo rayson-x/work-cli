@@ -7,7 +7,7 @@
 ## 命令
 
 ```bash
-lark-cli slides xml_presentation.slide get --as user --params '<json_params>'
+work-cli slides xml_presentation.slide get --as user --params '<json_params>'
 ```
 
 ## 参数说明
@@ -37,7 +37,7 @@ lark-cli slides xml_presentation.slide get --as user --params '<json_params>'
 ### 读最新版本
 
 ```bash
-lark-cli slides xml_presentation.slide get --as user --params '{
+work-cli slides xml_presentation.slide get --as user --params '{
   "xml_presentation_id": "slides_example_presentation_id",
   "slide_id": "slide_example_id"
 }'
@@ -46,7 +46,7 @@ lark-cli slides xml_presentation.slide get --as user --params '{
 ### 只提取 XML 内容
 
 ```bash
-lark-cli slides xml_presentation.slide get --as user \
+work-cli slides xml_presentation.slide get --as user \
   --params '{"xml_presentation_id":"slides_example_presentation_id","slide_id":"slide_example_id"}' \
   --jq '.data.slide.content'
 ```
@@ -54,7 +54,7 @@ lark-cli slides xml_presentation.slide get --as user \
 ### 读指定历史版本
 
 ```bash
-lark-cli slides xml_presentation.slide get --as user --params '{
+work-cli slides xml_presentation.slide get --as user --params '{
   "xml_presentation_id": "slides_example_presentation_id",
   "slide_id": "slide_example_id",
   "revision_id": 42
@@ -93,11 +93,11 @@ lark-cli slides xml_presentation.slide get --as user --params '{
 
 ## 注意事项
 
-1. **执行前必做**：`lark-cli schema slides.xml_presentation.slide.get` 查看最新参数结构
+1. **执行前必做**：`work-cli schema slides.xml_presentation.slide.get` 查看最新参数结构
 2. **block_id 提取**：返回 XML 里每个顶层块（shape、img、table、chart 等）的 `id` 属性即为 `block_id`，通常是 3 字符短码，例如 `<shape id="bUn" ...>`。用以下命令列出当前页所有 block_id：
 
    ```bash
-   lark-cli slides xml_presentation.slide get --as user \
+   work-cli slides xml_presentation.slide get --as user \
      --params "{\"xml_presentation_id\":\"$PRES_ID\",\"slide_id\":\"$SID\"}" \
      --jq '.data.slide.content' | grep -oE 'id="[^"]+"' | sed 's/id="//;s/"//'
    ```

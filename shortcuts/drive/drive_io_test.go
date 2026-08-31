@@ -2700,8 +2700,8 @@ func decodeDriveReportTags(t *testing.T, stub *httpmock.Stub) map[string]interfa
 	if err := json.Unmarshal(stub.CapturedBodies[0], &body); err != nil {
 		t.Fatalf("decode report body: %v", err)
 	}
-	if got := body["file_scene"]; got != "lark-cli" {
-		t.Fatalf("file_scene = %v, want lark-cli", got)
+	if got := body["file_scene"]; got != "work-cli" {
+		t.Fatalf("file_scene = %v, want work-cli", got)
 	}
 	if got := body["scene"]; got != "upload" {
 		t.Fatalf("scene = %v, want upload", got)

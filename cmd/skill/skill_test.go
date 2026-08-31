@@ -19,7 +19,7 @@ import (
 // explicitly to run() — nothing is shared, so they are safe under -parallel.
 func calFS() fstest.MapFS {
 	return fstest.MapFS{
-		"lark-calendar/SKILL.md":             {Data: []byte("---\nname: lark-calendar\nversion: 1.0.0\ndescription: \"Cal\"\nmetadata:\n  cliHelp: \"lark-cli calendar --help\"\n---\nbody")},
+		"lark-calendar/SKILL.md":             {Data: []byte("---\nname: lark-calendar\nversion: 1.0.0\ndescription: \"Cal\"\nmetadata:\n  cliHelp: \"work-cli calendar --help\"\n---\nbody")},
 		"lark-calendar/references/agenda.md": {Data: []byte("# Agenda")},
 	}
 }
@@ -190,10 +190,10 @@ func TestSkillReadRaw(t *testing.T) {
 	// Guidance goes to stderr: own files via `skills read <name> ...`, and
 	// cross-skill refs routed to `skills read <other-skill> ...` (version-
 	// consistent), not "read directly".
-	if !strings.Contains(stderr, "lark-cli skills read lark-calendar <relative-path>") {
+	if !strings.Contains(stderr, "work-cli skills read lark-calendar <relative-path>") {
 		t.Errorf("expected own-files guidance on stderr: got %q", stderr)
 	}
-	if !strings.Contains(stderr, "lark-cli skills read lark-foo/...") {
+	if !strings.Contains(stderr, "work-cli skills read lark-foo/...") {
 		t.Errorf("expected cross-skill refs routed to skills read: got %q", stderr)
 	}
 	if strings.Contains(stderr, "instead of opening them directly") ||

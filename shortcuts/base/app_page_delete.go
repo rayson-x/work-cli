@@ -21,7 +21,7 @@ var BaseAppPageDelete = common.Shortcut{
 		pageIDFlag(true),
 	},
 	Tips: []string{
-		"lark-cli base +app-page-delete --app-token <app_token> --page-id <page_id> --yes",
+		"work-cli base +app-page-delete --app-token <app_token> --page-id <page_id> --yes",
 		"Deleting a page also deletes its blocks and cannot be recovered; the base data behind the blocks is untouched.",
 		baseHighRiskYesTip,
 	},

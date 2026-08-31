@@ -8,47 +8,47 @@
 
 ```bash
 # 直接用行内内容创建
-lark-cli markdown +create \
+work-cli markdown +create \
   --name README.md \
   --content '# Hello'
 
 # 从本地 .md 文件创建
-lark-cli markdown +create \
+work-cli markdown +create \
   --file ./README.md
 
 # 从本地文件读取内容，但仍走 --content
-lark-cli markdown +create \
+work-cli markdown +create \
   --name README.md \
   --content @./README.md
 
 # 从 stdin 读取内容
 printf '# Hello\n\nfrom stdin\n' | \
-  lark-cli markdown +create \
+  work-cli markdown +create \
     --name README.md \
     --content -
 
 # 创建到指定文件夹
-lark-cli markdown +create \
+work-cli markdown +create \
   --folder-token fldcn_xxx \
   --file ./README.md
 
 # 创建到指定文件夹（可直接传 Drive folder URL）
-lark-cli markdown +create \
+work-cli markdown +create \
   --folder-token "https://feishu.cn/drive/folder/fldcn_xxx" \
   --file ./README.md
 
 # 创建到指定 wiki 节点
-lark-cli markdown +create \
+work-cli markdown +create \
   --wiki-token wikcn_xxx \
   --file ./README.md
 
 # 创建到指定 wiki 节点（可直接传 wiki URL）
-lark-cli markdown +create \
+work-cli markdown +create \
   --wiki-token "https://feishu.cn/wiki/wikcn_xxx" \
   --file ./README.md
 
 # 预览底层请求
-lark-cli markdown +create \
+work-cli markdown +create \
   --name README.md \
   --content '# Hello' \
   --dry-run
@@ -69,7 +69,7 @@ lark-cli markdown +create \
 - `--content` 与 `--file` 必须二选一
 - `--folder-token` 与 `--wiki-token` 互斥
 - `--folder-token` 只能是 Drive 文件夹；不要传 wiki/doc/sheet/base/file token 或 URL
-- `--wiki-token` 只能是 Wiki 节点；如果只有 docx/sheet/base 等文档 URL，先用 `lark-cli wiki +node-get --node-token <url>` 解析出 `node_token`
+- `--wiki-token` 只能是 Wiki 节点；如果只有 docx/sheet/base 等文档 URL，先用 `work-cli wiki +node-get --node-token <url>` 解析出 `node_token`
 - `--name` 必须带 `.md` 后缀
 - `--file` 指向的本地文件名也必须带 `.md` 后缀
 - 传 `--wiki-token` 时，返回值中不会附带 `/file/<token>` URL，因为 wiki 承载文件没有稳定的独立 file URL
@@ -89,11 +89,11 @@ lark-cli markdown +create \
 ```
 
 > [!IMPORTANT]
-> 如果 Markdown 文件是**以应用身份（bot）创建**的，如 `lark-cli markdown +create --as bot`，在创建成功后，CLI 会**尝试为当前 CLI 用户自动授予该文件的 `full_access`（可管理权限）**。
+> 如果 Markdown 文件是**以应用身份（bot）创建**的，如 `work-cli markdown +create --as bot`，在创建成功后，CLI 会**尝试为当前 CLI 用户自动授予该文件的 `full_access`（可管理权限）**。
 >
 > 以应用身份创建时，结果里会额外返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该文件的可管理权限
-> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `lark-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
+> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `work-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
 > - `status = failed`：Markdown 文件已创建成功，但自动授权用户失败；会带上失败原因，并提示稍后重试或继续使用 bot 身份处理该文件
 >
 > `permission_grant.perm = full_access` 表示该资源已授予“可管理权限”。

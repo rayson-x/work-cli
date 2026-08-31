@@ -6,20 +6,20 @@ List wiki spaces accessible to the caller. **Default fetches a single page** (ma
 
 ```bash
 # Default: single page (first up to --page-size items)
-lark-cli wiki +space-list
+work-cli wiki +space-list
 
 # Walk every page (capped by --page-limit, default 10)
-lark-cli wiki +space-list --page-all
+work-cli wiki +space-list --page-all
 
 # Walk every page, no cap (use with care if you have many spaces)
-lark-cli wiki +space-list --page-all --page-limit 0
+work-cli wiki +space-list --page-all --page-limit 0
 
 # Resume from a specific cursor (single-page fetch regardless of --page-all)
-lark-cli wiki +space-list --page-token <TOKEN>
+work-cli wiki +space-list --page-token <TOKEN>
 
 # Pretty / table / csv / ndjson output
-lark-cli wiki +space-list --format pretty
-lark-cli wiki +space-list --format table
+work-cli wiki +space-list --format pretty
+work-cli wiki +space-list --format table
 ```
 
 ## Flags
@@ -60,7 +60,7 @@ When the default single-page fetch (or `--page-all` capped by `--page-limit`) do
 
 ## Notes
 
-- **The underlying API never returns the my_library personal library**; resolve it via `lark-cli wiki spaces get --params '{"space_id":"my_library"}'`.
+- **The underlying API never returns the my_library personal library**; resolve it via `work-cli wiki spaces get --params '{"space_id":"my_library"}'`.
 - Use `space_id` from the output as `--space-id` for `+node-list` or `+node-copy`.
 
 ## Required Scope

@@ -8,16 +8,16 @@
 
 ```bash
 # 在根目录创建文件夹
-lark-cli drive +create-folder \
+work-cli drive +create-folder \
   --name "周报归档"
 
 # 在指定父文件夹下创建子文件夹
-lark-cli drive +create-folder \
+work-cli drive +create-folder \
   --folder-token <PARENT_FOLDER_TOKEN> \
   --name "2026-W16"
 
 # 预览底层调用
-lark-cli drive +create-folder \
+work-cli drive +create-folder \
   --folder-token <PARENT_FOLDER_TOKEN> \
   --name "分析资料" \
   --dry-run
@@ -34,11 +34,11 @@ lark-cli drive +create-folder \
 - `permission_grant`（可选）：仅 `--as bot` 时返回，说明是否已自动为当前 CLI 用户授予可管理权限
 
 > [!IMPORTANT]
-> 如果文件夹是**以应用身份（bot）创建**的，如 `lark-cli drive +create-folder --as bot`，在创建成功后 CLI 会**尝试为当前 CLI 用户自动授予该文件夹的 `full_access`（可管理权限）**。
+> 如果文件夹是**以应用身份（bot）创建**的，如 `work-cli drive +create-folder --as bot`，在创建成功后 CLI 会**尝试为当前 CLI 用户自动授予该文件夹的 `full_access`（可管理权限）**。
 >
 > 以应用身份创建时，结果里会额外返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该文件夹的可管理权限
-> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `lark-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
+> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `work-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
 > - `status = failed`：文件夹已创建成功，但自动授权用户失败；会带上失败原因，并提示稍后重试或继续使用 bot 身份处理该文件夹
 >
 > `permission_grant.perm = full_access` 表示该资源已授予“可管理权限”。
@@ -56,7 +56,7 @@ lark-cli drive +create-folder \
 
 - **根目录创建**：不传 `--folder-token` 时，shortcut 会向 API 显式传空字符串 `folder_token=""`，让后端按“根目录”语义创建
 - **bot 自动授权**：只有在 `--as bot` 时，结果才会额外带上 `permission_grant`
-- **原生 API 仍可用**：如果用户明确要求按底层 API 字段调用，仍可继续使用 `lark-cli drive files create_folder`
+- **原生 API 仍可用**：如果用户明确要求按底层 API 字段调用，仍可继续使用 `work-cli drive files create_folder`
 
 ## 推荐场景
 

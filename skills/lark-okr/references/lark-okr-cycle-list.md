@@ -8,19 +8,19 @@
 
 ```bash
 # 获取用户周期第一页 (默认页大小为 100 按时间倒序排列，一般不用翻页)
-lark-cli okr +cycle-list --user-id "ou_xxx"
+work-cli okr +cycle-list --user-id "ou_xxx"
 
 # 获取下一页
-lark-cli okr +cycle-list --user-id "ou_xxx" --page-size 100 --page-token "7000000000000000002"
+work-cli okr +cycle-list --user-id "ou_xxx" --page-size 100 --page-token "7000000000000000002"
 
 # 使用特定的用户 ID 类型列出周期
-lark-cli okr +cycle-list --user-id "xxx" --user-id-type user_id
+work-cli okr +cycle-list --user-id "xxx" --user-id-type user_id
 
 # 列出当前返回页中与时间范围重叠的周期（例如 2025-01 到 2025-06）
-lark-cli okr +cycle-list --user-id "ou_xxx" --time-range "2025-01--2025-06"
+work-cli okr +cycle-list --user-id "ou_xxx" --time-range "2025-01--2025-06"
 
 # 预览 API 调用而不实际执行
-lark-cli okr +cycle-list --user-id "ou_xxx" --dry-run
+work-cli okr +cycle-list --user-id "ou_xxx" --dry-run
 ```
 
 ## 参数
@@ -37,9 +37,9 @@ lark-cli okr +cycle-list --user-id "ou_xxx" --dry-run
 
 ## 工作流程
 
-1. 获取目标用户的 `open_id`（或其他 ID 类型）。如果用户说"我的 OKR 周期"，先通过 `lark-cli contact +get-user` 获取当前用户的
+1. 获取目标用户的 `open_id`（或其他 ID 类型）。如果用户说"我的 OKR 周期"，先通过 `work-cli contact +get-user` 获取当前用户的
    ID。
-2. 执行 `lark-cli okr +cycle-list --user-id "ou_xxx" --page-size 100`，可选择使用 `--time-range`。
+2. 执行 `work-cli okr +cycle-list --user-id "ou_xxx" --page-size 100`，可选择使用 `--time-range`。
 3. 如果响应中 `has_more=true`，继续用返回的 `page_token` 调用下一页。
 4. 报告结果：每个周期的 ID、开始/结束时间和状态。
 

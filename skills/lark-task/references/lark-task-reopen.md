@@ -8,7 +8,7 @@ Reopen a previously completed task.
 
 ```bash
 # Reopen a task
-lark-cli task +reopen --task-id "<task_guid>"
+work-cli task +reopen --task-id "<task_guid>"
 ```
 
 ## Parameters

@@ -237,7 +237,7 @@ func TestRunProbe_ProbeRequestShape(t *testing.T) {
 	if got := rt.probeReq.Header.Get("Authorization"); got != "Bearer t-ok" {
 		t.Errorf("Authorization = %q, want Bearer t-ok", got)
 	}
-	if !strings.Contains(rt.probeBody, `"from":"lark-cli/`+build.Version+`"`) {
+	if !strings.Contains(rt.probeBody, `"from":"work-cli/`+build.Version+`"`) {
 		t.Errorf("probe body missing from field: %s", rt.probeBody)
 	}
 }

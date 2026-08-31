@@ -60,14 +60,14 @@ type driveExportWikiResolution struct {
 // driveExportTaskResultCommand prints the resume command shown when bounded
 // export polling times out locally.
 func driveExportTaskResultCommand(ticket, docToken string) string {
-	return fmt.Sprintf("lark-cli drive +task_result --scenario export --ticket %s --file-token %s", ticket, docToken)
+	return fmt.Sprintf("work-cli drive +task_result --scenario export --ticket %s --file-token %s", ticket, docToken)
 }
 
 // driveExportDownloadCommand prints a copy-pasteable follow-up command for
 // downloading an already-generated export artifact by file token.
 func driveExportDownloadCommand(fileToken, fileName, outputDir string, overwrite bool) string {
 	parts := []string{
-		"lark-cli", "drive", "+export-download",
+		"work-cli", "drive", "+export-download",
 		"--file-token", strconv.Quote(fileToken),
 	}
 	if strings.TrimSpace(fileName) != "" {

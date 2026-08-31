@@ -20,7 +20,7 @@ func TestBase_RoleWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
 	t.Cleanup(cancel)
 
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-base-role-"+clie2e.GenerateSuffix())
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-base-role-"+clie2e.GenerateSuffix())
 	result, err := clie2e.RunCmd(ctx, clie2e.Request{
 		Args:      []string{"base", "+advperm-enable", "--base-token", baseToken},
 		DefaultAs: "bot",

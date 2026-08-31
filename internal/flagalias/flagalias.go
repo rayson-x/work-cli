@@ -23,7 +23,7 @@ import (
 
 // AnnotationAliases is attached to the canonical pflag. Consumers should use
 // Aliases instead of reading the annotation directly.
-const AnnotationAliases = "lark-cli/flag-aliases"
+const AnnotationAliases = "work-cli/flag-aliases"
 
 // Spec binds Aliases to one Canonical long-flag name. Names do not include the
 // leading "--".

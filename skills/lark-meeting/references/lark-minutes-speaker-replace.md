@@ -3,7 +3,7 @@
 
 替换妙记逐字稿中的说话人身份：把妙记逐字稿里"原说话人"对应的所有发言段，重新归属到"新说话人"。常用于解决妙记自动识别错说话人，或需要把外部/非飞书说话人改绑到正确飞书用户的场景。
 
-本 skill 对应 shortcut：`lark-cli minutes +speaker-replace`。
+本 skill 对应 shortcut：`work-cli minutes +speaker-replace`。
 
 ## 典型触发表达
 
@@ -20,9 +20,9 @@
    - 从妙记 URL、搜索或 VC 链路取得 `minute_token`。
 
 2. **查说话人列表（必须先做）**
-   - 用 **`lark-cli api`** 直接调用内部 HTTP 接口：
+   - 用 **`work-cli api`** 直接调用内部 HTTP 接口：
      ```bash
-     lark-cli api GET "/open-apis/minutes/v1/minutes/<minute_token>/transcript/speakerlist" --as user
+     work-cli api GET "/open-apis/minutes/v1/minutes/<minute_token>/transcript/speakerlist" --as user
      ```
    - 返回 `data.speakers[]`，每项含 `speaker_id`（不透明 id）与 `name`（逐字稿展示名）。示例：
      ```json
@@ -47,7 +47,7 @@
 
 5. **执行替换**
    ```bash
-   lark-cli minutes +speaker-replace \
+   work-cli minutes +speaker-replace \
      --minute-token obcnxxxxxxxxxxxxxxxxxxxx \
      --from-speaker-id ENCRYPTED_TOKEN_ABC \
      --to-user-id ou_new_speaker_open_id
@@ -57,10 +57,10 @@
 
 ```bash
 # 1. 先查列表（裸调 HTTP）
-lark-cli api GET "/open-apis/minutes/v1/minutes/obcnxxxxxxxxxxxxxxxxxxxx/transcript/speakerlist" --as user
+work-cli api GET "/open-apis/minutes/v1/minutes/obcnxxxxxxxxxxxxxxxxxxxx/transcript/speakerlist" --as user
 
 # 2. 再替换（from-speaker-id 来自上一步的 speaker_id）
-lark-cli minutes +speaker-replace \
+work-cli minutes +speaker-replace \
   --minute-token obcnxxxxxxxxxxxxxxxxxxxx \
   --from-speaker-id ENCRYPTED_TOKEN_ABC \
   --to-user-id ou_new_speaker_open_id
@@ -78,7 +78,7 @@ lark-cli minutes +speaker-replace \
 
 ### 1. 必须先查 speakerlist，再替换
 
-Agent 必须先 `lark-cli api GET .../speakerlist`，再 `+speaker-replace`；`--from-speaker-id` 只接受 `speaker_id`。
+Agent 必须先 `work-cli api GET .../speakerlist`，再 `+speaker-replace`；`--from-speaker-id` 只接受 `speaker_id`。
 
 `+speaker-replace` **不会**自己请求 speakerlist：`--from-speaker-id` 的值会原样发给替换接口。整条链路只在 Agent 一开始查一次 speakerlist，务必传入上一步拿到的 `speaker_id`（不要传展示名，否则替换接口会返回 speaker-not-found）。
 

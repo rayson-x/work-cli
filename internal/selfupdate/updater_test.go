@@ -84,14 +84,14 @@ func TestVerifyBinaryLookPath(t *testing.T) {
 	}
 
 	dir := t.TempDir()
-	bin := filepath.Join(dir, "lark-cli")
-	script := "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo \"lark-cli version 2.1.0\"; exit 0; fi\nexit 12\n"
+	bin := filepath.Join(dir, "work-cli")
+	script := "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo \"work-cli version 2.1.0\"; exit 0; fi\nexit 12\n"
 	if err := os.WriteFile(bin, []byte(script), 0755); err != nil {
 		t.Fatalf("write test binary: %v", err)
 	}
 
 	mock := &lookPathMock{result: bin}
-	mock.install("lark-cli")
+	mock.install("work-cli")
 	t.Cleanup(mock.restore)
 
 	if err := New().VerifyBinary("2.1.0"); err != nil {
@@ -114,14 +114,14 @@ func TestVerifyBinaryLookPath(t *testing.T) {
 func TestVerifyBinaryLookPathNotFound(t *testing.T) {
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
 	mock := &lookPathMock{result: "", resultErr: fmt.Errorf("not found")}
-	mock.install("lark-cli")
+	mock.install("work-cli")
 	t.Cleanup(mock.restore)
 
 	oldFS := vfs.DefaultFS
 	t.Cleanup(func() { vfs.DefaultFS = oldFS })
 	// Without this, VerifyBinary would fall back to the real test binary, which
-	// is not a lark-cli --version implementation.
-	vfs.DefaultFS = executableTestFS{exe: filepath.Join(t.TempDir(), "missing-lark-cli")}
+	// is not a work-cli --version implementation.
+	vfs.DefaultFS = executableTestFS{exe: filepath.Join(t.TempDir(), "missing-work-cli")}
 
 	if err := New().VerifyBinary("2.0.0"); err == nil {
 		t.Fatal("VerifyBinary(not-found) expected error, got nil")
@@ -135,14 +135,14 @@ func TestVerifyBinaryFallbackExecutableWhenNotOnPath(t *testing.T) {
 	}
 
 	dir := t.TempDir()
-	bin := filepath.Join(dir, "lark-cli-abs")
-	script := "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo \"lark-cli version 2.1.0\"; exit 0; fi\nexit 12\n"
+	bin := filepath.Join(dir, "work-cli-abs")
+	script := "#!/bin/sh\nif [ \"$1\" = \"--version\" ]; then echo \"work-cli version 2.1.0\"; exit 0; fi\nexit 12\n"
 	if err := os.WriteFile(bin, []byte(script), 0o755); err != nil {
 		t.Fatalf("write test binary: %v", err)
 	}
 
 	mock := &lookPathMock{result: "", resultErr: fmt.Errorf("not on PATH")}
-	mock.install("lark-cli")
+	mock.install("work-cli")
 	t.Cleanup(mock.restore)
 
 	oldFS := vfs.DefaultFS
@@ -161,14 +161,14 @@ func TestVerifyBinaryEmptyOutput(t *testing.T) {
 	}
 
 	dir := t.TempDir()
-	bin := filepath.Join(dir, "lark-cli")
+	bin := filepath.Join(dir, "work-cli")
 	script := "#!/bin/sh\necho\nexit 0\n"
 	if err := os.WriteFile(bin, []byte(script), 0755); err != nil {
 		t.Fatalf("write test binary: %v", err)
 	}
 
 	mock := &lookPathMock{result: bin}
-	mock.install("lark-cli")
+	mock.install("work-cli")
 	t.Cleanup(mock.restore)
 
 	if err := New().VerifyBinary("2.0.0"); err == nil {
@@ -380,12 +380,12 @@ func TestContainsPnpmMarker(t *testing.T) {
 	}{
 		// Classic virtual-store layout (.pnpm segment).
 		{"/Users/x/Library/pnpm/global/5/node_modules/.pnpm/@larksuite+cli@1.0.44/node_modules/@larksuite/cli/bin/lark-cli", true},
-		{`C:\Users\x\AppData\Local\pnpm\global\5\node_modules\.pnpm\@larksuite+cli@1.0.44\node_modules\@larksuite\cli\bin\lark-cli.exe`, true},
+		{`C:\Users\x\AppData\Local\pnpm\global\5\node_modules\.pnpm\@larksuite+cli@1.0.44\node_modules\@larksuite\cli\bin\work-cli.exe`, true},
 		// Global content-addressable store layout (pnpm 11): resolved path runs
 		// through the pnpm home store, a "pnpm" segment with no ".pnpm".
 		{"/Users/x/Library/pnpm/store/v11/links/@larksuite/cli/1.0.59/abc123/node_modules/@larksuite/cli/bin/lark-cli", true},
 		{"/home/x/.local/share/pnpm/store/v10/@larksuite/cli/node_modules/@larksuite/cli/bin/lark-cli", true},
-		{`C:\Users\x\AppData\Local\pnpm\store\v11\links\@larksuite\cli\node_modules\@larksuite\cli\bin\lark-cli.exe`, true},
+		{`C:\Users\x\AppData\Local\pnpm\store\v11\links\@larksuite\cli\node_modules\@larksuite\cli\bin\work-cli.exe`, true},
 		// npm and non-package installs — no pnpm/.pnpm segment.
 		{"/usr/local/lib/node_modules/@larksuite/cli/bin/lark-cli", false},
 		{"/usr/local/bin/lark-cli", false},

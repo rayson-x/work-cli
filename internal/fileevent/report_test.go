@@ -118,7 +118,7 @@ func TestReportUploadReportsEveryCallWithMinimalBody(t *testing.T) {
 func TestBuildUploadReportRequestCommandOmitsBinaryName(t *testing.T) {
 	runtime := newFakeRuntime(`{"code":0}`)
 	runtime.command = "+upload"
-	runtime.commandPath = "lark-cli drive +upload"
+	runtime.commandPath = "work-cli drive +upload"
 
 	tags := requestTags(t, buildUploadReportRequest(runtime, UploadMeta{}))
 	if got := tags["command"]; got != "drive +upload" {
@@ -314,7 +314,7 @@ func requestTags(t *testing.T, body map[string]interface{}) map[string]string {
 
 func assertReportEnvelope(t *testing.T, body map[string]interface{}) {
 	t.Helper()
-	if body["file_scene"] != "lark-cli" || body["scene"] != "upload" || body["operation"] != "upload" {
+	if body["file_scene"] != "work-cli" || body["scene"] != "upload" || body["operation"] != "upload" {
 		t.Fatalf("unexpected report envelope: %#v", body)
 	}
 }

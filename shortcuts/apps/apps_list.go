@@ -25,8 +25,8 @@ var AppsList = common.Shortcut{
 	Description: "List apps visible to the calling user (cursor pagination)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +list",
-		"Example: lark-cli apps +list --keyword <keyword>",
+		"Example: work-cli apps +list",
+		"Example: work-cli apps +list --keyword <keyword>",
 		"Tip: filter fields with --jq, e.g. -q '.data.items[].app_id'",
 	},
 	Scopes:    []string{"spark:app:read"},

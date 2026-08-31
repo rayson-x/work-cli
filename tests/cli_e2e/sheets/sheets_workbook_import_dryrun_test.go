@@ -60,7 +60,7 @@ func TestSheets_WorkbookImportDryRun(t *testing.T) {
 	require.Equal(t, "POST", clie2e.DryRunGet(out, "api.1.method").String(), "stdout:\n%s", out)
 	require.Equal(t, "/open-apis/drive/v1/lark_cli_file_event/report",
 		clie2e.DryRunGet(out, "api.1.url").String(), "stdout:\n%s", out)
-	require.Equal(t, "lark-cli", clie2e.DryRunGet(out, "api.1.body.file_scene").String(), "stdout:\n%s", out)
+	require.Equal(t, "work-cli", clie2e.DryRunGet(out, "api.1.body.file_scene").String(), "stdout:\n%s", out)
 	require.Equal(t, "sheets +workbook-import", clie2e.DryRunGet(out, "api.1.body.tags.command").String(),
 		"stdout:\n%s", out)
 	require.Equal(t, "ccm_import_open", clie2e.DryRunGet(out, "api.1.body.tags.mount_point").String(),

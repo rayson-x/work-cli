@@ -31,10 +31,10 @@ No args: show current mode. Switching does NOT require re-bind.
 
 For AI agents: this is a security policy. DO NOT switch without
 explicit user confirmation — never run on your own initiative.`,
-		Example: `  lark-cli config strict-mode               # show current
-  lark-cli config strict-mode user          # switch (after user confirms)
-  lark-cli config strict-mode bot --global  # set globally
-  lark-cli config strict-mode --reset       # clear profile override`,
+		Example: `  work-cli config strict-mode               # show current
+  work-cli config strict-mode user          # switch (after user confirms)
+  work-cli config strict-mode bot --global  # set globally
+  work-cli config strict-mode --reset       # clear profile override`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			multi, err := core.LoadOrNotConfigured()

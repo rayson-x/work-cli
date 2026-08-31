@@ -1,9 +1,9 @@
 ---
 name: cli-e2e-testcase-writer
-description: Use when adding or updating Go CLI E2E coverage for one `tests/cli_e2e/{domain}` domain of the compiled `lark-cli`, especially when the work requires live `--help` or `schema` exploration, scenario-based `clie2e.RunCmd` workflows, and per-domain `coverage.md` maintenance.
+description: Use when adding or updating Go CLI E2E coverage for one `tests/cli_e2e/{domain}` domain of the compiled `work-cli`, especially when the work requires live `--help` or `schema` exploration, scenario-based `clie2e.RunCmd` workflows, and per-domain `coverage.md` maintenance.
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
 ---
 
 # CLI E2E Testcase Writer
@@ -27,18 +27,18 @@ Focus on domain testcase files. Do not change shared E2E support code such as `t
 ### 1. Explore the live CLI before writing code
 
 ```bash
-lark-cli --help
-lark-cli <domain> --help
-lark-cli <domain> +<shortcut> -h
-lark-cli <domain> <group> --help
-lark-cli <domain> <group> <method> -h
-lark-cli schema <domain>.<group>.<method>
+work-cli --help
+work-cli <domain> --help
+work-cli <domain> +<shortcut> -h
+work-cli <domain> <group> --help
+work-cli <domain> <group> <method> -h
+work-cli schema <domain>.<group>.<method>
 ```
 
 ### 2. Count leaf commands for the denominator
 
 - A leaf command is one that executes an action — it has no further subcommands.
-- If `lark-cli <domain> <group> --help` lists no subcommands, `<group>` itself is the leaf.
+- If `work-cli <domain> <group> --help` lists no subcommands, `<group>` itself is the leaf.
 - Count `task +create` as one leaf and `task tasks get` as one leaf.
 - Do not count parameter combinations.
 - Reuse coverage already present under `tests/cli_e2e/{domain}/`. Do not count `tests/cli_e2e/demo/`.
@@ -117,6 +117,6 @@ Recommended structure:
 - Prefer deterministic negative cases over tenant-dependent assertions.
 - Do not guess `Params` or `Data` fields when help or schema can tell you the exact shape.
 - Do not hardcode obvious defaults unless the command truly requires explicit flags.
-- Do not put agent, model, or vendor brand names in visible remote test data; use neutral prefixes such as `lark-cli-e2e-` or `<domain>-e2e-`.
+- Do not put agent, model, or vendor brand names in visible remote test data; use neutral prefixes such as `work-cli-e2e-` or `<domain>-e2e-`.
 - A command is covered only when the testcase asserts returned fields or persisted state, not just exit code.
 - Cleanup-only execution is not primary coverage, except `delete` in the same workflow that created the resource.

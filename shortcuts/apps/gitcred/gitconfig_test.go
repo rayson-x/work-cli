@@ -22,7 +22,7 @@ import (
 )
 
 func TestClassifyCredentialConfig(t *testing.T) {
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	writable := "file:/tmp/global"
 	other := "file:/tmp/included"
 
@@ -96,7 +96,7 @@ func TestClassifyCredentialConfig(t *testing.T) {
 			name: "different app id",
 			state: credentialConfigState{
 				WritableOrigin: writable,
-				Helpers:        []configValue{{Origin: writable, Value: "!lark-cli apps git-credential-helper --app-id 'app_other'"}},
+				Helpers:        []configValue{{Origin: writable, Value: "!work-cli apps git-credential-helper --app-id 'app_other'"}},
 			},
 			want: managedForeign,
 		},
@@ -371,7 +371,7 @@ func TestReadCredentialConfigReturnsTypedExternalToolError(t *testing.T) {
 }
 
 func TestGlobalGitConfigWritesAndMigratesManagedStates(t *testing.T) {
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	url := "https://example.com/git/u/app.git"
 	tests := []struct {
 		name    string
@@ -477,7 +477,7 @@ func TestGlobalGitConfigDoesNotRollbackOverExternalChange(t *testing.T) {
 	if readErr != nil {
 		t.Fatalf("readCredentialConfig() error = %v", readErr)
 	}
-	want := []string{"", "!lark-cli apps git-credential-helper --app-id 'app_xxx'", "!external-change"}
+	want := []string{"", "!work-cli apps git-credential-helper --app-id 'app_xxx'", "!external-change"}
 	if got := configValues(state.Helpers); !reflect.DeepEqual(got, want) {
 		t.Fatalf("helpers after external change = %#v, want preserved %#v", got, want)
 	}
@@ -503,7 +503,7 @@ func TestGlobalGitConfigRollbackFailurePreservesFirstTypedCauseAndStaticHint(t *
 }
 
 func TestGlobalGitConfigRefusesNonOwnedStates(t *testing.T) {
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	url := "https://example.com/git/u/app.git"
 	tests := []struct {
 		name    string
@@ -512,7 +512,7 @@ func TestGlobalGitConfigRefusesNonOwnedStates(t *testing.T) {
 		{name: "third party", content: credentialConfigText(url, []string{"osxkeychain"}, nil)},
 		{name: "mixed", content: credentialConfigText(url, []string{canonical, "osxkeychain"}, nil)},
 		{name: "useHttpPath false", content: credentialConfigText(url, []string{canonical}, []string{"false"})},
-		{name: "different app id", content: credentialConfigText(url, []string{"!lark-cli apps git-credential-helper --app-id 'app_other'"}, nil)},
+		{name: "different app id", content: credentialConfigText(url, []string{"!work-cli apps git-credential-helper --app-id 'app_other'"}, nil)},
 		{name: "extra helper argument", content: credentialConfigText(url, []string{canonical + " --extra"}, nil)},
 		{name: "command injection suffix", content: credentialConfigText(url, []string{canonical + " && /bin/false"}, nil)},
 	}
@@ -539,7 +539,7 @@ func TestGlobalGitConfigRefusesNonOwnedStates(t *testing.T) {
 
 func TestGlobalGitConfigRefusesManagedStateFromIncludedConfig(t *testing.T) {
 	url := "https://example.com/git/u/app.git"
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	root := t.TempDir()
 	globalPath := filepath.Join(root, "global.config")
 	includePath := filepath.Join(root, "included.config")
@@ -567,7 +567,7 @@ func TestGlobalGitConfigRefusesManagedStateFromIncludedConfig(t *testing.T) {
 }
 
 func TestGlobalGitConfigUnsetOnlyExactManagedState(t *testing.T) {
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	url := "https://example.com/git/u/app.git"
 	tests := []struct {
 		name        string
@@ -578,7 +578,7 @@ func TestGlobalGitConfigUnsetOnlyExactManagedState(t *testing.T) {
 		{name: "legacy", content: credentialConfigText(url, []string{canonical}, nil)},
 		{name: "legacy with useHttpPath", content: credentialConfigText(url, []string{canonical}, []string{"true"})},
 		{name: "current", content: credentialConfigText(url, []string{"", canonical}, []string{"true"})},
-		{name: "different app", content: credentialConfigText(url, []string{"!lark-cli apps git-credential-helper --app-id 'app_other'"}, []string{"true"}), wantHelpers: []string{"!lark-cli apps git-credential-helper --app-id 'app_other'"}, wantUsePath: []string{"true"}},
+		{name: "different app", content: credentialConfigText(url, []string{"!work-cli apps git-credential-helper --app-id 'app_other'"}, []string{"true"}), wantHelpers: []string{"!work-cli apps git-credential-helper --app-id 'app_other'"}, wantUsePath: []string{"true"}},
 		{name: "only useHttpPath", content: credentialConfigText(url, nil, []string{"true"})},
 		{name: "managed helper with false useHttpPath", content: credentialConfigText(url, []string{canonical}, []string{"false"}), wantHelpers: []string{canonical}, wantUsePath: []string{"false"}},
 	}
@@ -610,7 +610,7 @@ func TestGlobalGitConfigUnsetOnlyExactManagedState(t *testing.T) {
 // normalize to the same cleaned form or a legacy managed helper is
 // misclassified as non-owned and migration is refused.
 func TestGlobalGitConfigMigratesWithNonCanonicalGlobalPath(t *testing.T) {
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	url := "https://example.com/git/u/app.git"
 	dir := t.TempDir()
 	cleanPath := filepath.Join(dir, "sub", "global.config")
@@ -716,10 +716,10 @@ func TestGlobalGitConfigDefaultHelperShellQuotesAppID(t *testing.T) {
 	root := t.TempDir()
 	argLog := filepath.Join(root, "args.log")
 	sentinel := filepath.Join(root, "pwned")
-	// Injecting a real lark-cli is out of scope; instead point the helper
-	// command at a fake `lark-cli` on PATH that records its literal arguments.
+	// Injecting a real work-cli is out of scope; instead point the helper
+	// command at a fake `work-cli` on PATH that records its literal arguments.
 	binDir := filepath.Join(root, "bin")
-	fakeCLI := filepath.Join(binDir, "lark-cli")
+	fakeCLI := filepath.Join(binDir, "work-cli")
 	writeTestFileMode(t, fakeCLI, []byte("#!/bin/sh\nfor a in \"$@\"; do printf '%s\\n' \"$a\" >> \"$ARG_LOG\"; done\ncat >/dev/null\nfor a in \"$@\"; do if [ \"$a\" = get ]; then printf 'username=fake-user\\npassword=fake-pass\\n'; fi; done\n"), 0o700)
 	t.Setenv("ARG_LOG", argLog)
 	t.Setenv("PATH", binDir+string(os.PathListSeparator)+os.Getenv("PATH"))
@@ -880,9 +880,9 @@ func writeTestFileMode(t *testing.T, path string, data []byte, mode fs.FileMode)
 
 // TestGlobalGitConfigResetDefeatsLaterGlobalHelperOnFill proves through real
 // `git credential fill` (and store/erase) that when a generic
-// credential.helper is configured AFTER the URL-scoped lark-cli section — the
+// credential.helper is configured AFTER the URL-scoped work-cli section — the
 // case an empty-helper reset alone does NOT isolate, because git applies
-// helpers in parse order — SetHelper repositions the lark-cli section so the
+// helpers in parse order — SetHelper repositions the work-cli section so the
 // reset defeats the later helper. Covers both a textually-later [credential]
 // section and one sourced from a later [include].
 func TestGlobalGitConfigResetDefeatsLaterGlobalHelperOnFill(t *testing.T) {
@@ -967,7 +967,7 @@ func TestGlobalGitConfigResetDefeatsLaterGlobalHelperOnFill(t *testing.T) {
 
 // TestGlobalGitConfigFailsClosedWhenLaterHelperCannotBeDefeated verifies the
 // fail-closed guarantee: if a generic credential.helper is applied AFTER the
-// lark-cli helper even after repositioning (i.e. it lives somewhere the writable
+// work-cli helper even after repositioning (i.e. it lives somewhere the writable
 // file cannot move past), SetHelper must return FailedPrecondition and restore
 // the prior configuration rather than leave a written-but-ineffective reset.
 //
@@ -975,7 +975,7 @@ func TestGlobalGitConfigResetDefeatsLaterGlobalHelperOnFill(t *testing.T) {
 // residual un-defeatable case deterministically we wrap git to inject a phantom
 // later generic helper into every `--list` (the parse-order oracle), which no
 // on-disk reposition can remove. The real config file is otherwise unmodified,
-// so we can assert the lark-cli section was rolled back to its pre-write state.
+// so we can assert the work-cli section was rolled back to its pre-write state.
 func TestGlobalGitConfigFailsClosedWhenLaterHelperCannotBeDefeated(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("test wrapper is a POSIX shell script")
@@ -991,20 +991,20 @@ func TestGlobalGitConfigFailsClosedWhenLaterHelperCannotBeDefeated(t *testing.T)
 	}
 
 	// The phantom exists only in --list output, so on-disk state must be rolled
-	// back to no lark-cli-owned credential configuration for the URL.
+	// back to no work-cli-owned credential configuration for the URL.
 	state, readErr := readCredentialConfig(context.Background(), url)
 	if readErr != nil {
 		t.Fatalf("readCredentialConfig() error = %v", readErr)
 	}
-	if got := classifyManagedState(state, "!lark-cli apps git-credential-helper --app-id 'app_xxx'"); got != managedAbsent {
+	if got := classifyManagedState(state, "!work-cli apps git-credential-helper --app-id 'app_xxx'"); got != managedAbsent {
 		t.Fatalf("state after fail-closed = %v (helpers=%#v), want absent", got, state.Helpers)
 	}
 	raw, err := os.ReadFile(globalPath)
 	if err != nil {
 		t.Fatalf("read config file: %v", err)
 	}
-	if strings.Contains(string(raw), "lark-cli") {
-		t.Fatalf("lark-cli helper not rolled back from config file:\n%s", raw)
+	if strings.Contains(string(raw), "work-cli") {
+		t.Fatalf("work-cli helper not rolled back from config file:\n%s", raw)
 	}
 }
 
@@ -1033,10 +1033,10 @@ exec "$GIT_TEST_REAL_GIT" "$@"
 	t.Setenv("PATH", binDir+string(os.PathListSeparator)+os.Getenv("PATH"))
 }
 
-// TestGlobalGitConfigDetectsConcurrentHelperInsertion models a non-lark-cli
+// TestGlobalGitConfigDetectsConcurrentHelperInsertion models a non-work-cli
 // writer that inserts a foreign helper into the URL-scoped list during the
 // write window (after the reset unset, before readback). lockGlobalConfig
-// serializes lark-cli writers against each other but cannot stop an unrelated
+// serializes work-cli writers against each other but cannot stop an unrelated
 // process, so this must be caught by readback and fail closed with the foreign
 // value preserved — never silently overwritten.
 func TestGlobalGitConfigDetectsConcurrentHelperInsertion(t *testing.T) {
@@ -1067,8 +1067,8 @@ func TestGlobalGitConfigDetectsConcurrentHelperInsertion(t *testing.T) {
 
 // TestGlobalGitConfigPreservesForeignHelperInsertedBeforeReset models the
 // narrower race the previous whole-key --unset-all could not survive: a
-// non-lark-cli process inserts a foreign helper into the URL-scoped list AFTER
-// the ownership read but BEFORE lark-cli begins rewriting the helper list. A
+// non-work-cli process inserts a foreign helper into the URL-scoped list AFTER
+// the ownership read but BEFORE work-cli begins rewriting the helper list. A
 // whole-key --unset-all would delete that foreign value and the canonical
 // re-add would leave a readback matching `known`, so the third party's write
 // would vanish and SetHelper would (wrongly) report success. Because the
@@ -1102,7 +1102,7 @@ func TestGlobalGitConfigPreservesForeignHelperInsertedBeforeReset(t *testing.T) 
 }
 
 // installForeignHelperBeforeFirstHelperAdd wraps git so that the FIRST time
-// lark-cli runs `git config --global --add <helperKey> ""` (the empty reset
+// work-cli runs `git config --global --add <helperKey> ""` (the empty reset
 // marker that begins the helper rewrite), a foreign helper is first inserted
 // into the same list via real git. This deterministically reproduces a
 // concurrent non-lark writer landing in the window between the ownership read
@@ -1141,7 +1141,7 @@ func TestLockGlobalConfigSerializesWriters(t *testing.T) {
 		t.Skip("cross-process file lock behavior is validated on POSIX")
 	}
 	url := "https://example.com/git/u/app.git"
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	configureIsolatedGlobalGit(t, "")
 
 	const writers = 4
@@ -1180,7 +1180,7 @@ func TestLockGlobalConfigSerializesWriters(t *testing.T) {
 // TestUnsetHelperUseHTTPPathDeleteFailureLeavesRecoverableState proves the new
 // delete order (useHttpPath first, then helper) keeps the residue recoverable
 // when the helper delete fails: the leftover helper (without useHttpPath) still
-// classifies as a lark-cli-owned state, so a later SetHelper can re-normalize
+// classifies as a work-cli-owned state, so a later SetHelper can re-normalize
 // it — unlike the old order, which could leave a useHttpPath-only orphan that
 // SetHelper refuses.
 func TestUnsetHelperUseHTTPPathDeleteFailureLeavesRecoverableState(t *testing.T) {
@@ -1188,7 +1188,7 @@ func TestUnsetHelperUseHTTPPathDeleteFailureLeavesRecoverableState(t *testing.T)
 		t.Skip("test wrapper is a POSIX shell script")
 	}
 	url := "https://example.com/git/u/app.git"
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	configureIsolatedGlobalGit(t, credentialConfigText(url, []string{"", canonical}, []string{"true"}))
 	installGitConfigHelperUnsetFailure(t, url, 29)
 
@@ -1200,12 +1200,12 @@ func TestUnsetHelperUseHTTPPathDeleteFailureLeavesRecoverableState(t *testing.T)
 		t.Fatalf("readCredentialConfig() error = %v", readErr)
 	}
 	// The helper delete failed; useHttpPath was deleted first and then restored
-	// best-effort. Whatever the exact residue, it must be a lark-cli-owned
+	// best-effort. Whatever the exact residue, it must be a work-cli-owned
 	// (recoverable) state — never a useHttpPath-only orphan (managedNone) that a
 	// later SetHelper would refuse to re-init.
 	kind := classifyManagedState(state, canonical)
 	if kind != managedLegacy && kind != managedCurrent && kind != managedPartial {
-		t.Fatalf("residue classified %v, want a recoverable lark-cli-owned state; state=%#v", kind, state)
+		t.Fatalf("residue classified %v, want a recoverable work-cli-owned state; state=%#v", kind, state)
 	}
 	if len(state.Helpers) == 0 {
 		t.Fatalf("helper delete failure lost the helper list, leaving an unrecoverable residue; state=%#v", state)
@@ -1219,13 +1219,13 @@ func TestUnsetHelperUseHTTPPathDeleteFailureLeavesRecoverableState(t *testing.T)
 }
 
 // TestUnsetHelperMixedOwnedRemovesOnlyLarkValues proves that when the URL-scoped
-// helper list mixes the lark-cli values with a foreign helper, UnsetHelper
-// removes only the lark-cli values (the empty reset and the canonical helper)
-// and the lark-cli useHttpPath, leaves the foreign helper intact, and returns a
+// helper list mixes the work-cli values with a foreign helper, UnsetHelper
+// removes only the work-cli values (the empty reset and the canonical helper)
+// and the work-cli useHttpPath, leaves the foreign helper intact, and returns a
 // non-nil warning so callers surface that a foreign helper remains.
 func TestUnsetHelperMixedOwnedRemovesOnlyLarkValues(t *testing.T) {
 	url := "https://example.com/git/u/app.git"
-	canonical := "!lark-cli apps git-credential-helper --app-id 'app_xxx'"
+	canonical := "!work-cli apps git-credential-helper --app-id 'app_xxx'"
 	configureIsolatedGlobalGit(t, credentialConfigText(url, []string{"", canonical, "osxkeychain"}, []string{"true"}))
 
 	err := (GlobalGitConfig{}).UnsetHelper(context.Background(), url, "app_xxx")
@@ -1239,7 +1239,7 @@ func TestUnsetHelperMixedOwnedRemovesOnlyLarkValues(t *testing.T) {
 		t.Fatalf("helpers after unset = %#v, want only the foreign helper", got)
 	}
 	if len(state.UseHTTPPath) != 0 {
-		t.Fatalf("lark-cli useHttpPath not removed: %#v", state.UseHTTPPath)
+		t.Fatalf("work-cli useHttpPath not removed: %#v", state.UseHTTPPath)
 	}
 }
 
@@ -1271,7 +1271,7 @@ exec "$GIT_TEST_REAL_GIT" "$@"
 // lowercasing the URL subsection when matching credential.helper entries in the
 // parse-order oracle. NormalizeGitHTTPURL preserves the URL path case, and git
 // stores/prints the subsection verbatim, so a URL with an uppercase path
-// segment must still be recognized as the lark-cli helper. If readHelperFillOrder
+// segment must still be recognized as the work-cli helper. If readHelperFillOrder
 // lowercased the scoped key, the lark helper would not be found in the order,
 // SetHelper would wrongly hit the fail-closed path, and this real fill would
 // return the later global helper's credential instead of the scoped one.
@@ -1292,7 +1292,7 @@ func TestGlobalGitConfigResetDefeatsLaterHelperForUppercaseURLPath(t *testing.T)
 
 	globalCmd := "!" + shellQuoteArg(globalHelper)
 	scopedCmd := "!" + shellQuoteArg(scopedHelper)
-	// lark-cli section first, generic helper AFTER it: only correct-case matching
+	// work-cli section first, generic helper AFTER it: only correct-case matching
 	// + repositioning isolates the scoped helper.
 	content := credentialConfigText(url, []string{"", scopedCmd}, []string{"true"}) +
 		"[credential]\n\thelper = " + globalCmd + "\n"
@@ -1317,7 +1317,7 @@ func TestGlobalGitConfigResetDefeatsLaterHelperForUppercaseURLPath(t *testing.T)
 }
 
 // TestGlobalGitConfigRefusesToRepositionSectionWithExtraKeys verifies that when
-// the lark-cli section must be repositioned (a later generic helper exists) but
+// the work-cli section must be repositioned (a later generic helper exists) but
 // the URL-scoped section also holds an untracked key (e.g. username), SetHelper
 // refuses with a typed FailedPrecondition error instead of destroying that key
 // via --remove-section, and leaves the extra key intact.
@@ -1328,7 +1328,7 @@ func TestGlobalGitConfigRefusesToRepositionSectionWithExtraKeys(t *testing.T) {
 	url := "https://example.com/git/u/app.git"
 	scopedCmd := "!scoped-cmd"
 	globalCmd := "!global-cmd"
-	// lark-cli reset+canonical+useHttpPath, PLUS an untracked username key, and a
+	// work-cli reset+canonical+useHttpPath, PLUS an untracked username key, and a
 	// later generic helper that forces repositioning.
 	content := "[credential \"" + url + "\"]\n" +
 		"\thelper = \n" +
@@ -1366,11 +1366,11 @@ func TestGlobalGitConfigRepositionsWhenUntrackedKeyLivesOnlyInIncludedConfig(t *
 	root := t.TempDir()
 	includePath := filepath.Join(root, "included.config")
 	// The included config holds the untracked username AND a later generic helper
-	// that forces repositioning of the writable lark-cli section.
+	// that forces repositioning of the writable work-cli section.
 	writeTestFile(t, includePath, []byte(
 		"[credential \""+url+"\"]\n\tusername = alice\n"+
 			"[credential]\n\thelper = "+globalCmd+"\n"))
-	// The writable file holds only the lark-cli-tracked keys, then the include.
+	// The writable file holds only the work-cli-tracked keys, then the include.
 	content := "[credential \"" + url + "\"]\n" +
 		"\thelper = \n" +
 		"\thelper = " + scopedCmd + "\n" +

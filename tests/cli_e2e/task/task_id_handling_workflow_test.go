@@ -22,8 +22,8 @@ func TestTaskIDHandlingWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	originalSummary := "lark-cli-e2e-task-id-original-" + suffix
-	updatedSummary := "lark-cli-e2e-task-id-updated-" + suffix
+	originalSummary := "work-cli-e2e-task-id-original-" + suffix
+	updatedSummary := "work-cli-e2e-task-id-updated-" + suffix
 	taskGUID := createTask(t, parentT, ctx, clie2e.Request{
 		Args:      []string{"task", "+create"},
 		DefaultAs: "bot",

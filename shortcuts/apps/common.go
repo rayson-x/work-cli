@@ -10,7 +10,7 @@ import (
 	"github.com/larksuite/cli/errs"
 )
 
-// appsService 是 CLI 命令的 service 前缀（lark-cli apps ...）。
+// appsService 是 CLI 命令的 service 前缀（work-cli apps ...）。
 const appsService = "apps"
 
 // apiBasePath is the registered OAPI prefix for the apps domain.
@@ -20,7 +20,7 @@ const apiBasePath = "/open-apis/spark/v1"
 // failure cause is a wrong/inaccessible --app-id. It points at +list to find
 // the correct app id. The app_/cli_ format rule is taught in
 // lark-apps SKILL.md ("app_id 获取"); the hint stays lean and does not repeat it.
-const appIDListHint = "verify --app-id is correct and you have access to the app; list your apps with `lark-cli apps +list`"
+const appIDListHint = "verify --app-id is correct and you have access to the app; list your apps with `work-cli apps +list`"
 
 // appNoDatabaseCode / appNoDatabaseLegacyCode are the Spark business codes seen
 // when a db command runs against an app that has not initialized a database yet.
@@ -48,7 +48,7 @@ const appNoDatabaseMessage = "this app does not have a database yet"
 // execute it without matching natural-language error text. Adding a database is
 // a cloud write: a failed read alone does not authorize it — confirm with the
 // user before starting a +chat.
-const appNoDatabaseHint = "ask the user whether to add a database through Miaoda cloud development; if confirmed, run `lark-cli apps +session-list --app-id <app_id>` and reuse an active session, or run `lark-cli apps +session-create --app-id <app_id>`; send the database requirement with `lark-cli apps +chat --app-id <app_id> --session-id <session_id> --message \"<database requirement>\"`, poll `lark-cli apps +session-get --app-id <app_id> --session-id <session_id>` until `latest_turn.status=completed`, then retry the original db command"
+const appNoDatabaseHint = "ask the user whether to add a database through Miaoda cloud development; if confirmed, run `work-cli apps +session-list --app-id <app_id>` and reuse an active session, or run `work-cli apps +session-create --app-id <app_id>`; send the database requirement with `work-cli apps +chat --app-id <app_id> --session-id <session_id> --message \"<database requirement>\"`, poll `work-cli apps +session-get --app-id <app_id> --session-id <session_id>` until `latest_turn.status=completed`, then retry the original db command"
 
 // appNoContainerCode is the Spark business code returned by the online
 // observability endpoints (query_metrics_data / query_analytics_data) when the
@@ -73,7 +73,7 @@ const appNoContainerMessage = "this app has no running container; online metrics
 // status check; a failed metrics read alone does not authorize a release. It
 // names existing commands with a stable placeholder arg so a harness can act on
 // it without parsing natural-language error text.
-const appNoContainerHint = "check the app's deployment status with `lark-cli apps +release-list --app-id <app_id> --status finished` (a newly created or undeployed app has no finished release, so it produces no metrics yet); if it is not deployed, ask the user whether to deploy — deploying takes the whole app live and can affect existing production traffic — and only if confirmed run `lark-cli apps +release-create --app-id <app_id>`, then retry once it is serving traffic"
+const appNoContainerHint = "check the app's deployment status with `work-cli apps +release-list --app-id <app_id> --status finished` (a newly created or undeployed app has no finished release, so it produces no metrics yet); if it is not deployed, ask the user whether to deploy — deploying takes the whole app live and can affect existing production traffic — and only if confirmed run `work-cli apps +release-create --app-id <app_id>`, then retry once it is serving traffic"
 
 // appNoContainerMessageMarkers are lowercase substrings of the raw "Container
 // not exists" server message, used as a fallback when the business code is not
@@ -245,7 +245,7 @@ func validateRealAppID(appID string) error {
 			`--app-id must be an app_id starting with "app_".`,
 		).WithParam("--app-id").WithHint(
 			`If you have a meta_token or a /page/<token>/ link, first resolve it:
-lark-cli apps +get --app-id <meta_token> -q '.data.app.app_id'
+work-cli apps +get --app-id <meta_token> -q '.data.app.app_id'
 Then retry this command with the returned app_id.`,
 		)
 	}

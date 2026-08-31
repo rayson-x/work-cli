@@ -24,7 +24,7 @@ import (
 // meanings), the min/max constraint, and the API default. This is the ONE
 // place that decides what a param's help says — add a fact here (e.g. a future
 // deprecation marker) and every surface shows it. Unabridged prose and
-// per-option detail stay in `lark-cli schema`.
+// per-option detail stay in `work-cli schema`.
 func fieldFacts(f meta.Field) []string {
 	var facts []string
 	if d := sanitizeFieldDesc(f.Description); d != "" {
@@ -124,7 +124,7 @@ func cutDocRef(s string) string {
 // formatEnumInline renders allowed values for the help line: "v=meaning" when
 // the value carries a (sanitized, truncated) description — so opaque numeric
 // enums like succeed_type read as "0=…|1=…|2=…" — else just "v". Full meanings
-// live in the envelope's enumDescriptions / `lark-cli schema`.
+// live in the envelope's enumDescriptions / `work-cli schema`.
 func formatEnumInline(opts []meta.EnumOption) string {
 	items := make([]string, len(opts))
 	for i, o := range opts {
@@ -139,7 +139,7 @@ func formatEnumInline(opts []meta.EnumOption) string {
 
 // formatBoundsInline renders the field's min/max constraint ("min: 1, max:
 // 100", or the single declared side), or "" when the field declares neither.
-// The vocabulary matches the envelope's minimum/maximum, so help and `lark-cli
+// The vocabulary matches the envelope's minimum/maximum, so help and `work-cli
 // schema` state the same constraint.
 func formatBoundsInline(f meta.Field) string {
 	min, max := f.MinBound(), f.MaxBound()

@@ -9,7 +9,7 @@
 - 只知道分享链接、还不知道 `base-token` / `table-id` / `form-id` 时，用 `+form-detail`；已在 Base 内部管理表单时，才用 `+form-get`。
 
 ```bash
-lark-cli base +form-detail --share-token <share_token> --format pretty
+work-cli base +form-detail --share-token <share_token> --format pretty
 ```
 
 ## 读取重点
@@ -54,7 +54,7 @@ lark-cli base +form-detail --share-token <share_token> --format pretty
 提交普通字段：
 
 ```bash
-lark-cli base +form-submit \
+work-cli base +form-submit \
   --share-token <share_token> \
   --json '{"fields":{"姓名":"张三","评分":5}}'
 ```
@@ -62,7 +62,7 @@ lark-cli base +form-submit \
 提交附件字段：
 
 ```bash
-lark-cli base +form-submit \
+work-cli base +form-submit \
   --share-token <share_token> \
   --base-token <base_token_from_form_detail> \
   --json '{"fields":{"姓名":"张三"},"attachments":{"附件":["./report.pdf"]}}'

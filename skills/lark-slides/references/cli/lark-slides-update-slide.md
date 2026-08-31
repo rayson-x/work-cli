@@ -6,22 +6,22 @@
 
 ```bash
 # 标准用法：整页 XML 从文件读（推荐：避免 shell 转义和长参数截断）
-lark-cli slides +update-slide --as user \
+work-cli slides +update-slide --as user \
   --presentation "https://xxx.larkoffice.com/slides/SCtZ...ynae" \
   --slide-id "piy" \
   --content @page.xml
 
 # XML 从 stdin 读
-cat page.xml | lark-cli slides +update-slide --as user \
+cat page.xml | work-cli slides +update-slide --as user \
   --presentation "$PRES" --slide-id "$SLIDE" --content -
 
 # wiki 链接直接传（CLI 自动解析并校验 obj_type=slides）
-lark-cli slides +update-slide --as user \
+work-cli slides +update-slide --as user \
   --presentation "https://xxx.larkoffice.com/wiki/wikcn..." \
   --slide-id "piy" --content @page.xml
 
 # 预览请求，不实际写入
-lark-cli slides +update-slide --as user \
+work-cli slides +update-slide --as user \
   --presentation "$PRES" --slide-id "$SLIDE" --content @page.xml --dry-run
 ```
 
@@ -36,7 +36,7 @@ lark-cli slides +update-slide --as user \
 | `--tid` | 否 | 调用方提供的任务/事务标识，CLI 原样透传；用于关联同一编辑任务或重试，不等同于版本前置条件，不能单独保证并发冲突时拒绝写入。一般留空 |
 
 `@file` 和 `+xml-get --output` 一样**只接受当前目录下的相对路径**，绝对路径会被拒。
-命令别名：`slides +update`（隐藏）；服务别名：`lark-cli slide …` 等价于 `lark-cli slides …`。
+命令别名：`slides +update`（隐藏）；服务别名：`work-cli slide …` 等价于 `work-cli slides …`。
 
 如果要求“从读取之后页面一旦变化就不再写入”，不能只传 `--revision-id` 或 `--tid`。写入前必须再次用 `+xml-get` 回读最新版，比较读取期间是否发生变化；有变化时先基于最新版重新合并本次修改，再执行整页写回。当前 shortcut 不提供严格的 compare-and-swap 保证。
 
@@ -61,7 +61,7 @@ lark-cli slides +update-slide --as user \
 占位符路径按**执行命令时的 CWD** 解析，跟 `--content @file` 所在目录无关；`@./assets/x.png` 找的是 `$PWD/assets/x.png`。
 
 ```bash
-lark-cli slides +update-slide --as user \
+work-cli slides +update-slide --as user \
   --presentation "$PRES" --slide-id "$SLIDE" \
   --content '<slide xmlns="https://www.larkoffice.com/sml/2.0"><data><img src="@./chart.png" topLeftX="100" topLeftY="100" width="320" height="180"/></data></slide>'
 ```
@@ -74,13 +74,13 @@ lark-cli slides +update-slide --as user \
 
 ```bash
 # 1. 读回当前页（拿到带 id 的完整 XML）
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "$PRES" --slide-id "$SLIDE" --output page.xml
 
 # 2. 编辑 page.xml —— 保留想留下的元素的 id，删掉不要的整段，新元素不写 id
 
 # 3. 整页写回
-lark-cli slides +update-slide --as user \
+work-cli slides +update-slide --as user \
   --presentation "$PRES" --slide-id "$SLIDE" --content @page.xml
 ```
 
@@ -121,7 +121,7 @@ python3 "<lark-slides-skill-dir>/scripts/xml_lint.py" --input page.xml
 写入成功后，必须回读整份演示文稿的最新 XML，而不是只相信写接口的成功响应：
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "$PRES" --output readback.xml
 ```
 

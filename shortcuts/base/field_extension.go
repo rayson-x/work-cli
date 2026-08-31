@@ -49,7 +49,7 @@ var BaseFieldExtensionGet = common.Shortcut{
 	AuthTypes:   authTypes(),
 	Flags:       []common.Flag{baseTokenFlag(true), tableRefFlag(true), fieldRefFlag(true)},
 	Tips: []string{
-		`Example: lark-cli base +field-extension-get --base-token <base_token> --table-id <table_id> --field-id <field_id>`,
+		`Example: work-cli base +field-extension-get --base-token <base_token> --table-id <table_id> --field-id <field_id>`,
 		"Returns current_extension; null means the field has no recognizable extension configuration.",
 	},
 	DryRun: dryRunFieldExtensionGet,
@@ -73,8 +73,8 @@ var BaseFieldExtensionUpdate = common.Shortcut{
 	},
 	Tips: []string{
 		baseHighRiskYesTip,
-		`Example update: lark-cli base +field-extension-update --base-token <base_token> --table-id <table_id> --field-id <field_id> --json '{"extension_id":"builtin_llm_completion","inputs":{"prompt":[{"type":"text","text":"Summarize "},{"type":"field_ref","field":"Description"}]}}' --yes`,
-		`Example clear: lark-cli base +field-extension-update --base-token <base_token> --table-id <table_id> --field-id <field_id> --json '{}' --yes`,
+		`Example update: work-cli base +field-extension-update --base-token <base_token> --table-id <table_id> --field-id <field_id> --json '{"extension_id":"builtin_llm_completion","inputs":{"prompt":[{"type":"text","text":"Summarize "},{"type":"field_ref","field":"Description"}]}}' --yes`,
+		`Example clear: work-cli base +field-extension-update --base-token <base_token> --table-id <table_id> --field-id <field_id> --json '{}' --yes`,
 		"Read lark-base-field-extension.md before constructing builtin_llm_completion prompt JSON.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
@@ -103,8 +103,8 @@ var BaseFieldExtensionUpdateCells = common.Shortcut{
 	},
 	Tips: []string{
 		baseHighRiskYesTip,
-		`Example column: lark-cli base +field-extension-update-cells --base-token <base_token> --table-id <table_id> --field-id <field_id> --type column --view-id <view_id> --yes`,
-		`Example row: lark-cli base +field-extension-update-cells --base-token <base_token> --table-id <table_id> --field-id <field_id> --type row --record-id <record_id_1> --record-id <record_id_2> --yes`,
+		`Example column: work-cli base +field-extension-update-cells --base-token <base_token> --table-id <table_id> --field-id <field_id> --type column --view-id <view_id> --yes`,
+		`Example row: work-cli base +field-extension-update-cells --base-token <base_token> --table-id <table_id> --field-id <field_id> --type row --record-id <record_id_1> --record-id <record_id_2> --yes`,
 		"Column updates may touch every visible record in the selected view; row updates must pass explicit record IDs.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {

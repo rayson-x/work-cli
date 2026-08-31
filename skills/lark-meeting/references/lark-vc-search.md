@@ -24,27 +24,27 @@
 
 ```bash
 # 关键词搜索
-lark-cli vc +search --query "周会"
+work-cli vc +search --query "周会"
 
 # 通过 9 位会议号查询会议 ID
-lark-cli vc +search --query "123456789" --format json --as user
+work-cli vc +search --query "123456789" --format json --as user
 
 # 查询某一天开过的会（单日查询时，start 和 end 必须填写同一天）
-lark-cli vc +search --start 2026-03-10 --end 2026-03-10
+work-cli vc +search --start 2026-03-10 --end 2026-03-10
 
 # 按时间范围搜索
-lark-cli vc +search --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
+work-cli vc +search --start "2026-03-10T00:00+08:00" --end "2026-03-17T00:00+08:00"
 
 # 按组织者 / 参与者 / 会议室（逗号分隔）
-lark-cli vc +search --organizer-ids "ou_user1,ou_user2"
-lark-cli vc +search --participant-ids "ou_user1,ou_user2"
-lark-cli vc +search --room-ids "123,456"
+work-cli vc +search --organizer-ids "ou_user1,ou_user2"
+work-cli vc +search --participant-ids "ou_user1,ou_user2"
+work-cli vc +search --room-ids "123,456"
 
 # 多条件组合
-lark-cli vc +search --organizer-ids "ou_user1" --room-ids "123" --start "2026-03-10T00:00+08:00"
+work-cli vc +search --organizer-ids "ou_user1" --room-ids "123" --start "2026-03-10T00:00+08:00"
 
 # 翻页
-lark-cli vc +search --query "周会" --page-token "<PAGE_TOKEN>"
+work-cli vc +search --query "周会" --page-token "<PAGE_TOKEN>"
 ```
 
 ## 参数
@@ -77,7 +77,7 @@ lark-cli vc +search --query "周会" --page-token "<PAGE_TOKEN>"
 
 ### 3. 仅支持 user 身份
 
-该接口仅支持 `user` 身份，使用前需完成 `lark-cli auth login` 并具备 `vc:meeting.search:read` 权限。
+该接口仅支持 `user` 身份，使用前需完成 `work-cli auth login` 并具备 `vc:meeting.search:read` 权限。
 
 ### 4. 支持分页
 
@@ -118,10 +118,10 @@ lark-cli vc +search --query "周会" --page-token "<PAGE_TOKEN>"
 
 ```bash
 # First page
-lark-cli vc +search --query "周会" --page-size 15
+work-cli vc +search --query "周会" --page-size 15
 
 # Next page
-lark-cli vc +search --query "周会" --page-size 15 --page-token "<PAGE_TOKEN>"
+work-cli vc +search --query "周会" --page-size 15 --page-token "<PAGE_TOKEN>"
 ```
 
 ## 常见错误与排查

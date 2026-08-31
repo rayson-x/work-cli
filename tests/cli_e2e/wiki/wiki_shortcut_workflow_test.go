@@ -28,9 +28,9 @@ func TestWiki_ShortcutWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	parentTitle := "lark-cli-e2e-wiki-sc-parent-" + suffix
-	childTitle := "lark-cli-e2e-wiki-sc-child-" + suffix
-	copyTitle := "lark-cli-e2e-wiki-sc-copy-" + suffix
+	parentTitle := "work-cli-e2e-wiki-sc-parent-" + suffix
+	childTitle := "work-cli-e2e-wiki-sc-child-" + suffix
+	copyTitle := "work-cli-e2e-wiki-sc-copy-" + suffix
 
 	var spaceID, parentNodeToken, childNodeToken, childObjType, copiedNodeToken string
 

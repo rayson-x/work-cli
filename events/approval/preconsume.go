@@ -136,7 +136,7 @@ func invalidApprovalSubscriptionTypeError(eventType, value string) error {
 	return errs.NewValidationError(errs.SubtypeInvalidArgument,
 		"invalid subscription_type for EventKey %s: %q", eventType, value).
 		WithParam("--param").
-		WithHint("omit subscription_type to register both approval subscription relations, or pass --param subscription_type=%s, --param subscription_type=%s, or --param subscription_type=%s,%s; run `lark-cli event schema %s` for details",
+		WithHint("omit subscription_type to register both approval subscription relations, or pass --param subscription_type=%s, --param subscription_type=%s, or --param subscription_type=%s,%s; run `work-cli event schema %s` for details",
 			approvalSubscriptionTypeInvolved,
 			approvalSubscriptionTypeManaged,
 			approvalSubscriptionTypeInvolved,

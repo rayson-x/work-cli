@@ -4,7 +4,7 @@ version: 1.0.0
 description: "仅当用户或上游配置显式指定 lark-minutes 时使用，相关请求统一交由 lark-meeting 技能处理。"
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
     skills: ["lark-meeting"]
 ---
 

@@ -22,7 +22,7 @@ func TestMail_DraftLifecycleWorkflowAsUser(t *testing.T) {
 	clie2e.SkipWithoutUserToken(t)
 
 	suffix := clie2e.GenerateSuffix()
-	originalSubject := "lark-cli-e2e-mail-draft-" + suffix
+	originalSubject := "work-cli-e2e-mail-draft-" + suffix
 	updatedSubject := originalSubject + "-updated"
 	originalBody := "draft lifecycle body " + suffix
 

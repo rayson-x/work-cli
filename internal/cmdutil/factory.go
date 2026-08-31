@@ -225,7 +225,7 @@ func (f *Factory) CheckStrictMode(ctx context.Context, as core.Identity) error {
 	mode := f.ResolveStrictMode(ctx)
 	if mode.IsActive() && !mode.AllowsIdentity(as) {
 		hint := recovery.Join("", recovery.Command(recovery.TargetConfigStrictMode,
-			"if the user explicitly wants to switch policy, see `lark-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)"))
+			"if the user explicitly wants to switch policy, see `work-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)"))
 		return recovery.Annotate(
 			errs.NewValidationError(errs.SubtypeInvalidArgument,
 				"strict mode is %q, only %s-identity commands are available", mode, mode.ForcedIdentity()).

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`lark-cli` is the official Lark/Feishu CLI for humans and AI agents. Optimize
+`work-cli` is the official Lark/Feishu CLI for humans and AI agents. Optimize
 for predictable machine-readable behavior without making the human CLI worse.
 
 Keep each PR focused on one goal: CLI UX, reliability, simpler explicit code,

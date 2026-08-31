@@ -10,7 +10,7 @@ import (
 )
 
 // ActivePolicy is the resolved user-layer policy after applyUserPolicyPruning
-// has run during bootstrap. `lark-cli config policy show` reads this to
+// has run during bootstrap. `work-cli config policy show` reads this to
 // answer "what rule is currently in effect, and how many commands does
 // it hide?".
 //

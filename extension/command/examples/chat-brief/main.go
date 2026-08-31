@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Command chat-brief is a runnable lark-cli distribution that contributes
+// Command chat-brief is a runnable work-cli distribution that contributes
 // two business commands to the existing im domain via WithCommandSets:
 //
 //	im +chat-brief   single read: Validate, shared DryRun request, CallJSON

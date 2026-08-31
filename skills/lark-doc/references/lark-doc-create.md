@@ -8,8 +8,8 @@
 
 ```bash
 # 简单内容优先使用 `--content -`，文件导入如下：
-lark-cli docs +create --doc-format xml --content "@<XML 文件相对路径>"
-lark-cli docs +create --doc-format markdown --content "@./draft.md"
+work-cli docs +create --doc-format xml --content "@<XML 文件相对路径>"
+work-cli docs +create --doc-format markdown --content "@./draft.md"
 ```
 
 ## 返回值
@@ -51,4 +51,4 @@ lark-cli docs +create --doc-format markdown --content "@./draft.md"
 
 ## 需要回查文档
 
-用 `lark-cli docs +fetch --doc "<document_id 或文档 URL>" --detail with-ids` 回查，若需要更多信息可查看 [`+fetch`](lark-doc-fetch.md)。
+用 `work-cli docs +fetch --doc "<document_id 或文档 URL>" --detail with-ids` 回查，若需要更多信息可查看 [`+fetch`](lark-doc-fetch.md)。

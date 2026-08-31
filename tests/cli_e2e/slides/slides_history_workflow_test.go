@@ -29,7 +29,7 @@ func TestSlides_HistoryWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	title := "lark-cli-e2e-slides-history-" + suffix
+	title := "work-cli-e2e-slides-history-" + suffix
 	originalMarker := "original history marker " + suffix
 	updatedMarker := "updated history marker " + suffix
 	const defaultAs = "user"

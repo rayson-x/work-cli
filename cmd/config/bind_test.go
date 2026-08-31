@@ -1666,7 +1666,7 @@ func TestConfigBindRun_OpenClawDisabledAccount(t *testing.T) {
 
 func TestGetBindMsg_Zh(t *testing.T) {
 	msg := getBindMsg("zh")
-	if want := "你想在哪个 Agent 中使用 lark-cli?"; msg.SelectSource != want {
+	if want := "你想在哪个 Agent 中使用 work-cli?"; msg.SelectSource != want {
 		t.Errorf("zh SelectSource = %q, want %q", msg.SelectSource, want)
 	}
 	if want := "你希望 AI 如何与你协作？"; msg.SelectIdentity != want {
@@ -1692,7 +1692,7 @@ func TestGetBindMsg_NonEnLang_FallsBackToZh(t *testing.T) {
 	// locale, short code, or unrecognized value) falls back to zh.
 	for _, lang := range []i18n.Lang{"fr_fr", "ja_jp", "ko", "unknown", ""} {
 		msg := getBindMsg(lang)
-		if want := "你想在哪个 Agent 中使用 lark-cli?"; msg.SelectSource != want {
+		if want := "你想在哪个 Agent 中使用 work-cli?"; msg.SelectSource != want {
 			t.Errorf("getBindMsg(%q) SelectSource = %q, want %q (zh fallback)", lang, msg.SelectSource, want)
 		}
 	}
@@ -1782,7 +1782,7 @@ func TestCleanupKeychainFromData_KeepsSecretSharedWithNewApp(t *testing.T) {
 	kc := newStatefulKeychain()
 
 	const sharedID = "appsecret:cli_shared"
-	if err := kc.Set("lark-cli", sharedID, "top-secret"); err != nil {
+	if err := kc.Set("work-cli", sharedID, "top-secret"); err != nil {
 		t.Fatalf("seed keychain: %v", err)
 	}
 
@@ -1796,7 +1796,7 @@ func TestCleanupKeychainFromData_KeepsSecretSharedWithNewApp(t *testing.T) {
 
 	cleanupKeychainFromData(kc, oldConfig, newApp)
 
-	got, err := kc.Get("lark-cli", sharedID)
+	got, err := kc.Get("work-cli", sharedID)
 	if err != nil {
 		t.Fatalf("keychain read after cleanup: %v", err)
 	}
@@ -1812,7 +1812,7 @@ func TestCleanupKeychainFromData_RemovesStaleSecretWhenAppIDChanges(t *testing.T
 
 	const oldID = "appsecret:cli_old"
 	const newID = "appsecret:cli_new"
-	if err := kc.Set("lark-cli", oldID, "old-secret"); err != nil {
+	if err := kc.Set("work-cli", oldID, "old-secret"); err != nil {
 		t.Fatalf("seed keychain: %v", err)
 	}
 
@@ -1826,7 +1826,7 @@ func TestCleanupKeychainFromData_RemovesStaleSecretWhenAppIDChanges(t *testing.T
 
 	cleanupKeychainFromData(kc, oldConfig, newApp)
 
-	got, _ := kc.Get("lark-cli", oldID)
+	got, _ := kc.Get("work-cli", oldID)
 	if got != "" {
 		t.Fatalf("stale secret should have been removed; still got %q", got)
 	}

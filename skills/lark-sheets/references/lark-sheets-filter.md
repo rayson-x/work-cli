@@ -89,7 +89,7 @@ _创建/更新的筛选器属性_
 
 ```bash
 # 查看当前 sheet 的筛选器配置（filter_id 等于 sheet_id）
-lark-cli sheets +filter-list --url "..." --sheet-id "$SID"
+work-cli sheets +filter-list --url "..." --sheet-id "$SID"
 ```
 
 ### `+filter-create`
@@ -97,7 +97,7 @@ lark-cli sheets +filter-list --url "..." --sheet-id "$SID"
 `--range` 是独立 flag（含表头行）；`rules` 走 `--properties`：
 
 ```bash
-lark-cli sheets +filter-create --url "..." --sheet-id "$SID" \
+work-cli sheets +filter-create --url "..." --sheet-id "$SID" \
   --range "A1:F1000" \
   --properties '{"rules":[{"column_index":"B","conditions":[{"type":"multiValue","compare_type":"equal","values":["北京","上海"]}]}]}'
 ```
@@ -120,7 +120,7 @@ lark-cli sheets +filter-create --url "..." --sheet-id "$SID" \
 ### `+filter-delete`
 
 ```bash
-lark-cli sheets +filter-delete --url "..." --sheet-id "$SID" --yes
+work-cli sheets +filter-delete --url "..." --sheet-id "$SID" --yes
 ```
 
 ### Validate / DryRun / Execute 约束

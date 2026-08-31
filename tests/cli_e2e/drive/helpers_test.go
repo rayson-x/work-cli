@@ -121,7 +121,7 @@ echo "unexpected fake CLI args: $*" >&2
 exit 2
 `
 
-	binaryPath := filepath.Join(t.TempDir(), "fake-lark-cli")
+	binaryPath := filepath.Join(t.TempDir(), "fake-work-cli")
 	require.NoError(t, os.WriteFile(binaryPath, []byte(script), 0o755))
 	return binaryPath
 }

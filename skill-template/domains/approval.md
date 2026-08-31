@@ -74,11 +74,11 @@
 **特别注意：** 对拒绝 / 转交 / 撤回场景更要严格执行上述规则；这些场景最容易因状态切换而失败。
 
 ```bash
-lark-cli approval approvals search --data '{"keyword":"请假"}' --as user
-lark-cli approval approvals get --params '{"approval_code":"<code>"}' --as user
-lark-cli approval instances create --data '{"approval_code":"<code>","form":"[...]"}' --yes --as user
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
-lark-cli approval tasks approve --data '{"instance_code":"<ic>","task_id":"<tid>","comment":"同意"}' --as user
+work-cli approval approvals search --data '{"keyword":"请假"}' --as user
+work-cli approval approvals get --params '{"approval_code":"<code>"}' --as user
+work-cli approval instances create --data '{"approval_code":"<code>","form":"[...]"}' --yes --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks approve --data '{"instance_code":"<ic>","task_id":"<tid>","comment":"同意"}' --as user
 ```
 
 ## 不在本 skill 范围

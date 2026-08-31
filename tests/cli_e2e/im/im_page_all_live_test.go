@@ -21,7 +21,7 @@ import (
 // page_token from the last fetched page.
 //
 // Self-contained: creates its own chats and messages. Chat cleanup follows the
-// repo-wide convention in createChat — lark-cli has no chat-delete command, so
+// repo-wide convention in createChat — work-cli has no chat-delete command, so
 // created chats are intentionally left in the test account.
 //
 // +chat-search pagination is intentionally not covered live: newly created
@@ -35,15 +35,15 @@ func TestIM_PageAllLiveWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	chatID := createChat(t, parentT, ctx, "lark-cli-e2e-page-all-"+suffix)
+	chatID := createChat(t, parentT, ctx, "work-cli-e2e-page-all-"+suffix)
 	// A second chat guarantees the bot is a member of at least two chats, so
 	// +chat-list with --page-size 1 is guaranteed to have a second page.
-	createChat(t, parentT, ctx, "lark-cli-e2e-page-all-b-"+suffix)
+	createChat(t, parentT, ctx, "work-cli-e2e-page-all-b-"+suffix)
 
 	texts := make([]string, 0, 3)
 	var parentMessageID string
 	for i := 1; i <= 3; i++ {
-		text := fmt.Sprintf("lark-cli-e2e-page-all-msg-%d-%s", i, suffix)
+		text := fmt.Sprintf("work-cli-e2e-page-all-msg-%d-%s", i, suffix)
 		texts = append(texts, text)
 		id := sendMessage(t, ctx, chatID, text)
 		if i == 1 {
@@ -111,7 +111,7 @@ func TestIM_PageAllLiveWorkflow(t *testing.T) {
 			reply, err := clie2e.RunCmd(ctx, clie2e.Request{
 				Args: []string{"im", "+messages-reply",
 					"--message-id", parentMessageID,
-					"--text", fmt.Sprintf("lark-cli-e2e-page-all-reply-%d-%s", i, suffix),
+					"--text", fmt.Sprintf("work-cli-e2e-page-all-reply-%d-%s", i, suffix),
 					"--reply-in-thread",
 				},
 				DefaultAs: "bot",
@@ -131,7 +131,7 @@ func TestIM_PageAllLiveWorkflow(t *testing.T) {
 				if result == nil || result.ExitCode != 0 {
 					return true
 				}
-				return strings.Count(result.Stdout, "lark-cli-e2e-page-all-reply-") < 2
+				return strings.Count(result.Stdout, "work-cli-e2e-page-all-reply-") < 2
 			},
 		})
 		require.NoError(t, err)

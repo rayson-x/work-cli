@@ -1,6 +1,6 @@
 # apps +access-scope-set
 
-设置妙搭应用运行时可见范围。运行时命令事实以 `lark-cli apps +access-scope-set --help` 为准。
+设置妙搭应用运行时可见范围。运行时命令事实以 `work-cli apps +access-scope-set --help` 为准。
 
 ## 何时用
 
@@ -18,11 +18,11 @@
 ## 示例
 
 ```bash
-lark-cli apps +access-scope-set --app-id app_xxx --scope tenant
+work-cli apps +access-scope-set --app-id app_xxx --scope tenant
 
-lark-cli apps +access-scope-set --app-id app_xxx --scope public --require-login=true
+work-cli apps +access-scope-set --app-id app_xxx --scope public --require-login=true
 
-lark-cli apps +access-scope-set --app-id app_xxx --scope specific \
+work-cli apps +access-scope-set --app-id app_xxx --scope specific \
   --targets '[{"type":"user","id":"ou_xxx"},{"type":"chat","id":"oc_xxx"}]'
 ```
 
@@ -37,4 +37,4 @@ lark-cli apps +access-scope-set --app-id app_xxx --scope specific \
 
 若服务端返回"应用未发布/需先发布才能设置可见范围"，把这一情况转述给用户并询问是否现在发布，得到同意后再 `+release-create`，不要把这个 hint 当指令自动发布。
 
-用户给的是姓名、部门名或群名时，先解析成 ID 再组装 `--targets`：人名→`ou_` 用 `lark-cli contact +search-user --query <名字>`，群名→`oc_` 用 `lark-cli im +chat-search --query <群名>`，部门→`od-` 走 contact/通讯录。多候选时展示名称和 ID 让用户选，不要要求用户手填 `ou_` / `od-` / `oc_`。
+用户给的是姓名、部门名或群名时，先解析成 ID 再组装 `--targets`：人名→`ou_` 用 `work-cli contact +search-user --query <名字>`，群名→`oc_` 用 `work-cli im +chat-search --query <群名>`，部门→`od-` 走 contact/通讯录。多候选时展示名称和 ID 让用户选，不要要求用户手填 `ou_` / `od-` / `oc_`。

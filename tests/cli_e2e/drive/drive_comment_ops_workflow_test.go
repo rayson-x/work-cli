@@ -35,7 +35,7 @@ func TestDriveCommentOpsWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	fileName := "lark-cli-e2e-drive-comment-ops-" + suffix + ".md"
+	fileName := "work-cli-e2e-drive-comment-ops-" + suffix + ".md"
 
 	// --- Create: fixture file + fixture comment ---
 	createResult, err := clie2e.RunCmd(ctx, clie2e.Request{

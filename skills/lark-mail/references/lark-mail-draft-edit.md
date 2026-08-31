@@ -49,22 +49,22 @@
 
 ```bash
 # 编辑草稿元数据（主题、收件人）
-lark-cli mail +draft-edit --draft-id <draft-id> --set-subject '更新后的主题' --set-to alice@example.com,bob@example.com
+work-cli mail +draft-edit --draft-id <draft-id> --set-subject '更新后的主题' --set-to alice@example.com,bob@example.com
 
 # 快速完整替换正文
-lark-cli mail +draft-edit --draft-id <draft-id> --body '<p>更新后的正文</p>'
+work-cli mail +draft-edit --draft-id <draft-id> --body '<p>更新后的正文</p>'
 
 # 高级正文编辑（如保留回复/转发引用区）
-lark-cli mail +draft-edit --draft-id <draft-id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft-id> --patch-file ./patch.json
 
 # 查看草稿（只读）— 返回包含 has_quoted_content、attachments_summary 和 inline_summary 的投影
-lark-cli mail +draft-edit --draft-id <draft-id> --inspect
+work-cli mail +draft-edit --draft-id <draft-id> --inspect
 
 # 打印补丁模板
-lark-cli mail +draft-edit --print-patch-template
+work-cli mail +draft-edit --print-patch-template
 
 # Dry Run（仅打印请求，不执行）
-lark-cli mail +draft-edit --draft-id <draft-id> --set-subject '测试' --dry-run
+work-cli mail +draft-edit --draft-id <draft-id> --set-subject '测试' --dry-run
 ```
 
 ## 通用参数
@@ -195,7 +195,7 @@ lark-cli mail +draft-edit --draft-id <draft-id> --set-subject '测试' --dry-run
 这些值来自草稿的 MIME 结构与 header 解析，与公开 API 的附件 ID **不同**。
 
 ```bash
-lark-cli mail +draft-edit --draft-id <draft_id> --inspect
+work-cli mail +draft-edit --draft-id <draft_id> --inspect
 ```
 
 `add_attachment` — 统一入口，不区分普通/超大。当累计附件导致 EML 总大小超过 25 MB 时，超出部分自动作为超大附件处理，单个文件上限 3 GB。
@@ -292,13 +292,13 @@ lark-cli mail +draft-edit --draft-id <draft_id> --inspect
 
 ```bash
 # 1. 查看草稿当前状态
-lark-cli mail +draft-edit --draft-id <draft_id> --inspect
+work-cli mail +draft-edit --draft-id <draft_id> --inspect
 
 # 2. 编辑草稿（元数据和快速正文替换）
-lark-cli mail +draft-edit --draft-id <draft_id> --set-subject '最终版本' --body '<p>更新后的内容</p>'
+work-cli mail +draft-edit --draft-id <draft_id> --set-subject '最终版本' --body '<p>更新后的内容</p>'
 
 # 3. 发送草稿
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 ### 编辑回复/转发草稿的正文
@@ -307,7 +307,7 @@ lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_
 
 ```bash
 # 1. 查看草稿，确认是否有引用区
-lark-cli mail +draft-edit --draft-id <draft_id> --inspect
+work-cli mail +draft-edit --draft-id <draft_id> --inspect
 # 返回包含：
 #   has_quoted_content: true  ← 说明有引用区，应使用 set_reply_body
 #   body_html_summary: "<div>原有回复内容</div>..."
@@ -316,7 +316,7 @@ lark-cli mail +draft-edit --draft-id <draft_id> --inspect
 cat > ./patch.json << 'EOF'
 { "ops": [{ "op": "set_reply_body", "value": "<p>修改后的回复内容</p>" }] }
 EOF
-lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 ```
 
 **注意：** 如果误用 `set_body`，引用区将被覆盖丢失。如果用户明确要去掉引用区或修改引用区内容，则应使用 `set_body`。
@@ -327,7 +327,7 @@ lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 
 ```bash
 # 1. 查看草稿以获取附件定位信息
-lark-cli mail +draft-edit --draft-id <draft_id> --inspect
+work-cli mail +draft-edit --draft-id <draft_id> --inspect
 # 返回包含：
 #   projection.attachments_summary (普通附件):
 #     [{"part_id":"1.3","filename":"report.pdf","content_type":"application/pdf"}]
@@ -345,7 +345,7 @@ cat > ./patch.json << 'EOF'
 EOF
 
 # 3. 应用补丁
-lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 ```
 
 ### 在正文中插入内嵌图片
@@ -354,7 +354,7 @@ lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 
 ```bash
 # 1. 查看草稿以获取当前 HTML 正文
-lark-cli mail +draft-edit --draft-id <draft_id> --inspect
+work-cli mail +draft-edit --draft-id <draft_id> --inspect
 
 # 2. 编写补丁 — 直接使用相对路径（注意：回复草稿用 set_reply_body，普通草稿用 set_body）
 cat > ./patch.json << 'EOF'
@@ -366,7 +366,7 @@ cat > ./patch.json << 'EOF'
 EOF
 
 # 3. 应用补丁
-lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 ```
 
 内嵌图片的增删改通过 HTML 正文自动联动：
@@ -380,7 +380,7 @@ lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 
 ```bash
 # 1. 查看补丁模板
-lark-cli mail +draft-edit --print-patch-template
+work-cli mail +draft-edit --print-patch-template
 
 # 2. 编写补丁文件（例如添加一个抄送并移除一个附件）
 cat > ./patch.json << 'EOF'
@@ -394,11 +394,11 @@ cat > ./patch.json << 'EOF'
 EOF
 
 # 3. 应用补丁
-lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 ```
 
 ## 相关命令
 
-- `lark-cli mail +draft-create` — 创建新草稿
-- `lark-cli mail user_mailbox.drafts get` — 获取草稿原始内容
-- `lark-cli mail user_mailbox.drafts send` — 发送已有草稿
+- `work-cli mail +draft-create` — 创建新草稿
+- `work-cli mail user_mailbox.drafts get` — 获取草稿原始内容
+- `work-cli mail user_mailbox.drafts send` — 发送已有草稿

@@ -22,9 +22,9 @@ var AppsCreate = common.Shortcut{
 	Description: "Create a new app",
 	Risk:        "write",
 	Tips: []string{
-		`Example: lark-cli apps +create --name "审批系统" --app-type full_stack`,
-		`Example: lark-cli apps +create --name "工具页" --app-type frontend --description "纯前端工具"`,
-		`Example: lark-cli apps +create --name "活动页" --app-type html --description "活动报名"`,
+		`Example: work-cli apps +create --name "审批系统" --app-type full_stack`,
+		`Example: work-cli apps +create --name "工具页" --app-type frontend --description "纯前端工具"`,
+		`Example: work-cli apps +create --name "活动页" --app-type html --description "活动报名"`,
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

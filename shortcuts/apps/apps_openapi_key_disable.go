@@ -15,7 +15,7 @@ var AppsOpenAPIKeyDisable = common.Shortcut{
 	Command:     "+openapi-key-disable",
 	Description: "Disable an open API key (minimal safety brake)",
 	Risk:        "write",
-	Tips:        []string{"Example: lark-cli apps +openapi-key-disable --app-id <app_id> --key-id <key_id>"},
+	Tips:        []string{"Example: work-cli apps +openapi-key-disable --app-id <app_id> --key-id <key_id>"},
 	Scopes:      []string{"spark:app:write"},
 	AuthTypes:   []string{"user"},
 	HasFormat:   true,

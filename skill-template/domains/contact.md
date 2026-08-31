@@ -14,8 +14,8 @@
 
 ```bash
 # 找张三给他发消息:先搜,确认 open_id,再发
-lark-cli contact +search-user --query "张三" --has-chatted --as user
-lark-cli im +messages-send --user-id ou_xxx --text "Hi!"
+work-cli contact +search-user --query "张三" --has-chatted --as user
+work-cli im +messages-send --user-id ou_xxx --text "Hi!"
 ```
 
 搜索命中多条且后续操作有副作用(发消息、邀请会议等),把候选列给用户挑;不要擅自选第一条。

@@ -34,7 +34,7 @@ import (
 // discover the identity-first workflow without needing skill documentation.
 func hintIdentityFirst(runtime *common.RuntimeContext, mailboxID string) {
 	fmt.Fprintf(runtime.IO().ErrOut,
-		"tip: run \"lark-cli mail user_mailboxes profile --params '{\"user_mailbox_id\":\"%s\"}'\" to confirm your email identity\n",
+		"tip: run \"work-cli mail user_mailboxes profile --params '{\"user_mailbox_id\":\"%s\"}'\" to confirm your email identity\n",
 		sanitizeForTerminal(mailboxID))
 }
 
@@ -43,7 +43,7 @@ func hintIdentityFirst(runtime *common.RuntimeContext, mailboxID string) {
 func hintSendDraft(runtime *common.RuntimeContext, mailboxID, draftID string) {
 	fmt.Fprintf(runtime.IO().ErrOut,
 		"tip: draft saved. To send this draft, run:\n"+
-			`  lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"%s","draft_id":"%s"}'`+"\n",
+			`  work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"%s","draft_id":"%s"}'`+"\n",
 		sanitizeForTerminal(mailboxID), sanitizeForTerminal(draftID))
 }
 
@@ -51,7 +51,7 @@ func hintSendDraft(runtime *common.RuntimeContext, mailboxID, draftID string) {
 // original message as read after a reply/reply-all/forward operation.
 func hintMarkAsRead(runtime *common.RuntimeContext, mailboxID, originalMessageID string) {
 	fmt.Fprintf(runtime.IO().ErrOut,
-		"tip: mark original as read? lark-cli mail +message-modify --mailbox '%s' --message-ids '%s' --remove-label-ids UNREAD\n",
+		"tip: mark original as read? work-cli mail +message-modify --mailbox '%s' --message-ids '%s' --remove-label-ids UNREAD\n",
 		shellQuoteForHint(mailboxID), shellQuoteForHint(originalMessageID))
 }
 
@@ -73,9 +73,9 @@ func hintReadReceiptRequest(runtime *common.RuntimeContext, mailboxID, messageID
 		"tip: sender requested a read receipt (READ_RECEIPT_REQUEST).\n"+
 			"  - do NOT auto-act; ask the user first (from=%s, subject=%q)\n"+
 			"  - if the user agrees to confirm they have read it:\n"+
-			"    lark-cli mail +send-receipt --mailbox '%s' --message-id '%s' --yes\n"+
+			"    work-cli mail +send-receipt --mailbox '%s' --message-id '%s' --yes\n"+
 			"  - if the user wants to dismiss the banner without sending a receipt:\n"+
-			"    lark-cli mail +decline-receipt --mailbox '%s' --message-id '%s'\n",
+			"    work-cli mail +decline-receipt --mailbox '%s' --message-id '%s'\n",
 		sanitizeForSingleLine(fromEmail), sanitizeForSingleLine(subject),
 		shellQuoteForHint(mailboxID), shellQuoteForHint(messageID),
 		shellQuoteForHint(mailboxID), shellQuoteForHint(messageID))
@@ -997,9 +997,9 @@ func resolveLookupHint(kind, mailboxID string) string {
 	}
 	switch kind {
 	case "folder":
-		return fmt.Sprintf("Run `lark-cli mail user_mailbox.folders list --params '{\"user_mailbox_id\":\"%s\"}'` to inspect available folder IDs and names.", mailboxID)
+		return fmt.Sprintf("Run `work-cli mail user_mailbox.folders list --params '{\"user_mailbox_id\":\"%s\"}'` to inspect available folder IDs and names.", mailboxID)
 	case "label":
-		return fmt.Sprintf("Run `lark-cli api GET '/open-apis/mail/v1/user_mailboxes/%s/labels' --as user` to inspect available label IDs and names.", validate.EncodePathSegment(mailboxID))
+		return fmt.Sprintf("Run `work-cli api GET '/open-apis/mail/v1/user_mailboxes/%s/labels' --as user` to inspect available label IDs and names.", validate.EncodePathSegment(mailboxID))
 	default:
 		return ""
 	}
@@ -2180,7 +2180,7 @@ func buildDraftSendOutput(resData map[string]interface{}, mailboxID string) map[
 		messageID, _ := resData["message_id"].(string)
 		out["recall_available"] = true
 		out["recall_tip"] = fmt.Sprintf(
-			`This message can be recalled within 24 hours. To recall: lark-cli mail user_mailbox.sent_messages recall --params '{"user_mailbox_id":"%s","message_id":"%s"}'`,
+			`This message can be recalled within 24 hours. To recall: work-cli mail user_mailbox.sent_messages recall --params '{"user_mailbox_id":"%s","message_id":"%s"}'`,
 			mailboxID, messageID)
 	}
 	if automationDisable, ok := resData["automation_send_disable"]; ok {
@@ -2201,7 +2201,7 @@ func buildDraftSendOutput(resData map[string]interface{}, mailboxID string) map[
 func buildDraftSavedOutput(draftResult draftpkg.DraftResult, mailboxID string) map[string]interface{} {
 	out := map[string]interface{}{
 		"draft_id": draftResult.DraftID,
-		"tip":      fmt.Sprintf(`draft saved. To send: lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"%s","draft_id":"%s"}'`, mailboxID, draftResult.DraftID),
+		"tip":      fmt.Sprintf(`draft saved. To send: work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"%s","draft_id":"%s"}'`, mailboxID, draftResult.DraftID),
 	}
 	if draftResult.Reference != "" {
 		out["reference"] = draftResult.Reference

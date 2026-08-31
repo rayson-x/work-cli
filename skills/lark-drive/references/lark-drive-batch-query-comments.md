@@ -8,7 +8,7 @@
 
 ```bash
 # 推荐：完整 URL + 评论 ID（逗号分隔或重复 --comment-ids，单次上限 100）
-lark-cli drive +batch-query-comments --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-ids '<id1>,<id2>'
+work-cli drive +batch-query-comments --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-ids '<id1>,<id2>'
 ```
 
 ## 参数

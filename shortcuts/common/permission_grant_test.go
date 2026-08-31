@@ -64,11 +64,11 @@ func TestAutoGrantStderrWarning_SkippedNoUser(t *testing.T) {
 	if result["status"] != PermissionGrantSkipped {
 		t.Fatalf("status = %v, want %q", result["status"], PermissionGrantSkipped)
 	}
-	const wantStderr = "Warning: resource was created with bot identity, but no current user open_id is configured, so auto-grant was skipped. Run `lark-cli auth login` and retry, or grant permission manually.\n"
+	const wantStderr = "Warning: resource was created with bot identity, but no current user open_id is configured, so auto-grant was skipped. Run `work-cli auth login` and retry, or grant permission manually.\n"
 	if got := stderr.String(); got != wantStderr {
 		t.Fatalf("default stderr changed:\n got: %q\nwant: %q", got, wantStderr)
 	}
-	const wantHint = "No current user identity (not logged in or session expired). Run `lark-cli auth login` and retry, or grant permission manually via the Lark document UI."
+	const wantHint = "No current user identity (not logged in or session expired). Run `work-cli auth login` and retry, or grant permission manually via the Lark document UI."
 	if got := result["hint"]; got != wantHint {
 		t.Fatalf("default hint changed:\n got: %#v\nwant: %q", got, wantHint)
 	}

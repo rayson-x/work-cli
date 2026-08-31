@@ -3,9 +3,9 @@ name: lark-doc
 description: "飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。独立评论操作走 lark-drive；随正文读取评论使用 docs +fetch。表格或 Base 内部数据操作不在本 skill。"
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
     skills: ["lark-shared"]
-  cliHelp: "lark-cli docs --help;lark-cli mindnotes --help"
+  cliHelp: "work-cli docs --help;work-cli mindnotes --help"
 ---
 
 # docs
@@ -16,7 +16,7 @@ metadata:
 
 **身份：文档操作推荐显式指定 `--as user`。**
 
-**所有表示本地文件的 `@path` 均使用 `@./xxx` 形式的相对路径，并以运行 `lark-cli` 时的当前工作目录（CWD）为基准。**
+**所有表示本地文件的 `@path` 均使用 `@./xxx` 形式的相对路径，并以运行 `work-cli` 时的当前工作目录（CWD）为基准。**
 
 ### 文档内容
 
@@ -45,5 +45,5 @@ metadata:
 
 ## 不在本 Skill 范围
 
-- **Drive 文件级操作**：找文档、导入导出、云空间文件上传 / 下载 / 权限管理 → [`lark-drive`](../lark-drive/SKILL.md)。复制文档、创建副本或另存为副本时，按其指引使用 `lark-cli drive files copy`；不要用 `docs +fetch` + `docs +create` 重建正文。
+- **Drive 文件级操作**：找文档、导入导出、云空间文件上传 / 下载 / 权限管理 → [`lark-drive`](../lark-drive/SKILL.md)。复制文档、创建副本或另存为副本时，按其指引使用 `work-cli drive files copy`；不要用 `docs +fetch` + `docs +create` 重建正文。
 - **独立评论操作**：添加、分页查看、回复评论或增删 reaction → [`lark-drive`](../lark-drive/SKILL.md)；只需紧凑评论上下文时，直接使用默认 JSON 响应的 `docs +fetch`。

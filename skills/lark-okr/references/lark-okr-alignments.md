@@ -19,28 +19,28 @@ OKR 对齐关系表示两个目标之间的关联：
 ### 命令
 
 ```bash
-lark-cli okr objective.alignments list --objective-id "<目标ID>" [flags]
+work-cli okr objective.alignments list --objective-id "<目标ID>" [flags]
 ```
 
 ### 常用示例
 
 ```bash
 # 获取目标的所有对齐关系（同时包含对齐和被对齐）
-lark-cli okr objective.alignments list \
+work-cli okr objective.alignments list \
   --objective-id "7652569715131075772"
 
 # 只查询该目标主动对齐他人的关系
-lark-cli okr objective.alignments list \
+work-cli okr objective.alignments list \
   --objective-id "7652569715131075772" \
   --align-type "aligning"
 
 # 只查询他人对齐该目标的关系
-lark-cli okr objective.alignments list \
+work-cli okr objective.alignments list \
   --objective-id "7652569715131075772" \
   --align-type "aligned"
 
 # 自动分页获取全部数据
-lark-cli okr objective.alignments list \
+work-cli okr objective.alignments list \
   --objective-id "7652569715131075772" \
   --page-all
 ```
@@ -69,19 +69,19 @@ lark-cli okr objective.alignments list \
 ### 命令
 
 ```bash
-lark-cli okr objective.alignments create --objective-id "<发起对齐的目标ID>" --data '<JSON>'
+work-cli okr objective.alignments create --objective-id "<发起对齐的目标ID>" --data '<JSON>'
 ```
 
 ### 常用示例
 
 ```bash
 # 创建对齐关系：目标 7652569715131075772 对齐到目标 7652569715131075773
-lark-cli okr objective.alignments create \
+work-cli okr objective.alignments create \
   --objective-id "7652569715131075772" \
   --data '{"to_entity_id":"7652569715131075773","to_entity_type":2}'
 
 # 从文件读取请求体
-lark-cli okr objective.alignments create \
+work-cli okr objective.alignments create \
   --objective-id "7652569715131075772" \
   --data @alignment.json
 ```
@@ -119,14 +119,14 @@ lark-cli okr objective.alignments create \
 ### 命令
 
 ```bash
-lark-cli okr alignments delete --alignment-id "<对齐关系ID>"
+work-cli okr alignments delete --alignment-id "<对齐关系ID>"
 ```
 
 ### 常用示例
 
 ```bash
 # 删除指定的对齐关系
-lark-cli okr alignments delete \
+work-cli okr alignments delete \
   --alignment-id "7652569715131075780"
 ```
 
@@ -149,28 +149,28 @@ lark-cli okr alignments delete \
 
 1. **查询现有对齐关系**（确认是否已存在）
    ```bash
-   lark-cli okr objective.alignments list \
+   work-cli okr objective.alignments list \
      --objective-id "目标A的ID" \
      --align-type "aligning"
    ```
 
 2. **创建对齐关系**
    ```bash
-   lark-cli okr objective.alignments create \
+   work-cli okr objective.alignments create \
      --objective-id "目标A的ID" \
      --data '{"to_entity_id":"目标B的ID","to_entity_type":2}'
    ```
 
 3. **验证对齐结果**
    ```bash
-   lark-cli okr objective.alignments list \
+   work-cli okr objective.alignments list \
      --objective-id "目标A的ID" \
      --align-type "aligning"
    ```
 
 4. **（如需）删除对齐关系**
    ```bash
-   lark-cli okr alignments delete \
+   work-cli okr alignments delete \
      --alignment-id "从步骤1返回的alignment_id"
    ```
 

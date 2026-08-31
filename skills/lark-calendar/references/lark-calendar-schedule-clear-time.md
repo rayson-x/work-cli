@@ -17,7 +17,7 @@
 若用户需要会议室，先调用 `+room-find`。详见 [`lark-calendar-room-find.md`](./lark-calendar-room-find.md)。
 
 ```bash
-lark-cli calendar +room-find \
+work-cli calendar +room-find \
   --slot "<start>~<end>" \
   --attendee-ids "<ids>" \
   --city "<city>" \
@@ -35,7 +35,7 @@ lark-cli calendar +room-find \
 ### 2. 查询忙闲
 
 ```bash
-lark-cli calendar +freebusy --start "<start>" --end "<end>"
+work-cli calendar +freebusy --start "<start>" --end "<end>"
 ```
 
 规则：

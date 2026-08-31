@@ -65,5 +65,5 @@ func unknownEventKeyErr(snap *catalog.Snapshot, key string) error {
 		msg += " — did you mean " + formatSuggestions(guesses) + "?"
 	}
 	return errs.NewValidationError(errs.SubtypeInvalidArgument, "%s", msg).
-		WithHint("Run 'lark-cli event list' to see available keys.")
+		WithHint("Run 'work-cli event list' to see available keys.")
 }

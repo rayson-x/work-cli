@@ -28,19 +28,19 @@
 
 ```bash
 # 删除普通文件（异步操作，会自动有限轮询任务状态）
-lark-cli drive +delete \
+work-cli drive +delete \
   --file-token <FILE_TOKEN> \
   --type file \
   --yes
 
 # 删除在线文档（异步操作，会自动有限轮询任务状态）
-lark-cli drive +delete \
+work-cli drive +delete \
   --file-token <DOCX_TOKEN> \
   --type docx \
   --yes
 
 # 删除文件夹（异步操作，会自动有限轮询任务状态）
-lark-cli drive +delete \
+work-cli drive +delete \
   --file-token <FOLDER_TOKEN> \
   --type folder \
   --yes
@@ -74,13 +74,13 @@ lark-cli drive +delete \
 
 ```bash
 # 第一步：先直接删除资源
-lark-cli drive +delete \
+work-cli drive +delete \
   --file-token <FILE_OR_FOLDER_TOKEN> \
   --type <TYPE> \
   --yes
 
 # 只有返回 ready=false / timed_out=true 或 next_command 时，才需要继续查
-lark-cli drive +task_result \
+work-cli drive +task_result \
   --scenario task_check \
   --task-id <TASK_ID>
 ```

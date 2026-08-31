@@ -9,25 +9,25 @@
 
 ```bash
 # 查询我发起的审批列表
-lark-cli approval instances initiated --params '{"page_size":20}' --as user
+work-cli approval instances initiated --params '{"page_size":20}' --as user
 
 # 只看某个审批定义下我发起的实例
-lark-cli approval instances initiated --params '{"definition_code":"<DEFINITION_CODE>","page_size":20}' --as user
+work-cli approval instances initiated --params '{"definition_code":"<DEFINITION_CODE>","page_size":20}' --as user
 
 # 按关键词搜索我发起的实例
-lark-cli approval instances initiated --params '{"keyword":"测试","page_size":10}' --as user
+work-cli approval instances initiated --params '{"keyword":"测试","page_size":10}' --as user
 
 # 按发起时间范围筛选（秒级时间戳）
-lark-cli approval instances initiated --params '{"start_timestamp":"<START_SECONDS>","end_timestamp":"<END_SECONDS>","page_size":20}' --as user
+work-cli approval instances initiated --params '{"start_timestamp":"<START_SECONDS>","end_timestamp":"<END_SECONDS>","page_size":20}' --as user
 
 # 使用 page_token 翻页
-lark-cli approval instances initiated --params '{"page_size":20,"page_token":"example_page_token"}' --as user
+work-cli approval instances initiated --params '{"page_size":20,"page_token":"example_page_token"}' --as user
 
 # 表格格式输出，便于快速浏览
-lark-cli approval instances initiated --params '{"page_size":20}' --format table --as user
+work-cli approval instances initiated --params '{"page_size":20}' --format table --as user
 
 # 预览 API 调用，不执行
-lark-cli approval instances initiated --params '{"page_size":20}' --as user --dry-run
+work-cli approval instances initiated --params '{"page_size":20}' --as user --dry-run
 ```
 
 ## 参数
@@ -84,23 +84,23 @@ lark-cli approval instances initiated --params '{"page_size":20}' --as user --dr
 ### 1) 找到我要操作的审批实例
 
 ```bash
-lark-cli approval instances initiated --params '{"page_size":20}' --format table --as user
+work-cli approval instances initiated --params '{"page_size":20}' --format table --as user
 ```
 
 拿到 `instances[].instance_code` 后，可继续：
 
 ```bash
 # 查看审批实例详情
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 
 # 撤回审批实例
-lark-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
+work-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
 ```
 
 ### 2) 只看某类审批
 
 ```bash
-lark-cli approval instances initiated \
+work-cli approval instances initiated \
   --params '{"definition_code":"<DEFINITION_CODE>","page_size":20}' \
   --as user
 ```
@@ -123,11 +123,11 @@ lark-cli approval instances initiated \
 
 ```bash
 # 查看单个审批实例详情
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 
 # 撤回审批实例
-lark-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
+work-cli approval instances cancel --data '{"instance_code":"<INSTANCE_CODE>"}' --as user --yes
 
 # 给审批实例追加抄送人
-lark-cli approval instances cc --data '{"instance_code":"<INSTANCE_CODE>","cc_user_ids":["<USER_ID>"]}' --params '{"user_id_type":"open_id"}' --as user --yes
+work-cli approval instances cc --data '{"instance_code":"<INSTANCE_CODE>","cc_user_ids":["<USER_ID>"]}' --params '{"user_id_type":"open_id"}' --as user --yes
 ```

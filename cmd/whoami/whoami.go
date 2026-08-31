@@ -15,7 +15,7 @@ import (
 	"github.com/larksuite/cli/internal/recovery"
 )
 
-// whoamiResult is the structured output of `lark-cli whoami`.
+// whoamiResult is the structured output of `work-cli whoami`.
 //
 // The self-vs-delegated distinction is carried by `identity`: a bot identity is
 // the app acting as itself; a user identity is the app acting *on behalf of* a

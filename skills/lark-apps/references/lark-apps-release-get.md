@@ -1,6 +1,6 @@
 # apps +release-get
 
-按 release ID 查询单次发布详情。运行时命令事实以 `lark-cli apps +release-get --help` 为准。
+按 release ID 查询单次发布详情。运行时命令事实以 `work-cli apps +release-get --help` 为准。
 
 ## 何时用
 
@@ -16,7 +16,7 @@
 ## 示例
 
 ```bash
-lark-cli apps +release-get --app-id app_xxx --release-id release_yyy
+work-cli apps +release-get --app-id app_xxx --release-id release_yyy
 ```
 
 ## 输出契约

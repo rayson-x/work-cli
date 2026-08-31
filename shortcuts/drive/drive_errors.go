@@ -70,7 +70,7 @@ func driveDownloadIsRateLimit(err error) bool {
 
 func driveDownloadForbiddenPreviewHint() string {
 	const tokenArg = "<FILE_TOKEN>"
-	return fmt.Sprintf("Direct Drive download returned HTTP 403. To view file content through preview artifacts, try `lark-cli drive +preview --file-token %s --type source_file --output <path>`.", tokenArg)
+	return fmt.Sprintf("Direct Drive download returned HTTP 403. To view file content through preview artifacts, try `work-cli drive +preview --file-token %s --type source_file --output <path>`.", tokenArg)
 }
 
 func driveDownloadPermissionDeniedError() error {
@@ -79,7 +79,7 @@ func driveDownloadPermissionDeniedError() error {
 		errs.SubtypePermissionDenied,
 		"current identity does not have export permission for this Drive file",
 	).WithHint(
-		"Direct Drive download is unavailable. To view file content through preview artifacts, try `lark-cli drive +preview --file-token %s --type source_file --output <path>`.",
+		"Direct Drive download is unavailable. To view file content through preview artifacts, try `work-cli drive +preview --file-token %s --type source_file --output <path>`.",
 		tokenArg,
 	)
 }
@@ -184,7 +184,7 @@ func withDriveExportRateLimitRecovery(err error, ticket, fileToken string) error
 	}
 
 	hint := fmt.Sprintf(
-		"export task status lookup was rate limited (ticket=%s); stop polling and wait at least 1 minute before retrying with: %s\nif rate limiting continues, use exponential backoff starting at 1 minute instead of retrying immediately; do not run `lark-cli drive +export` again because the export task already exists",
+		"export task status lookup was rate limited (ticket=%s); stop polling and wait at least 1 minute before retrying with: %s\nif rate limiting continues, use exponential backoff starting at 1 minute instead of retrying immediately; do not run `work-cli drive +export` again because the export task already exists",
 		ticket,
 		driveExportTaskResultCommand(ticket, fileToken),
 	)
@@ -200,7 +200,7 @@ func withDriveExportCreateRateLimitRecovery(err error) error {
 		return err
 	}
 
-	const hint = "export task creation was rate limited before a ticket was issued; stop and wait at least 1 minute, then rerun the original command with the same arguments\nif rate limiting continues, use exponential backoff starting at 1 minute instead of retrying immediately; do not run `lark-cli drive +task_result` because no export ticket exists yet"
+	const hint = "export task creation was rate limited before a ticket was issued; stop and wait at least 1 minute, then rerun the original command with the same arguments\nif rate limiting continues, use exponential backoff starting at 1 minute instead of retrying immediately; do not run `work-cli drive +task_result` because no export ticket exists yet"
 	return appendDriveExportRecoveryHint(err, hint)
 }
 

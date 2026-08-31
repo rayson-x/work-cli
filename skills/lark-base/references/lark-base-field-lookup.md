@@ -2,7 +2,7 @@
 
 ## Mandatory Read Acknowledgement
 
-When creating or updating a lookup field with `lark-cli base +field-create/+field-update --json ...` and `type` is `lookup`, you should read this guide first and only then add `--i-have-read-guide` to the command.
+When creating or updating a lookup field with `work-cli base +field-create/+field-update --json ...` and `type` is `lookup`, you should read this guide first and only then add `--i-have-read-guide` to the command.
 
 Do **not** proactively add `--i-have-read-guide` before reading this guide. Without it, the CLI will fail fast and direct you back to this guide.
 
@@ -16,8 +16,8 @@ When using `+field-update`, also pass `--yes`: field update is a high-risk `PUT`
 
 When creating a lookup field, the Agent should:
 
-1. Get all table names: `lark-cli base +table-list --base-token <base>` — returns `items[].table_name`
-2. Get table structure: `lark-cli base +table-get --base-token <base> --table-id <table>` — returns `fields[]`
+1. Get all table names: `work-cli base +table-list --base-token <base>` — returns `items[].table_name`
+2. Get table structure: `work-cli base +table-get --base-token <base> --table-id <table>` — returns `fields[]`
 3. If the lookup references other tables, also get those tables' structures
 4. Determine the four elements: from (source table), select (source field), where (filter), aggregate (aggregation)
 5. Construct the Lookup field JSON and submit it to create or update the field

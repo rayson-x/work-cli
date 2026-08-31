@@ -5,21 +5,21 @@
 直接更新目标（Objective）或关键结果（Key Result）的指标当前值，无需手动查询指标 ID。
 
 > **查询指标：** 如需查看指标详情，请使用原生 API：
-> - 目标指标：`lark-cli okr objective.indicators list --objective-id <id>`
-> - KR 指标：`lark-cli okr key_result.indicators list --key-result-id <id>`
+> - 目标指标：`work-cli okr objective.indicators list --objective-id <id>`
+> - KR 指标：`work-cli okr key_result.indicators list --key-result-id <id>`
 
 ## 推荐命令
 
 ```bash
 # 更新 Objective 的指标值
-lark-cli okr +indicator-update \
+work-cli okr +indicator-update \
   --level objective \
   --id 7000000000000000001 \
   --value 75.5 \
   --as user
 
 # 更新 Key Result 的指标值
-lark-cli okr +indicator-update \
+work-cli okr +indicator-update \
   --level key-result \
   --id 7000000000000000002 \
   --value 100 \

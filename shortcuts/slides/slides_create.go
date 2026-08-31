@@ -31,7 +31,7 @@ var SlidesCreate = common.Shortcut{
 	AuthTypes:   []string{"user", "bot"},
 	// docs:document.media:upload is required by the @-placeholder upload path.
 	// Declared up-front (matching the convention used by other multi-API shortcuts
-	// like wiki_move) so the pre-flight check fails fast and lark-cli's
+	// like wiki_move) so the pre-flight check fails fast and work-cli's
 	// auth login --scope hint guides the user, instead of leaving an orphaned
 	// empty presentation when the in-flight upload 403s.
 	// NB: no drive scope here on purpose — slides creation never touches drive;

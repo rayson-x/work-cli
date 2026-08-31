@@ -6,43 +6,43 @@ List chats the current user (or bot, with `--as bot`) is a member of. **Not a se
 
 **Defaults to groups only**; pass `--types=p2p,group` (or `--types p2p --types group`) to also include p2p single chats (user identity only — see ["Bot identity and p2p"](#bot-identity-and-p2p)). Supports pagination, sort order, and (user identity only) muted-chat filtering.
 
-This skill maps to the shortcut: `lark-cli im +chat-list` (internally calls `GET /open-apis/im/v1/chats`).
+This skill maps to the shortcut: `work-cli im +chat-list` (internally calls `GET /open-apis/im/v1/chats`).
 
 ## Commands
 
 ```bash
 # List the user's chats (default sort: create_time, ascending)
-lark-cli im +chat-list
+work-cli im +chat-list
 
 # Sort by recent activity (most recently active first)
-lark-cli im +chat-list --sort active_time
+work-cli im +chat-list --sort active_time
 
 # Limit page size
-lark-cli im +chat-list --page-size 50
+work-cli im +chat-list --page-size 50
 
 # Pagination
-lark-cli im +chat-list --page-token "xxx"
+work-cli im +chat-list --page-token "xxx"
 
 # Fetch multiple pages automatically, up to 10 pages by default
-lark-cli im +chat-list --page-all
+work-cli im +chat-list --page-all
 
 # Drop muted chats (user identity only)
-lark-cli im +chat-list --exclude-muted
+work-cli im +chat-list --exclude-muted
 
 # JSON output
-lark-cli im +chat-list --format json
+work-cli im +chat-list --format json
 
 # Preview the request without executing it
-lark-cli im +chat-list --dry-run
+work-cli im +chat-list --dry-run
 
 # Include p2p single chats (user identity only) — comma form
-lark-cli im +chat-list --as user --types p2p,group
+work-cli im +chat-list --as user --types p2p,group
 
 # Same, using repeat flag instead of CSV
-lark-cli im +chat-list --as user --types p2p --types group
+work-cli im +chat-list --as user --types p2p --types group
 
 # Only p2p single chats (user identity only)
-lark-cli im +chat-list --as user --types p2p
+work-cli im +chat-list --as user --types p2p
 ```
 
 ## Parameters
@@ -137,13 +137,13 @@ When the flag is set, the JSON envelope gains a `filter` sub-object (absent othe
 ### Scenario 1: List my recent chats
 
 ```bash
-lark-cli im +chat-list --sort active_time --page-size 10
+work-cli im +chat-list --sort active_time --page-size 10
 ```
 
 ### Scenario 2: List my non-muted chats sorted by activity
 
 ```bash
-lark-cli im +chat-list --sort active_time --exclude-muted
+work-cli im +chat-list --sort active_time --exclude-muted
 ```
 
 ### Scenario 3: Iterate all my chats programmatically
@@ -151,7 +151,7 @@ lark-cli im +chat-list --sort active_time --exclude-muted
 ```bash
 TOKEN=""
 while :; do
-  RESP=$(lark-cli im +chat-list --page-size 100 --page-token "$TOKEN" --format json)
+  RESP=$(work-cli im +chat-list --page-size 100 --page-token "$TOKEN" --format json)
   echo "$RESP" | jq -r '.data.chats[].chat_id'
   HAS_MORE=$(echo "$RESP" | jq -r '.data.has_more')
   [ "$HAS_MORE" = "true" ] || break
@@ -165,7 +165,7 @@ done
 |---------|---------|---------|
 | `invalid --page-size 101: must be between 1 and 100` | page-size is out of range | Use an integer between 1 and 100 |
 | Permission denied (99991672) | The bot app does not have `im:chat:read` TAT permission enabled | Enable the permission for the app in the Open Platform console |
-| Permission denied (99991679) with `--as user` | UAT is not authorized for `im:chat:read` | Run `lark-cli auth login --scope "im:chat:read"` |
+| Permission denied (99991679) with `--as user` | UAT is not authorized for `im:chat:read` | Run `work-cli auth login --scope "im:chat:read"` |
 | `Bot ability is not activated` (232025) | The app does not have bot capability enabled | Enable bot capability in the Open Platform console |
 | `--exclude-muted` returns all chats unfiltered and `hint` says "no effect under bot identity" | Running under `--as bot` (mute API is UAT-only) | Switch to `--as user` for mute filtering |
 | `--types=p2p (single chats) is only supported with user identity` | `--as bot` + `--types=p2p` (single-value only; mixed `--types=p2p,group` is downgraded to `group` and surfaces a `bot_strip_p2p` notice via stderr + `outData["notices"]` — see "Bot identity and p2p") | Use `--as user`, or include `group` in `--types` (the bot proceeds with `group` only and emits the `bot_strip_p2p` notice) |

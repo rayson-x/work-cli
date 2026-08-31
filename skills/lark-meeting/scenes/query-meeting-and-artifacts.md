@@ -23,7 +23,7 @@
 没有标识时，用 `vc +search` 搜索已经结束的会议：
 
 ```bash
-lark-cli vc +search --query <query> --start <start> --end <end> --format json
+work-cli vc +search --query <query> --start <start> --end <end> --format json
 ```
 
 - 至少提供关键词、时间范围、组织者、参与者或会议室中的一个条件；不要把“总结”“回顾”“所有会议”等动作词当作 `--query`。
@@ -47,7 +47,7 @@ lark-cli vc +search --query <query> --start <start> --end <end> --format json
 查询“谁参加过、何时加入或离开、某人是否参会”时，读取会议的参会人快照：
 
 ```bash
-lark-cli vc meeting get --params '{"meeting_id":"<meeting_id>","with_participants":true}' --as <source_identity>
+work-cli vc meeting get --params '{"meeting_id":"<meeting_id>","with_participants":true}' --as <source_identity>
 ```
 
 这是服务端快照，不要求应用机器人入会，会议结束后也可以查询。不要用会中事件代替完整参会人快照。
@@ -57,7 +57,7 @@ lark-cli vc meeting get --params '{"meeting_id":"<meeting_id>","with_participant
 使用 `vc +detail` 获取会议关联的 `note_id` 和 `minute_token`：
 
 ```bash
-lark-cli vc +detail --meeting-ids <meeting_id> --as <source_identity>
+work-cli vc +detail --meeting-ids <meeting_id> --as <source_identity>
 ```
 
 Note 与 Minutes 来自相互独立的 AI 总结和录制链路，可能同时存在、只存在一个或都不存在：

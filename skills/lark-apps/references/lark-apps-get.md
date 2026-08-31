@@ -1,6 +1,6 @@
 # apps +get
 
-按 app_id 查询单个应用详情。运行时命令事实以 `lark-cli apps +get --help` 为准。
+按 app_id 查询单个应用详情。运行时命令事实以 `work-cli apps +get --help` 为准。
 
 ## 何时用
 
@@ -14,9 +14,9 @@
 ## 示例
 
 ```bash
-lark-cli apps +get --app-id app_xxx
-lark-cli apps +get --app-id app_xxx --dry-run
-lark-cli apps +get --app-id app_xxx -q '.data.app.app_type'
+work-cli apps +get --app-id app_xxx
+work-cli apps +get --app-id app_xxx --dry-run
+work-cli apps +get --app-id app_xxx -q '.data.app.app_type'
 ```
 
 ## 输出契约

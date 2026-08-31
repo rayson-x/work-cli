@@ -25,8 +25,8 @@ var BaseAppCreate = common.Shortcut{
 		{Name: "theme-style", Desc: "theme style", Enum: []string{"default", "cloudBlue", "fresh", "softLight", "future", "technology"}},
 	},
 	Tips: []string{
-		`lark-cli base +app-create --name "Sales app" --workspace-token <workspace_token>`,
-		`lark-cli base +app-create --name "Sales app" --workspace-token <workspace_token> --theme-style cloudBlue`,
+		`work-cli base +app-create --name "Sales app" --workspace-token <workspace_token>`,
+		`work-cli base +app-create --name "Sales app" --workspace-token <workspace_token> --theme-style cloudBlue`,
 		"This command creates a new empty BaseApp; it does not copy an existing BaseApp or its pages and blocks.",
 		"Create or select a Base separately when the app needs data.",
 		"Record the returned app_token; page and block commands require it.",

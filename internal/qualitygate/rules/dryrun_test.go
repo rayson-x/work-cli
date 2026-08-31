@@ -100,12 +100,12 @@ func TestExtractDryRunJSONReturnsAPICallCount(t *testing.T) {
 
 func TestClassifyExampleSkipsFileAndInteractiveInputs(t *testing.T) {
 	cases := map[string]string{
-		"lark-cli auth login":                                  "interactive",
-		"lark-cli config init":                                 "local_state",
-		"lark-cli docs +fetch --doc @doc.json":                 "file_input",
-		"lark-cli im message send --content -":                 "stdin",
-		"lark-cli drive file delete --file-token abc --yes":    "high_risk",
-		"lark-cli docs +fetch --doc abc | jq -r '.data.title'": "stdin",
+		"work-cli auth login":                                  "interactive",
+		"work-cli config init":                                 "local_state",
+		"work-cli docs +fetch --doc @doc.json":                 "file_input",
+		"work-cli im message send --content -":                 "stdin",
+		"work-cli drive file delete --file-token abc --yes":    "high_risk",
+		"work-cli docs +fetch --doc abc | jq -r '.data.title'": "stdin",
 	}
 	for raw, want := range cases {
 		got := classifyExample(skillscan.Example{Raw: raw})
@@ -116,7 +116,7 @@ func TestClassifyExampleSkipsFileAndInteractiveInputs(t *testing.T) {
 }
 
 func TestClassifyExampleDoesNotTreatQuotedPipeAsStdin(t *testing.T) {
-	got := classifyExample(skillscan.Example{Raw: `lark-cli api GET /open-apis/test --jq '.data.items[] | select(.ok)'`})
+	got := classifyExample(skillscan.Example{Raw: `work-cli api GET /open-apis/test --jq '.data.items[] | select(.ok)'`})
 	if !got.Executable || got.SkipReason != "" {
 		t.Fatalf("quoted jq pipe should remain executable, got %#v", got)
 	}
@@ -124,10 +124,10 @@ func TestClassifyExampleDoesNotTreatQuotedPipeAsStdin(t *testing.T) {
 
 func TestDryRunIdentitySkipAllowsExplicitUser(t *testing.T) {
 	cmd := manifest.Command{Path: "mail +send", Identities: []string{"user"}}
-	if got := dryRunIdentitySkip(cmd, "lark-cli mail +send --as user"); got != "" {
+	if got := dryRunIdentitySkip(cmd, "work-cli mail +send --as user"); got != "" {
 		t.Fatalf("explicit user dry-run skip = %q, want executable", got)
 	}
-	if got := dryRunIdentitySkip(cmd, "lark-cli mail +send"); got != "requires_user_identity" {
+	if got := dryRunIdentitySkip(cmd, "work-cli mail +send"); got != "requires_user_identity" {
 		t.Fatalf("implicit user-only dry-run skip = %q, want requires_user_identity", got)
 	}
 }
@@ -143,7 +143,7 @@ func TestRunDryRunsMaterializesTypedPlaceholderFlagValues(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli im +chat-messages-list --chat-id <chat_id>",
+		Raw:            "work-cli im +chat-messages-list --chat-id <chat_id>",
 		SourceFile:     "skills/lark-im/references/messages.md",
 		Line:           12,
 		HasPlaceholder: true,
@@ -176,7 +176,7 @@ func TestRunDryRunsMaterializesValidMinuteTokenPlaceholder(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli minutes +detail --minute-tokens <minute_token>",
+		Raw:            "work-cli minutes +detail --minute-tokens <minute_token>",
 		SourceFile:     "skills/lark-meeting/scenes/create-and-edit-minutes.md",
 		Line:           28,
 		HasPlaceholder: true,
@@ -206,7 +206,7 @@ func TestRunDryRunsIgnoresTrailingShellComment(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli docs +fetch --doc doccnxxxx # inspect --params shape first`,
+		Raw:        `work-cli docs +fetch --doc doccnxxxx # inspect --params shape first`,
 		SourceFile: "skills/lark-doc/SKILL.md",
 		Line:       12,
 	}
@@ -238,7 +238,7 @@ func TestRunDryRunsIgnoresJQFilterWhenValidatingRequestPreview(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:        `lark-cli im +flag-list --as user --page-all -q '.data.flag_items[-1]'`,
+		Raw:        `work-cli im +flag-list --as user --page-all -q '.data.flag_items[-1]'`,
 		SourceFile: "skills/lark-im/references/lark-im-flag-list.md",
 		Line:       26,
 	}
@@ -267,7 +267,7 @@ func TestRunDryRunsMaterializesPlaceholdersInsideJSONFlags(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli im messages list --params '{"chat_id":"<chat_id>","page_token":"<PAGE_TOKEN>"}'`,
+		Raw:            `work-cli im messages list --params '{"chat_id":"<chat_id>","page_token":"<PAGE_TOKEN>"}'`,
 		SourceFile:     "skills/lark-im/references/messages.md",
 		Line:           20,
 		HasPlaceholder: true,
@@ -294,7 +294,7 @@ func TestRunDryRunsWarnsWhenStdoutTruncated(t *testing.T) {
 		Runnable: true,
 		Flags:    []manifest.Flag{{Name: "dry-run"}},
 	}}}
-	ex := skillscan.Example{Raw: "lark-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 10}
+	ex := skillscan.Example{Raw: "work-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 10}
 
 	diags, facts := RunDryRuns(context.Background(), cliBin, m, []skillscan.Example{ex})
 	if len(diags) != 1 || diags[0].Action != report.ActionWarning {
@@ -312,7 +312,7 @@ func TestRunDryRunsRejectsNonTimeoutFailure(t *testing.T) {
 		Runnable: true,
 		Flags:    []manifest.Flag{{Name: "dry-run"}},
 	}}}
-	ex := skillscan.Example{Raw: "lark-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 10}
+	ex := skillscan.Example{Raw: "work-cli docs +fetch", SourceFile: "skills/lark-doc/SKILL.md", Line: 10}
 
 	diags, facts := RunDryRuns(context.Background(), cliBin, m, []skillscan.Example{ex})
 	if len(diags) != 1 || diags[0].Action != report.ActionReject {
@@ -333,7 +333,7 @@ func TestRunDryRunsKeepsNonJSONParamsPlaceholderSkipped(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli api GET /open-apis/im/v1/messages --params 'container_id=oc_xxx&page_token=<PAGE_TOKEN>'`,
+		Raw:            `work-cli api GET /open-apis/im/v1/messages --params 'container_id=oc_xxx&page_token=<PAGE_TOKEN>'`,
 		SourceFile:     "skills/lark-im/references/lark-im-chat-messages-list.md",
 		Line:           111,
 		HasPlaceholder: true,
@@ -359,7 +359,7 @@ func TestRunDryRunsMaterializesInlinePlaceholderFlagValues(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli im +chat-messages-list --chat-id=<chat_id>",
+		Raw:            "work-cli im +chat-messages-list --chat-id=<chat_id>",
 		SourceFile:     "skills/lark-im/references/messages.md",
 		Line:           24,
 		HasPlaceholder: true,
@@ -397,7 +397,7 @@ func TestRunDryRunsMaterializesNumericPlaceholderFlagValues(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli vc +meeting-events --meeting-id <meeting_id> --page-size <page_size>",
+		Raw:            "work-cli vc +meeting-events --meeting-id <meeting_id> --page-size <page_size>",
 		SourceFile:     "skills/lark-vc-agent/SKILL.md",
 		Line:           120,
 		HasPlaceholder: true,
@@ -427,7 +427,7 @@ func TestRunDryRunsMaterializesNumericPlaceholdersInsideJSONFlags(t *testing.T) 
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli api GET /open-apis/test --params '{"timestamp":"<timestamp>","count":"<count>"}'`,
+		Raw:            `work-cli api GET /open-apis/test --params '{"timestamp":"<timestamp>","count":"<count>"}'`,
 		SourceFile:     "skills/lark-demo/SKILL.md",
 		Line:           20,
 		HasPlaceholder: true,
@@ -458,7 +458,7 @@ func TestRunDryRunsMaterializesLarkDocumentURLPlaceholders(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli drive +inspect --url '<url>' --format json",
+		Raw:            "work-cli drive +inspect --url '<url>' --format json",
 		SourceFile:     "skills/lark-drive/references/lark-drive-workflow-permission-governance-commands.md",
 		Line:           15,
 		HasPlaceholder: true,
@@ -490,7 +490,7 @@ func TestRunDryRunsMaterializesResourceIDPlaceholderFlagValues(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli wiki +node-list --space-id <space_id> --page-token <PAGE_TOKEN> --format json",
+		Raw:            "work-cli wiki +node-list --space-id <space_id> --page-token <PAGE_TOKEN> --format json",
 		SourceFile:     "skills/lark-wiki/references/lark-wiki-node-list.md",
 		Line:           24,
 		HasPlaceholder: true,
@@ -521,7 +521,7 @@ func TestRunDryRunsMaterializesResourcePlaceholdersInsideJSONFlags(t *testing.T)
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'`,
+		Raw:            `work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'`,
 		SourceFile:     "skills/lark-mail/references/lark-mail-send.md",
 		Line:           172,
 		HasPlaceholder: true,
@@ -547,7 +547,7 @@ func TestRunDryRunsSkipsUnknownFlagsBeforeDryRun(t *testing.T) {
 		Flags:    []manifest.Flag{{Name: "chat-id", TakesValue: true}, {Name: "dry-run"}},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli im +chat-messages-list --container-id <chat_id>",
+		Raw:            "work-cli im +chat-messages-list --container-id <chat_id>",
 		SourceFile:     "skills/lark-im/references/messages.md",
 		Line:           31,
 		HasPlaceholder: true,
@@ -572,7 +572,7 @@ func TestRunDryRunsKeepsGenericTypePlaceholderSkipped(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli contact users list --user-id-type <type>",
+		Raw:            "work-cli contact users list --user-id-type <type>",
 		SourceFile:     "skills/lark-contact/references/users.md",
 		Line:           44,
 		HasPlaceholder: true,
@@ -597,7 +597,7 @@ func TestRunDryRunsKeepsAmbiguousAppLikePlaceholderSkipped(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli approval tasks get --code <approval_code>",
+		Raw:            "work-cli approval tasks get --code <approval_code>",
 		SourceFile:     "skills/lark-approval/references/tasks.md",
 		Line:           52,
 		HasPlaceholder: true,
@@ -624,7 +624,7 @@ func TestRunDryRunsPreservesMarkupLiteralWhileMaterializingPlaceholder(t *testin
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli docs +update --doc-token <doc_token> --body '<p>ok</p>'`,
+		Raw:            `work-cli docs +update --doc-token <doc_token> --body '<p>ok</p>'`,
 		SourceFile:     "skills/lark-doc/references/update.md",
 		Line:           58,
 		HasPlaceholder: true,
@@ -654,7 +654,7 @@ func TestRunDryRunsKeepsUnmaterializablePlaceholdersSkipped(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli apps +html-publish --app-id "$APP" --path ./dist`,
+		Raw:            `work-cli apps +html-publish --app-id "$APP" --path ./dist`,
 		SourceFile:     "skills/lark-apps/references/html-publish.md",
 		Line:           103,
 		HasPlaceholder: true,
@@ -672,7 +672,7 @@ func TestRunDryRunsKeepsUnmaterializablePlaceholdersSkipped(t *testing.T) {
 func TestRunDryRunsKeepsCommandTemplatePlaceholdersSkipped(t *testing.T) {
 	m := manifest.Manifest{Commands: []manifest.Command{{Path: "approval", Runnable: true, Flags: []manifest.Flag{{Name: "dry-run"}}}}}
 	ex := skillscan.Example{
-		Raw:            "lark-cli approval <resource> <method> [flags]",
+		Raw:            "work-cli approval <resource> <method> [flags]",
 		SourceFile:     "skills/lark-approval/SKILL.md",
 		Line:           42,
 		HasPlaceholder: true,
@@ -698,7 +698,7 @@ func TestRunDryRunsKeepsUnparseablePlaceholderExamplesSkipped(t *testing.T) {
 		},
 	}}}
 	ex := skillscan.Example{
-		Raw:            `lark-cli docs +update --doc-token <doc_token> --body '{"content":`,
+		Raw:            `work-cli docs +update --doc-token <doc_token> --body '{"content":`,
 		SourceFile:     "skills/lark-doc/references/update.md",
 		Line:           77,
 		HasPlaceholder: true,
@@ -715,7 +715,7 @@ func TestRunDryRunsKeepsUnparseablePlaceholderExamplesSkipped(t *testing.T) {
 
 func TestDryRunRequestShapeMismatchRejects(t *testing.T) {
 	fact := facts.CommandExample{
-		Raw:             "lark-cli api GET /open-apis/test --dry-run",
+		Raw:             "work-cli api GET /open-apis/test --dry-run",
 		ExpectedRequest: &facts.DryRunRequest{Method: "POST", URL: "/open-apis/test"},
 		DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/test"},
 		APICallCount:    1,
@@ -729,13 +729,13 @@ func TestDryRunRequestShapeMismatchRejects(t *testing.T) {
 func TestDryRunRequestShapeMismatchRejectsUnexpectedParamsOrBody(t *testing.T) {
 	for _, fact := range []facts.CommandExample{
 		{
-			Raw:             "lark-cli svc items list --dry-run",
+			Raw:             "work-cli svc items list --dry-run",
 			ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items"},
 			DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items", Params: map[string]any{"unexpected": "1"}},
 			APICallCount:    1,
 		},
 		{
-			Raw:             "lark-cli svc items get --dry-run",
+			Raw:             "work-cli svc items get --dry-run",
 			ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items/1"},
 			DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items/1", Body: jsonRaw(`{"unexpected":true}`)},
 			APICallCount:    1,
@@ -750,7 +750,7 @@ func TestDryRunRequestShapeMismatchRejectsUnexpectedParamsOrBody(t *testing.T) {
 
 func TestDryRunRequestShapeMismatchRejectsMultipleAPICalls(t *testing.T) {
 	fact := facts.CommandExample{
-		Raw:             "lark-cli svc items get --dry-run",
+		Raw:             "work-cli svc items get --dry-run",
 		ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items/1"},
 		DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items/1"},
 		APICallCount:    2,
@@ -763,7 +763,7 @@ func TestDryRunRequestShapeMismatchRejectsMultipleAPICalls(t *testing.T) {
 
 func TestDryRunRequestShapeMismatchRejectsMissingAPICall(t *testing.T) {
 	fact := facts.CommandExample{
-		Raw:             "lark-cli svc items get --dry-run",
+		Raw:             "work-cli svc items get --dry-run",
 		ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items/1"},
 		APICallCount:    0,
 	}
@@ -775,7 +775,7 @@ func TestDryRunRequestShapeMismatchRejectsMissingAPICall(t *testing.T) {
 
 func TestDryRunRequestShapeMismatchRejectsQueryMismatch(t *testing.T) {
 	fact := facts.CommandExample{
-		Raw:             "lark-cli svc items get --dry-run",
+		Raw:             "work-cli svc items get --dry-run",
 		ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items", Query: map[string][]string{"page_size": {"20"}}},
 		DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items", Query: map[string][]string{"page_size": {"200"}}},
 		APICallCount:    1,
@@ -788,7 +788,7 @@ func TestDryRunRequestShapeMismatchRejectsQueryMismatch(t *testing.T) {
 
 func TestDryRunRequestShapeMismatchRejectsParamMismatch(t *testing.T) {
 	fact := facts.CommandExample{
-		Raw:             "lark-cli svc items list --params '{\"page_size\":1}' --dry-run",
+		Raw:             "work-cli svc items list --params '{\"page_size\":1}' --dry-run",
 		ExpectedRequest: &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items", Params: map[string]any{"page_size": float64(1)}},
 		DryRun:          &facts.DryRunRequest{Method: "GET", URL: "/open-apis/svc/v1/items", Params: map[string]any{"page_size": float64(20)}},
 		APICallCount:    1,
@@ -820,7 +820,7 @@ func jsonRaw(raw string) json.RawMessage {
 }
 
 func TestAppendDryRunArgDoesNotDuplicate(t *testing.T) {
-	got, err := appendDryRunArg("lark-cli docs +fetch --dry-run --doc abc")
+	got, err := appendDryRunArg("work-cli docs +fetch --dry-run --doc abc")
 	if err != nil {
 		t.Fatalf("appendDryRunArg() error = %v", err)
 	}
@@ -836,7 +836,7 @@ func TestAppendDryRunArgDoesNotDuplicate(t *testing.T) {
 }
 
 func TestAppendDryRunArgForcesJSONFormat(t *testing.T) {
-	got, err := appendDryRunArg("lark-cli vc +meeting-events --meeting-id 400000000001 --format pretty")
+	got, err := appendDryRunArg("work-cli vc +meeting-events --meeting-id 400000000001 --format pretty")
 	if err != nil {
 		t.Fatalf("appendDryRunArg() error = %v", err)
 	}
@@ -847,7 +847,7 @@ func TestAppendDryRunArgForcesJSONFormat(t *testing.T) {
 }
 
 func TestAppendDryRunArgForcesInlineJSONFormat(t *testing.T) {
-	got, err := appendDryRunArg("lark-cli vc +meeting-events --meeting-id 400000000001 --format=pretty --dry-run")
+	got, err := appendDryRunArg("work-cli vc +meeting-events --meeting-id 400000000001 --format=pretty --dry-run")
 	if err != nil {
 		t.Fatalf("appendDryRunArg() error = %v", err)
 	}
@@ -865,47 +865,47 @@ func TestAppendDryRunArgRemovesJQFilter(t *testing.T) {
 	}{
 		{
 			name: "short split",
-			raw:  `lark-cli im +flag-list --page-all -q '.data.flag_items[-1]'`,
+			raw:  `work-cli im +flag-list --page-all -q '.data.flag_items[-1]'`,
 			want: []string{"im", "+flag-list", "--page-all", "--dry-run"},
 		},
 		{
 			name: "long split",
-			raw:  `lark-cli im +flag-list --jq '.data.flag_items[].item_id' --page-all`,
+			raw:  `work-cli im +flag-list --jq '.data.flag_items[].item_id' --page-all`,
 			want: []string{"im", "+flag-list", "--page-all", "--dry-run"},
 		},
 		{
 			name: "short inline",
-			raw:  `lark-cli im +flag-list -q='.data.flag_items[-1]' --page-all`,
+			raw:  `work-cli im +flag-list -q='.data.flag_items[-1]' --page-all`,
 			want: []string{"im", "+flag-list", "--page-all", "--dry-run"},
 		},
 		{
 			name: "long inline",
-			raw:  `lark-cli im +flag-list --jq='.data.flag_items[-1]' --page-all`,
+			raw:  `work-cli im +flag-list --jq='.data.flag_items[-1]' --page-all`,
 			want: []string{"im", "+flag-list", "--page-all", "--dry-run"},
 		},
 		{
 			name: "missing value remains invalid",
-			raw:  `lark-cli im +flag-list --page-all --jq`,
+			raw:  `work-cli im +flag-list --page-all --jq`,
 			want: []string{"im", "+flag-list", "--page-all", "--jq", "--dry-run"},
 		},
 		{
 			name: "next flag is not accepted as jq expression",
-			raw:  `lark-cli im +flag-list --jq --page-all`,
+			raw:  `work-cli im +flag-list --jq --page-all`,
 			want: []string{"im", "+flag-list", "--jq", "--page-all", "--dry-run"},
 		},
 		{
 			name: "invalid expression remains invalid",
-			raw:  `lark-cli im +flag-list --jq 'invalid[' --page-all`,
+			raw:  `work-cli im +flag-list --jq 'invalid[' --page-all`,
 			want: []string{"im", "+flag-list", "--jq", "invalid[", "--page-all", "--dry-run"},
 		},
 		{
 			name: "incompatible pretty format remains invalid",
-			raw:  `lark-cli im +flag-list --jq '.data' --format pretty`,
+			raw:  `work-cli im +flag-list --jq '.data' --format pretty`,
 			want: []string{"im", "+flag-list", "--jq", ".data", "--format", "pretty", "--dry-run"},
 		},
 		{
 			name: "compatible json format preserves request preview",
-			raw:  `lark-cli im +flag-list --jq '.data' --format json`,
+			raw:  `work-cli im +flag-list --jq '.data' --format json`,
 			want: []string{"im", "+flag-list", "--format", "json", "--dry-run"},
 		},
 	}
@@ -925,9 +925,9 @@ func TestAppendDryRunArgRemovesJQFilter(t *testing.T) {
 
 func TestAppendDryRunArgPreservesNonPrettyFormat(t *testing.T) {
 	for _, raw := range []string{
-		"lark-cli mail +watch --format data --dry-run",
-		"lark-cli export +events --format=ndjson --dry-run",
-		"lark-cli docs +fetch --format table",
+		"work-cli mail +watch --format data --dry-run",
+		"work-cli export +events --format=ndjson --dry-run",
+		"work-cli docs +fetch --format table",
 	} {
 		got, err := appendDryRunArg(raw)
 		if err != nil {
@@ -947,7 +947,7 @@ func TestAppendDryRunArgPreservesNonPrettyFormat(t *testing.T) {
 }
 
 func TestAppendDryRunArgForcesDryRunWhenExplicitlyDisabled(t *testing.T) {
-	got, err := appendDryRunArg("lark-cli docs +fetch --dry-run=false --doc abc")
+	got, err := appendDryRunArg("work-cli docs +fetch --dry-run=false --doc abc")
 	if err != nil {
 		t.Fatalf("appendDryRunArg() error = %v", err)
 	}
@@ -958,7 +958,7 @@ func TestAppendDryRunArgForcesDryRunWhenExplicitlyDisabled(t *testing.T) {
 }
 
 func TestAppendDryRunArgForcesDryRunWhenLastValueDisablesIt(t *testing.T) {
-	got, err := appendDryRunArg("lark-cli docs +fetch --dry-run --doc abc --dry-run=0")
+	got, err := appendDryRunArg("work-cli docs +fetch --dry-run --doc abc --dry-run=0")
 	if err != nil {
 		t.Fatalf("appendDryRunArg() error = %v", err)
 	}
@@ -970,10 +970,10 @@ func TestAppendDryRunArgForcesDryRunWhenLastValueDisablesIt(t *testing.T) {
 
 func TestDryRunIdentitySkipRequiresExplicitBotForDualIdentity(t *testing.T) {
 	cmd := manifest.Command{Path: "mail +triage", Identities: []string{"user", "bot"}}
-	if got := dryRunIdentitySkip(cmd, "lark-cli mail +triage"); got != "identity_auto_requires_state" {
+	if got := dryRunIdentitySkip(cmd, "work-cli mail +triage"); got != "identity_auto_requires_state" {
 		t.Fatalf("skip = %q, want identity_auto_requires_state", got)
 	}
-	if got := dryRunIdentitySkip(cmd, "lark-cli mail +triage --as bot"); got != "" {
+	if got := dryRunIdentitySkip(cmd, "work-cli mail +triage --as bot"); got != "" {
 		t.Fatalf("skip with --as bot = %q, want empty", got)
 	}
 }

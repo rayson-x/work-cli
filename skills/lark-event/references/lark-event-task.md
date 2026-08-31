@@ -62,17 +62,17 @@ task_summary_update
 
 ```bash
 # Stream task update events for the current user
-lark-cli event consume task.task.update_user_access_v2 --as user
+work-cli event consume task.task.update_user_access_v2 --as user
 
 # Sample one event for payload inspection
-lark-cli event consume task.task.update_user_access_v2 \
+work-cli event consume task.task.update_user_access_v2 \
   --as user --max-events 1 --timeout 2m
 
 # Project to a compact task-update record
-lark-cli event consume task.task.update_user_access_v2 \
+work-cli event consume task.task.update_user_access_v2 \
   --as user \
   --jq '{event_id: .header.event_id, task_guid: .event.task_guid, event_types: .event.event_types, timestamp: .header.create_time}'
 
 # Consume as the app identity
-lark-cli event consume task.task.update_user_access_v2 --as bot
+work-cli event consume task.task.update_user_access_v2 --as bot
 ```

@@ -37,7 +37,7 @@ func normalizeMemberAPIError(err error) error {
 	switch problem.Code {
 	case 40005, 3340005:
 		problem.Subtype = errs.SubtypeFeatureNotAvailable
-		problem.Message = "Collaborator management is not available for this app via lark-cli."
+		problem.Message = "Collaborator management is not available for this app via work-cli."
 		problem.Hint = "Open this app in Miaoda and manage collaborators from its permission settings."
 		problem.Retryable = false
 	case 40006, 3340006:
@@ -48,7 +48,7 @@ func normalizeMemberAPIError(err error) error {
 	case 40007, 3340007:
 		problem.Subtype = errs.SubtypeFeatureNotAvailable
 		problem.Message = "Copy, print, and download permissions are read-only for Miaoda apps."
-		problem.Hint = "Inspect copy_download_by with +member-settings-get; do not retry this setting through lark-cli."
+		problem.Hint = "Inspect copy_download_by with +member-settings-get; do not retry this setting through work-cli."
 		problem.Retryable = false
 	case 40400, 3340400:
 		problem.Subtype = errs.SubtypeNotFound
@@ -232,26 +232,26 @@ func validateMemberAppID(rctx *common.RuntimeContext) error {
 	appID := memberAppID(rctx)
 	if appID == "" {
 		return appsValidationParamError("--app-id", "--app-id is required").
-			WithHint("list your Miaoda apps with `lark-cli apps +list`")
+			WithHint("list your Miaoda apps with `work-cli apps +list`")
 	}
 	if strings.HasPrefix(appID, "cli_") {
 		return appsValidationParamError("--app-id", "--app-id must be a Miaoda app_id, not a credential app id").
-			WithHint("pass the app_... value returned by `lark-cli apps +list`, not the cli_... credential app id")
+			WithHint("pass the app_... value returned by `work-cli apps +list`, not the cli_... credential app id")
 	}
 	if !strings.HasPrefix(appID, "app_") || len(appID) == len("app_") {
 		return appsValidationParamError("--app-id", "--app-id must start with app_ and include an identifier").
-			WithHint("list your Miaoda apps with `lark-cli apps +list`, then pass its app_id")
+			WithHint("list your Miaoda apps with `work-cli apps +list`, then pass its app_id")
 	}
 	for _, r := range appID {
 		if unicode.IsSpace(r) || unicode.IsControl(r) || r == '/' || r == '\\' {
 			return appsValidationParamError("--app-id", "--app-id must not contain slashes, whitespace, or control characters").
-				WithHint("pass one app_... identifier exactly as returned by `lark-cli apps +list`")
+				WithHint("pass one app_... identifier exactly as returned by `work-cli apps +list`")
 		}
 	}
 	if err := validate.ResourceName(appID, "--app-id"); err != nil {
 		return appsValidationParamError("--app-id", "invalid --app-id: %v", err).
 			WithCause(err).
-			WithHint("pass one app_... identifier exactly as returned by `lark-cli apps +list`")
+			WithHint("pass one app_... identifier exactly as returned by `work-cli apps +list`")
 	}
 	return nil
 }

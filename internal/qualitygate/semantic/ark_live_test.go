@@ -125,7 +125,7 @@ func arkLiveCases() []arkLiveCase {
 				RequiredHint:        true,
 				Code:                "missing_sort",
 				Message:             "missing sort configuration",
-				Hint:                "run `lark-cli base +view-set-sort --sort field:asc` or pass sort.field and sort.order in the input file",
+				Hint:                "run `work-cli base +view-set-sort --sort field:asc` or pass sort.field and sort.order in the input file",
 			}}},
 		},
 		{
@@ -265,7 +265,7 @@ func arkLiveCases() []arkLiveCase {
 			facts: facts.Facts{SchemaVersion: 1, Skills: []facts.SkillFact{{
 				SourceFile:               "skills/lark-base/SKILL.md",
 				Line:                     15,
-				Raw:                      "Use `lark-cli base +missing-command` to inspect records.",
+				Raw:                      "Use `work-cli base +missing-command` to inspect records.",
 				CommandPath:              "base +missing-command",
 				Domain:                   "base",
 				Changed:                  true,
@@ -321,7 +321,7 @@ func arkLiveCases() []arkLiveCase {
 				Skills: []facts.SkillFact{{
 					SourceFile:               "skills/lark-base/SKILL.md",
 					Line:                     15,
-					Raw:                      "Use `lark-cli base +missing-command` to inspect records.",
+					Raw:                      "Use `work-cli base +missing-command` to inspect records.",
 					CommandPath:              "base +missing-command",
 					Domain:                   "base",
 					Changed:                  true,
@@ -382,9 +382,9 @@ func arkLiveCases() []arkLiveCase {
 					{Command: "calendar +event-list", Domain: "calendar", Changed: true, Source: "shortcut", IsList: true, HasDefaultLimit: true, HasDecisionField: true},
 				},
 				Examples: []facts.CommandExample{
-					{Raw: "lark-cli base +record-list --limit 20", SourceFile: "skills/lark-base/SKILL.md", Line: 50, CommandPath: "base +record-list", Domain: "base", Changed: true, Source: "shortcut", Executable: true},
-					{Raw: "lark-cli drive +file-list --limit 20", SourceFile: "skills/lark-drive/SKILL.md", Line: 60, CommandPath: "drive +file-list", Domain: "drive", Changed: true, Source: "shortcut", Executable: true},
-					{Raw: "lark-cli calendar +event-list --limit 20", SourceFile: "skills/lark-calendar/SKILL.md", Line: 70, CommandPath: "calendar +event-list", Domain: "calendar", Changed: true, Source: "shortcut", Executable: true},
+					{Raw: "work-cli base +record-list --limit 20", SourceFile: "skills/lark-base/SKILL.md", Line: 50, CommandPath: "base +record-list", Domain: "base", Changed: true, Source: "shortcut", Executable: true},
+					{Raw: "work-cli drive +file-list --limit 20", SourceFile: "skills/lark-drive/SKILL.md", Line: 60, CommandPath: "drive +file-list", Domain: "drive", Changed: true, Source: "shortcut", Executable: true},
+					{Raw: "work-cli calendar +event-list --limit 20", SourceFile: "skills/lark-calendar/SKILL.md", Line: 70, CommandPath: "calendar +event-list", Domain: "calendar", Changed: true, Source: "shortcut", Executable: true},
 				},
 			},
 			expectedBlockers:  []expectedFinding{{category: "error_hint", evidence: []string{"facts.errors[1]"}}},
@@ -396,7 +396,7 @@ func arkLiveCases() []arkLiveCase {
 			category: "error_hint",
 			slices:   []string{"positive", "conflict", "error_hint"},
 			facts: facts.Facts{SchemaVersion: 1, Errors: []facts.ErrorFact{
-				{File: "shortcuts/base/view.go", Line: 46, Command: "base +view-set-sort", CommandPath: "base +view-set-sort", Domain: "base", Changed: true, Source: "shortcut", Boundary: true, HasHint: true, HintActionCount: 1, RequiredHint: true, Code: "missing_sort", Message: "missing sort configuration", Hint: "run `lark-cli base +view-set-sort --sort field:asc`"},
+				{File: "shortcuts/base/view.go", Line: 46, Command: "base +view-set-sort", CommandPath: "base +view-set-sort", Domain: "base", Changed: true, Source: "shortcut", Boundary: true, HasHint: true, HintActionCount: 1, RequiredHint: true, Code: "missing_sort", Message: "missing sort configuration", Hint: "run `work-cli base +view-set-sort --sort field:asc`"},
 				{File: "shortcuts/base/view.go", Line: 52, Command: "base +view-set-sort", CommandPath: "base +view-set-sort", Domain: "base", Changed: true, Source: "shortcut", Boundary: true, HasHint: true, HintActionCount: 0, RequiredHint: true, Code: "missing_sort", Message: "missing sort configuration", Hint: "missing sort configuration"},
 			}},
 			expectedBlockers: []expectedFinding{{category: "error_hint", evidence: []string{"facts.errors[1]"}}},
@@ -428,7 +428,7 @@ func arkLiveCases() []arkLiveCase {
 					Source:      "shortcut",
 				}},
 				Examples: []facts.CommandExample{{
-					Raw:         "lark-cli base +record-list --limit 20",
+					Raw:         "work-cli base +record-list --limit 20",
 					SourceFile:  "skills/lark-base/SKILL.md",
 					Line:        101,
 					CommandPath: "base +record-list",

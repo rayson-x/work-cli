@@ -22,8 +22,8 @@ var AppsPluginList = common.Shortcut{
 	Scopes:      []string{},
 	Tips: []string{
 		"Run in project root (like npm); does NOT take --app-id",
-		"Example: lark-cli apps +plugin-list",
-		"Example: lark-cli apps +plugin-list --format pretty",
+		"Example: work-cli apps +plugin-list",
+		"Example: work-cli apps +plugin-list --format pretty",
 	},
 	Flags: []common.Flag{},
 	DryRun: func(ctx context.Context, rctx *common.RuntimeContext) *common.DryRunAPI {

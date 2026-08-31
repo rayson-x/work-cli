@@ -56,7 +56,7 @@ func syncSuite(runner SkillsRunner, source string, plan SyncPlan, installed []in
 		return removeSkills(runner, remove)
 	}
 
-	stagingRoot, err := vfs.MkdirTemp("", "lark-cli-suite-")
+	stagingRoot, err := vfs.MkdirTemp("", "work-cli-suite-")
 	if err != nil {
 		return fmt.Errorf("create suite staging directory: %w", err)
 	}

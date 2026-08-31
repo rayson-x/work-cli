@@ -129,23 +129,23 @@ Use only these command forms:
 
 ```bash
 # Drive resource back to original parent folder
-lark-cli drive +move \
+work-cli drive +move \
   --file-token <current_token> \
   --type <type> \
   --folder-token <original_parent_token>
 
 # Drive resource back to root
-lark-cli drive +move \
+work-cli drive +move \
   --file-token <current_token> \
   --type <type>
 
 # Wiki node back to original parent node
-lark-cli wiki +move \
+work-cli wiki +move \
   --node-token <current_node_token> \
   --target-parent-token <original_parent_token>
 
 # Wiki node back to original space root
-lark-cli wiki +move \
+work-cli wiki +move \
   --node-token <current_node_token> \
   --target-space-id <original_space_id>
 ```
@@ -259,13 +259,13 @@ Command forms:
 
 ```bash
 # Delete workflow-created Drive folder
-lark-cli drive +delete \
+work-cli drive +delete \
   --file-token <folder_token> \
   --type folder \
   --yes
 
 # Delete workflow-created Wiki node
-lark-cli wiki +node-delete \
+work-cli wiki +node-delete \
   --node-token <node_token> \
   --obj-type wiki \
   --include-children=true \

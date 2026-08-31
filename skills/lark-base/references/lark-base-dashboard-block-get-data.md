@@ -52,7 +52,7 @@
 ## 推荐命令
 
 ```bash
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token bascn***************CtadY \
   --block-id chtxxxxxxxx
 ```
@@ -61,13 +61,13 @@ lark-cli base +dashboard-block-get-data \
 
 ```bash
 # 先看仪表盘里有哪些组件
-lark-cli base +dashboard-block-list \
+work-cli base +dashboard-block-list \
   --base-token bascn***************CtadY \
   --dashboard-id blkxxxxxxxx \
   --page-size 100
 
 # 再读取某个组件的最终计算结果
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token bascn***************CtadY \
   --block-id chtxxxxxxxx
 ```
@@ -79,7 +79,7 @@ set -euo pipefail
 
 block_ids=(cht_block_1 cht_block_2)
 for block_id in "${block_ids[@]}"; do
-  lark-cli base +dashboard-block-get-data \
+  work-cli base +dashboard-block-get-data \
     --base-token bascn***************CtadY \
     --block-id "$block_id"
 done
@@ -90,7 +90,7 @@ done
 如果你需要先确认组件类型、名称或 `data_config`，请先执行：
 
 ```bash
-lark-cli base +dashboard-block-get \
+work-cli base +dashboard-block-get \
   --base-token bascn***************CtadY \
   --dashboard-id blkxxxxxxxx \
   --block-id chtxxxxxxxx
@@ -619,7 +619,7 @@ CLI 成功输出使用标准 `{ok, identity, data}` 信封：
 
 ```bash
 # 如果已知 block_id，直接读结果
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token xxx \
   --block-id chtxxxxxxxx
 ```
@@ -628,13 +628,13 @@ lark-cli base +dashboard-block-get-data \
 
 ```bash
 # 先看组件配置，确认它是不是支持计算的图表类型
-lark-cli base +dashboard-block-get \
+work-cli base +dashboard-block-get \
   --base-token xxx \
   --dashboard-id blk_xxx \
   --block-id chtxxxxxxxx
 
 # 再读最终计算结果
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token xxx \
   --block-id chtxxxxxxxx
 ```
@@ -643,12 +643,12 @@ lark-cli base +dashboard-block-get-data \
 
 ```bash
 # 先列组件
-lark-cli base +dashboard-block-list \
+work-cli base +dashboard-block-list \
   --base-token xxx \
   --dashboard-id blk_xxx
 
 # 再针对可疑 block 逐个取结果
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token xxx \
   --block-id chtxxxxxxxx
 ```
@@ -705,7 +705,7 @@ lark-cli base +dashboard-block-get-data \
 可用来确认最终会调用的接口路径：
 
 ```bash
-lark-cli base +dashboard-block-get-data \
+work-cli base +dashboard-block-get-data \
   --base-token bascn_example_token \
   --block-id chtxxxxxxxx \
   --dry-run \

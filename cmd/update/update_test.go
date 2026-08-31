@@ -830,8 +830,8 @@ func TestUpdateCheck_Human_Npm(t *testing.T) {
 	if !strings.Contains(out, "Update available") {
 		t.Errorf("expected 'Update available' in stderr, got: %s", out)
 	}
-	if !strings.Contains(out, "lark-cli update") {
-		t.Errorf("expected 'lark-cli update' instruction for npm, got: %s", out)
+	if !strings.Contains(out, "work-cli update") {
+		t.Errorf("expected 'work-cli update' instruction for npm, got: %s", out)
 	}
 }
 
@@ -859,8 +859,8 @@ func TestUpdateCheck_Human_Manual(t *testing.T) {
 	if !strings.Contains(out, "manually") {
 		t.Errorf("expected manual download instruction for non-npm, got: %s", out)
 	}
-	if strings.Contains(out, "lark-cli update` to install") {
-		t.Errorf("should NOT suggest 'lark-cli update' for manual install, got: %s", out)
+	if strings.Contains(out, "work-cli update` to install") {
+		t.Errorf("should NOT suggest 'work-cli update' for manual install, got: %s", out)
 	}
 }
 
@@ -963,7 +963,7 @@ func TestUpdateWindows_NpmSuccess_JSON(t *testing.T) {
 	currentOS = osWindows
 	defer func() { currentOS = origOS }()
 	mockDetectAndNpm(t,
-		selfupdate.DetectResult{Method: selfupdate.InstallNpm, ResolvedPath: `C:\npm\node_modules\@larksuite\cli\bin\lark-cli.exe`, NpmAvailable: true},
+		selfupdate.DetectResult{Method: selfupdate.InstallNpm, ResolvedPath: `C:\npm\node_modules\@larksuite\cli\bin\work-cli.exe`, NpmAvailable: true},
 		func(version string) *selfupdate.NpmResult { return &selfupdate.NpmResult{} },
 	)
 
@@ -992,7 +992,7 @@ func TestUpdateWindows_Check_JSON(t *testing.T) {
 	origOS := currentOS
 	currentOS = osWindows
 	defer func() { currentOS = origOS }()
-	mockDetect(t, selfupdate.DetectResult{Method: selfupdate.InstallNpm, ResolvedPath: `C:\node_modules\@larksuite\cli\bin\lark-cli.exe`, NpmAvailable: true})
+	mockDetect(t, selfupdate.DetectResult{Method: selfupdate.InstallNpm, ResolvedPath: `C:\node_modules\@larksuite\cli\bin\work-cli.exe`, NpmAvailable: true})
 
 	err := cmd.Execute()
 	if err != nil {
@@ -1116,7 +1116,7 @@ func TestUpdateNpm_SkillsFail_Human(t *testing.T) {
 	if err == nil || !strings.Contains(err.Error(), "skills update failed") {
 		t.Fatalf("error = %v, want skills update failure", err)
 	}
-	if !strings.Contains(stderr.String(), "lark-cli binary updated from 1.0.0 to 2.0.0") {
+	if !strings.Contains(stderr.String(), "work-cli binary updated from 1.0.0 to 2.0.0") {
 		t.Errorf("must report the completed binary update before the skills error: %s", stderr.String())
 	}
 	if strings.Contains(stderr.String(), "Successfully updated") {
@@ -1785,7 +1785,7 @@ func seedLiveSkillsGlobal(t *testing.T) []string {
 }
 
 // TestUpdateCommand_RealSkillsSyncRewritesState is a live integration test that
-// verifies "lark-cli update" correctly triggers skills sync and rewrites the
+// verifies "work-cli update" correctly triggers skills sync and rewrites the
 // state file. It calls the real npx skills CLI and only runs with explicit
 // opt-in. All user directories are redirected to a temporary home.
 func TestUpdateCommand_RealSkillsSyncRewritesState(t *testing.T) {
@@ -1819,7 +1819,7 @@ func TestUpdateCommand_RealSkillsSyncRewritesState(t *testing.T) {
 	}
 
 	// Phase 3: Mock version functions so the update command believes it has
-	// upgraded from 1.0.19 to 1.0.20, then execute "lark-cli update --json".
+	// upgraded from 1.0.19 to 1.0.20, then execute "work-cli update --json".
 	// This triggers SyncSkills which calls the real npx skills add command.
 	origFetch := fetchLatest
 	origVersion := currentVersion
@@ -1831,7 +1831,7 @@ func TestUpdateCommand_RealSkillsSyncRewritesState(t *testing.T) {
 	cmd := NewCmdUpdate(f)
 	cmd.SetArgs([]string{"--json"})
 	if err := cmd.Execute(); err != nil {
-		t.Fatalf("lark-cli update --json err = %v, want nil", err)
+		t.Fatalf("work-cli update --json err = %v, want nil", err)
 	}
 
 	// Phase 4: Verify the state file was rewritten with the new version,
@@ -1908,7 +1908,7 @@ func TestUpdateCommand_SkillsSyncColdStart(t *testing.T) {
 	}
 
 	// Phase 3: Mock version functions so the update command believes it is at
-	// v1.0.20, then execute "lark-cli update --json". This triggers SyncSkills
+	// v1.0.20, then execute "work-cli update --json". This triggers SyncSkills
 	// which calls the real npx skills add command.
 	origFetch := fetchLatest
 	origVersion := currentVersion
@@ -1920,7 +1920,7 @@ func TestUpdateCommand_SkillsSyncColdStart(t *testing.T) {
 	cmd := NewCmdUpdate(f)
 	cmd.SetArgs([]string{"--json"})
 	if err := cmd.Execute(); err != nil {
-		t.Fatalf("lark-cli update --json err = %v, want nil", err)
+		t.Fatalf("work-cli update --json err = %v, want nil", err)
 	}
 
 	// Phase 4: Verify the state file was created with all official skills in

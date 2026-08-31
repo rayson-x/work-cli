@@ -727,8 +727,8 @@ func appendDryRunArg(raw string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(argv) == 0 || argv[0] != "lark-cli" {
-		return nil, fmt.Errorf("not a lark-cli command")
+	if len(argv) == 0 || argv[0] != "work-cli" {
+		return nil, fmt.Errorf("not a work-cli command")
 	}
 	argv = truncateShellTail(argv)
 	var jqValid bool
@@ -874,7 +874,7 @@ type commandResult struct {
 }
 
 func runCommand(ctx context.Context, cliBin string, argv []string) commandResult {
-	tempDir, err := vfs.MkdirTemp("", "lark-cli-quality-gate-")
+	tempDir, err := vfs.MkdirTemp("", "work-cli-quality-gate-")
 	if err != nil {
 		return commandResult{Err: err, ExitCode: 1}
 	}

@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package platform is the single public extension contract for lark-cli.
+// Package platform is the single public extension contract for work-cli.
 //
 // External integrators (plugin authors, embedding platforms) only import this
 // package; everything else under internal/ is off-limits.

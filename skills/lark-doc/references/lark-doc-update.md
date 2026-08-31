@@ -8,20 +8,20 @@
 
 ```bash
 # 先定位内容并获取最新 block ID
-lark-cli docs +fetch --doc "文档URL或token" --scope keyword --keyword "key1|key2" --detail with-ids
+work-cli docs +fetch --doc "文档URL或token" --scope keyword --keyword "key1|key2" --detail with-ids
 
 # 替换文本；--content "" 可删除文本
-lark-cli docs +update --doc "xx" --command str_replace --pattern "旧内容" --content "新内容"
+work-cli docs +update --doc "xx" --command str_replace --pattern "旧内容" --content "新内容"
 
 # 替换单个 block，或同父连续范围内的 block
-lark-cli docs +update --doc "xx" --command block_replace --block-id blkTarget --content '<p>新段落</p>'
-lark-cli docs +update --doc "xx" --command block_replace --start-block-id blkFirst --end-block-id blkLast --content '<p></p>'
+work-cli docs +update --doc "xx" --command block_replace --block-id blkTarget --content '<p>新段落</p>'
+work-cli docs +update --doc "xx" --command block_replace --start-block-id blkFirst --end-block-id blkLast --content '<p></p>'
 
-lark-cli docs +update --doc "xx" --command block_insert_after --block-id blkAnchor --content '<h2>新章节</h2><p>章节内容</p>'
+work-cli docs +update --doc "xx" --command block_insert_after --block-id blkAnchor --content '<h2>新章节</h2><p>章节内容</p>'
 
 # 删除单个 block 或范围内的 block
-lark-cli docs +update --doc "xx" --command block_delete --block-id blkA
-lark-cli docs +update --doc "xx" --command block_delete --start-block-id blkFirst --end-block-id blkLast
+work-cli docs +update --doc "xx" --command block_delete --block-id blkA
+work-cli docs +update --doc "xx" --command block_delete --start-block-id blkFirst --end-block-id blkLast
 ```
 
 ## 推荐流程

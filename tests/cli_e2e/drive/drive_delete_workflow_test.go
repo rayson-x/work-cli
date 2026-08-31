@@ -21,10 +21,10 @@ func TestDrive_DeleteAsyncWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	parentFolderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-delete-"+suffix, "")
+	parentFolderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-delete-"+suffix, "")
 
 	t.Run("docx", func(t *testing.T) {
-		docToken := createDeleteWorkflowDoc(t, ctx, parentFolderToken, "lark-cli-e2e-drive-delete-docx-"+suffix)
+		docToken := createDeleteWorkflowDoc(t, ctx, parentFolderToken, "work-cli-e2e-drive-delete-docx-"+suffix)
 
 		taskID := deleteAsyncAndVerify(t, ctx, docToken, "docx")
 		t.Logf("docx delete task_id=%s token=%s", taskID, docToken)

@@ -1,7 +1,7 @@
-# lark-cli Plugin SDK
+# work-cli Plugin SDK
 
-`extension/platform` is the **in-process plugin SDK** for lark-cli.
-Plugins compile into a **fork** of the lark-cli binary via a blank
+`extension/platform` is the **in-process plugin SDK** for work-cli.
+Plugins compile into a **fork** of the work-cli binary via a blank
 import; there is no `.so` loading, no RPC, no subprocess isolation.
 A plugin shares the binary's address space and lifecycle.
 
@@ -50,13 +50,13 @@ func main() {
 ```
 
 ```sh
-go build -o lark-cli ./cmd/larkx && ./lark-cli config plugins show
+go build -o work-cli ./cmd/larkx && ./lark-cli config plugins show
 ```
 
 You should see `audit` in the plugin list.
 
 That is sufficient for a hook-only plugin such as the audit observer. A
-wrapper main does not compile lark-cli's repository-root `content_embed.go`,
+wrapper main does not compile work-cli's repository-root `content_embed.go`,
 so distribution content is a separate, explicit host choice.
 
 ### Ship skills and command guidance
@@ -107,7 +107,7 @@ complete `SkillsOverlay.Base`. Without `SetEmbeddedAffordanceContent`,
 commands still run, but distribution-specific guidance and its skill pointers
 are absent.
 
-Keep the executable available as `lark-cli` on `PATH`: command-linked
+Keep the executable available as `work-cli` on `PATH`: command-linked
 guidance invokes that canonical name.
 
 ## What you can hook
@@ -124,7 +124,7 @@ guidance invokes that canonical name.
 
 ```mermaid
 sequenceDiagram
-    participant Host as lark-cli (host)
+    participant Host as work-cli (host)
     participant SDK as platform (SDK)
     participant Plugin as your plugin
 
@@ -177,7 +177,7 @@ observers still fire so audit plugins see the rejected dispatch.
   `Remove` wins over `Allow`, and `Overlay` entries are exempt), `Remove`
   drops skills, `Overlay` adds/replaces ones, or swap the whole `Base` —
   layered over the host-provided base skill tree. The repository's root
-  lark-cli binary wires its default in `content_embed.go`; an external fork
+  work-cli binary wires its default in `content_embed.go`; an external fork
   main must call `cmd.SetEmbeddedSkillContent` as shown above (unless its
   plugin supplies `Base`) and should wire `cmd.SetEmbeddedAffordanceContent`
   for command guidance. `EmbeddedSkills()` implies `FailClosed`: it
@@ -327,6 +327,6 @@ defines its exit code, wire fields, and consumer behavior.
 - Builder API: see [`builder.go`](./builder.go) for the full DSL
   (`NewPlugin`, `Observer`, `Wrap`, `Restrict`, `EmbeddedSkills`,
   `FailOpen`/`FailClosed`, `MustBuild`).
-- Inventory diagnostic: run `lark-cli config plugins show` after
+- Inventory diagnostic: run `work-cli config plugins show` after
   installing your plugin to see hooks/rules attributed to your plugin
   name.

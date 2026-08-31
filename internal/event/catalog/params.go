@@ -26,7 +26,7 @@ func ValidateParams(def *KeyDefinition, params map[string]string) error {
 				return errs.NewValidationError(errs.SubtypeInvalidArgument,
 					"required param %q missing for EventKey %s", p.Name, def.Key).
 					WithParam("--param").
-					WithHint("pass it as --param %s=<value>; run `lark-cli event schema %s` for details", p.Name, def.Key)
+					WithHint("pass it as --param %s=<value>; run `work-cli event schema %s` for details", p.Name, def.Key)
 			}
 		}
 	}
@@ -51,12 +51,12 @@ func ValidateParams(def *KeyDefinition, params map[string]string) error {
 			return errs.NewValidationError(errs.SubtypeInvalidArgument,
 				"unknown param %q: EventKey %s accepts no params", k, def.Key).
 				WithParam("--param").
-				WithHint("run `lark-cli event schema %s` for details", def.Key)
+				WithHint("run `work-cli event schema %s` for details", def.Key)
 		}
 		return errs.NewValidationError(errs.SubtypeInvalidArgument,
 			"unknown param %q for EventKey %s. valid params: %s", k, def.Key, strings.Join(validNames, ", ")).
 			WithParam("--param").
-			WithHint("run `lark-cli event schema %s` for details", def.Key)
+			WithHint("run `work-cli event schema %s` for details", def.Key)
 	}
 	return nil
 }

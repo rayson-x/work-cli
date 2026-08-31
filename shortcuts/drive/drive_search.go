@@ -359,7 +359,7 @@ func buildDriveSearchRequest(spec driveSearchSpec, userOpenID string, now time.T
 func missingDriveSearchUserError(param string) error {
 	message := recovery.Join("",
 		recovery.Text(param+" requires a logged-in user open_id, but none is configured; "),
-		recovery.Command(recovery.TargetAuthLogin, "run `lark-cli auth login` or "),
+		recovery.Command(recovery.TargetAuthLogin, "run `work-cli auth login` or "),
 		recovery.Text("set user open_id in config"),
 	)
 	err := errs.NewValidationError(errs.SubtypeInvalidArgument, "%s", message.String()).

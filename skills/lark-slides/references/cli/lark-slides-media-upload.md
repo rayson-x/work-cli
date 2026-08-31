@@ -6,22 +6,22 @@
 
 ```bash
 # 直接传 xml_presentation_id
-lark-cli slides +media-upload --as user \
+work-cli slides +media-upload --as user \
   --file ./pic.png \
   --presentation slidesXXXXXXXXXXXXXXXXXXXXXX
 
 # 传 slides URL 也行
-lark-cli slides +media-upload --as user \
+work-cli slides +media-upload --as user \
   --file ./chart.png \
   --presentation "https://xxx.feishu.cn/slides/slidesXXXXXXXXXXXXXXXXXXXXXX"
 
 # 传 wiki URL（CLI 自动 wiki.spaces.get_node 解析为真实 token，校验 obj_type=slides）
-lark-cli slides +media-upload --as user \
+work-cli slides +media-upload --as user \
   --file ./pic.png \
   --presentation "https://xxx.feishu.cn/wiki/wikcnXXXXXX"
 
 # 预览（不实际上传）
-lark-cli slides +media-upload --file ./pic.png --presentation $PRES_ID --dry-run
+work-cli slides +media-upload --file ./pic.png --presentation $PRES_ID --dry-run
 ```
 
 ## 返回值
@@ -63,11 +63,11 @@ PRES_ID=xxx
 SID=yyy       # 要加图的那一页
 
 # 1) 上传图片拿 file_token
-TOKEN=$(lark-cli slides +media-upload --as user \
+TOKEN=$(work-cli slides +media-upload --as user \
   --file ./pic.png --presentation $PRES_ID --jq '.data.file_token')
 
 # 2) block_insert 到页末（或用 insert_before_block_id 指定插入位置）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts "$(jq -n --arg token "$TOKEN" \
     '[{action:"block_insert",insertion:("<img src=\""+$token+"\" topLeftX=\"500\" topLeftY=\"100\" width=\"200\" height=\"150\"/>")}]')"
@@ -92,7 +92,7 @@ lark-cli slides +replace-slide --as user \
 | 错误码 | 含义 | 解决方案 |
 |--------|------|----------|
 | 1061002 | params error / 不支持的 parent_type | 不要用原生 API 自己拼 parent_type；用 `+media-upload` 即可 |
-| 1061004 | forbidden：当前身份对该演示文稿无编辑权限 | 确认当前身份（user 或 bot）对目标 PPT 有编辑权限。bot 模式常见原因：PPT 不是该 bot 创建的——可用 `+create --as bot` 新建，或以 user 身份给 bot 授权 `lark-cli drive permission.members create --as user ...` |
+| 1061004 | forbidden：当前身份对该演示文稿无编辑权限 | 确认当前身份（user 或 bot）对目标 PPT 有编辑权限。bot 模式常见原因：PPT 不是该 bot 创建的——可用 `+create --as bot` 新建，或以 user 身份给 bot 授权 `work-cli drive permission.members create --as user ...` |
 | 1061044 | parent node not exist | `--presentation` 给的 token 不对，或不是 slides 类型 |
 | 403 | 权限不足 | 检查 `docs:document.media:upload` scope；wiki URL 还需要 `wiki:node:read` |
 

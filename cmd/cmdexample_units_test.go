@@ -78,12 +78,12 @@ func refWordsOf(refs []ref) [][]string {
 
 func TestCmdExampleParseRefsExtractsCommands(t *testing.T) {
 	content := strings.Join([]string{
-		"运行 `lark-cli contact +search-user --query 张三` 搜索", // inline code
+		"运行 `work-cli contact +search-user --query 张三` 搜索", // inline code
 		"```bash",
-		"lark-cli api GET /open-apis/x --params '{}'", // bash block
+		"work-cli api GET /open-apis/x --params '{}'", // bash block
 		"```",
-		"用 lark-cli mail user_mailbox.messages batch_modify 即可", // bare prose command
-		"npx foo | lark-cli api GET /y",                         // after a pipe
+		"用 work-cli mail user_mailbox.messages batch_modify 即可", // bare prose command
+		"npx foo | work-cli api GET /y",                         // after a pipe
 	}, "\n")
 	refs := parseRefs(content)
 	if len(refs) != 4 {
@@ -100,17 +100,17 @@ func TestCmdExampleParseRefsExtractsCommands(t *testing.T) {
 
 func TestCmdExampleParseRefsFiltersPlaceholdersAndProse(t *testing.T) {
 	// A line whose first word is prose yields no command at all.
-	if refs := parseRefs("lark-cli 就能搞定这件事"); len(refs) != 0 {
+	if refs := parseRefs("work-cli 就能搞定这件事"); len(refs) != 0 {
 		t.Errorf("prose-first line should yield 0 refs, got %v", refWordsOf(refs))
 	}
 	// Syntax templates / trailing prose may leave a real leading word ("mail"),
 	// but no placeholder or CJK token may leak into the command words — that is
 	// what prevents false positives like an "<resource>" unknown-command report.
 	for _, line := range []string{
-		"lark-cli mail <resource> <method> [flags]",
-		"lark-cli apps +<verb> [flags]",
-		"lark-cli base +...",
-		"lark-cli mail 写信场景下的格式说明",
+		"work-cli mail <resource> <method> [flags]",
+		"work-cli apps +<verb> [flags]",
+		"work-cli base +...",
+		"work-cli mail 写信场景下的格式说明",
 	} {
 		for _, r := range parseRefs(line) {
 			for _, w := range r.words {
@@ -124,7 +124,7 @@ func TestCmdExampleParseRefsFiltersPlaceholdersAndProse(t *testing.T) {
 
 func TestCmdExampleParseRefsStripsTrailingJunk(t *testing.T) {
 	// frontmatter-style quoted value: the trailing quote must not bleed into the flag
-	refs := parseRefs(`cliHelp: "lark-cli contact --help"`)
+	refs := parseRefs(`cliHelp: "work-cli contact --help"`)
 	if len(refs) != 1 {
 		t.Fatalf("expected 1 ref, got %d", len(refs))
 	}
@@ -132,7 +132,7 @@ func TestCmdExampleParseRefsStripsTrailingJunk(t *testing.T) {
 		t.Errorf("expected flag --help, got %v", refs[0].flags)
 	}
 	// bare "-" (stdin marker) and "=value" suffix
-	refs = parseRefs("lark-cli api GET /x --params={} --data -")
+	refs = parseRefs("work-cli api GET /x --params={} --data -")
 	if len(refs) != 1 {
 		t.Fatalf("expected 1 ref, got %d", len(refs))
 	}
@@ -195,22 +195,22 @@ func TestCmdExampleParseRefsRobustness(t *testing.T) {
 		wantRefs                            int
 	}{
 		{"backslash continuation joins flags",
-			"lark-cli contact +search-user \\\n  --query foo \\\n  --as user",
+			"work-cli contact +search-user \\\n  --query foo \\\n  --as user",
 			"contact +search-user", "--query --as", 1},
 		{"underscore flag not truncated",
-			"lark-cli whiteboard +update --input_format mermaid",
+			"work-cli whiteboard +update --input_format mermaid",
 			"whiteboard +update", "--input_format", 1},
 		{"command-substitution flags ignored",
-			`lark-cli slides x create --data "$(jq -n --arg c '{}')" --as user`,
+			`work-cli slides x create --data "$(jq -n --arg c '{}')" --as user`,
 			"slides x create", "--data --as", 1},
 		{"glued separator truncates",
-			"lark-cli auth login; echo done",
+			"work-cli auth login; echo done",
 			"auth login", "", 1},
 		{"trailing CJK punctuation stripped",
-			"用 lark-cli auth login。",
+			"用 work-cli auth login。",
 			"auth login", "", 1},
 		{"ellipsis placeholder stays placeholder",
-			"lark-cli base +...",
+			"work-cli base +...",
 			"base", "", 1},
 	}
 	for _, tt := range cases {

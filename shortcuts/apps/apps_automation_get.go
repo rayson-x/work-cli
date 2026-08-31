@@ -19,7 +19,7 @@ var AppsAutomationGet = common.Shortcut{
 	Description: "Get an automation trigger's config (webhook Bearer Token redacted)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +automation-get --app-id <app_id> --name <trigger_name>",
+		"Example: work-cli apps +automation-get --app-id <app_id> --name <trigger_name>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -62,12 +62,12 @@ func automationValidateName(ctx context.Context, rctx *common.RuntimeContext) er
 	}
 	if strings.TrimSpace(rctx.Str("name")) == "" {
 		return appsValidationParamError("--name", "--name is required").
-			WithHint("find trigger names with `lark-cli apps +automation-list --app-id <app_id>`")
+			WithHint("find trigger names with `work-cli apps +automation-list --app-id <app_id>`")
 	}
 	return nil
 }
 
 // automationNotFoundHint is the shared recovery hint when a trigger name may not exist.
 func automationNotFoundHint() string {
-	return "verify the trigger name with `lark-cli apps +automation-list --app-id <app_id>`"
+	return "verify the trigger name with `work-cli apps +automation-list --app-id <app_id>`"
 }

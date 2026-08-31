@@ -78,7 +78,7 @@ var SlashCommandCreate = common.Shortcut{
 			if !runtime.Bool("force") {
 				p, _ := errs.ProblemOf(err)
 				rewrapped := errs.NewAPIError(errs.SubtypeAlreadyExists, "slash command %q already exists", name).
-					WithHint("use `lark-cli application +slash-command-update --command %q` for an ordinary edit; do not add --force unless the user explicitly intends this create request as an idempotent rerun that may update the existing same-name command", name).
+					WithHint("use `work-cli application +slash-command-update --command %q` for an ordinary edit; do not add --force unless the user explicitly intends this create request as an idempotent rerun that may update the existing same-name command", name).
 					WithCause(err)
 				if p.Code != 0 {
 					rewrapped = rewrapped.WithCode(p.Code)

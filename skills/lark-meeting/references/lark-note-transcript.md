@@ -5,7 +5,7 @@
 `note +transcript` 仅支持 `--as user`，不支持 `--as bot`。如果 `note +detail --as bot` 返回 `unified`，不要静默省略 `--as` 或改用用户身份继续；先说明该限制，只有用户明确同意后才切换身份重试。
 
 ```bash
-lark-cli note +transcript --note-id <note_id>
+work-cli note +transcript --note-id <note_id>
 ```
 
 ## 行为契约

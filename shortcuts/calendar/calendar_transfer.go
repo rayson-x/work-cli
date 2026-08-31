@@ -48,7 +48,7 @@ var CalendarTransfer = common.Shortcut{
 	Tips: []string{
 		"Transferring is irreversible and also moves meeting minutes, notes and attachments to the new organizer; pass --yes to confirm.",
 		"--as must be the event's current organizer (user or bot); --to-user-id may be a user or a bot, so all four user/bot directions are expressed by those two flags.",
-		`Example: lark-cli calendar +transfer --event-id <uid_originalTime> --to-user-id ou_xxx --yes`,
+		`Example: work-cli calendar +transfer --event-id <uid_originalTime> --to-user-id ou_xxx --yes`,
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
 		return validateCalendarTransfer(runtime)
@@ -102,11 +102,11 @@ func withCalendarTransferRecovery(err error) error {
 	var hint string
 	switch p.Code {
 	case larkErrCalendarNoAccessRole:
-		hint = "the calling identity has no edit access to this calendar (WRITER or OWNER is required). This is not a missing OAuth scope, so do not run `lark-cli auth login`: set --as to the event's current organizer, or ask the calendar owner to grant access"
+		hint = "the calling identity has no edit access to this calendar (WRITER or OWNER is required). This is not a missing OAuth scope, so do not run `work-cli auth login`: set --as to the event's current organizer, or ask the calendar owner to grant access"
 	case larkErrCalendarWrongCalendarType:
 		hint = "only events on a primary or shared calendar can be transferred; resource, mailbox, and imported Google/Exchange calendars cannot"
 	case larkErrCalendarCannotInviteReceiver:
-		hint = "executive-mode collaboration rules block inviting this receiver. This is not a missing OAuth scope, so do not run `lark-cli auth login`: pick another receiver, or have the receiver start the transfer"
+		hint = "executive-mode collaboration rules block inviting this receiver. This is not a missing OAuth scope, so do not run `work-cli auth login`: pick another receiver, or have the receiver start the transfer"
 	case larkErrCalendarEventNotInOrganizer:
 		hint = "the transfer must run against the organizer's own calendar; --calendar-id defaults to the primary calendar, so pass the organizer's calendar id explicitly when the event lives on a shared calendar"
 	case larkErrCalendarCrossTenantTransfer:

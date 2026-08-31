@@ -36,16 +36,16 @@
 
 ```bash
 # 列出历史版本
-lark-cli slides +history-list --presentation "<slides_url_or_token>" --page-size 20
+work-cli slides +history-list --presentation "<slides_url_or_token>" --page-size 20
 
 # 翻页
-lark-cli slides +history-list --presentation "<slides_url_or_token>" --page-size 20 --page-token "<page_token>"
+work-cli slides +history-list --presentation "<slides_url_or_token>" --page-size 20 --page-token "<page_token>"
 
 # 发起回滚任务，立即返回 task_id
-lark-cli slides +history-revert --presentation "<slides_url_or_token>" --history-version-id 42
+work-cli slides +history-revert --presentation "<slides_url_or_token>" --history-version-id 42
 
 # 查询回滚任务状态
-lark-cli slides +history-revert-status --presentation "<slides_url_or_token>" --task-id "<task_id>"
+work-cli slides +history-revert-status --presentation "<slides_url_or_token>" --task-id "<task_id>"
 ```
 
 ## 参数
@@ -121,12 +121,12 @@ lark-cli slides +history-revert-status --presentation "<slides_url_or_token>" --
 回滚成功后必须读取一次当前内容确认：
 
 ```bash
-lark-cli slides +xml-get --presentation "<slides_url_or_token>" --output ./presentation.xml
+work-cli slides +xml-get --presentation "<slides_url_or_token>" --output ./presentation.xml
 ```
 
 如果只需要快速检查返回结构，也可以走 raw OpenAPI：
 
 ```bash
-lark-cli api get "/open-apis/slides_ai/v1/xml_presentations/<xml_presentation_id>" \
+work-cli api get "/open-apis/slides_ai/v1/xml_presentations/<xml_presentation_id>" \
   --params '{"revision_id":-1}'
 ```

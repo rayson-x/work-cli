@@ -123,7 +123,7 @@ name: lark-drive
 description: Manage Drive comments with service command references.
 ---
 
-` + "```bash\n" + `lark-cli drive file.comments create_v2 --file-token doccnxxxx --params '{"file_type":"docx"}' --data '{"reply_list":[]}'` + "\n```\n"
+` + "```bash\n" + `work-cli drive file.comments create_v2 --file-token doccnxxxx --params '{"file_type":"docx"}' --data '{"reply_list":[]}'` + "\n```\n"
 	if err := vfs.WriteFile(skillPath, []byte(skill), 0o644); err != nil {
 		t.Fatal(err)
 	}

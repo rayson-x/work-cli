@@ -8,39 +8,39 @@
 
 ```bash
 # 在个人知识库根目录下创建一个 docx 节点（user 身份默认回退到 my_library）
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --title "项目计划"
 
 # 在指定知识空间中创建一个 docx 节点
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --space-id <SPACE_ID> \
   --title "项目计划"
 
 # 在指定父节点下创建一个子节点
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --parent-node-token <PARENT_NODE_TOKEN> \
   --title "迭代记录"
 
 # 显式指定创建到个人知识库（仅 user 身份；bot 不支持 `--space-id my_library`）
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --space-id my_library \
   --title "学习笔记"
 
 # 创建一个快捷方式节点（shortcut）
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --parent-node-token <PARENT_NODE_TOKEN> \
   --node-type shortcut \
   --origin-node-token <ORIGIN_NODE_TOKEN> \
   --title "原文档快捷方式"
 
 # 创建非 docx 类型节点
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --space-id <SPACE_ID> \
   --obj-type sheet \
   --title "周报数据"
 
 # 预览底层调用链
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --title "Roadmap" \
   --dry-run
 ```
@@ -59,11 +59,11 @@ lark-cli wiki +node-create \
 - `permission_grant`（可选）：仅 `--as bot` 时返回，说明是否已自动为当前 CLI 用户授予可管理权限
 
 > [!IMPORTANT]
-> 如果节点是**以应用身份（bot）创建**的，如 `lark-cli wiki +node-create --as bot`，在创建成功后 CLI 会**尝试为当前 CLI 用户自动授予该知识库节点的 `full_access`（可管理权限）**。
+> 如果节点是**以应用身份（bot）创建**的，如 `work-cli wiki +node-create --as bot`，在创建成功后 CLI 会**尝试为当前 CLI 用户自动授予该知识库节点的 `full_access`（可管理权限）**。
 >
 > 以应用身份创建时，结果里会额外返回 `permission_grant` 字段，明确说明授权结果：
 > - `status = granted`：当前 CLI 用户已获得该知识库节点的可管理权限
-> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `lark-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
+> - `status = skipped`：本地没有可用的当前用户 `open_id`，因此不会自动授权；可提示用户先完成 `work-cli auth login`，再让 AI / agent 继续使用应用身份（bot）授予当前用户权限
 > - `status = failed`：节点已创建成功，但自动授权用户失败；会带上失败原因，并提示稍后重试或继续使用 bot 身份处理该节点
 >
 > `permission_grant.perm = full_access` 表示该资源已授予“可管理权限”
@@ -104,7 +104,7 @@ lark-cli wiki +node-create \
 
 ```bash
 # 创建一个指向文件的快捷方式节点
-lark-cli wiki +node-create \
+work-cli wiki +node-create \
   --space-id <SPACE_ID> \
   --node-type shortcut \
   --obj-type file \
@@ -131,7 +131,7 @@ lark-cli wiki +node-create \
 
 ## 推荐场景
 
-- 用户说“在我的知识库里新建一篇页面”时，优先用 `lark-cli wiki +node-create --title "..."`
+- 用户说“在我的知识库里新建一篇页面”时，优先用 `work-cli wiki +node-create --title "..."`
 - 用户已经给出父页面链接或 `parent_node_token` 时，优先传 `--parent-node-token`，让 shortcut 自动推导空间
 - 需要创建知识库快捷方式时，使用 `--node-type shortcut --origin-node-token <token>`
 

@@ -1,6 +1,6 @@
 # apps file 域命令（应用存储）
 
-管理妙搭应用的文件存储：上传 / 下载本地文件、列出与查看已存文件、生成临时分享链接、批量删除、查看用量。运行时命令事实以 `lark-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
+管理妙搭应用的文件存储：上传 / 下载本地文件、列出与查看已存文件、生成临时分享链接、批量删除、查看用量。运行时命令事实以 `work-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
 
 ## 何时用
 
@@ -31,51 +31,51 @@
 列出应用文件，支持精确过滤：`--name`（文件名）、`--path`（远端路径）、`--type`（MIME 类型）、`--size-gt`/`--size-lt`（字节）、`--uploaded-since`/`--uploaded-until`（上传时间区间，时间格式见末尾）。分页 `--page-size`（默认 20，范围 1..200）/ `--page-token`。列表每项给名称、路径、大小、类型、上传时间（pretty 表格即这 5 列）；上传者、下载地址（如有）仅在 JSON 输出里，单文件详情用 `+file-get`。
 
 ```bash
-lark-cli apps +file-list --app-id app_xxx
-lark-cli apps +file-list --app-id app_xxx --type image/png --uploaded-since 7d
+work-cli apps +file-list --app-id app_xxx
+work-cli apps +file-list --app-id app_xxx --type image/png --uploaded-since 7d
 ```
 
 ### +file-get
 按 `--path` 查单个文件的元数据。路径不存在时返回明确的「文件不存在」错误。
 
 ```bash
-lark-cli apps +file-get --app-id app_xxx --path /1858537546760216.png
+work-cli apps +file-get --app-id app_xxx --path /1858537546760216.png
 ```
 
 ### +file-sign
 为指定文件生成一个**有时效的下载链接**——适合发给用户分享、或直接下载。`--expires-in` 设有效期秒数（默认 1 天，最长 30 天）。`pretty` 模式只输出链接本身，便于复制 / 管道；要把到期时间一并告诉用户时用默认 JSON 输出（含到期时间）。
 
 ```bash
-lark-cli apps +file-sign --app-id app_xxx --path /1858537546760216.png --expires-in 3600
+work-cli apps +file-sign --app-id app_xxx --path /1858537546760216.png --expires-in 3600
 ```
 
 ### +file-download
 把远端文件保存到本地。`--output` 指定保存路径，缺省时按远端文件名保存到当前目录。
 
 ```bash
-lark-cli apps +file-download --app-id app_xxx --path /1858537546760216.png --output ./logo.png
+work-cli apps +file-download --app-id app_xxx --path /1858537546760216.png --output ./logo.png
 ```
 
 ### +file-upload
 上传一个本地文件。文件名沿用本地文件名（特殊字符做 URL 编码透传；以 `.` 开头的隐藏文件名会加 `_` 前缀，避免下载回本地时覆盖隐藏文件），远端路径由平台分配。单文件上限 100 MB。
 
 ```bash
-lark-cli apps +file-upload --app-id app_xxx --file ./report.pdf
+work-cli apps +file-upload --app-id app_xxx --file ./report.pdf
 ```
 
 ### +file-delete（高危）
 按路径批量删除，`--path` 可重复传多个。删除是高危操作，必须带 `--yes`；缺省会被确认关卡拦下。**逐项返回结果**：部分文件删除失败（如某个路径不存在）不影响其余文件，整体仍算成功，失败项在结果里单独标出原因。
 
 ```bash
-lark-cli apps +file-delete --app-id app_xxx --path /1858537546760216.png --yes
-lark-cli apps +file-delete --app-id app_xxx --path /a.png --path /b.png --yes
+work-cli apps +file-delete --app-id app_xxx --path /1858537546760216.png --yes
+work-cli apps +file-delete --app-id app_xxx --path /a.png --path /b.png --yes
 ```
 
 ### +file-quota-get
 查应用的文件存储用量（已用量、文件数；配额接入后还会给总配额与使用率）。
 
 ```bash
-lark-cli apps +file-quota-get --app-id app_xxx
+work-cli apps +file-quota-get --app-id app_xxx
 ```
 
 ## 时间格式（`--uploaded-since` / `--uploaded-until`）

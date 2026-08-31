@@ -18,7 +18,7 @@ var BaseFieldGet = common.Shortcut{
 	AuthTypes:   authTypes(),
 	Flags:       []common.Flag{baseTokenFlag(true), tableRefFlag(true), fieldRefFlag(true)},
 	Tips: []string{
-		`Example: lark-cli base +field-get --base-token <base_token> --table-id <table_id> --field-id "Status"`,
+		`Example: work-cli base +field-get --base-token <base_token> --table-id <table_id> --field-id "Status"`,
 		"field-id accepts a field ID (fld...) or the field name from the current table.",
 		"Returns full field configuration; use it as the baseline before +field-update.",
 	},

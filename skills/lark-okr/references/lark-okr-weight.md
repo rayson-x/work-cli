@@ -8,7 +8,7 @@
 
 ```bash
 # 调整 Objective 权重（部分指定，剩余自动分配）
-lark-cli okr +weight \
+work-cli okr +weight \
   --cycle-id 7000000000000000001 \
   --level objective \
   --weights '[
@@ -18,7 +18,7 @@ lark-cli okr +weight \
   --as user
 
 # 调整 KR 权重（全部指定，和为 1）
-lark-cli okr +weight \
+work-cli okr +weight \
   --cycle-id 7000000000000000001 \
   --level key-result \
   --objective-id 7000000000000000002 \
@@ -29,7 +29,7 @@ lark-cli okr +weight \
   --as user
 
 # 从文件读取 weights
-lark-cli okr +weight \
+work-cli okr +weight \
   --cycle-id 7000000000000000001 \
   --level objective \
   --weights @weights.json \

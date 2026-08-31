@@ -1,6 +1,6 @@
 # apps +init
 
-`+init` 初始化妙搭应用的代码（clone 仓库、scaffold/同步源码、拉取本地环境变量）。运行时命令事实以 `lark-cli apps +init --help` 为准。
+`+init` 初始化妙搭应用的代码（clone 仓库、scaffold/同步源码、拉取本地环境变量）。运行时命令事实以 `work-cli apps +init --help` 为准。
 
 ## 何时用
 
@@ -16,9 +16,9 @@
 ## 示例
 
 ```bash
-lark-cli apps +init --app-id app_xxx --dir ./my-app
-lark-cli apps +init --app-id app_xxx --dir /absolute/path/my-app
-lark-cli apps +init --app-id app_xxx --dir ./my-app --dry-run
+work-cli apps +init --app-id app_xxx --dir ./my-app
+work-cli apps +init --app-id app_xxx --dir /absolute/path/my-app
+work-cli apps +init --app-id app_xxx --dir ./my-app --dry-run
 ```
 
 ## 输出契约

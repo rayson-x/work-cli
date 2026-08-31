@@ -51,8 +51,8 @@ const (
 // The scaffold's `git commit` would otherwise fail with "please tell me who you
 // are"; an existing identity (e.g. the developer's global config) is respected.
 const (
-	defaultGitUserName  = "lark-cli-bot"
-	defaultGitUserEmail = "lark-cli-bot@miaoda.com"
+	defaultGitUserName  = "work-cli-bot"
+	defaultGitUserEmail = "work-cli-bot@miaoda.com"
 )
 
 // initRunner is the commandRunner used by +init. Package-level so unit tests
@@ -105,8 +105,8 @@ var AppsInit = common.Shortcut{
 	Description: "Initialize an app's code and local development environment",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +init --app-id <app_id> --dir <dir>",
-		"Example: lark-cli apps +init --app-id <app_id> --dir <dir> --dry-run",
+		"Example: work-cli apps +init --app-id <app_id> --dir <dir>",
+		"Example: work-cli apps +init --app-id <app_id> --dir <dir> --dry-run",
 	},
 	// +init calls queryAppType (GET /apps/{id}) which requires spark:app:read;
 	// the scope is declared as conditional since the call is non-fatal.
@@ -341,7 +341,7 @@ func ensureMetaAppID(dir, appID string) error {
 
 // ensureGitIdentity guarantees the cloned repo has a committer identity so the
 // scaffold's `git commit` cannot fail with "please tell me who you are". It sets
-// the repo-LOCAL user.name/user.email to the lark-cli-bot defaults ONLY when
+// the repo-LOCAL user.name/user.email to the work-cli-bot defaults ONLY when
 // each is not already resolvable from local/global/system config, so a
 // developer's existing identity is never overwritten. Each key is handled
 // independently (a machine with only user.name set still gets a default email).
@@ -606,7 +606,7 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 		} else {
 			initLogf(rctx, "Could not pull local env vars: %s", envPullErr)
 			out["env_pull_error"] = envPullErr
-			out["message"] = fmt.Sprintf("Repository already initialized. Could not pull local env vars automatically — run `lark-cli apps +env-pull --app-id %s` to retry.", appID)
+			out["message"] = fmt.Sprintf("Repository already initialized. Could not pull local env vars automatically — run `work-cli apps +env-pull --app-id %s` to retry.", appID)
 		}
 		rctx.OutFormat(out, nil, func(w io.Writer) {
 			fmt.Fprintf(w, "✓ Already initialized at %s\n", dir)
@@ -614,7 +614,7 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 				fmt.Fprintf(w, "✓ Local environment written to %s\n", envFile)
 			} else {
 				fmt.Fprintf(w, "⚠ Could not pull local env vars: %s\n", envPullErr)
-				fmt.Fprintf(w, "  run `lark-cli apps +env-pull --app-id %s` to retry\n", appID)
+				fmt.Fprintf(w, "  run `work-cli apps +env-pull --app-id %s` to retry\n", appID)
 			}
 			fmt.Fprintln(w, "仓库已初始化完成，可以开始开发了。")
 		})
@@ -654,7 +654,7 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 
 	// Ensure a committer identity exists before the scaffold commit. Uses the
 	// author name/email from +git-credential-init when available; falls back
-	// to lark-cli-bot defaults when the server does not provide them.
+	// to work-cli-bot defaults when the server does not provide them.
 	if err := ensureGitIdentity(ctx, dir, cred.CommitAuthorName, cred.CommitAuthorEmail); err != nil {
 		return err
 	}
@@ -710,7 +710,7 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 		} else {
 			initLogf(rctx, "Could not pull local env vars: %s", envPullErr)
 			out["env_pull_error"] = envPullErr
-			out["message"] = fmt.Sprintf("Repository initialized. Could not pull local env vars automatically — run `lark-cli apps +env-pull --app-id %s` to retry.", appID)
+			out["message"] = fmt.Sprintf("Repository initialized. Could not pull local env vars automatically — run `work-cli apps +env-pull --app-id %s` to retry.", appID)
 		}
 	}
 
@@ -723,7 +723,7 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 			fmt.Fprintf(w, "✓ Local environment written to %s\n", out["env_file"])
 		} else if envPullErr, ok := out["env_pull_error"].(string); ok {
 			fmt.Fprintf(w, "⚠ Could not pull local env vars: %s\n", envPullErr)
-			fmt.Fprintf(w, "  run `lark-cli apps +env-pull --app-id %s` to retry\n", appID)
+			fmt.Fprintf(w, "  run `work-cli apps +env-pull --app-id %s` to retry\n", appID)
 		}
 		fmt.Fprintln(w, "仓库已初始化完成，可以开始开发了。")
 	})
@@ -734,12 +734,12 @@ func appsInitExecute(ctx context.Context, rctx *common.RuntimeContext) error {
 // --format json`, forwarding --as when set. Returns (envFile, "") on success or
 // ("", reason) on failure. Non-fatal by contract: the caller logs a warning and
 // continues. The success envelope is read from stdout, the error envelope from
-// stderr (lark-cli writes structured errors to stderr; see cmd/root.go
+// stderr (work-cli writes structured errors to stderr; see cmd/root.go
 // handleRootError). The reason is always redacted.
 func pullEnv(ctx context.Context, rctx *common.RuntimeContext, appID, dir string) (envFile, reason string) {
 	self, err := os.Executable()
 	if err != nil {
-		return "", redactURLCredentials(fmt.Sprintf("cannot locate lark-cli executable: %v", err))
+		return "", redactURLCredentials(fmt.Sprintf("cannot locate work-cli executable: %v", err))
 	}
 	args := []string{"apps", "+env-pull", "--app-id", appID, "--project-path", dir, "--format", "json"}
 	if as := strings.TrimSpace(rctx.Str("as")); as != "" {
@@ -765,7 +765,7 @@ func pullEnv(ctx context.Context, rctx *common.RuntimeContext, appID, dir string
 func issueCredentials(ctx context.Context, rctx *common.RuntimeContext, appID string) (credentialInitResult, error) {
 	self, err := os.Executable()
 	if err != nil {
-		return credentialInitResult{}, errs.NewInternalError(errs.SubtypeUnknown, "cannot locate lark-cli executable: %v", err).WithCause(err)
+		return credentialInitResult{}, errs.NewInternalError(errs.SubtypeUnknown, "cannot locate work-cli executable: %v", err).WithCause(err)
 	}
 	args := []string{"apps", "+git-credential-init", "--app-id", appID, "--format", "json"}
 	if as := strings.TrimSpace(rctx.Str("as")); as != "" {
@@ -825,7 +825,7 @@ func commitAndPushIfDirty(ctx context.Context, dir, scaffoldKind string) (commit
 	if _, se, e := initRunner.Run(ctx, dir, "git", "push", "origin", defaultInitBranch); e != nil {
 		return true, false, withAppsHint(
 			appsExternalToolError(e, "git push failed: %s", gitErr(se, e)),
-			"the push was rejected — the git output is in the message above; if it is a non-fast-forward (remote has new commits), sync the remote and retry; if it is an auth failure, make sure `lark-cli apps +git-credential-init` has succeeded")
+			"the push was rejected — the git output is in the message above; if it is a non-fast-forward (remote has new commits), sync the remote and retry; if it is an auth failure, make sure `work-cli apps +git-credential-init` has succeeded")
 	}
 	return true, true, nil
 }

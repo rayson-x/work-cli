@@ -54,8 +54,8 @@ var AppsDBExecute = common.Shortcut{
 	Description: "Execute SQL (SELECT / DML / DDL) against a Miaoda app database",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		`Example: lark-cli apps +db-execute --app-id <app_id> --sql "SELECT * FROM orders LIMIT 10" --yes`,
-		`Example: lark-cli apps +db-execute --app-id <app_id> --environment dev --file ./migration.sql --yes`,
+		`Example: work-cli apps +db-execute --app-id <app_id> --sql "SELECT * FROM orders LIMIT 10" --yes`,
+		`Example: work-cli apps +db-execute --app-id <app_id> --environment dev --file ./migration.sql --yes`,
 		"Tip: single SELECT returns data as a row array — filter with --jq, e.g. -q '.data[].id'",
 	},
 	Scopes:    []string{"spark:app:write"},
@@ -110,7 +110,7 @@ var AppsDBExecute = common.Shortcut{
 			buildDBSQLParams(rctx),
 			buildDBSQLBody(rctx))
 		if err != nil {
-			return withAppsHint(err, "verify table/column names with `lark-cli apps +db-table-get --app-id "+appID+" --table <table>`; for day-to-day debugging target the dev database with `--environment dev`")
+			return withAppsHint(err, "verify table/column names with `work-cli apps +db-table-get --app-id "+appID+" --table <table>`; for day-to-day debugging target the dev database with `--environment dev`")
 		}
 
 		// server `result: string` 内嵌结构化数组 —— CLI 解出来后按 SQL 类型归一化成 PRD 形态，
@@ -230,7 +230,7 @@ const dbOnlineDDLForbiddenCode = 4000001
 //
 // 不说 "fix the SQL"——SQL 本身没问题，错的是目标环境，改 SQL 只会再撞一次同样的墙。
 const dbOnlineDDLForbiddenHint = "the online branch of a multi-env app forbids DDL/DCL. No statements were applied. " +
-	"Run the DDL against dev, then publish it with `lark-cli apps +db-env-migrate --app-id <app_id>`"
+	"Run the DDL against dev, then publish it with `work-cli apps +db-env-migrate --app-id <app_id>`"
 
 // sqlStatementError 把 ERROR 哨兵升级成 typed 错误。
 //

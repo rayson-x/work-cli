@@ -572,7 +572,7 @@ func TestAuthLoginRun_NonTerminal_NoFlags_RejectsWithHint(t *testing.T) {
 }
 
 func TestGenericUserAuthorizationStartCommandPassesLoginValidation(t *testing.T) {
-	const startCommand = "lark-cli auth login --recommend --no-wait --json"
+	const startCommand = "work-cli auth login --recommend --no-wait --json"
 	if hint := recovery.UserAuthorization().String(); !strings.Contains(hint, startCommand) {
 		t.Fatalf("generic recovery = %q, want executable start command %q", hint, startCommand)
 	}
@@ -617,7 +617,7 @@ func TestGenericUserAuthorizationStartCommandPassesLoginValidation(t *testing.T)
 	if !ok {
 		t.Fatalf("hint = %#v, want string", payload["hint"])
 	}
-	if strings.Contains(hint, "lark-cli auth login --no-wait --json") {
+	if strings.Contains(hint, "work-cli auth login --no-wait --json") {
 		t.Errorf("successful start response recommends an invalid optionless retry: %q", hint)
 	}
 	for _, want := range []string{"same `--scope`, `--domain`, or `--recommend` selection", "any `--exclude` values", "`--no-wait --json`"} {
@@ -636,7 +636,7 @@ func TestEnsureRequestedScopesGranted(t *testing.T) {
 	if !strings.Contains(issue.Message, "im:message:send") {
 		t.Fatalf("message %q missing requested scope", issue.Message)
 	}
-	for _, want := range []string{"Do not retry continuously", "scope being disabled", "lark-cli auth status"} {
+	for _, want := range []string{"Do not retry continuously", "scope being disabled", "work-cli auth status"} {
 		if !strings.Contains(issue.Hint, want) {
 			t.Fatalf("hint %q missing %q", issue.Hint, want)
 		}
@@ -697,7 +697,7 @@ func TestHandleLoginScopeIssue_NonJSONAlignsWithLoginSuccess(t *testing.T) {
 	f, _, stderr, _ := cmdutil.TestFactory(t, nil)
 	err := handleLoginScopeIssue(&LoginOptions{}, getLoginMsg("zh"), f, &loginScopeIssue{
 		Message: "授权结果异常: 以下请求 scopes 未被授予: im:message:send",
-		Hint:    "以上结果是本次授权请求用户最终确认后的结果，请勿持续重试；Scopes 未授予的原因是多样的，如 scope 被禁用；具体原因已通过授权页提示用户。可执行 `lark-cli auth status` 查看账号当前已授予的全部 scopes；",
+		Hint:    "以上结果是本次授权请求用户最终确认后的结果，请勿持续重试；Scopes 未授予的原因是多样的，如 scope 被禁用；具体原因已通过授权页提示用户。可执行 `work-cli auth status` 查看账号当前已授予的全部 scopes；",
 		Summary: &loginScopeSummary{
 			Requested: []string{"im:message:send"},
 			Missing:   []string{"im:message:send"},
@@ -718,7 +718,7 @@ func TestHandleLoginScopeIssue_NonJSONAlignsWithLoginSuccess(t *testing.T) {
 		"本次新授予 scopes: （空）",
 		"以上结果是本次授权请求用户最终确认后的结果，请勿持续重试",
 		"scope 被禁用",
-		"lark-cli auth status",
+		"work-cli auth status",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("stderr missing %q, got:\n%s", want, got)
@@ -813,7 +813,7 @@ func TestWriteLoginSuccess_TextOutputScenarios(t *testing.T) {
 				"授权成功! 用户: tester (ou_user)",
 				"本次请求 scopes: im:message:send im:message:reply",
 				"本次新授予 scopes: im:message:send",
-				"可执行 `lark-cli auth status` 查看账号当前已授予的全部 scopes；",
+				"可执行 `work-cli auth status` 查看账号当前已授予的全部 scopes；",
 			},
 			expectedAbsent: []string{
 				"本次未授予 scopes:",
@@ -831,7 +831,7 @@ func TestWriteLoginSuccess_TextOutputScenarios(t *testing.T) {
 			expectedPresent: []string{
 				"本次请求 scopes: im:message:send",
 				"本次新授予 scopes: （空）",
-				"可执行 `lark-cli auth status` 查看账号当前已授予的全部 scopes；",
+				"可执行 `work-cli auth status` 查看账号当前已授予的全部 scopes；",
 			},
 			expectedAbsent: []string{
 				"本次未授予 scopes:",
@@ -854,7 +854,7 @@ func TestWriteLoginSuccess_TextOutputScenarios(t *testing.T) {
 				"本次未授予 scopes:",
 				"已有 scopes:",
 				"最终已授权 scopes:",
-				"可执行 `lark-cli auth status` 查看账号当前已授予的全部 scopes；",
+				"可执行 `work-cli auth status` 查看账号当前已授予的全部 scopes；",
 			},
 		},
 	}
@@ -968,7 +968,7 @@ func TestAuthLoginRun_MissingRequestedScopeAlignsWithLoginSuccess(t *testing.T) 
 		"本次请求 scopes: im:message:send",
 		"以上结果是本次授权请求用户最终确认后的结果，请勿持续重试",
 		"scope 被禁用",
-		"lark-cli auth status",
+		"work-cli auth status",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("stderr missing %q, got:\n%s", want, got)
@@ -1190,7 +1190,7 @@ func TestAuthLoginRun_DeviceCodeUsesCachedRequestedScopes(t *testing.T) {
 		"OK: 授权成功! 用户: tester (ou_user)",
 		"本次请求 scopes: im:message:send",
 		"本次新授予 scopes: im:message:send",
-		"可执行 `lark-cli auth status` 查看账号当前已授予的全部 scopes；",
+		"可执行 `work-cli auth status` 查看账号当前已授予的全部 scopes；",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("stderr missing %q, got:\n%s", want, got)
@@ -1218,7 +1218,7 @@ func TestWriteLoginSuccess_TextOutputEnglishIncludesStatusHintWhenNoMissingScope
 		"Authorization successful! User: tester (ou_user)",
 		"Requested scopes: im:message:send",
 		"Newly granted scopes: im:message:send",
-		"Run `lark-cli auth status` to inspect all scopes currently granted to the account.",
+		"Run `work-cli auth status` to inspect all scopes currently granted to the account.",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("stderr missing %q, got:\n%s", want, got)
@@ -1423,7 +1423,7 @@ func TestAuthLoginRun_NoWaitJSONHintIncludesRawURLGuidance(t *testing.T) {
 	hint, _ := data["hint"].(string)
 	for _, want := range []string{
 		"MUST generate QR code AND display it",
-		"lark-cli auth qrcode",
+		"work-cli auth qrcode",
 		"Prefer PNG QR code (--output)",
 		"use ASCII (--ascii) only when the user explicitly requests it",
 		"This is a required step, do NOT skip it",
@@ -1440,7 +1440,7 @@ func TestAuthLoginRun_NoWaitJSONHintIncludesRawURLGuidance(t *testing.T) {
 		"do not block on --device-code in the same turn",
 		"come back and notify",
 		"YOU must execute",
-		"lark-cli auth login --device-code <device_code>",
+		"work-cli auth login --device-code <device_code>",
 		"Do NOT cache",
 		"same `--scope`, `--domain`, or `--recommend` selection",
 		"any `--exclude` values",
@@ -1453,7 +1453,7 @@ func TestAuthLoginRun_NoWaitJSONHintIncludesRawURLGuidance(t *testing.T) {
 	for _, unwanted := range []string{
 		"Then immediately execute",
 		"Do not instruct the user to run this command themselves",
-		"lark-cli auth login --no-wait --json",
+		"work-cli auth login --no-wait --json",
 	} {
 		if strings.Contains(hint, unwanted) {
 			t.Fatalf("hint should not contain %q, got:\n%s", unwanted, hint)
@@ -1462,7 +1462,7 @@ func TestAuthLoginRun_NoWaitJSONHintIncludesRawURLGuidance(t *testing.T) {
 }
 
 func TestNoWaitAgentHint_DefaultBytesStable(t *testing.T) {
-	const wantSHA256 = "bd1000350f418a4353807c45c68e1ee073127366bf9d8dd8a0a0f797e0adf8b7"
+	const wantSHA256 = "8c56fc04cbe9a9d479ec083c532e318fdb33bac690193775014ead004dac0eee"
 	if got := fmt.Sprintf("%x", sha256.Sum256([]byte(noWaitAgentHint(recovery.RenderContext{})))); got != wantSHA256 {
 		t.Fatalf("default no-wait hint digest = %s, want legacy %s", got, wantSHA256)
 	}
@@ -1506,16 +1506,16 @@ func TestAuthLoginRun_NoWaitJSONHintPreservesExplicitProfile(t *testing.T) {
 	}
 	hint, _ := data["hint"].(string)
 	for _, want := range []string{
-		"`lark-cli auth login --profile='team-beta' --device-code <device_code>`",
-		"rerun `lark-cli auth login --profile='team-beta'` with the same",
+		"`work-cli auth login --profile='team-beta' --device-code <device_code>`",
+		"rerun `work-cli auth login --profile='team-beta'` with the same",
 	} {
 		if !strings.Contains(hint, want) {
 			t.Errorf("profile-aware no-wait JSON hint missing %q: %s", want, hint)
 		}
 	}
 	for _, stale := range []string{
-		"`lark-cli auth login --device-code <device_code>`",
-		"rerun `lark-cli auth login` with the same",
+		"`work-cli auth login --device-code <device_code>`",
+		"rerun `work-cli auth login` with the same",
 	} {
 		if strings.Contains(hint, stale) {
 			t.Errorf("profile-aware no-wait JSON hint retained stale command %q: %s", stale, hint)
@@ -1607,7 +1607,7 @@ func TestAuthLoginRun_JSONDeviceAuthorizationAgentHintIncludesRawURLGuidance(t *
 		"用户回复已完成授权",
 		"不要在同一轮里展示 URL 后立刻阻塞执行 --device-code",
 		"必须生成二维码并展示",
-		"lark-cli auth qrcode",
+		"work-cli auth qrcode",
 		"优先生成 PNG 二维码（--output）",
 		"仅当用户明确要求时才使用 ASCII（--ascii）",
 		"生成后必须在回复中展示图片",

@@ -1,6 +1,6 @@
 # apps role 域命令（应用角色）
 
-管理妙搭应用内的平台角色、角色成员，以及查询某个用户命中的角色。运行时命令事实以 `lark-cli apps +<cmd> --help` 为准；身份、授权和高风险确认遵循本域 [`SKILL.md`](../SKILL.md)。
+管理妙搭应用内的平台角色、角色成员，以及查询某个用户命中的角色。运行时命令事实以 `work-cli apps +<cmd> --help` 为准；身份、授权和高风险确认遵循本域 [`SKILL.md`](../SKILL.md)。
 
 ## 何时用
 
@@ -33,10 +33,10 @@
 ### 查询角色
 
 ```bash
-lark-cli apps +role-list --app-id <app_id> --page-size 100
-lark-cli apps +role-list --app-id <app_id> --name '<exact_name>'
-lark-cli apps +role-get --app-id <app_id> --role-id <role_id>
-lark-cli apps +role-match-list --app-id <app_id> --user-id <ou_x>
+work-cli apps +role-list --app-id <app_id> --page-size 100
+work-cli apps +role-list --app-id <app_id> --name '<exact_name>'
+work-cli apps +role-get --app-id <app_id> --role-id <role_id>
+work-cli apps +role-match-list --app-id <app_id> --user-id <ou_x>
 ```
 
 整理角色列表时保留 `role_id`、`name` 和 `description`。不要猜测未知 `role_id`，也不要从同名候选中静默选择。
@@ -46,15 +46,15 @@ lark-cli apps +role-match-list --app-id <app_id> --user-id <ou_x>
 ### 创建与更新
 
 ```bash
-lark-cli apps +role-create --app-id <app_id> --name '<name>' \
+work-cli apps +role-create --app-id <app_id> --name '<name>' \
   --description '<description>'
 
 # 只修改名称
-lark-cli apps +role-update --app-id <app_id> --role-id <role_id> \
+work-cli apps +role-update --app-id <app_id> --role-id <role_id> \
   --name '<new_name>' --as user --format json
 
 # 只修改描述
-lark-cli apps +role-update --app-id <app_id> --role-id <role_id> \
+work-cli apps +role-update --app-id <app_id> --role-id <role_id> \
   --description '<new_description>' --as user --format json
 ```
 
@@ -71,9 +71,9 @@ lark-cli apps +role-update --app-id <app_id> --role-id <role_id> \
 删除前读取准确角色和完整成员范围，向用户说明 app、role、`users` / `departments` / `chats` 影响；得到不可逆删除确认后才使用 `--yes`：
 
 ```bash
-lark-cli apps +role-get --app-id <app_id> --role-id <role_id>
-lark-cli apps +role-member-list --app-id <app_id> --role-id <role_id>
-lark-cli apps +role-delete --app-id <app_id> --role-id <role_id> --yes
+work-cli apps +role-get --app-id <app_id> --role-id <role_id>
+work-cli apps +role-member-list --app-id <app_id> --role-id <role_id>
+work-cli apps +role-delete --app-id <app_id> --role-id <role_id> --yes
 ```
 
 成功响应包含匹配的 `data.role_id` 和 `data.deleted=true`。只有用户明确要求独立验证删除结果时，才再用 `+role-list --name` 检查目标 ID 已不存在。
@@ -85,16 +85,16 @@ lark-cli apps +role-delete --app-id <app_id> --role-id <role_id> --yes
 
 ```bash
 # 用户：每个姓名或邮箱单独查询。
-lark-cli contact +search-user --query '<姓名或邮箱>' \
+work-cli contact +search-user --query '<姓名或邮箱>' \
   --exclude-external-users --page-size 30
 
 # 部门：拉完分页，只接受唯一的 open_department_id。
-lark-cli api POST /open-apis/contact/v3/departments/search \
+work-cli api POST /open-apis/contact/v3/departments/search \
   --params '{"user_id_type":"open_id","department_id_type":"open_department_id","page_size":50}' \
   --data '{"query":"<部门名称>"}'
 
 # 群：拉完分页，只接受名称精确匹配的唯一 chat_id。
-lark-cli im +chat-search --query '<群名称>' --page-size 50
+work-cli im +chat-search --query '<群名称>' --page-size 50
 ```
 
 - 只接受与输入姓名、邮箱或群名精确匹配的唯一结果；部门搜索只接受完整 query 的唯一 `od-...`。0 条、多条或分页未完成时停止写入并让用户补充或消歧。
@@ -104,16 +104,16 @@ lark-cli im +chat-search --query '<群名称>' --page-size 50
 
 ```bash
 # 省略 --member-type，返回完整 users / departments / chats。
-lark-cli apps +role-member-list --app-id <app_id> --role-id <role_id>
+work-cli apps +role-member-list --app-id <app_id> --role-id <role_id>
 
-lark-cli apps +role-member-add --app-id <app_id> --role-id <role_id> \
+work-cli apps +role-member-add --app-id <app_id> --role-id <role_id> \
   --users ou_x,ou_y --departments od-x --chats oc_x
 
-lark-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> \
+work-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> \
   --users ou_x --yes
 
 # 清空成员，不删除角色。
-lark-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> \
+work-cli apps +role-member-remove --app-id <app_id> --role-id <role_id> \
   --all --yes
 ```
 

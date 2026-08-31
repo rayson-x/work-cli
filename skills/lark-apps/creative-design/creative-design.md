@@ -51,7 +51,7 @@ description: 以自包含 HTML 创建精致的设计产物：UI mockup、可交�
 - **数据文件（csv / json / xlsx）**——先看结构（列名、字段类型、行数）和样本行，再决定信息层级与图表选型；指标一律用脚本从源数据计算，不要目测。
 - **压缩包（zip）**——先解压到临时目录，逐个查看内容物，再按各自类型处理。
 - **文档（docx / pdf / 论文 / 需求文档）**——用当前 harness 的文档解析能力读取**全文**（映射见 `references/<harness>.md`；Aily 原生支持解析 Word / PDF 等二进制文件），不要只读开头就动手。
-- **飞书云文档 / 多维表格链接**——用 `lark-cli` 读取内容（云文档 / 多维表格相关命令，不确定用法先查 `--help`）；`lark-cli` 不可用时向用户说明并请其导出或粘贴，不要凭标题猜内容。
+- **飞书云文档 / 多维表格链接**——用 `work-cli` 读取内容（云文档 / 多维表格相关命令，不确定用法先查 `--help`）；`work-cli` 不可用时向用户说明并请其导出或粘贴，不要凭标题猜内容。
 - **网页 URL**——用 `web_fetch` 抓取全文后再产出；抓取失败就告知用户，不要凭 URL 和常识编写。
 
 ## 如何开展设计工作
@@ -94,7 +94,7 @@ description: 以自包含 HTML 创建精致的设计产物：UI mockup、可交�
 
 - 配图要属于同一视觉体系——风格、色调、光线与已确立的视觉方向一致，宁可少而统一，不要多而杂乱；逐张风格漂移比没有图更伤美观度。
 - 用户已提供图片 / 品牌素材时优先使用，不要擅自用生成图替换。
-- 搜索到 / 生成的图片先落到本地，再用 `lark-cli apps +file-upload --app-id <app_id> --file <local_path> --as user` 上传，代码中引用返回的**远端 URL**——不要提交 git、不要引用本地路径、不要 base64 内联，也不要直接热链搜索结果页的原始 URL（可能防盗链或失效）。上传需要 `app_id`，任务尚未初始化时先按「发布」前提完成 `+create` / `+init` 两步。
+- 搜索到 / 生成的图片先落到本地，再用 `work-cli apps +file-upload --app-id <app_id> --file <local_path> --as user` 上传，代码中引用返回的**远端 URL**——不要提交 git、不要引用本地路径、不要 base64 内联，也不要直接热链搜索结果页的原始 URL（可能防盗链或失效）。上传需要 `app_id`，任务尚未初始化时先按「发布」前提完成 `+create` / `+init` 两步。
 
 ## 输出创建准则
 - **文件输出路径**：会话根目录下会并存多个任务。**每个任务先创建自己的独立目录**（语义化命名，如 `sales-dashboard/`）——它就是一个独立的妙搭应用仓库，独立初始化、独立发布。所有交付物写进本任务目录，主 HTML 入口是该目录下的 `index.html`。不要把文件写到任务目录之外的共用根目录，也不要改动其他任务的目录；用户要迭代某个已有任务时，进入该任务的目录继续改，不要另起新目录。
@@ -185,23 +185,23 @@ Object.assign(window, {
 **闭环。** 每个 tweak 都需要一个生产者（面板控件）和一个消费者（对该值作出反应的内容）。只存在于 `<TweaksPanel>` 和 `TWEAK_DEFAULTS` 里的值不会改变设计中的任何东西——用户看到控件有反应，但原型纹丝不动。
 
 ## 发布
-设计产物写完并提交后，需要发布到妙搭（lark-apps）才能拿到可访问链接。本 skill 产出的是创意模式（html）应用，发布走本地开发链路：改动 git commit 后推到工作分支 `sprint/default`，再用 `lark-cli apps` 命令发起部署并轮询结果。
+设计产物写完并提交后，需要发布到妙搭（lark-apps）才能拿到可访问链接。本 skill 产出的是创意模式（html）应用，发布走本地开发链路：改动 git commit 后推到工作分支 `sprint/default`，再用 `work-cli apps` 命令发起部署并轮询结果。
 
 **前提**：每个任务目录是一个独立的妙搭 html 应用仓库，独立发布、互不影响；发布序列的所有命令都在**当前任务目录**内执行。任务目录还不是应用仓库（没有 `.spark/meta.json`）时，先完成两步初始化：
 
 ```bash
 # 1. 创建应用，记下返回的 app_id（app_ 开头）
-lark-cli apps +create --name "<应用名>" --app-type html --as user
+work-cli apps +create --name "<应用名>" --app-type html --as user
 
 # 2. 初始化到任务目录：会自动 clone 远端仓库并 checkout 工作分支 sprint/default，
 #    无需 git init / git checkout（--dir 不传默认 ./<app-id>；
 #    --source-path 可把已写好的产物一并并入，但源码目录不存在时会被静默跳过，用后核对文件确实进了仓库）
-lark-cli apps +init --app-id <app_id> --dir <任务目录> --as user
+work-cli apps +init --app-id <app_id> --dir <任务目录> --as user
 ```
 
 初始化后在任务目录内创建 / 修改产物（创意模式是 buildless，源码即产物，`index.html` 放仓库根目录），然后走下方发布序列。
 
-`app_id`（`app_` 开头）从任务目录的 `.spark/meta.json` 读取，或来自 `+create` 的返回 / 用户给出——`cli_` 开头的是飞书应用 ID，绝不能传给 `apps +*` 命令。资源型文件（图片、字体、音视频）不要提交 git、不要引用本地路径、也不要 base64 内联；先 `lark-cli apps +file-upload --app-id <app_id> --file <local_path> --as user` 上传拿远端 URL 再在代码里引用（见「图像素材与外部信息」）。
+`app_id`（`app_` 开头）从任务目录的 `.spark/meta.json` 读取，或来自 `+create` 的返回 / 用户给出——`cli_` 开头的是飞书应用 ID，绝不能传给 `apps +*` 命令。资源型文件（图片、字体、音视频）不要提交 git、不要引用本地路径、也不要 base64 内联；先 `work-cli apps +file-upload --app-id <app_id> --file <local_path> --as user` 上传拿远端 URL 再在代码里引用（见「图像素材与外部信息」）。
 
 发布序列：
 
@@ -212,8 +212,8 @@ git add . && git commit -m "feat: ..." && git push origin sprint/default
 
 # 2. 发起部署（记下返回的 release_id），然后轮询状态直到 finished / failed：
 #    publishing → 继续轮询；finished → 输出含可分享的 online_url，直接返回给用户；failed → 按输出中的 error_logs 报告失败原因
-lark-cli apps +release-create --app-id <app_id> --as user
-lark-cli apps +release-get --app-id <app_id> --release-id <release_id> --as user
+work-cli apps +release-create --app-id <app_id> --as user
+work-cli apps +release-get --app-id <app_id> --release-id <release_id> --as user
 ```
 
 要点：
@@ -223,7 +223,7 @@ lark-cli apps +release-get --app-id <app_id> --release-id <release_id> --as user
 - `+release-create` 部署的是远端 `sprint/default` 上**已 push** 的代码，不是本地工作区——未 commit / 未 push 的改动不会进入这次发布。
 - 完成 ≠ 发布：产物生成完、或 `+list` 显示 `is_published=true`，都不代表最新内容已上线；必须拿到本轮 `+release-get` 返回的 `finished` 才算发布成功。
 - 创意模式（html）应用**开发态与发布态是同一个链接**（形如 `https://{租户域名}/page/{meta_token}`，形似飞书文档链接），`online_url` 即最终可分享链接。
-- 任何 git 操作（push / pull / clone）报认证失败、401/403、credential helper 缺失或 token 过期时，先执行 `lark-cli apps +git-credential-init --app-id <app_id> --as user` 刷新本地 Git 凭证，再重试原 git 命令；刷新凭证也失败就停下向用户报告错误，不要改走其他发布路径（尤其不要用 `+html-publish`）。
+- 任何 git 操作（push / pull / clone）报认证失败、401/403、credential helper 缺失或 token 过期时，先执行 `work-cli apps +git-credential-init --app-id <app_id> --as user` 刷新本地 Git 凭证，再重试原 git 命令；刷新凭证也失败就停下向用户报告错误，不要改走其他发布路径（尤其不要用 `+html-publish`）。
 
 ## Skills 元信息
 你有以下内置技能 prompt，位于本文件相对路径下的 `references/` 目录中。如果用户的需求与其中某个技能匹配，而对应的 prompt 尚未加载进你的上下文，就去 READ（读取）相应文件，把它的指引加载进来。

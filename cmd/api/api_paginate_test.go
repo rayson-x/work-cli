@@ -109,7 +109,7 @@ func TestAPIPaginate_DefaultAggregatesAllPages(t *testing.T) {
 	}
 
 	err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-		output.FormatJSON, "", out, errOut, "lark-cli api GET", client.PaginationOptions{
+		output.FormatJSON, "", out, errOut, "work-cli api GET", client.PaginationOptions{
 			PageLimit: 10,
 			PageDelay: -1,
 		})
@@ -192,7 +192,7 @@ func TestAPIPaginate_StreamingFormatsEmitExactMultiPageBytes(t *testing.T) {
 			})
 
 			err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-				tt.format, "", out, errOut, "lark-cli api GET", client.PaginationOptions{
+				tt.format, "", out, errOut, "work-cli api GET", client.PaginationOptions{
 					PageLimit: 10,
 					PageDelay: -1,
 				})
@@ -238,7 +238,7 @@ func TestAPIPaginate_StreamingWriteFailureStopsFurtherPages(t *testing.T) {
 	}
 
 	err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli api GET",
+		output.FormatNDJSON, "", out, errOut, "work-cli api GET",
 		client.PaginationOptions{PageLimit: 10, PageDelay: -1})
 
 	if !errors.Is(err, sentinel) {
@@ -271,7 +271,7 @@ func TestAPIPaginate_StreamingFormatFallsBackToJSONWithoutList(t *testing.T) {
 	})
 
 	err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli api GET", client.PaginationOptions{PageDelay: -1})
+		output.FormatNDJSON, "", out, errOut, "work-cli api GET", client.PaginationOptions{PageDelay: -1})
 
 	if err != nil {
 		t.Fatalf("apiPaginate() error = %v, want nil", err)
@@ -314,7 +314,7 @@ func TestAPIPaginate_BusinessErrorsWriteRawAndAreMarkedRaw(t *testing.T) {
 			})
 
 			err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-				tt.format, tt.jqExpr, out, errOut, "lark-cli api GET", client.PaginationOptions{PageDelay: -1})
+				tt.format, tt.jqExpr, out, errOut, "work-cli api GET", client.PaginationOptions{PageDelay: -1})
 
 			if err == nil {
 				t.Fatal("apiPaginate() error = nil, want business error")
@@ -349,7 +349,7 @@ func TestAPIPaginate_TransportErrorsAreMarkedRaw(t *testing.T) {
 			ac, out, errOut, _ := newAPIPaginateTestHarness(t)
 
 			err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-				tt.format, tt.jqExpr, out, errOut, "lark-cli api GET", client.PaginationOptions{PageDelay: -1})
+				tt.format, tt.jqExpr, out, errOut, "work-cli api GET", client.PaginationOptions{PageDelay: -1})
 
 			if err == nil {
 				t.Fatal("apiPaginate() error = nil, want transport error")
@@ -379,7 +379,7 @@ func TestAPIPaginate_StreamBusinessErrorIsMarkedRaw(t *testing.T) {
 	})
 
 	err := apiPaginate(context.Background(), ac, apiPaginateRequest(),
-		output.FormatNDJSON, "", out, errOut, "lark-cli api GET", client.PaginationOptions{PageDelay: -1})
+		output.FormatNDJSON, "", out, errOut, "work-cli api GET", client.PaginationOptions{PageDelay: -1})
 
 	if err == nil {
 		t.Fatal("apiPaginate() error = nil, want business error")

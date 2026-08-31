@@ -114,7 +114,7 @@ func assertDriveUploadReportDryRun(t *testing.T, out, mountPoint string) {
 		t.Fatalf("data.api.1.url = %q, want report_file_event\nstdout:\n%s", got, out)
 	}
 	checks := map[string]string{
-		"api.1.body.file_scene":         "lark-cli",
+		"api.1.body.file_scene":         "work-cli",
 		"api.1.body.scene":              "upload",
 		"api.1.body.operation":          "upload",
 		"api.1.body.tags.api_path":      "/open-apis/drive/v1/files/upload_all",

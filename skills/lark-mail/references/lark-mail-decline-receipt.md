@@ -4,7 +4,7 @@
 
 关闭收到邮件的已读回执请求 banner，**但不向发件人发送回执**。**本命令仅在对方邮件请求了已读回执（`READ_RECEIPT_REQUEST` 标签，系统 ID `-607`）时使用**。对齐飞书客户端上已读回执 banner 右侧的"不发送"按钮。
 
-本 skill 对应 shortcut：`lark-cli mail +decline-receipt`。
+本 skill 对应 shortcut：`work-cli mail +decline-receipt`。
 
 ## 使用时机
 
@@ -18,13 +18,13 @@
 
 ```bash
 # 标准用法
-lark-cli mail +decline-receipt --message-id <message-id>
+work-cli mail +decline-receipt --message-id <message-id>
 
 # 指定邮箱（公共邮箱场景）
-lark-cli mail +decline-receipt --mailbox shared@example.com --message-id <message-id>
+work-cli mail +decline-receipt --mailbox shared@example.com --message-id <message-id>
 
 # Dry Run（不真改）
-lark-cli mail +decline-receipt --message-id <message-id> --dry-run
+work-cli mail +decline-receipt --message-id <message-id> --dry-run
 ```
 
 ## 参数
@@ -78,7 +78,7 @@ lark-cli mail +decline-receipt --message-id <message-id> --dry-run
 
 ```bash
 # 1. 拉信
-lark-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
+work-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
 # → ["UNREAD", "READ_RECEIPT_REQUEST"]
 
 # 2. 向用户提示：
@@ -87,18 +87,18 @@ lark-cli mail +message --message-id msg-1 --format json | jq '.data.label_ids'
 #     也可以选择：不发送回执，但关闭这条提示。"
 
 # 3. 用户选了"不发送" → 
-lark-cli mail +decline-receipt --message-id msg-1
+work-cli mail +decline-receipt --message-id msg-1
 ```
 
 ### 场景 2：幂等重跑
 
 ```bash
 # 第一次移除标签
-lark-cli mail +decline-receipt --message-id msg-1
+work-cli mail +decline-receipt --message-id msg-1
 # → {"declined": true}
 
 # 再跑一次 —— 不会报错，也不会再发 modify 请求
-lark-cli mail +decline-receipt --message-id msg-1
+work-cli mail +decline-receipt --message-id msg-1
 # → {"declined": false, "already_cleared": true}
 ```
 
@@ -110,6 +110,6 @@ lark-cli mail +decline-receipt --message-id msg-1
 
 ## 相关命令
 
-- `lark-cli mail +send-receipt` — 同意回执（发一封系统样式的已读回执邮件）
-- `lark-cli mail +message` — 拉单封邮件（在 `label_ids` 里检查 `READ_RECEIPT_REQUEST`）
-- `lark-cli mail +send --request-receipt` — 反向：**请求**别人回执
+- `work-cli mail +send-receipt` — 同意回执（发一封系统样式的已读回执邮件）
+- `work-cli mail +message` — 拉单封邮件（在 `label_ids` 里检查 `READ_RECEIPT_REQUEST`）
+- `work-cli mail +send --request-receipt` — 反向：**请求**别人回执

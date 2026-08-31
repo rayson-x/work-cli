@@ -2,16 +2,16 @@
 
 列出当前进行中的会议，用来发现 `+meeting-events` 需要的长数字 `meeting_id`。
 
-本 skill 对应 shortcut：`lark-cli vc +meeting-list-active`（调用 `GET /open-apis/vc/v1/bots/user_active_meeting`）。
+本 skill 对应 shortcut：`work-cli vc +meeting-list-active`（调用 `GET /open-apis/vc/v1/bots/user_active_meeting`）。
 
 ## 命令
 
 ```bash
 # 查询当前登录用户正在参加的会议
-lark-cli vc +meeting-list-active --as user --format json
+work-cli vc +meeting-list-active --as user --format json
 
 # 查询指定用户当前参加、且应用机器人也在会中的会议
-lark-cli vc +meeting-list-active --as bot --user-id ou_xxx --format json
+work-cli vc +meeting-list-active --as bot --user-id ou_xxx --format json
 ```
 
 ## 参数

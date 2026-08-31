@@ -46,7 +46,7 @@ type Rule struct {
 	// — a typo'd or forgotten annotation cannot slip past an
 	// "agent read-only" rule.
 	//
-	// Set to true to opt out during gradual adoption: lark-cli main
+	// Set to true to opt out during gradual adoption: work-cli main
 	// has hundreds of service commands that may not yet carry
 	// risk_level annotations, and a brand-new policy plugin would
 	// otherwise lock the binary to nothing.

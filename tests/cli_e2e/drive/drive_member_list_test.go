@@ -146,7 +146,7 @@ func TestDrive_MemberListWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	t.Cleanup(cancel)
 
-	folderName := "lark-cli-e2e-drive-member-list-" + clie2e.GenerateSuffix()
+	folderName := "work-cli-e2e-drive-member-list-" + clie2e.GenerateSuffix()
 	folderToken := createDriveFolderOrSkipPermission(t, parentT, ctx, folderName)
 
 	result, err := clie2e.RunCmd(ctx, clie2e.Request{

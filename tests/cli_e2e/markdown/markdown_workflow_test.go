@@ -28,7 +28,7 @@ func TestMarkdownLifecycleWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	fileName := "lark-cli-e2e-markdown-" + suffix + ".md"
+	fileName := "work-cli-e2e-markdown-" + suffix + ".md"
 	initialContent := "# Initial\n\nhello markdown workflow\n"
 	patchedContent := "# Initial\n\nhello patched workflow\n"
 	updatedContent := "# Updated\n\nnew body\n"
@@ -200,7 +200,7 @@ func TestMarkdownCreateWorkflow_WikiParent(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	fileName := "lark-cli-e2e-markdown-wiki-" + suffix + ".md"
+	fileName := "work-cli-e2e-markdown-wiki-" + suffix + ".md"
 	initialContent := "# Wiki Parent\n\nhello wiki markdown workflow\n"
 
 	createResult, err := clie2e.RunCmd(ctx, clie2e.Request{

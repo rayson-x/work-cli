@@ -34,6 +34,6 @@
 ## Aily 专属注意事项
 
 - **优先用专用工具而非手搓。** 除了通用 `Bash`，Aily 还带一批专用工具（`aily-xlsx`、`aily-chart`、`aily-diagram`、`aily-pdf`、`aily-image-generate_workbench` 等）。涉及表格、图表、流程图、PDF、图像生成时，优先用对应专用工具，而不是用 `Bash` 从零脚本化。
-- **图像素材优先走生成 / 搜索。** [`../creative-design.md`](../creative-design.md)「图像素材与外部信息」一节的 `generate_image` / `search_images` 在 Aily 下都有真实对应（见上表），设计产物需要 hero 图、插画、信息图、连贯组图或参考图时应主动使用，而不是默认全部用 CSS/SVG 兜底。搜索到 / 生成的图片先落到本地，再用 `lark-cli apps +file-upload` 上传、在代码中引用返回的远端 URL，不提交 git。
+- **图像素材优先走生成 / 搜索。** [`../creative-design.md`](../creative-design.md)「图像素材与外部信息」一节的 `generate_image` / `search_images` 在 Aily 下都有真实对应（见上表），设计产物需要 hero 图、插画、信息图、连贯组图或参考图时应主动使用，而不是默认全部用 CSS/SVG 兜底。搜索到 / 生成的图片先落到本地，再用 `work-cli apps +file-upload` 上传、在代码中引用返回的远端 URL，不提交 git。
 - `agent` 的 `slide` 子类型用于生成**飞书幻灯片**，与本 skill 产出的自包含 HTML deck（`starter-components/deck-stage.js`）是两条不同路径，不要混用——本 skill 的 deck 始终是 HTML。
 - 交付统一走 `submit`；需要跨轮次保留项目上下文时可用 `aily-work-memory`。

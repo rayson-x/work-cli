@@ -213,14 +213,14 @@ _公共：URL/token（无 sheet 定位） · 系统：`--dry-run`_
 
 ```bash
 # 简单读（sheet 定位必填：--sheet-name 或 --sheet-id 必给一个；range 的 Sheet1! 前缀不能替代它）
-lark-cli sheets +csv-get --url "https://example.feishu.cn/sheets/shtXXX" --sheet-name "Sheet1" --range "A1:F30"
+work-cli sheets +csv-get --url "https://example.feishu.cn/sheets/shtXXX" --sheet-name "Sheet1" --range "A1:F30"
 
 # 用 sheet-name 模糊定位（运行时框架会先解析到 sheet-id）
-lark-cli sheets +csv-get --spreadsheet-token shtXXX --sheet-name "销售明细" --range "A1:F30"
+work-cli sheets +csv-get --spreadsheet-token shtXXX --sheet-name "销售明细" --range "A1:F30"
 
 # 全量读：省略 --range 即读整个子表（按实际边界裁剪，返回 actual_range 标注实读范围），
 # 无需先 +workbook-info 探行列再拼 range；大表配合 --max-chars / --output-path
-lark-cli sheets +csv-get --spreadsheet-token shtXXX --sheet-name "销售明细"
+work-cli sheets +csv-get --spreadsheet-token shtXXX --sheet-name "销售明细"
 ```
 
 输出契约（envelope.data）：
@@ -240,7 +240,7 @@ lark-cli sheets +csv-get --spreadsheet-token shtXXX --sheet-name "销售明细"
 
 ```bash
 # 读 A1:F10 的公式 + 样式（sheet 定位必填）
-lark-cli sheets +cells-get --url "https://example.feishu.cn/sheets/shtXXX" --sheet-name "Sheet1" \
+work-cli sheets +cells-get --url "https://example.feishu.cn/sheets/shtXXX" --sheet-name "Sheet1" \
   --range "A1:F10" --include formula,style
 ```
 
@@ -256,9 +256,9 @@ lark-cli sheets +cells-get --url "https://example.feishu.cn/sheets/shtXXX" --she
 
 ```bash
 # 默认读所有子表 → sheets[]（与 +table-put 的 --sheets 同构，可喂回或转 DataFrame）
-lark-cli sheets +table-get --url "<表URL>"
+work-cli sheets +table-get --url "<表URL>"
 # 可选：--sheet-name / --sheet-id 限定只读某一个子表（不给则读全部）
-lark-cli sheets +table-get --url "<表URL>" --sheet-name "销售"
+work-cli sheets +table-get --url "<表URL>" --sheet-name "销售"
 ```
 
 #### 输出 → DataFrame（用 `sheet_to_df` helper）
@@ -290,7 +290,7 @@ from sheets_df import df_to_sheet, sheet_to_df
 
 # 1. 读
 out = json.loads(subprocess.check_output(
-    ["lark-cli","sheets","+table-get","--url",URL,"--sheet-name","销售"]))
+    ["work-cli","sheets","+table-get","--url",URL,"--sheet-name","销售"]))
 sheet = out["data"]["sheets"][0]
 df = sheet_to_df(sheet)
 
@@ -299,7 +299,7 @@ df["营收"] = df["营收"] * 1.1
 
 # 3. 写回（formats 是飞书侧显示格式，pandas 不消费，透传保留显示）
 payload = {"sheets": [df_to_sheet(df, sheet["name"], formats=sheet.get("formats"))]}
-subprocess.run(["lark-cli","sheets","+table-put","--url",URL,"--sheets","-"],
+subprocess.run(["work-cli","sheets","+table-put","--url",URL,"--sheets","-"],
                input=json.dumps(payload).encode(), check=True)
 ```
 

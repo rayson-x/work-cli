@@ -55,7 +55,7 @@ func TestAutomationListExecute_APIErrorAttachesAppIDHint(t *testing.T) {
 		t.Error("subtype must be populated on typed API errors")
 	}
 	if !strings.Contains(p.Hint, "apps +list") {
-		t.Errorf("hint must point at `lark-cli apps +list`, got %q", p.Hint)
+		t.Errorf("hint must point at `work-cli apps +list`, got %q", p.Hint)
 	}
 }
 

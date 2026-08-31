@@ -8,24 +8,24 @@ Upload a single local file as an attachment to a task (or any resource type acce
 
 ```bash
 # Upload a local file as a task attachment (relative path required)
-lark-cli task +upload-attachment \
+work-cli task +upload-attachment \
   --resource-id "<task_guid>" \
   --file "./report.pdf"
 
 # Pass a Feishu task applink instead of a raw guid — the guid is extracted automatically
-lark-cli task +upload-attachment \
+work-cli task +upload-attachment \
   --resource-id "https://applink.feishu.cn/client/todo/task?guid=<task_guid>" \
   --file "./note.md"
 
 # Explicit resource type / user id type
-lark-cli task +upload-attachment \
+work-cli task +upload-attachment \
   --resource-id "<task_guid>" \
   --resource-type task \
   --user-id-type open_id \
   --file "./design.png"
 
 # Upload a local file to a task agent
-lark-cli task +upload-attachment \
+work-cli task +upload-attachment \
   --resource-id "4b113c53-a68b-419f-8bd0-c9c532a3285a" \
   --file "./飞书.zip" \
   --resource-type task_delivery
@@ -45,7 +45,7 @@ lark-cli task +upload-attachment \
 1. Confirm the target task GUID (or applink) and the local file path with the user.
 2. Ensure the file is within the current working directory and its size is ≤ 50 MB; otherwise ask the user to move/split the file.
 3. Determine if this is a task agent: if yes, add `--resource-type task_delivery`.
-4. Execute `lark-cli task +upload-attachment --resource-id "..." --file "..."`.
+4. Execute `work-cli task +upload-attachment --resource-id "..." --file "..."`.
 5. Report the returned attachment record. The output exposes all fields returned by the API (e.g. `guid`, `name`, `size`, `url`, `uploader`, ...); always surface the attachment `guid` and, if present, the `url` so the user can jump to the attachment directly.
 
 ## Output

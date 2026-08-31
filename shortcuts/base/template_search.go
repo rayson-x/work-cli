@@ -25,7 +25,7 @@ var BaseTemplateSearch = common.Shortcut{
 		"Use this when the user wants to create a new Base and has no owned/recent Base anchor.",
 		"Do not use drive +search for marketplace templates; drive search only finds user-accessible Drive/Wiki objects.",
 		"Returned template.token is the Base template token. To create from it, run +base-copy --base-token <token>.",
-		`Example: lark-cli base +template-search --keyword "project management" --limit 10 --as user`,
+		`Example: work-cli base +template-search --keyword "project management" --limit 10 --as user`,
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
 		if strings.TrimSpace(runtime.Str("keyword")) == "" {

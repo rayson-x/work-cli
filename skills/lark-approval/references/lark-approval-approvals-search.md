@@ -9,16 +9,16 @@
 
 ```bash
 # 按关键词搜索可发起审批定义
-lark-cli approval approvals search --data '{"keyword":"请假"}' --as user
+work-cli approval approvals search --data '{"keyword":"请假"}' --as user
 
 # 使用 page_token 翻页
-lark-cli approval approvals search --data '{"keyword":"请假", "page_token":"example_page_token"}' --as user
+work-cli approval approvals search --data '{"keyword":"请假", "page_token":"example_page_token"}' --as user
 
 # 表格格式输出，便于快速浏览候选定义
-lark-cli approval approvals search --data '{"keyword":"出差"}' --format table --as user
+work-cli approval approvals search --data '{"keyword":"出差"}' --format table --as user
 
 # 预览 API 调用，不执行
-lark-cli approval approvals search --data '{"keyword":"请假"}' --as user --dry-run
+work-cli approval approvals search --data '{"keyword":"请假"}' --as user --dry-run
 ```
 
 ## 参数
@@ -89,13 +89,13 @@ lark-cli approval approvals search --data '{"keyword":"请假"}' --as user --dry
 ### 1）用户选中了某个定义，继续查看详情
 
 ```bash
-lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
+work-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
 ```
 
 ### 2）确认是原生定义后，再准备发起审批实例
 
 ```bash
-lark-cli approval instances create --data '{"approval_code":"<APPROVAL_CODE>","form":"[...]"}' --as user --yes
+work-cli approval instances create --data '{"approval_code":"<APPROVAL_CODE>","form":"[...]"}' --as user --yes
 ```
 
 ### 3）确认是三方定义时，直接返回链接

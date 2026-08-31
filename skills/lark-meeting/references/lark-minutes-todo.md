@@ -1,11 +1,11 @@
 # minutes +todo
 
-> **路由**：本命令操作**妙记内的 AI 待办**，不是飞书任务（Task）。用户说「在妙记里新建待办」时**必须**用本命令，**禁止**走 `lark-cli task` / `tasklists list` / `task +create`。详见 [生成和修改妙记](../scenes/create-and-edit-minutes.md)。
+> **路由**：本命令操作**妙记内的 AI 待办**，不是飞书任务（Task）。用户说「在妙记里新建待办」时**必须**用本命令，**禁止**走 `work-cli task` / `tasklists list` / `task +create`。详见 [生成和修改妙记](../scenes/create-and-edit-minutes.md)。
 
 
 对妙记中的待办做新增 / 更新 / 删除（单条或批量）。写操作。
 
-本 skill 对应 shortcut：`lark-cli minutes +todo`（调用 `POST /open-apis/minutes/v1/minutes/{minute_token}/todo`）。
+本 skill 对应 shortcut：`work-cli minutes +todo`（调用 `POST /open-apis/minutes/v1/minutes/{minute_token}/todo`）。
 
 ## 典型触发表达
 
@@ -21,26 +21,26 @@
 
 ```bash
 # 单条：新增
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
 
 # 批量：一次新增两条
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos '[{"operation":"add","content":"晚上好1","is_done":true},{"operation":"add","content":"晚上好2","is_done":false}]'
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos '[{"operation":"add","content":"晚上好1","is_done":true},{"operation":"add","content":"晚上好2","is_done":false}]'
 
 # 批量：混合增删改
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos '[{"operation":"add","content":"新待办","is_done":false},{"operation":"update","todo_id":"1234567890","content":"已更新","is_done":true},{"operation":"delete","todo_id":"9876543210"}]'
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos '[{"operation":"add","content":"新待办","is_done":false},{"operation":"update","todo_id":"1234567890","content":"已更新","is_done":true},{"operation":"delete","todo_id":"9876543210"}]'
 
 # 从文件读取
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos @todos.json
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --as user --todos @todos.json
 
 # 单条：更新 / 删除
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation update --todo-id 1234567890 --todo "整理会议纪要" --is-done --as user
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation delete --todo-id 1234567890 --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation update --todo-id 1234567890 --todo "整理会议纪要" --is-done --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation delete --todo-id 1234567890 --as user
 
 # 预览
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "新待办" --is-done --dry-run --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "新待办" --is-done --dry-run --as user
 
 # 新增待办并指定负责人（负责人以内联 @ 提及写进 --todo 内容，这是妙记待办表示归属的既定写法）
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批 @张三" --is-done=false --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批 @张三" --is-done=false --as user
 ```
 
 ## 参数
@@ -89,7 +89,7 @@ lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add -
 
 ### 1. 先读后写，待办 id 如何获取
 
-更新 / 删除前先用 `lark-cli minutes +detail --minute-tokens <token> --todo` 读取当前待办。返回的每条待办带 `todo_id` 字段。
+更新 / 删除前先用 `work-cli minutes +detail --minute-tokens <token> --todo` 读取当前待办。返回的每条待办带 `todo_id` 字段。
 
 > 待办 id 仅用于程序内部定位，不必展示给用户。
 
@@ -103,7 +103,7 @@ lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add -
 
 - 用户已经直接给出姓名时（例如"负责人是张三"），**不做任何查找**，原文原样拼进 `--todo` 内容，写成纯文本 `@张三`（`--todo "xxx @张三"`）。
 - 用户说"负责人是我"时，**必须**先取当前登录用户的真实姓名再拼接，禁止直接写成字面的 `@我`：
-  - 执行 `lark-cli contact +get-user --as user`，取返回中的姓名字段作为真实姓名，拼成 `--todo "xxx @<真实姓名>"`。
+  - 执行 `work-cli contact +get-user --as user`，取返回中的姓名字段作为真实姓名，拼成 `--todo "xxx @<真实姓名>"`。
   - 如果这一步失败或取不到姓名（无权限、报错等），**不要**写任何 `@` 提及占位——直接用不带负责人后缀的原始待办文本创建（`--todo "xxx"`），不要保留字面的 `@我`。
 - **不要**因为要处理负责人而改路由到 [lark-task](../../lark-task/SKILL.md) 或做进一步的通讯录搜索——第一优先级永远是落地这条待办；姓名解析只影响追加的 `@` 文本，绝不能阻塞或取消待办创建。
 - **不要**用"创建者是谁 / 以什么身份创建"来代替 `@` 提及——创建时用的 `--as user`/`--as bot` 身份和"负责人"是两件不相关的事，即使已知当前用户真实姓名，也必须把它拼进 `content` 文本，不能只在回复里用"以你的身份创建即归属于你"这类说法搪塞。
@@ -114,10 +114,10 @@ lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add -
 
 ```bash
 # 姓名解析成功
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批 @王小明" --is-done=false --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批 @王小明" --is-done=false --as user
 
 # "我"解析失败：不写 @ 提及，仅保留原始内容
-lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
+work-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add --todo "跟进预算审批" --is-done=false --as user
 ```
 
 ```json
@@ -158,7 +158,7 @@ lark-cli minutes +todo --minute-token obcnxxxxxxxxxxxxxxxxxxxx --operation add -
 | `todos[i]` 校验失败 | 检查该条 `operation` 与字段组合 |
 | `error.subtype` = `permission_denied` | **妙记资源无编辑权**：向妙记所有者申请该妙记的编辑/协作权限；**不要**走 `auth login --scope` |
 | `error.subtype` = `quota_exceeded` | **该妙记生成时 ASR/AI 额度已用尽**，AI 待办未完整生成，改待办无法落库：让用户去该妙记详情页查看额度详细信息；CLI 无法补充额度，重试不会成功 |
-| 缺少 OAuth scope（`error.missing_scopes` 含 `minutes:minutes:update`） | `lark-cli auth login --scope "minutes:minutes:update"` |
+| 缺少 OAuth scope（`error.missing_scopes` 含 `minutes:minutes:update`） | `work-cli auth login --scope "minutes:minutes:update"` |
 
 ## 相关场景
 - [生成和修改妙记](../scenes/create-and-edit-minutes.md)

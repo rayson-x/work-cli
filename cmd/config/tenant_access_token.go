@@ -119,7 +119,7 @@ func configTenantAccessTokenSetRun(f *cmdutil.Factory, appID string) error {
 		"appId":  appID,
 		"stored": true,
 	}, output.SuccessEnvelopeOptions{
-		CommandPath: "lark-cli config tenant-access-token set",
+		CommandPath: "work-cli config tenant-access-token set",
 		Out:         f.IOStreams.Out,
 		ErrOut:      f.IOStreams.ErrOut,
 	})
@@ -142,7 +142,7 @@ func configTenantAccessTokenRemoveRun(f *cmdutil.Factory, appID string) error {
 		"appId":   appID,
 		"removed": true,
 	}, output.SuccessEnvelopeOptions{
-		CommandPath: "lark-cli config tenant-access-token remove",
+		CommandPath: "work-cli config tenant-access-token remove",
 		Out:         f.IOStreams.Out,
 		ErrOut:      f.IOStreams.ErrOut,
 	})

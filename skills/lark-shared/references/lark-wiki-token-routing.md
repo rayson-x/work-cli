@@ -7,7 +7,7 @@ Wiki URL 中的 `/wiki/<token>` 是节点 token，不一定是底层文档、表
 优先使用 `lark-drive` 的 `drive +inspect`：
 
 ```bash
-lark-cli drive +inspect --url 'https://xxx.feishu.cn/wiki/<wiki_token>'
+work-cli drive +inspect --url 'https://xxx.feishu.cn/wiki/<wiki_token>'
 ```
 
 输出中的 `type` 是底层对象类型，`token` 是后续命令应使用的 canonical token。`wiki_node` 字段保留节点侧信息，如 `space_id`、`node_token`、`obj_token`、`obj_type`。
@@ -17,7 +17,7 @@ lark-cli drive +inspect --url 'https://xxx.feishu.cn/wiki/<wiki_token>'
 如果不能使用 shortcut，再调用 Wiki 节点接口：
 
 ```bash
-lark-cli wiki spaces get_node --params '{"token":"<wiki_token>"}'
+work-cli wiki spaces get_node --params '{"token":"<wiki_token>"}'
 ```
 
 从返回值中读取：

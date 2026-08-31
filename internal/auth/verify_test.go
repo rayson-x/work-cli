@@ -89,7 +89,7 @@ func TestVerifyUserToken(t *testing.T) {
 			restore := keychain.SetAuthLogHooksForTest(log.New(&buf, "", 0), func() time.Time {
 				return time.Date(2026, 4, 2, 3, 4, 5, 0, time.UTC)
 			}, func() []string {
-				return []string{"lark-cli", "auth", "status"}
+				return []string{"work-cli", "auth", "status"}
 			})
 			t.Cleanup(restore)
 
@@ -117,7 +117,7 @@ func TestVerifyUserToken(t *testing.T) {
 				if !strings.Contains(got, "x-tt-logid=verify-log-id") {
 					t.Fatalf("expected x-tt-logid in log, got %q", got)
 				}
-				if !strings.Contains(got, "cmdline=lark-cli auth status") {
+				if !strings.Contains(got, "cmdline=work-cli auth status") {
 					t.Fatalf("expected cmdline in log, got %q", got)
 				}
 			} else if got != "" {

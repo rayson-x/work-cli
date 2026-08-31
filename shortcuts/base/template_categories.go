@@ -18,7 +18,7 @@ var BaseTemplateCategories = common.Shortcut{
 	AuthTypes:   authTypes(),
 	Tips: []string{
 		"Use this first when the user asks to browse template categories.",
-		`Example: lark-cli base +template-categories --as user`,
+		`Example: work-cli base +template-categories --as user`,
 	},
 	DryRun: dryRunTemplateCategories,
 	Execute: func(ctx context.Context, runtime *common.RuntimeContext) error {

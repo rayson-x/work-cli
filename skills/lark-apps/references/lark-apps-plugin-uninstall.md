@@ -2,7 +2,7 @@
 
 > **本地命令**：读当前目录的 `package.json`，在项目根目录下运行（和 npm 一样）。**不接受 `--app-id`**——它不是远端 API 命令。
 
-卸载插件包。运行时命令事实以 `lark-cli apps +plugin-uninstall --help` 为准。
+卸载插件包。运行时命令事实以 `work-cli apps +plugin-uninstall --help` 为准。
 
 ## 何时用
 
@@ -17,7 +17,7 @@
 ## 示例
 
 ```bash
-lark-cli apps +plugin-uninstall --name <plugin-key>
+work-cli apps +plugin-uninstall --name <plugin-key>
 ```
 
 ## 输出契约

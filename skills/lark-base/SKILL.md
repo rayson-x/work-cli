@@ -4,8 +4,8 @@ version: 1.2.21
 description: "飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限、模板中心（多维表格模板分类/列表/搜索）；遇到 Base/多维表格/bitable、BaseApp/AppMode、/base/ 或 /app/ 链接时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli base --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli base --help"
 ---
 
 # Base
@@ -20,10 +20,10 @@ metadata:
 
 开始操作前先确定 `base_token` 和目标实体类型；上下文已提供 `<bitable>` / `<base_refer>` 标签及资源 ID 时直接使用。其余情况按意图选择入口：
 
-1. **URL 或分享链接：** `lark-cli base +url-resolve --url '<url>' --as user`。Base URL 根据返回的 `resource_type` / `block_type` 及 `table_id`、`view_id`、`record_id`、`dashboard_id`、`workflow_id`、`docx_token`、`share_token` 等坐标进入对应模块；BaseApp `/app/` URL 返回 `app_token`，并在链接携带时返回 `workspace_token` 和 `page_id`。实体类型以解析结果为准。
-2. **Base 标题或关键词：** `lark-cli base +title-resolve --title '<keyword>' --as user`。单一结果直接取得 `base_token`；多个候选结合标题、所有者和更新时间消歧，仍无法唯一确定时请用户选择。随后按下方 Base Block 资源模型定位目标实体。
-3. **已有 Base 候选列表：** 用户要列出已有 Base 候选，且需要按最近访问、owner、创建人、时间、类型等维度筛选/排序时，转 `lark-cli drive +search --doc-types bitable --as user`。按标题/关键词定位单个 Base 仍用 `+title-resolve`。常见候选列表命令：
-   - 最近访问：`lark-cli drive +search --doc-types bitable --sort open_time --opened-since 3m --page-size 20 --as user`
+1. **URL 或分享链接：** `work-cli base +url-resolve --url '<url>' --as user`。Base URL 根据返回的 `resource_type` / `block_type` 及 `table_id`、`view_id`、`record_id`、`dashboard_id`、`workflow_id`、`docx_token`、`share_token` 等坐标进入对应模块；BaseApp `/app/` URL 返回 `app_token`，并在链接携带时返回 `workspace_token` 和 `page_id`。实体类型以解析结果为准。
+2. **Base 标题或关键词：** `work-cli base +title-resolve --title '<keyword>' --as user`。单一结果直接取得 `base_token`；多个候选结合标题、所有者和更新时间消歧，仍无法唯一确定时请用户选择。随后按下方 Base Block 资源模型定位目标实体。
+3. **已有 Base 候选列表：** 用户要列出已有 Base 候选，且需要按最近访问、owner、创建人、时间、类型等维度筛选/排序时，转 `work-cli drive +search --doc-types bitable --as user`。按标题/关键词定位单个 Base 仍用 `+title-resolve`。常见候选列表命令：
+   - 最近访问：`work-cli drive +search --doc-types bitable --sort open_time --opened-since 3m --page-size 20 --as user`
    - 只列我拥有的：加 `--mine`；如果要列“我创建的”，用 `--created-by-me`。
    - 从候选项拿到 URL 或 token 后，再用 `+url-resolve` 或 `+base-get` 进入 Base 业务命令。
 4. **BaseApp：** 优先使用真实 `/app/` URL；已有 `workspace_token` 时可用 `+workspace-entity-list --type baseapp` 定位。两者都没有时请用户补充应用链接或 Workspace，不按名称全局猜测 `app_token`。
@@ -118,7 +118,7 @@ Record 是 Table 中的一行数据，包含该记录在各个 Field 下的 Cell
 
 ```bash
 # Example: 行数较大时先筛选 Status 包含 Doing 的记录，再导出 20 条作为局部预览
-lark-cli base +record-list \
+work-cli base +record-list \
   --base-token <base_token> --table-id <table_id> \
   --filter-json '{"logic":"and","conditions":[["Status","intersects",["Doing"]]]}' \
   --field-id Name --field-id Status --field-id Score --limit 20 \
@@ -178,12 +178,12 @@ PY
 
 ```bash
 # 新增：成功时返回 record_id_list
-lark-cli base +record-batch-create \
+work-cli base +record-batch-create \
   --base-token <base_token> --table-id <table_id> \
   --json '{"create_records":[{"Name":"Task A","Status":["Todo"]},{"Name":"Task B","Score":20}]}' --as user
 
 # 更新：每条记录只提交要改变的字段
-lark-cli base +record-batch-update \
+work-cli base +record-batch-update \
   --base-token <base_token> --table-id <table_id> \
   --json '{"update_records":{"<record_id_a>":{"Status":["Done"]},"<record_id_b>":{"Score":100}}}' --as user
 ```

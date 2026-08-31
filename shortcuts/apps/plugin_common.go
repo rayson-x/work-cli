@@ -41,7 +41,7 @@ func pluginCheckProjectDir(projectPath string) error {
 	if err != nil {
 		if os.IsNotExist(err) {
 			return appsFailedPreconditionError("package.json not found in %s", projectPath).
-				WithHint("run 'lark-cli apps +init' to initialize the project first")
+				WithHint("run 'work-cli apps +init' to initialize the project first")
 		}
 		return appsFileIOError(err, "cannot access package.json in %s", projectPath)
 	}

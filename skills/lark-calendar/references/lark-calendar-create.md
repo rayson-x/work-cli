@@ -8,20 +8,20 @@
 
 ```bash
 # 创建日程 + 邀请参会人（ISO 8601 时间）
-lark-cli calendar +create \
+work-cli calendar +create \
   --summary "产品评审" \
   --start "2026-03-12T14:00+08:00" \
   --end "2026-03-12T15:00+08:00" \
   --attendee-ids ou_aaa,ou_bbb
 
 # 无参会人
-lark-cli calendar +create \
+work-cli calendar +create \
   --summary "午餐" \
   --start "2026-03-12T12:00+08:00" \
   --end "2026-03-12T13:00+08:00"
 
 # 指定日历
-lark-cli calendar +create --summary "..." --start "..." --end "..." \
+work-cli calendar +create --summary "..." --start "..." --end "..." \
   --calendar-id cal_xxx
 ```
 
@@ -57,7 +57,7 @@ lark-cli calendar +create --summary "..." --start "..." --end "..." \
 
 ```bash
 ## 添加需要审批的会议室（approval_reason 最大 200 字符）
-lark-cli calendar event.attendees create \
+work-cli calendar event.attendees create \
   --as user \
   --params '{"calendar_id":"<CALENDAR_ID>","event_id":"<EVENT_ID>"}' \
   --data '{"attendees": [{"type": "resource", "room_id": "omm_xxx", "approval_reason": "申请原因"}]}'

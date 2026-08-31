@@ -32,18 +32,18 @@
 ### 命令
 
 ```bash
-lark-cli okr objective.indicators list --objective-id "<目标ID>" [flags]
+work-cli okr objective.indicators list --objective-id "<目标ID>" [flags]
 ```
 
 ### 常用示例
 
 ```bash
 # 获取目标的量化指标
-lark-cli okr objective.indicators list \
+work-cli okr objective.indicators list \
   --objective-id 7000000000000000001
 
 # 指定用户 ID 类型
-lark-cli okr objective.indicators list \
+work-cli okr objective.indicators list \
   --objective-id 7000000000000000001 \
   --user-id-type "user_id"
 ```
@@ -124,14 +124,14 @@ lark-cli okr objective.indicators list \
 ### 命令
 
 ```bash
-lark-cli okr key_result.indicators list --key-result-id "<关键结果ID>" [flags]
+work-cli okr key_result.indicators list --key-result-id "<关键结果ID>" [flags]
 ```
 
 ### 常用示例
 
 ```bash
 # 获取关键结果的量化指标
-lark-cli okr key_result.indicators list \
+work-cli okr key_result.indicators list \
   --key-result-id "7652569715131075780"
 ```
 
@@ -154,24 +154,24 @@ lark-cli okr key_result.indicators list \
 ### 命令
 
 ```bash
-lark-cli okr indicators patch --indicator-id "<指标ID>" --data '<JSON>'
+work-cli okr indicators patch --indicator-id "<指标ID>" --data '<JSON>'
 ```
 
 ### 常用示例
 
 ```bash
 # 更新指标的当前值（手动更新方式）
-lark-cli okr indicators patch \
+work-cli okr indicators patch \
   --indicator-id "ind-123" \
   --data '{"current_value": 75.5, "current_value_calculate_type": 0}'
 
 # 更新指标状态为"有风险"（需 status_calculate_type=0）
-lark-cli okr indicators patch \
+work-cli okr indicators patch \
   --indicator-id "ind-123" \
   --data '{"indicator_status": 1, "status_calculate_type": 0}'
 
 # 更新关键结果指标的目标值和单位
-lark-cli okr indicators patch \
+work-cli okr indicators patch \
   --indicator-id "ind-456" \
   --data '{
     "target_value": 100,
@@ -179,7 +179,7 @@ lark-cli okr indicators patch \
   }'
 
 # 从文件读取请求体
-lark-cli okr indicators patch \
+work-cli okr indicators patch \
   --indicator-id "ind-123" \
   --data @indicator_update.json
 ```
@@ -232,7 +232,7 @@ lark-cli okr indicators patch \
 
 1. **查询关键结果的指标**（获取 `indicator_id` 和当前配置）
    ```bash
-   lark-cli okr key_result.indicators list \
+   work-cli okr key_result.indicators list \
      --key-result-id 7652569715131075780
    ```
 
@@ -242,14 +242,14 @@ lark-cli okr indicators patch \
 
 3. **更新指标**
    ```bash
-   lark-cli okr indicators patch \
+   work-cli okr indicators patch \
      --indicator-id "ind-123" \
      --data '{"current_value":65.0,"current_value_calculate_type":0,"indicator_status":1,"status_calculate_type":0}'
    ```
 
 4. **验证更新结果**
    ```bash
-   lark-cli okr key_result.indicators list \
+   work-cli okr key_result.indicators list \
      --key-result-id 7652569715131075780
    ```
 
@@ -257,10 +257,10 @@ lark-cli okr indicators patch \
 
 ```bash
 # 1. 查询获取 indicator_id
-lark-cli okr key_result.indicators list --key-result-id 7652569715131075780
+work-cli okr key_result.indicators list --key-result-id 7652569715131075780
 
 # 2. 更新目标值和单位
-lark-cli okr indicators patch \
+work-cli okr indicators patch \
   --indicator-id 7652569715131075781 \
   --data '{"target_value":500,"unit":{"unit_type":0,"unit_value":"YUAN"}}'
 ```

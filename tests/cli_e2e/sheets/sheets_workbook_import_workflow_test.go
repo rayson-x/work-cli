@@ -39,7 +39,7 @@ func TestSheets_WorkbookImportWorkflow(t *testing.T) {
 		[]byte("Name,Age,City\nAlice,25,Beijing\nBob,30,Shanghai\n"), 0o644))
 
 	suffix := clie2e.GenerateSuffix()
-	title := "lark-cli-e2e-sheets-import-" + suffix
+	title := "work-cli-e2e-sheets-import-" + suffix
 	folderToken := drive.CreateDriveFolder(t, parentT, ctx, title+"-folder", "bot", "")
 
 	result, err := clie2e.RunCmd(ctx, clie2e.Request{

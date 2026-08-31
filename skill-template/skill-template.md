@@ -4,8 +4,8 @@ version: {{meta_version}}
 description: "{{meta_description}}"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli {{service}} --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli {{service}} --help"
 ---
 
 # {{service}} ({{version}})
@@ -16,7 +16,7 @@ metadata:
 {{#shortcuts}}
 ## Shortcuts（推荐优先使用）
 
-Shortcut 是对常用操作的高级封装（`lark-cli {{service}} +<verb> [flags]`）。有 Shortcut 的操作优先使用。
+Shortcut 是对常用操作的高级封装（`work-cli {{service}} +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 | Shortcut | 说明 |
 |----------|------|
@@ -26,8 +26,8 @@ Shortcut 是对常用操作的高级封装（`lark-cli {{service}} +<verb> [flag
 ## API Resources
 
 ```bash
-lark-cli schema {{service}}.<resource>.<method>   # 调用 API 前必须先查看参数结构
-lark-cli {{service}} <resource> <method> [flags] # 调用 API
+work-cli schema {{service}}.<resource>.<method>   # 调用 API 前必须先查看参数结构
+work-cli {{service}} <resource> <method> [flags] # 调用 API
 ```
 
 > **重要**：使用原生 API 时，必须先运行 `schema` 查看 `--data` / `--params` 参数结构，不要猜测字段格式。

@@ -21,7 +21,7 @@ var BaseWorkspaceMoveIn = common.Shortcut{
 		{Name: "entity-token", Desc: "base_token or app_token to move into the workspace", Required: true},
 	},
 	Tips: []string{
-		"lark-cli base +workspace-move-in --workspace-token <workspace_token> --entity-token <base_token>",
+		"work-cli base +workspace-move-in --workspace-token <workspace_token> --entity-token <base_token>",
 		"This moves the entity into the workspace tree; it does not create the Base or App.",
 		"The current OpenAPI does not accept entity_type or ordering fields for move-in.",
 	},

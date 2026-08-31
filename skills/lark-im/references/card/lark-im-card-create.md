@@ -100,10 +100,10 @@
 
 ```bash
 # 发送到群聊
-lark-cli im +messages-send --chat-id oc_xxx --msg-type interactive --content '<card_json>'
+work-cli im +messages-send --chat-id oc_xxx --msg-type interactive --content '<card_json>'
 
 # 发送给指定用户（私聊）
-lark-cli im +messages-send --user-id ou_xxx --msg-type interactive --content '<card_json>'
+work-cli im +messages-send --user-id ou_xxx --msg-type interactive --content '<card_json>'
 ```
 
 **发送失败时**：先对照下方常见失败列表排查，若能匹配则按对应处理方式修复后重新发送；否则根据错误信息修复 JSON 后重新发送。最多尝试 **3 次**。若 3 次后仍失败，**降级为 Card 1.0 卡片**重新构造并发送。**不参考之前发送 2.0 的记忆**，完全根据用户意图重新构造 1.0 卡片。1.0 无本地参考文档（components/、resource/ 均为 2.0）。

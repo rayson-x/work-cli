@@ -189,7 +189,7 @@ func TestDriveTaskResultExportRateLimitSuggestsOneMinuteBackoff(t *testing.T) {
 	for _, want := range []string{
 		"wait at least 1 minute",
 		"exponential backoff starting at 1 minute",
-		"lark-cli drive +task_result --scenario export --ticket tk_export_limited --file-token docx123",
+		"work-cli drive +task_result --scenario export --ticket tk_export_limited --file-token docx123",
 	} {
 		if !strings.Contains(problem.Hint, want) {
 			t.Fatalf("hint missing %q: %q", want, problem.Hint)

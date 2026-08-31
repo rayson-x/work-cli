@@ -63,13 +63,13 @@ func newCmdAuthLogin(f *cmdutil.Factory, runF func(*LoginOptions) error, registe
 For AI agents: this command blocks until the user completes authorization in the
 browser. If your harness or agent tool only delivers final turn messages, use --no-wait --json,
 send the verification URL (or QR code) to the user as your final message, end the turn, then
-run --device-code in a later step after the user confirms authorization. Use 'lark-cli auth qrcode'
+run --device-code in a later step after the user confirms authorization. Use 'work-cli auth qrcode'
 to generate QR codes (supports ASCII and PNG formats).`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if mode := f.ResolveStrictMode(cmd.Context()); mode == core.StrictModeBot {
 				return errs.NewValidationError(errs.SubtypeInvalidArgument,
 					"strict mode is %q, user login is disabled in this profile", mode).
-					WithHint("if the user explicitly wants to switch to user identity, see `lark-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)")
+					WithHint("if the user explicitly wants to switch to user identity, see `work-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)")
 			}
 			opts.Ctx = cmd.Context()
 			if runF != nil {
@@ -310,7 +310,7 @@ func authLoginRun(opts *LoginOptions, resolver domainResolver) error {
 	// --no-wait: return immediately with device code and URL
 	if opts.NoWait {
 		if err := saveLoginRequestedScope(authResp.DeviceCode, finalScope); err != nil {
-			fmt.Fprintf(f.IOStreams.ErrOut, "[lark-cli] [WARN] auth login: failed to cache requested scopes: %v\n", err)
+			fmt.Fprintf(f.IOStreams.ErrOut, "[work-cli] [WARN] auth login: failed to cache requested scopes: %v\n", err)
 		}
 		data := map[string]interface{}{
 			"verification_url": authResp.VerificationUriComplete,
@@ -436,11 +436,11 @@ func authLoginPollDeviceCode(opts *LoginOptions, config *core.CliConfig, msg *lo
 	}
 	requestedScope, err := loadLoginRequestedScope(opts.DeviceCode)
 	if err != nil {
-		fmt.Fprintf(f.IOStreams.ErrOut, "[lark-cli] [WARN] auth login: failed to load cached requested scopes: %v\n", err)
+		fmt.Fprintf(f.IOStreams.ErrOut, "[work-cli] [WARN] auth login: failed to load cached requested scopes: %v\n", err)
 	}
 	cleanupRequestedScope := func() {
 		if err := removeLoginRequestedScope(opts.DeviceCode); err != nil {
-			fmt.Fprintf(f.IOStreams.ErrOut, "[lark-cli] [WARN] auth login: failed to remove cached requested scopes: %v\n", err)
+			fmt.Fprintf(f.IOStreams.ErrOut, "[work-cli] [WARN] auth login: failed to remove cached requested scopes: %v\n", err)
 		}
 	}
 	// Skip the stderr hint in JSON mode (the --no-wait call that issued

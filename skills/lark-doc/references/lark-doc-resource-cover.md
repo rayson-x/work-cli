@@ -15,22 +15,22 @@ Docx 封面图不是正文里的 `<img token="...">` 素材块。读取、更新
 
 ```bash
 # 下载封面图。CLI 会先读取 document.cover.token，再下载图片内容并保存到本地。
-lark-cli docs +resource-download --doc doxcnXXX --type cover --output ./cover
+work-cli docs +resource-download --doc doxcnXXX --type cover --output ./cover
 
 # 使用本地文件更新封面图。
-lark-cli docs +resource-update --doc doxcnXXX --type cover --file ./cover.png
+work-cli docs +resource-update --doc doxcnXXX --type cover --file ./cover.png
 
 # 使用剪切板图片更新封面图。
-lark-cli docs +resource-update --doc doxcnXXX --type cover --from-clipboard
+work-cli docs +resource-update --doc doxcnXXX --type cover --from-clipboard
 
 # 使用 HTTPS URL 更新封面图。CLI 会先下载 URL 内容，再上传并写入 cover.token。
-lark-cli docs +resource-update --doc doxcnXXX --type cover --url "https://example.com/cover.png"
+work-cli docs +resource-update --doc doxcnXXX --type cover --url "https://example.com/cover.png"
 
 # 可选：设置封面图裁切偏移。
-lark-cli docs +resource-update --doc doxcnXXX --type cover --file ./cover.png --offset-ratio-x 0.2 --offset-ratio-y 0.8
+work-cli docs +resource-update --doc doxcnXXX --type cover --file ./cover.png --offset-ratio-x 0.2 --offset-ratio-y 0.8
 
 # 删除封面图；当文档本来没有封面图时也成功返回。
-lark-cli docs +resource-delete --doc doxcnXXX --type cover
+work-cli docs +resource-delete --doc doxcnXXX --type cover
 ```
 
 ## 参数

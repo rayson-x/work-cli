@@ -8,12 +8,12 @@
 
 ```bash
 # 更新进展记录内容（默认 simple 风格，半纯文本格式）
-lark-cli okr +progress-update \
+work-cli okr +progress-update \
   --progress-id 1234567890123456789 \
   --content '{"text":"更新后的进展内容","mention":["ou_123"]}'
 
 # 更新进展记录内容并同时更新进度（richtext 风格，完整 ContentBlock 格式）
-lark-cli okr +progress-update \
+work-cli okr +progress-update \
   --progress-id 1234567890123456789 \
   --content '{"blocks":[{"block_element_type":"paragraph","paragraph":{"elements":[{"paragraph_element_type":"textRun","text_run":{"text":"进度已更新至 90%"}}]}}]}' \
   --style richtext \
@@ -21,12 +21,12 @@ lark-cli okr +progress-update \
   --progress-status normal
 
 # 从文件读取 content（适用于较长的进展内容）
-lark-cli okr +progress-update \
+work-cli okr +progress-update \
   --progress-id 1234567890123456789 \
   --content @updated_progress.json
 
 # 预览 API 调用而不实际执行
-lark-cli okr +progress-update \
+work-cli okr +progress-update \
   --progress-id 1234567890123456789 \
   --content '{"text":"test"}' \
   --dry-run
@@ -51,7 +51,7 @@ lark-cli okr +progress-update \
 2. 修改进展内容：
    - **推荐**：使用 `simple` 风格（默认），构造 SemiPlainContent JSON：`{"text":"内容","mention":["ou_xxx"]}`，mention 中提及的用户会统一连接在文本末尾。
    - 如需复杂格式：使用 `richtext` 风格，构造 ContentBlock JSON。请参考 [ContentBlock 格式](lark-okr-contentblock.md)。若需要插入图片/飞书文档或复杂文本格式，则必须使用 richtext 风格
-3. 执行 `lark-cli okr +progress-update --progress-id "..." --content "..."`。
+3. 执行 `work-cli okr +progress-update --progress-id "..." --content "..."`。
 4. 报告结果：更新后的进展记录 ID、修改时间、进度百分比等。
 
 ## 输出

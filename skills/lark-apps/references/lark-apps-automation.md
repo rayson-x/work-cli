@@ -100,7 +100,7 @@
 - `+automation-get` / `+automation-list`：**恒不返回明文 Bearer Token**——`trigger_condition.token_value` 被抹为 `null`。用户想知道「token 是什么」时，list/get 都查不到明文。
 - `+automation-update --enable-token` / `--reset-token`：明文 Bearer Token **仅当次 stdout 回显一次**，同时 stderr 打印一次性告警：
   ```text
-  warning: this bearer token is shown only once and is NOT stored by lark-cli — copy it now and store it in your own secret manager.
+  warning: this bearer token is shown only once and is NOT stored by work-cli — copy it now and store it in your own secret manager.
   ```
 - Webhook URL 同理：`--reset-url` 后新 URL 仅当次回显一次，旧 URL 立即失效。
 - CLI 不落盘任何明文 token/URL（不写 cache / config / recent / debug log / 错误信息）。
@@ -185,7 +185,7 @@
 仅对 cron、webhook、record-change 的 `INSERT`、`UPDATE`、`DELETE` 使用此路径。先用 `+automation-get` 定位；不存在时用 `+automation-create` 创建同名 disabled trigger，再次回读确认。已存在时记录它是否 enabled。按项目 guide 完成同名业务 handler 并本地验证后，commit、`git push origin sprint/default`。若 trigger 已 enabled，先说明发布前必须临时停用以及可能造成的运行中断，并取得这次临时停用授权；未获授权时停止在发布前。取得授权后，在发布前执行 `+automation-disable`，并再次用 `+automation-get` 确认 disabled。随后发布完整应用：
 
 ```bash
-lark-cli apps +release-create --as user --app-id <app_id> --branch sprint/default
+work-cli apps +release-create --as user --app-id <app_id> --branch sprint/default
 ```
 
 若 `+release-create` 本身返回错误或未返回 `data.release_id`：视为确认未创建本轮 release（新代码未上线），原本 enabled 的 trigger 恢复 enabled 并回读、原本 disabled 的保持 disabled，然后停止；若因超时等导致创建结果未知，保持 disabled，先用 `+release-list --status finished --page-size 1` 核对是否已产生新 release 再决定。取得 `data.release_id` 后，对**这一轮** ID 调用 `+release-get`：`publishing` 时每 20 秒继续轮询，整体最多约 5 分钟；超时且状态仍不确定时报告 `release_id` 和当前 status，并保持 disabled；只有 `data.status=finished` 才算完成。确认 `failed` 且新代码未上线时，原本 enabled 的 trigger 恢复 enabled 并回读，原本 disabled 的保持 disabled。release 是整个应用上线，可能影响既有线上功能；未获得启动或测试授权时，finished 后始终保持 disabled，不执行 `+automation-enable`。

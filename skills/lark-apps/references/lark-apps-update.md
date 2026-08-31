@@ -1,6 +1,6 @@
 # apps +update
 
-部分更新妙搭应用元信息。运行时命令事实以 `lark-cli apps +update --help` 为准。
+部分更新妙搭应用元信息。运行时命令事实以 `work-cli apps +update --help` 为准。
 
 ## 何时用
 
@@ -15,9 +15,9 @@
 ## 示例
 
 ```bash
-lark-cli apps +update --app-id app_xxx --name "审批系统"
-lark-cli apps +update --app-id app_xxx --description "用于部门审批流转"
-lark-cli apps +update --app-id app_xxx --name "审批系统" --description "用于部门审批流转" --dry-run
+work-cli apps +update --app-id app_xxx --name "审批系统"
+work-cli apps +update --app-id app_xxx --description "用于部门审批流转"
+work-cli apps +update --app-id app_xxx --name "审批系统" --description "用于部门审批流转" --dry-run
 ```
 
 ## 输出契约

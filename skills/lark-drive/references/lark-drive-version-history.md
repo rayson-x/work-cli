@@ -7,21 +7,21 @@
 ## 命令
 
 ```bash
-lark-cli drive +version-history \
+work-cli drive +version-history \
   --file-token boxcnxxxxxxxx \
   --as bot
 
-lark-cli drive +version-history \
+work-cli drive +version-history \
   --file-token boxcnxxxxxxxx \
   --as user
 
-lark-cli drive +version-history \
+work-cli drive +version-history \
   --file-token boxcnxxxxxxxx \
   --limit 50 \
   --cursor 1777013761763 \
   --as bot
 
-lark-cli drive +version-history \
+work-cli drive +version-history \
   --file-token boxcnxxxxxxxx \
   --dry-run \
   --as bot

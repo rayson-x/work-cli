@@ -52,7 +52,7 @@ func TestEnsureBus_RemoteBusAlreadyConnectedIsFailedPrecondition(t *testing.T) {
 	}
 	wantHints := []string{
 		"remote event connection",
-		"`lark-cli event status` and `lark-cli event stop` only inspect local buses",
+		"`work-cli event status` and `work-cli event stop` only inspect local buses",
 		"stop the owner host/process",
 		"wait for the platform connection timeout",
 	}

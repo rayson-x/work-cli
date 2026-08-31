@@ -3,7 +3,7 @@
 
 修改飞书妙记的标题（topic）。
 
-本 skill 对应 shortcut：`lark-cli minutes +update`。
+本 skill 对应 shortcut：`work-cli minutes +update`。
 
 ## 典型触发表达
 
@@ -14,7 +14,7 @@
 ## 命令示例
 
 ```bash
-lark-cli minutes +update --minute-token xxx --topic "周会纪要 2026-05-18"
+work-cli minutes +update --minute-token xxx --topic "周会纪要 2026-05-18"
 ```
 
 ## 参数

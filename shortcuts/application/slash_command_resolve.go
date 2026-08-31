@@ -34,7 +34,7 @@ func matchCommandID(items []interface{}, name string) string {
 func commandNotFoundError(name string) error {
 	return errs.NewAPIError(errs.SubtypeNotFound,
 		"slash command %q not found in the current bound app", name).
-		WithHint("run `lark-cli application +slash-command-list` to see registered commands")
+		WithHint("run `work-cli application +slash-command-list` to see registered commands")
 }
 
 // resolveCommandID resolves a command name to its command_id via the live

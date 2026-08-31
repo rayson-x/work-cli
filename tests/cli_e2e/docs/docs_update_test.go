@@ -27,9 +27,9 @@ func TestDocs_UpdateWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-update-folder-" + suffix
-	originalTitle := "lark-cli-e2e-update-" + suffix
-	updatedTitle := "lark-cli-e2e-update-updated-" + suffix
+	folderName := "work-cli-e2e-update-folder-" + suffix
+	originalTitle := "work-cli-e2e-update-" + suffix
+	updatedTitle := "work-cli-e2e-update-updated-" + suffix
 	originalContent := "# Original\n\nThis is the original content."
 	updatedContent := "# Updated\n\nThis is the updated content."
 	const defaultAs = "bot"
@@ -101,8 +101,8 @@ func TestDocs_BlockMutationRangeWorkflow(t *testing.T) {
 	}
 	replacement := "range-replaced-" + suffix
 
-	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "lark-cli-e2e-range-folder-"+suffix, defaultAs, "")
-	docToken := createDocWithRetry(t, parentT, ctx, folderToken, "lark-cli-e2e-range-"+suffix,
+	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "work-cli-e2e-range-folder-"+suffix, defaultAs, "")
+	docToken := createDocWithRetry(t, parentT, ctx, folderToken, "work-cli-e2e-range-"+suffix,
 		strings.Join(append(append([]string{}, replaceTargets...), deleteTargets...), "\n\n"), defaultAs)
 
 	initialXML, err := fetchDocsContent(ctx, docToken, "xml", "with-ids", defaultAs)

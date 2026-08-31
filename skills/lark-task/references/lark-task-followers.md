@@ -8,13 +8,13 @@ Manage task followers. Add or remove followers from an existing task.
 
 ```bash
 # Add a follower
-lark-cli task +followers --task-id "<task_guid>" --add "ou_aaa"
+work-cli task +followers --task-id "<task_guid>" --add "ou_aaa"
 
 # Add an app follower
-lark-cli task +followers --task-id "<task_guid>" --add "cli_xxx"
+work-cli task +followers --task-id "<task_guid>" --add "cli_xxx"
 
 # Remove a follower
-lark-cli task +followers --task-id "<task_guid>" --remove "ou_aaa"
+work-cli task +followers --task-id "<task_guid>" --remove "ou_aaa"
 ```
 
 ## Parameters

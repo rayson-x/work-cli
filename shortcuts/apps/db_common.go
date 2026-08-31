@@ -263,7 +263,7 @@ func appTableRecordsPath(appID, table string) string {
 	return appTablePath(appID, table) + "/records"
 }
 
-// resolveDataFormat 由文件扩展名推断数据格式。lark-cli 的 --format 已被框架占用（输出渲染），
+// resolveDataFormat 由文件扩展名推断数据格式。work-cli 的 --format 已被框架占用（输出渲染），
 // 故数据格式从文件名推断：import 接受 csv/json，export 还接受 sql。
 func resolveDataFormat(ext string, allowSQL bool) (string, error) {
 	raw := strings.TrimPrefix(strings.ToLower(strings.TrimSpace(ext)), ".")
@@ -495,7 +495,7 @@ func requireDBSyncSourceTableIdentifiable(cfg map[string]interface{}) error {
 	return dbSyncConfigError("source.table.name is required when source.base_url has no table").
 		WithHint("append the table id to base_url as ?table=<table_id>, " +
 			"set source.table.name to the Base table name, " +
-			"or list tables with `lark-cli base +table-list --base-token <token>` and pick one")
+			"or list tables with `work-cli base +table-list --base-token <token>` and pick one")
 }
 
 // baseURLHasTable reports whether a Base URL carries a specific table via the

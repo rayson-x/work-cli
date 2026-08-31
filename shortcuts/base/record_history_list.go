@@ -32,7 +32,7 @@ var BaseRecordHistoryList = common.Shortcut{
 		{Name: "page-size", Type: "int", Default: "30", Desc: "pagination size, range 1-50"},
 	},
 	Tips: []string{
-		`Example: lark-cli base +record-history-list --base-token <base_token> --table-id <table_id> --record-id <record_id>`,
+		`Example: work-cli base +record-history-list --base-token <base_token> --table-id <table_id> --record-id <record_id>`,
 		"This reads one record's history only; it is not a table-wide audit scan.",
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {

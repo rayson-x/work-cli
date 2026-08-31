@@ -41,49 +41,49 @@
 
 ```bash
 # 先预览并加签请求，不实际执行
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","add_sign_type":3,"add_sign_user_ids":["ou_xxx"],"comment":"请项目 owner 一起审核"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --dry-run
 
 # 单人前加签：未指定方式时使用或签
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","add_sign_type":1,"add_sign_user_ids":["ou_xxx"],"approval_method":1,"comment":"请先补充审核"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 多人后加签：所有人都需要审批，使用会签
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","add_sign_type":2,"add_sign_user_ids":["ou_xxx","ou_yyy"],"approval_method":2,"comment":"当前审批完成后请两位都完成审核"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 多人前加签：按数组中的人员顺序依次审批
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","add_sign_type":1,"add_sign_user_ids":["ou_first","ou_second"],"approval_method":3,"comment":"请先由第一位审核，再由第二位审核"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 同一请求要求先加签、再转交：必须并加签；两条命令按顺序执行
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","add_sign_type":3,"add_sign_user_ids":["ou_reviewer"],"comment":"请一起审核"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 仅在上面的 add_sign 成功后，转交同一当前任务
-lark-cli approval tasks transfer \
+work-cli approval tasks transfer \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","transfer_user_id":"ou_transferee","comment":"出差期间请代为处理"}' \
   --params '{"user_id_type":"open_id"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体，适合较长 comment 或较多加签人
-lark-cli approval tasks add_sign \
+work-cli approval tasks add_sign \
   --data @./add-sign-body.json \
   --params '{"user_id_type":"open_id"}' \
   --as user \
@@ -133,7 +133,7 @@ lark-cli approval tasks add_sign \
 先查到待办任务：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的字段：
@@ -149,7 +149,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需先确认表单、节点、审批流进度，可继续查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

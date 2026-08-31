@@ -9,13 +9,13 @@
 直接使用以下命令，不需要先加载 `lark-drive` Skill：
 
 ```bash
-lark-cli drive +import --as user --file "<template.pptx>" --type slides --json
+work-cli drive +import --as user --file "<template.pptx>" --type slides --json
 ```
 
 可选参数：用 `--name "<title>"` 指定导入后的 Slides 标题；用 `--folder-token <FOLDER_TOKEN>` 指定目标文件夹。若返回 `ready=false` / `timed_out=true`，直接执行返回值里的 `next_command`；等价形式是：
 
 ```bash
-lark-cli drive +task_result --scenario import --ticket <TICKET>
+work-cli drive +task_result --scenario import --ticket <TICKET>
 ```
 
 ## Read Before Editing

@@ -16,7 +16,7 @@ import (
 
 // TestMailDeclineReceipt_ShortcutMetadata verifies the shortcut is registered
 // with the expected command name, risk level, and scopes. These are public
-// contracts (they show up in `lark-cli mail --help` and the auth prompt);
+// contracts (they show up in `work-cli mail --help` and the auth prompt);
 // changes should be intentional.
 func TestMailDeclineReceipt_ShortcutMetadata(t *testing.T) {
 	if MailDeclineReceipt.Service != "mail" {

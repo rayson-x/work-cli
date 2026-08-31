@@ -53,7 +53,7 @@ func TestDocsFetchCommentsDeniedDocumentDoesNotLeakToBot(t *testing.T) {
 	suffix := clie2e.GenerateSuffix()
 	anchorText := "private document anchor " + suffix
 	commentText := "private document comment " + suffix
-	folderToken := drive.CreateDriveFolder(t, t, ctx, "lark-cli-e2e-fetch-comments-denied-"+suffix, "user", "")
+	folderToken := drive.CreateDriveFolder(t, t, ctx, "work-cli-e2e-fetch-comments-denied-"+suffix, "user", "")
 	docToken := createDocWithRetry(t, t, ctx, folderToken, "fetch comments denied "+suffix, anchorText, "user")
 	addDocComment(t, ctx, "user", docToken, commentText, "--full-comment")
 	ownerResult, err := clie2e.RunCmdWithRetry(ctx, clie2e.Request{
@@ -193,7 +193,7 @@ func testDocsFetchCommentsWorkflow(t *testing.T, defaultAs string) {
 
 	// Both creation helpers register parentT cleanup immediately. Cleanup is
 	// LIFO, so the document is deleted before its containing folder.
-	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "lark-cli-e2e-fetch-comments-"+suffix, defaultAs, "")
+	folderToken := drive.CreateDriveFolder(t, parentT, ctx, "work-cli-e2e-fetch-comments-"+suffix, defaultAs, "")
 	docToken := createDocWithRetry(t, parentT, ctx, folderToken, "fetch comments "+suffix, anchorText+"\n\n"+secondaryText, defaultAs)
 
 	initialXML, err := fetchDocsContent(ctx, docToken, "xml", "with-ids", defaultAs)

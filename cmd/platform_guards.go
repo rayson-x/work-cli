@@ -28,7 +28,7 @@ import (
 // stopping at the first non-nil PersistentPreRunE. Subcommands that
 // declare their own PersistentPreRunE (cmd/auth/auth.go and
 // cmd/config/config.go both do) would shadow root's, letting a
-// fail-closed condition silently bypass via `lark-cli auth foo`.
+// fail-closed condition silently bypass via `work-cli auth foo`.
 //
 // The fix: replace the RunE of every runnable command with one that
 // returns makeErr(). Subcommands cannot bypass because the dispatch

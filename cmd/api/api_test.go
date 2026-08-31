@@ -33,7 +33,7 @@ func newTestApiCmd(f *cmdutil.Factory, runF func(*APIOptions) error) *cobra.Comm
 
 func newTestRootCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:           "lark-cli",
+		Use:           "work-cli",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
@@ -1149,7 +1149,7 @@ func TestApiCmd_DryRunWithFile(t *testing.T) {
 
 // TestApiCmd_PermissionError_DerivesFirstClassFields pins that when a Lark
 // API returns a missing-scope failure, the typed *errs.PermissionError
-// surfaced by `lark-cli api` lifts the diagnostic signals BuildAPIError
+// surfaced by `work-cli api` lifts the diagnostic signals BuildAPIError
 // consumed during classification into first-class wire fields
 // (MissingScopes, LogID, ConsoleURL). The wire shape is the typed envelope
 // — there is no raw-payload passthrough; new Lark diagnostic fields require

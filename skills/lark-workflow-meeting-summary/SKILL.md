@@ -4,7 +4,7 @@ version: 1.0.0
 description: "会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。"
 metadata:
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
     skills: ["lark-meeting"]
 ---
 
@@ -22,9 +22,9 @@ metadata:
 仅支持 **user 身份**。执行前确保已授权：
 
 ```bash
-lark-cli auth login --domain vc        # 基础（查询+纪要）
-lark-cli auth login --domain vc,drive   # 含读取纪要文档正文、生成文档
-lark-cli auth login --domain vc,drive,minutes  # 含无 note_id 时的妙记备选路径
+work-cli auth login --domain vc        # 基础（查询+纪要）
+work-cli auth login --domain vc,drive   # 含读取纪要文档正文、生成文档
+work-cli auth login --domain vc,drive,minutes  # 含无 note_id 时的妙记备选路径
 ```
 
 ## 工作流
@@ -55,7 +55,7 @@ lark-cli auth login --domain vc,drive,minutes  # 含无 note_id 时的妙记备�
 
 ```bash
 # page-size 最大为 30
-lark-cli vc +search --start "<YYYY-MM-DD>" --end "<YYYY-MM-DD>" --format json --page-size 30
+work-cli vc +search --start "<YYYY-MM-DD>" --end "<YYYY-MM-DD>" --format json --page-size 30
 ```
 
 - 时间范围拆分：搜索的时间范围最大为 1 个月。搜索更长时间范围的会议，需要拆分为多次时间范围为一个月查询。
@@ -69,10 +69,10 @@ lark-cli vc +search --start "<YYYY-MM-DD>" --end "<YYYY-MM-DD>" --format json --
 1. 查询会议关联的纪要信息
 ```bash
 # 首先获取 note_id 和 minute_token
-lark-cli vc +detail --meeting-ids "id1,id2,...,idN"
+work-cli vc +detail --meeting-ids "id1,id2,...,idN"
 
 # 然后用 note_id 获取文档 tokens（如有多个需分别获取）
-lark-cli note +detail --note-id "note_id"
+work-cli note +detail --note-id "note_id"
 ```
 - 根据上一步搜集到的 `meeting-id` 查询。
 - 单次最多查询 50 个，超过 50 个需分批调用。
@@ -83,10 +83,10 @@ lark-cli note +detail --note-id "note_id"
 >
 > ```bash
 > # --minute-tokens 是复数形式（+download 同）；--output-dir 只接受相对路径
-> lark-cli minutes +detail --minute-tokens "<minute_token>" --transcript --output-dir ./transcripts --as user
+> work-cli minutes +detail --minute-tokens "<minute_token>" --transcript --output-dir ./transcripts --as user
 > ```
 >
-> 逐字稿会落盘，供 Step 4 基于原始发言独立提炼（不要照搬 AI 总结）。若返回 `No read permission`（`2091005`），先把无权限事实告知用户，用户明确同意后再用单数 flag 申请：`lark-cli minutes +apply-permission --minute-token "<minute_token>" --perm view --as user`；申请需 owner 在客户端批准后才可重试。详见 [基于 minute_token 查询妙记及关联产物](../lark-meeting/scenes/query-minutes-and-artifacts.md)。
+> 逐字稿会落盘，供 Step 4 基于原始发言独立提炼（不要照搬 AI 总结）。若返回 `No read permission`（`2091005`），先把无权限事实告知用户，用户明确同意后再用单数 flag 申请：`work-cli minutes +apply-permission --minute-token "<minute_token>" --perm view --as user`；申请需 owner 在客户端批准后才可重试。详见 [基于 minute_token 查询妙记及关联产物](../lark-meeting/scenes/query-minutes-and-artifacts.md)。
 
 > **逐字稿路由按 `note_display_type` 决定**（详见 [基于 note_id 查询智能纪要及关联产物](../lark-meeting/scenes/query-note-and-artifacts.md)）：
 > - `normal`：逐字稿是独立文档，链接/正文走 `verbatim_doc_token`。
@@ -95,11 +95,11 @@ lark-cli note +detail --note-id "note_id"
 2. 获取纪要文档和逐字稿文档链接
 ```bash
 # 学习命令使用方式
-lark-cli schema drive.metas.batch_query
+work-cli schema drive.metas.batch_query
 
 # 批量获取纪要文档与逐字稿链接: 一次最多查询 10 个文档
 # 仅对 note_doc_token 与 normal 纪要的 verbatim_doc_token 查询链接
-lark-cli drive metas batch_query --data '{"request_docs": [{"doc_type": "docx", "doc_token": "<doc_token>"}], "with_url": true}'
+work-cli drive metas batch_query --data '{"request_docs": [{"doc_type": "docx", "doc_token": "<doc_token>"}], "with_url": true}'
 ```
 
 ### Step 4: 整理纪要报告
@@ -114,9 +114,9 @@ lark-cli drive metas batch_query --data '{"request_docs": [{"doc_type": "docx", 
 阅读 [`../lark-doc/SKILL.md`](../lark-doc/SKILL.md) 学习云文档技能。
 
 ```bash
-lark-cli docs +create --doc-format markdown --content $'<title>会议纪要汇总 (<start> - <end>)</title>\n<内容>'
+work-cli docs +create --doc-format markdown --content $'<title>会议纪要汇总 (<start> - <end>)</title>\n<内容>'
 # 或追加到已有文档
-lark-cli docs +update --doc "<url_or_token>" --command append --doc-format markdown --content $'<内容>'
+work-cli docs +update --doc "<url_or_token>" --command append --doc-format markdown --content $'<内容>'
 ```
 
 ## 参考

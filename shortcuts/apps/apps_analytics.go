@@ -24,7 +24,7 @@ var AppsAnalyticsList = common.Shortcut{
 	Description: "List online app user and page-view analytics",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +analytics-list --app-id <app_id> --analytics users --granularity week",
+		"Example: work-cli apps +analytics-list --app-id <app_id> --analytics users --granularity week",
 		"Tip: analytics timestamps use nanoseconds; use +metric-list for request/runtime metrics.",
 	},
 	Scopes:    []string{"spark:app:read"},

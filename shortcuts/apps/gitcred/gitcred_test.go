@@ -576,7 +576,7 @@ func TestManagerGetKeepsStdoutEmptyWhenRefreshFails(t *testing.T) {
 			t.Fatalf("stderr missing %q in %s", want, stderr)
 		}
 	}
-	if !bytes.Contains(errOut.Bytes(), []byte("lark-cli apps +git-credential-init --app-id app_xxx")) {
+	if !bytes.Contains(errOut.Bytes(), []byte("work-cli apps +git-credential-init --app-id app_xxx")) {
 		t.Fatalf("stderr missing actionable hint: %q", errOut.String())
 	}
 }
@@ -1695,7 +1695,7 @@ func TestManagerGetBranches(t *testing.T) {
 	if !strings.Contains(stderr, "save local Git credential PAT to keychain failed") {
 		t.Fatalf("stderr = %q, want static keychain error", stderr)
 	}
-	if !strings.Contains(stderr, "lark-cli apps +git-credential-init") {
+	if !strings.Contains(stderr, "work-cli apps +git-credential-init") {
 		t.Fatalf("stderr = %q, want init retry hint", stderr)
 	}
 	if strings.Contains(stderr, "keychain locked") {

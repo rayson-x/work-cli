@@ -109,7 +109,7 @@ func captureHelpBase(cmd *cobra.Command, key string) string {
 func methodLong(description, schemaPath, paramsOnly string) string {
 	var b strings.Builder
 	b.WriteString(description)
-	fmt.Fprintf(&b, "\n\nFull parameter schema:\n  lark-cli schema %s", schemaPath)
+	fmt.Fprintf(&b, "\n\nFull parameter schema:\n  work-cli schema %s", schemaPath)
 	b.WriteString(paramsOnly)
 	return b.String()
 }
@@ -197,7 +197,7 @@ func prepareMethodHelp(
 	}
 
 	if canReferenceSchema == nil || canReferenceSchema() {
-		fmt.Fprintf(&b, "\n\nFull parameter schema:\n  lark-cli schema %s", schemaPath)
+		fmt.Fprintf(&b, "\n\nFull parameter schema:\n  work-cli schema %s", schemaPath)
 	}
 	b.WriteString(ann[paramsOnlyAnnotation])
 
@@ -283,7 +283,7 @@ func writeRelatedSkills(b *strings.Builder, skills []string, skillFS fs.FS, refe
 	}
 	b.WriteString("\n\nRelated skills (read for end-to-end usage):")
 	for _, s := range avail {
-		fmt.Fprintf(b, "\n  lark-cli skills read %s", s)
+		fmt.Fprintf(b, "\n  work-cli skills read %s", s)
 	}
 }
 
@@ -296,11 +296,11 @@ func writeDomainSkills(b *strings.Builder, skills []string, skillFS fs.FS, refer
 	case 0:
 		return
 	case 1:
-		fmt.Fprintf(b, "\n\nDomain guide (concepts, command choice, conventions): lark-cli skills read %s", avail[0])
+		fmt.Fprintf(b, "\n\nDomain guide (concepts, command choice, conventions): work-cli skills read %s", avail[0])
 	default:
 		b.WriteString("\n\nDomain skills (concepts, command choice, conventions):")
 		for _, skill := range avail {
-			fmt.Fprintf(b, "\n  lark-cli skills read %s", skill)
+			fmt.Fprintf(b, "\n  work-cli skills read %s", skill)
 		}
 	}
 }

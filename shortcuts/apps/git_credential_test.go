@@ -348,7 +348,7 @@ func TestAppsGitCredentialInitPrettyWithGitConfigWarning(t *testing.T) {
 		"Status: initialized",
 		"Repository URL: https://example.com/git/u/app.git",
 		"Git credential saved, but Git helper was not configured",
-		"Next step: lark-cli apps +git-credential-init --app-id app_xxx",
+		"Next step: work-cli apps +git-credential-init --app-id app_xxx",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("pretty stdout missing %q in:\n%s", want, got)
@@ -469,7 +469,7 @@ func TestAppsGitCredentialListScansAllLocalAppStorage(t *testing.T) {
 		"https://example.com/git/u/b.git",
 		gitcred.ListStatusValid,
 		"Profile switches do not remove old URL-scoped Git helpers automatically.",
-		"Cleanup: lark-cli apps +git-credential-remove --app-id <app_id>",
+		"Cleanup: work-cli apps +git-credential-remove --app-id <app_id>",
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("list pretty stdout missing %q in:\n%s", want, got)

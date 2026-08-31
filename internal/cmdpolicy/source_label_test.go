@@ -20,7 +20,7 @@ import (
 // to any agent or log consumer; the contract is to emit just "yaml" and
 // rely on rule_name (from the yaml's "name:" field) for disambiguation.
 func TestEnvelope_yamlPolicySourceDoesNotLeakHomePath(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 	leaf := &cobra.Command{Use: "+write", RunE: func(*cobra.Command, []string) error { return nil }}
@@ -67,7 +67,7 @@ func TestEnvelope_yamlPolicySourceDoesNotLeakHomePath(t *testing.T) {
 // denial wants to know which plugin fired). This test pins that intent
 // so a future change does not silently strip the plugin name too.
 func TestEnvelope_pluginPolicySourceCarriesName(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	leaf := &cobra.Command{Use: "+block", RunE: func(*cobra.Command, []string) error { return nil }}
 	root.AddCommand(leaf)
 

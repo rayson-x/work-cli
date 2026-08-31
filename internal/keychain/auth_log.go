@@ -103,7 +103,7 @@ func LogAuthResponse(path string, status int, logID string) {
 	}
 
 	authResponseLogger.Printf(
-		"[lark-cli] auth-response: time=%s path=%s status=%d x-tt-logid=%s cmdline=%s",
+		"[work-cli] auth-response: time=%s path=%s status=%d x-tt-logid=%s cmdline=%s",
 		authResponseLogNow().Format(time.RFC3339Nano),
 		path,
 		status,
@@ -123,7 +123,7 @@ func LogAuthError(component, op string, err error) {
 	}
 
 	authResponseLogger.Printf(
-		"[lark-cli] auth-error: time=%s component=%s op=%s error=%q cmdline=%s",
+		"[work-cli] auth-error: time=%s component=%s op=%s error=%q cmdline=%s",
 		authResponseLogNow().Format(time.RFC3339Nano),
 		component,
 		op,
@@ -159,7 +159,7 @@ func SetAuthLogHooksForTest(logger *log.Logger, now func() time.Time, args func(
 func cleanupOldLogs(dir string, now time.Time) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Fprintf(os.Stderr, "[lark-cli] [WARN] background log cleanup panicked: %v\n", r)
+			fmt.Fprintf(os.Stderr, "[work-cli] [WARN] background log cleanup panicked: %v\n", r)
 		}
 	}()
 

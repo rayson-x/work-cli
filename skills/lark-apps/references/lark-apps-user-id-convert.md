@@ -1,6 +1,6 @@
 # apps +user-id-convert
 
-把一批已知 ID 在**妙搭 user_id** 与**飞书开放平台 ID**（open_id / union_id / 飞书 user_id）之间互转。运行时命令事实以 `lark-cli apps +user-id-convert --help` 为准。
+把一批已知 ID 在**妙搭 user_id** 与**飞书开放平台 ID**（open_id / union_id / 飞书 user_id）之间互转。运行时命令事实以 `work-cli apps +user-id-convert --help` 为准。
 
 ## 何时用
 
@@ -32,13 +32,13 @@
 
 ```bash
 # 批量把 open_id 转妙搭 user_id
-lark-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids ou_abc123,ou_def456 --as user
+work-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids ou_abc123,ou_def456 --as user
 
 # 从 stdin 读 ID 列表
-printf 'ou_abc123,ou_def456' | lark-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids - --as user
+printf 'ou_abc123,ou_def456' | work-cli apps +user-id-convert --convert-type open-id-to-miaoda --ids - --as user
 
 # 只看将要发送的请求体，不真正调用
-lark-cli apps +user-id-convert --convert-type miaoda-to-feishu-user-id --ids 1234567890123456 --dry-run --as user
+work-cli apps +user-id-convert --convert-type miaoda-to-feishu-user-id --ids 1234567890123456 --dry-run --as user
 ```
 
 ## 输出契约

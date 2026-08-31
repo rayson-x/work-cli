@@ -29,7 +29,7 @@ subsequent reads to that file.
 
 Intended workflow: run this once from an interactive Terminal session on
 macOS (where the system Keychain is reachable). After it finishes,
-sandboxed / automation / CI runs of lark-cli on the same machine will read
+sandboxed / automation / CI runs of work-cli on the same machine will read
 the master key from the local file and no longer need the OS Keychain.
 
 This is the supported fix for environments like the Codex sandbox where the

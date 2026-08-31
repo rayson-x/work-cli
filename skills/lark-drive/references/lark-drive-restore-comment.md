@@ -10,7 +10,7 @@
 
 ```bash
 # 推荐：完整 URL + 评论 ID
-lark-cli drive +restore-comment --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>'
+work-cli drive +restore-comment --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --comment-id '<id>'
 ```
 
 ## 参数

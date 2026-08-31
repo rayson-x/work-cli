@@ -8,46 +8,46 @@
 
 ```bash
 # 字面量替换
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --pattern 'hello markdown' \
   --content 'hello patched'
 
 # 正则替换（RE2）
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --regex \
   --pattern 'hello (.+)' \
   --content 'hi $1'
 
 # 正则 pattern 含特殊字符时要显式转义
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --regex \
   --pattern 'version \\(1\\.0\\)' \
   --content 'version (2.0)'
 
 # 删除匹配内容
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --pattern ' debug' \
   --content ''
 
 # --pattern / --content 也支持 @file
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --pattern @./pattern.txt \
   --content @./replacement.md
 
 # 从 stdin 读取 replacement
 printf 'hi patched\n' | \
-  lark-cli markdown +patch \
+  work-cli markdown +patch \
     --file-token boxcnxxxx \
     --pattern 'hello markdown' \
     --content -
 
 # 预览底层编排
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --pattern 'hello markdown' \
   --content 'hello patched' \
@@ -77,14 +77,14 @@ lark-cli markdown +patch \
 
 ```bash
 # BAD: pattern 含正则特殊字符但未转义，容易匹配错误位置
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --regex \
   --pattern 'version (1.0)' \
   --content 'version (2.0)'
 
 # GOOD: 显式转义括号和点号
-lark-cli markdown +patch \
+work-cli markdown +patch \
   --file-token boxcnxxxx \
   --regex \
   --pattern 'version \\(1\\.0\\)' \

@@ -69,25 +69,25 @@ _公共：URL/token（无 sheet 定位） · 系统：`--dry-run`_
 
 ```bash
 # 列出某张电子表格的最新一页历史版本
-lark-cli sheets +history-list --url "https://sample.feishu.cn/sheets/SHTxxxxxx"
+work-cli sheets +history-list --url "https://sample.feishu.cn/sheets/SHTxxxxxx"
 
 # 用原始 spreadsheet token 定位
-lark-cli sheets +history-list --spreadsheet-token "SHTxxxxxx"
+work-cli sheets +history-list --spreadsheet-token "SHTxxxxxx"
 
 # 翻到下一页：把上次响应里的 next_end_version 作为 --end-version 传入
-lark-cli sheets +history-list --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --end-version 12345
+work-cli sheets +history-list --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --end-version 12345
 ```
 
 ### `+history-revert`
 
 ```bash
 # 回滚到指定历史版本（异步受理）
-lark-cli sheets +history-revert --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --history-version-id "<id-from-history-list>"
+work-cli sheets +history-revert --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --history-version-id "<id-from-history-list>"
 ```
 
 ### `+history-revert-status`
 
 ```bash
 # 查询某次回滚的当前状态（进行中 / 成功 / 失败）
-lark-cli sheets +history-revert-status --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --transaction-id "<transaction-id-from-history-revert>"
+work-cli sheets +history-revert-status --url "https://sample.feishu.cn/sheets/SHTxxxxxx" --transaction-id "<transaction-id-from-history-revert>"
 ```

@@ -15,7 +15,7 @@
 
 ```bash
 # 按字段分组计数
-lark-cli base +data-query \
+work-cli base +data-query \
   --base-token MAGObxxxxx \
   --dsl '{
     "datasource": {"type": "table", "table": {"tableId": "tblxxxxxxxx"}},
@@ -25,7 +25,7 @@ lark-cli base +data-query \
   }'
 
 # 带过滤条件 + 排序 + 限制条数
-lark-cli base +data-query \
+work-cli base +data-query \
   --base-token MAGObxxxxx \
   --dsl '{
     "datasource": {"type": "table", "table": {"tableId": "tblxxxxxxxx"}},
@@ -42,7 +42,7 @@ lark-cli base +data-query \
   }'
 
 # 使用 tableName（表名）代替 tableId
-lark-cli base +data-query \
+work-cli base +data-query \
   --base-token MAGObxxxxx \
   --dsl '{
     "datasource": {"type": "table", "table": {"tableName": "销售数据"}},
@@ -51,7 +51,7 @@ lark-cli base +data-query \
   }'
 
 # 聚合或维度查询后如需读取逐条记录，先让 data-query 返回可回查的业务 key
-lark-cli base +data-query \
+work-cli base +data-query \
   --base-token MAGObxxxxx \
   --dsl '{
     "datasource": {"type": "table", "table": {"tableId": "tblxxxxxxxx"}},
@@ -86,7 +86,7 @@ https://example.feishu.cn/base/<base_token>?table=<block_id>
 不要直接把 URL 中的 `table=` 当成数据表 ID。它表示当前选中的 Base 顶层块，可能是数据表、仪表盘、工作流、文件夹或文档。先解析链接：
 
 ```bash
-lark-cli base +url-resolve --url "<url>" --as user
+work-cli base +url-resolve --url "<url>" --as user
 ```
 
 - `--base-token`：使用返回的 `base_token`
@@ -412,7 +412,7 @@ CLI 输出标准信封 `{ok, identity, data}`（失败时为 `{ok:false, identit
 ## 工作流
 
 1. 确认 base-token 和 table-id
-2. **先查表结构**：执行 `lark-cli base +field-list --base-token <base_token> --table-id <table_id>`
+2. **先查表结构**：执行 `work-cli base +field-list --base-token <base_token> --table-id <table_id>`
 3. 从返回的字段列表中获取 field_name（DSL 中使用的字段名称）
 4. 根据字段信息构造 DSL JSON
 5. 执行 +data-query
@@ -437,7 +437,7 @@ CLI 输出标准信封 `{ok, identity, data}`（失败时为 `{ok:false, identit
 
 ## 坑点
 
-- ⚠️ **必须先查表结构**：DSL 的 `field_name` 必须与表中字段名称精确匹配（区分大小写），不能凭猜测构造。先用 `lark-cli base +field-list --base-token <base_token> --table-id <table_id>` 获取真实字段名
+- ⚠️ **必须先查表结构**：DSL 的 `field_name` 必须与表中字段名称精确匹配（区分大小写），不能凭猜测构造。先用 `work-cli base +field-list --base-token <base_token> --table-id <table_id>` 获取真实字段名
 - ⚠️ **权限要求按文档类型分流**：普通多维表格只需文档**阅读权限**；高级权限多维表格必须是文档管理员（**FA / Full Access**），否则返回权限错误
 - ⚠️ **alias 不支持中文**：dimensions 和 measures 的 alias 必须使用英文（如 `dim_city`、`total_amount`），中文 alias 会导致错误
 - ⚠️ **API 路径是 `base/v3`**：本接口路径为 `/open-apis/base/v3/bases/:base_token/data/query`，不是 `bitable/v1`。两者完全不同，用错版本号会返回 `[2200] Internal Error`

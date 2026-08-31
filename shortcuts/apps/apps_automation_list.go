@@ -20,9 +20,9 @@ var AppsAutomationList = common.Shortcut{
 	Description: "List a Miaoda app's automation triggers (cron/record-change/webhook/feishu-approval)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +automation-list --app-id <app_id>",
-		"Example: lark-cli apps +automation-list --app-id <app_id> --trigger-type webhook",
-		"Example: lark-cli apps +automation-list --app-id <app_id> --all   # aggregate all pages",
+		"Example: work-cli apps +automation-list --app-id <app_id>",
+		"Example: work-cli apps +automation-list --app-id <app_id> --trigger-type webhook",
+		"Example: work-cli apps +automation-list --app-id <app_id> --all   # aggregate all pages",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},

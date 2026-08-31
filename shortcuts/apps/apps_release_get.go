@@ -20,7 +20,7 @@ var AppsReleaseGet = common.Shortcut{
 	Description: "Get a single release's status/detail by release ID",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +release-get --app-id <app_id> --release-id <release_id>",
+		"Example: work-cli apps +release-get --app-id <app_id> --release-id <release_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -56,7 +56,7 @@ var AppsReleaseGet = common.Shortcut{
 		path := fmt.Sprintf(releaseGetPath, validate.EncodePathSegment(appID), validate.EncodePathSegment(releaseID))
 		data, err := rctx.CallAPITyped("GET", path, nil, nil)
 		if err != nil {
-			return withAppsHint(err, "if the release_id is unknown or invalid, list this app's releases with `lark-cli apps +release-list --app-id "+appID+"`")
+			return withAppsHint(err, "if the release_id is unknown or invalid, list this app's releases with `work-cli apps +release-list --app-id "+appID+"`")
 		}
 		out := data
 		if release, ok := data["release"].(map[string]interface{}); ok {

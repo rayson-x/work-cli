@@ -194,7 +194,7 @@ func TestServiceMethod_TypedFlag_OverridesNullParams(t *testing.T) {
 // would crash the whole CLI at startup), and a known path param must surface as
 // a typed flag end to end.
 func TestRegisterServiceCommands_GeneratesFlagsNoPanic(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	f := &cmdutil.Factory{}
 
 	defer func() {
@@ -592,7 +592,7 @@ func TestServiceMethod_MissingRequired_HintNamesFlagAndParams(t *testing.T) {
 	if !errors.As(err, &ve) {
 		t.Fatalf("expected *errs.ValidationError, got %T: %v", err, err)
 	}
-	for _, want := range []string{"--chat-id", `--params '{"chat_id": "<value>"}'`, "lark-cli schema im.chat.members.create"} {
+	for _, want := range []string{"--chat-id", `--params '{"chat_id": "<value>"}'`, "work-cli schema im.chat.members.create"} {
 		if !strings.Contains(ve.Hint, want) {
 			t.Errorf("hint %q should contain %q", ve.Hint, want)
 		}
@@ -618,7 +618,7 @@ func TestServiceMethod_MissingRequired_ProjectsOnlySchemaRecovery(t *testing.T) 
 			t.Errorf("projected hint %q lost valid recovery %q", ve.Hint, want)
 		}
 	}
-	if strings.Contains(ve.Hint, "lark-cli schema") {
+	if strings.Contains(ve.Hint, "work-cli schema") {
 		t.Errorf("projected hint retained concealed schema pointer: %q", ve.Hint)
 	}
 
@@ -626,7 +626,7 @@ func TestServiceMethod_MissingRequired_ProjectsOnlySchemaRecovery(t *testing.T) 
 	if !errors.As(source, &sourceValidation) {
 		t.Fatalf("source is not *errs.ValidationError: %T", source)
 	}
-	if !strings.Contains(sourceValidation.Hint, "lark-cli schema im.chat.members.create") {
+	if !strings.Contains(sourceValidation.Hint, "work-cli schema im.chat.members.create") {
 		t.Errorf("presentation mutated source hint: %q", sourceValidation.Hint)
 	}
 }

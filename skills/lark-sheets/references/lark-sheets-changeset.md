@@ -86,10 +86,10 @@ _公共：URL/token（无 sheet 定位）_
 
 ```bash
 # 只传起始版本 → 返回从该版本到最新的全部 changeset（最常用：复核 AI 编辑前后的差异）
-lark-cli sheets +changeset-get --url "https://example.feishu.cn/sheets/shtXXX" --start-revision 120
+work-cli sheets +changeset-get --url "https://example.feishu.cn/sheets/shtXXX" --start-revision 120
 
 # 传起始 + 结束版本（版本差 end-start+1 ≤ 20）
-lark-cli sheets +changeset-get --spreadsheet-token shtXXX --start-revision 120 --end-revision 135
+work-cli sheets +changeset-get --spreadsheet-token shtXXX --start-revision 120 --end-revision 135
 ```
 
 输出契约（envelope.data）：

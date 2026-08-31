@@ -56,7 +56,7 @@ func TestValidateDocsV2OnlyRejectsChangedLegacyFlags(t *testing.T) {
 	if got, want := validationErr.Param, "--mode"; got != want {
 		t.Fatalf("param = %q, want %q", got, want)
 	}
-	if got, want := problem.Hint, "run `lark-cli docs +update --help` for the latest command flags; read the version-matched embedded guidance before retrying: `lark-cli skills read lark-doc`, `lark-cli skills read lark-doc/references/lark-doc-update.md`, `lark-cli skills read lark-doc/references/lark-doc-xml.md`, `lark-cli skills read lark-doc/references/lark-doc-md.md`; do not inspect another local SKILL.md copy"; got != want {
+	if got, want := problem.Hint, "run `work-cli docs +update --help` for the latest command flags; read the version-matched embedded guidance before retrying: `work-cli skills read lark-doc`, `work-cli skills read lark-doc/references/lark-doc-update.md`, `work-cli skills read lark-doc/references/lark-doc-xml.md`, `work-cli skills read lark-doc/references/lark-doc-md.md`; do not inspect another local SKILL.md copy"; got != want {
 		t.Fatalf("hint = %q, want %q", got, want)
 	}
 }
@@ -71,7 +71,7 @@ func TestValidateDocsV2OnlyOmitsConcealedSkillsReadRecovery(t *testing.T) {
 	if !ok {
 		t.Fatalf("error = %T, want typed problem", err)
 	}
-	if got, want := problem.Hint, "run `lark-cli docs +update --help` for the latest command flags"; got != want {
+	if got, want := problem.Hint, "run `work-cli docs +update --help` for the latest command flags"; got != want {
 		t.Fatalf("hint = %q, want %q", got, want)
 	}
 }
@@ -84,10 +84,10 @@ func TestValidateDocsV2OnlyUsesRemappedSkillReferences(t *testing.T) {
 		t.Fatalf("error = %T, want typed problem", err)
 	}
 	for _, want := range []string{
-		"lark-cli skills read acme-doc",
-		"lark-cli skills read acme-doc/references/lark-doc-update.md",
-		"lark-cli skills read acme-doc/references/lark-doc-xml.md",
-		"lark-cli skills read acme-doc/references/lark-doc-md.md",
+		"work-cli skills read acme-doc",
+		"work-cli skills read acme-doc/references/lark-doc-update.md",
+		"work-cli skills read acme-doc/references/lark-doc-xml.md",
+		"work-cli skills read acme-doc/references/lark-doc-md.md",
 	} {
 		if !strings.Contains(problem.Hint, want) {
 			t.Fatalf("hint missing %q: %s", want, problem.Hint)

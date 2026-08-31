@@ -36,23 +36,23 @@
 
 ```bash
 # 基础用法 —— 把云端 fldcXXX 镜像到 ./repo
-lark-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx
+work-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx
 
 # 推荐的重复同步用法：smart 会按 modified_time 跳过已经对齐的本地文件
-lark-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists smart
 
 # 已存在的本地文件保持不动
-lark-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --if-exists skip
 
 # 云端有多个同名二进制文件时，显式下载全部并用稳定 hash 后缀改名
-lark-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --on-duplicate-remote rename
 
 # 文件级镜像：下载新文件 + 删除云端没有的本地文件（不删空目录）
 # （--delete-local 必须搭配 --yes，否则会被 Validate 直接拒绝）
-lark-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
+work-cli drive +pull --local-dir ./repo --folder-token fldcnxxxxxxxxx \
   --delete-local --yes
 ```
 

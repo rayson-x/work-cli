@@ -14,7 +14,7 @@
 ## 命令
 
 ```bash
-lark-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
+work-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
 ```
 
 ## 结果类型
@@ -54,6 +54,6 @@ lark-cli mail multi_entity search --as user --data '{"query":"<关键词>"}'
 
 ## 相关命令
 
-- `lark-cli mail +send` — 新邮件收件人。
-- `lark-cli mail +draft-create` — 新建草稿收件人。
-- `lark-cli mail +draft-edit` — 编辑草稿收件人。
+- `work-cli mail +send` — 新邮件收件人。
+- `work-cli mail +draft-create` — 新建草稿收件人。
+- `work-cli mail +draft-edit` — 编辑草稿收件人。

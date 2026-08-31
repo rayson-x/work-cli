@@ -5,8 +5,8 @@
 ## 命令
 
 ```bash
-lark-cli note +detail --note-id <note_id>
-lark-cli note +detail --note-id <note_id> --as bot
+work-cli note +detail --note-id <note_id>
+work-cli note +detail --note-id <note_id> --as bot
 ```
 
 `note_id` 由其他命令取得时，必须显式沿用来源身份。应用身份能否读到数据取决于应用对纪要主文档的查看权限。若 `--as bot` 返回 `note_display_type=unified`，不要静默切换到用户身份执行 `note +transcript`；先向用户说明该命令仅支持用户身份。

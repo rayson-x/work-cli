@@ -18,9 +18,9 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
-// `lark-cli auth check` is a predicate command: its README contract is
+// `work-cli auth check` is a predicate command: its README contract is
 // `exit 0 = ok, 1 = missing`. The JSON answer goes to stdout; stderr stays
-// empty so callers can write `if lark-cli auth check ...; then ... fi`
+// empty so callers can write `if work-cli auth check ...; then ... fi`
 // without their logs getting polluted by an error envelope on the negative
 // branch. These tests pin that contract end-to-end through the dispatcher.
 
@@ -87,7 +87,7 @@ func TestAuthCheckRun_ScopedTokenPresent_ExitZero(t *testing.T) {
 	// Predicate command happy path: stored token covers every required
 	// scope. Exit must be 0 (nil error, not ErrBare), stdout carries the
 	// `{"ok":true,...}` JSON answer, and stderr stays empty so shell
-	// callers can rely on `if lark-cli auth check ...; then` without log
+	// callers can rely on `if work-cli auth check ...; then` without log
 	// pollution. Pairs with the two exit-1 negatives above so both
 	// branches of the predicate contract are pinned.
 	keyring.MockInit()
@@ -203,7 +203,7 @@ func TestAuthCheckRun_ConcealedLoginOmitsSuggestion(t *testing.T) {
 	if err := json.Unmarshal(visibleStdout.Bytes(), &visiblePayload); err != nil {
 		t.Fatalf("default stdout must be valid JSON: %v", err)
 	}
-	const wantSuggestion = "run `lark-cli auth login --scope \"calendar:calendar:read\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `lark-cli auth login --device-code <device_code>` in a later turn to finish login"
+	const wantSuggestion = "run `work-cli auth login --scope \"calendar:calendar:read\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `work-cli auth login --device-code <device_code>` in a later turn to finish login"
 	if suggestion, _ := visiblePayload["suggestion"].(string); suggestion != wantSuggestion {
 		t.Fatalf("default suggestion = %q, want executable split-flow recovery %q", suggestion, wantSuggestion)
 	}

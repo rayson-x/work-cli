@@ -22,7 +22,7 @@ var BaseDashboardDelete = common.Shortcut{
 		dashboardIDFlag(true),
 	},
 	Tips: []string{
-		"lark-cli base +dashboard-delete --base-token <base_token> --dashboard-id <dashboard_id> --yes",
+		"work-cli base +dashboard-delete --base-token <base_token> --dashboard-id <dashboard_id> --yes",
 		"Deleting a dashboard also deletes its blocks and cannot be recovered.",
 		baseHighRiskYesTip,
 	},

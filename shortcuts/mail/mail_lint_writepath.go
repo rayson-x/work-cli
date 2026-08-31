@@ -119,7 +119,7 @@ func addComposeHint(out map[string]interface{}) {
 // `+draft-edit --draft-id <id>` rather than re-running `+draft-create`,
 // which would create a duplicate draft entry instead of updating the
 // original one.
-const draftEditHintConst = "To modify this draft later (body, subject, recipients, attachments), prefer 'lark-cli mail +draft-edit --draft-id <id>' over creating a new draft via '+draft-create'. Re-running '+draft-create' will produce a separate draft entry instead of updating the existing one."
+const draftEditHintConst = "To modify this draft later (body, subject, recipients, attachments), prefer 'work-cli mail +draft-edit --draft-id <id>' over creating a new draft via '+draft-create'. Re-running '+draft-create' will produce a separate draft entry instead of updating the existing one."
 
 // addDraftEditHint inserts the draft-edit recommendation into the envelope
 // data map under the key `draft_edit_hint`. ONLY +draft-create calls this —

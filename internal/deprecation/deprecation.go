@@ -47,9 +47,9 @@ func (n *Notice) MessageWithoutUpdateAction() string {
 
 // Message returns a single-line, AI-agent-parseable description of the alias
 // plus the canonical fix (update the skill). Mirrors the style of
-// internal/skillscheck.StaleNotice.Message ("..., run: lark-cli update").
+// internal/skillscheck.StaleNotice.Message ("..., run: work-cli update").
 func (n *Notice) Message() string {
-	return n.MessageWithoutUpdateAction() + ", run: lark-cli update"
+	return n.MessageWithoutUpdateAction() + ", run: work-cli update"
 }
 
 // pending stores the latest deprecation notice for the current process.

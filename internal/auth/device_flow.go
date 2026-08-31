@@ -182,7 +182,7 @@ func PollDeviceToken(ctx context.Context, httpClient *http.Client, appId, appSec
 
 		resp, err := httpClient.Do(req)
 		if err != nil {
-			fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: poll network error: %v\n", err)
+			fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: poll network error: %v\n", err)
 			currentInterval = minInt(currentInterval+1, maxPollInterval)
 			continue
 		}
@@ -191,14 +191,14 @@ func PollDeviceToken(ctx context.Context, httpClient *http.Client, appId, appSec
 		body, err := io.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
-			fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: poll read error: %v\n", err)
+			fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: poll read error: %v\n", err)
 			currentInterval = minInt(currentInterval+1, maxPollInterval)
 			continue
 		}
 
 		var data map[string]interface{}
 		if err := json.Unmarshal(body, &data); err != nil {
-			fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: poll parse error: %v\n", err)
+			fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: poll parse error: %v\n", err)
 			currentInterval = minInt(currentInterval+1, maxPollInterval)
 			continue
 		}
@@ -206,12 +206,12 @@ func PollDeviceToken(ctx context.Context, httpClient *http.Client, appId, appSec
 		errStr := getStr(data, "error")
 
 		if errStr == "" && getStr(data, "access_token") != "" {
-			fmt.Fprintf(errOut, "[lark-cli] device-flow: token response received\n")
+			fmt.Fprintf(errOut, "[work-cli] device-flow: token response received\n")
 			refreshToken := getStr(data, "refresh_token")
 			tokenExpiresIn := getInt(data, "expires_in", 7200)
 			refreshExpiresIn := getInt(data, "refresh_token_expires_in", 604800)
 			if refreshToken == "" {
-				fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: no refresh_token in response\n")
+				fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: no refresh_token in response\n")
 				refreshExpiresIn = tokenExpiresIn
 			}
 			return &DeviceFlowResult{
@@ -231,7 +231,7 @@ func PollDeviceToken(ctx context.Context, httpClient *http.Client, appId, appSec
 			continue
 		case "slow_down":
 			currentInterval = minInt(currentInterval+5, maxPollInterval)
-			fmt.Fprintf(errOut, "[lark-cli] device-flow: slow_down, interval increased to %ds\n", currentInterval)
+			fmt.Fprintf(errOut, "[work-cli] device-flow: slow_down, interval increased to %ds\n", currentInterval)
 			continue
 		case "access_denied":
 			msg := getStr(data, "error_description")
@@ -254,12 +254,12 @@ func PollDeviceToken(ctx context.Context, httpClient *http.Client, appId, appSec
 		if desc == "" {
 			desc = "Unknown error"
 		}
-		fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: unexpected error: error=%s, desc=%s\n", errStr, desc)
+		fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: unexpected error: error=%s, desc=%s\n", errStr, desc)
 		return &DeviceFlowResult{OK: false, Error: "expired_token", Message: desc}
 	}
 
 	if attempts >= maxPollAttempts {
-		fmt.Fprintf(errOut, "[lark-cli] [WARN] device-flow: max poll attempts (%d) reached\n", maxPollAttempts)
+		fmt.Fprintf(errOut, "[work-cli] [WARN] device-flow: max poll attempts (%d) reached\n", maxPollAttempts)
 	}
 	return &DeviceFlowResult{OK: false, Error: "expired_token", Message: "Authorization timed out, please try again"}
 }

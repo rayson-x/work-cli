@@ -13,7 +13,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const dbSyncListHint = "verify --app-id is correct; if targeting --environment dev, create it first with `lark-cli apps +db-env-create --app-id <app_id> --environment dev`"
+const dbSyncListHint = "verify --app-id is correct; if targeting --environment dev, create it first with `work-cli apps +db-env-create --app-id <app_id> --environment dev`"
 
 // AppsDBSyncList lists Base data sync tasks under an app.
 var AppsDBSyncList = common.Shortcut{
@@ -22,8 +22,8 @@ var AppsDBSyncList = common.Shortcut{
 	Description: "List Base data sync tasks for an app",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-list --app-id <app_id>",
-		"Example: lark-cli apps +db-sync-list --app-id <app_id> --mode streaming --status enabled",
+		"Example: work-cli apps +db-sync-list --app-id <app_id>",
+		"Example: work-cli apps +db-sync-list --app-id <app_id> --mode streaming --status enabled",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},

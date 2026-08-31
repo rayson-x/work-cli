@@ -102,7 +102,7 @@ func doctorRun(opts *DoctorOptions, projector *recovery.Projector) error {
 	if err != nil {
 		// For "config not present" cases, prefer the workspace-aware
 		// NotConfiguredError message + hint (e.g. "openclaw context
-		// detected but lark-cli is not bound to it" → bind --help) over
+		// detected but work-cli is not bound to it" → bind --help) over
 		// the OS-level "open ... no such file or directory".
 		// For other errors (parse, perms), keep the raw error so the
 		// underlying problem is still visible.

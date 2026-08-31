@@ -9,13 +9,13 @@ Manage task reminders. Set new reminders or remove existing ones. Note that sett
 
 ```bash
 # Set a reminder (e.g., 30 minutes before due)
-lark-cli task +reminder --task-id "<task_guid>" --set "30"
+work-cli task +reminder --task-id "<task_guid>" --set "30"
 
 # Set a reminder (e.g., 1 hour before due)
-lark-cli task +reminder --task-id "<task_guid>" --set "1h"
+work-cli task +reminder --task-id "<task_guid>" --set "1h"
 
 # Remove all reminders
-lark-cli task +reminder --task-id "<task_guid>" --remove "true"
+work-cli task +reminder --task-id "<task_guid>" --remove "true"
 ```
 
 ## Parameters

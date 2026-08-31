@@ -11,7 +11,7 @@
 ## 命令
 
 ```bash
-lark-cli calendar +room-find \
+work-cli calendar +room-find \
   --slot "2026-03-27T14:00:00+08:00~2026-03-27T15:00:00+08:00" \
   --slot "2026-03-27T16:00:00+08:00~2026-03-27T17:00:00+08:00" \
   --attendee-ids "ou_xxx,ou_yyy" \
@@ -27,14 +27,14 @@ lark-cli calendar +room-find \
 
 ```bash
 # 场景：帮我约一个 16~20 号之间的会议室
-lark-cli calendar +room-find \
+work-cli calendar +room-find \
   --slot "2026-03-27T14:00:00+08:00~2026-03-27T15:00:00+08:00" \
   --room-name "16,17,18,19,20"
 ```
 
 ```bash
 # 场景：查找 木星 或 火星 会议室
-lark-cli calendar +room-find \
+work-cli calendar +room-find \
   --slot "2026-03-27T14:00:00+08:00~2026-03-27T15:00:00+08:00" \
   --room-name "木星,火星"
 ```

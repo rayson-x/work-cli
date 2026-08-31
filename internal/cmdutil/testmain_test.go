@@ -15,7 +15,7 @@ func TestMain(m *testing.M) {
 	// Default-factory tests initialize the registry and resolve config. Keep
 	// them deterministic: never read the developer's real ~/.lark-cli and
 	// prevent background remote-metadata refreshes from touching user state.
-	root, err := os.MkdirTemp("", "lark-cli-cmdutil-test-*")
+	root, err := os.MkdirTemp("", "work-cli-cmdutil-test-*")
 	if err != nil {
 		println("internal/cmdutil test setup: MkdirTemp failed:", err.Error())
 		os.Exit(2)

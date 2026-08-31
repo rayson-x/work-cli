@@ -20,10 +20,10 @@ func TestApplicationAffordanceExamples(t *testing.T) {
 		method  string
 		command string
 	}{
-		{method: "+slash-command-list", command: "lark-cli application +slash-command-list"},
-		{method: "+slash-command-create", command: `lark-cli application +slash-command-create --command greet --description "say hi" --description-i18n zh_cn=问候`},
-		{method: "+slash-command-update", command: `lark-cli application +slash-command-update --command greet --description "new text"`},
-		{method: "+slash-command-delete", command: "lark-cli application +slash-command-delete --command greet --yes"},
+		{method: "+slash-command-list", command: "work-cli application +slash-command-list"},
+		{method: "+slash-command-create", command: `work-cli application +slash-command-create --command greet --description "say hi" --description-i18n zh_cn=问候`},
+		{method: "+slash-command-update", command: `work-cli application +slash-command-update --command greet --description "new text"`},
+		{method: "+slash-command-delete", command: "work-cli application +slash-command-delete --command greet --yes"},
 	}
 
 	for _, tt := range tests {

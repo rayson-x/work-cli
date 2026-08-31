@@ -24,13 +24,13 @@ The user scopes in the table are alternatives; the CLI preflight uses `im:messag
 
 ```bash
 # Preview one request
-lark-cli im +messages-read-status \
+work-cli im +messages-read-status \
   --message-ids om_xxx,om_yyy \
   --as user \
   --dry-run
 
 # Execute with a user access token
-lark-cli im +messages-read-status \
+work-cli im +messages-read-status \
   --message-ids om_xxx,om_yyy \
   --as user \
   --json
@@ -45,13 +45,13 @@ The command accepts 1–50 comma-separated `om_` message IDs. The three scopes a
 
 ```bash
 # Fetch one page as the current user
-lark-cli im +message-read-users \
+work-cli im +message-read-users \
   --message-id om_xxx \
   --as user \
   --json
 
 # Fetch every page as a bot, bounded to ten pages by default
-lark-cli im +message-read-users \
+work-cli im +message-read-users \
   --message-id om_xxx \
   --user-id-type open_id \
   --page-all \
@@ -74,8 +74,8 @@ The command preserves each server item, including `user_id_type`, `user_id`, `ti
 When Registry MR !128 is published, the corresponding raw commands remain available:
 
 ```bash
-lark-cli im messages read_status --data '{"message_ids":["om_xxx"]}' --as user
-lark-cli im messages read_users --params '{"message_id":"om_xxx","user_id_type":"open_id"}' --as user
+work-cli im messages read_status --data '{"message_ids":["om_xxx"]}' --as user
+work-cli im messages read_users --params '{"message_id":"om_xxx","user_id_type":"open_id"}' --as user
 ```
 
 Prefer the shortcuts for flag validation, identity-specific scope hints, and read-users auto-pagination.

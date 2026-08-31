@@ -23,8 +23,8 @@ var BaseFieldCreate = common.Shortcut{
 		{Name: "i-have-read-guide", Type: "bool", Desc: "set only after you have read the formula/lookup guide for those field types", Hidden: true},
 	},
 	Tips: []string{
-		`Example text: lark-cli base +field-create --base-token <base_token> --table-id <table_id> --json '{"name":"Status","type":"text"}'`,
-		`Example select: lark-cli base +field-create --base-token <base_token> --table-id <table_id> --json '{"name":"Status","type":"select","multiple":false,"options":[{"name":"Todo"},{"name":"Done"}]}'`,
+		`Example text: work-cli base +field-create --base-token <base_token> --table-id <table_id> --json '{"name":"Status","type":"text"}'`,
+		`Example select: work-cli base +field-create --base-token <base_token> --table-id <table_id> --json '{"name":"Status","type":"select","multiple":false,"options":[{"name":"Todo"},{"name":"Done"}]}'`,
 		`+field-create defines storage schema only: choose a documented field type from explicit stored-value requirements and the user's semantics. Treat the field name or business purpose only as a clue to confirm; do not use it to invent derived behavior. Use style only to format the chosen type.`,
 		`For explicitly requested derived, automatic, synchronized, or backfilled behavior, use documented formula, lookup, link, workflow, or automation only. If unsupported, do not probe code/web/OpenAPI, create a storage placeholder, or claim completion; report the boundary and alternatives.`,
 		"Agent hint: for multiple fields in one table, prefer one array; array items are created sequentially.",

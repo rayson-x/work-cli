@@ -154,44 +154,44 @@ _公共四件套 · 系统：`--dry-run`_
 
 ```bash
 # 在第 10 行前插 3 行，继承上方样式
-lark-cli sheets +dim-insert --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +dim-insert --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-id "$SID" --position 10 --count 3 --inherit-style before
 
 # 在 C 列前插 2 列
-lark-cli sheets +dim-insert --url "..." --sheet-id "$SID" --position C --count 2
+work-cli sheets +dim-insert --url "..." --sheet-id "$SID" --position C --count 2
 ```
 
 ### `+dim-delete`
 
 ```bash
 # 删除第 5-7 行
-lark-cli sheets +dim-delete --url "..." --sheet-id "$SID" --range "5:7" --yes
+work-cli sheets +dim-delete --url "..." --sheet-id "$SID" --range "5:7" --yes
 
 # 删除 D-F 列
-lark-cli sheets +dim-delete --url "..." --sheet-id "$SID" --range "D:F" --yes
+work-cli sheets +dim-delete --url "..." --sheet-id "$SID" --range "D:F" --yes
 
 # 删除多个散布区间（如按查重结果删行）：--ranges 一次批量交付（fail-fast，失败后先回读再补发；CLI 逆序保索引）。
 # CLI 自动按位置从大到小逆序执行——正序会因前面的行被删导致后续索引前移错位；
 # 无需自行排序，也不要为此拼 +batch-update 的子操作数组
-lark-cli sheets +dim-delete --url "..." --sheet-id "$SID" --ranges '["5:5","8:8","11:13"]' --yes
+work-cli sheets +dim-delete --url "..." --sheet-id "$SID" --ranges '["5:5","8:8","11:13"]' --yes
 ```
 
 ### `+dim-hide` / `+dim-unhide`
 
 ```bash
-lark-cli sheets +dim-hide   --url "..." --sheet-id "$SID" --range "5:7"
-lark-cli sheets +dim-unhide --url "..." --sheet-id "$SID" --range "5:7"
-lark-cli sheets +dim-hide   --url "..." --sheet-id "$SID" --range "C:F"
+work-cli sheets +dim-hide   --url "..." --sheet-id "$SID" --range "5:7"
+work-cli sheets +dim-unhide --url "..." --sheet-id "$SID" --range "5:7"
+work-cli sheets +dim-hide   --url "..." --sheet-id "$SID" --range "C:F"
 ```
 
 ### `+dim-move`
 
 ```bash
 # 把第 3-7 行移到第 12 行前
-lark-cli sheets +dim-move --url "..." --sheet-id "$SID" --source-range "3:7" --target 12
+work-cli sheets +dim-move --url "..." --sheet-id "$SID" --source-range "3:7" --target 12
 
 # 把 C-F 列移到 H 列前
-lark-cli sheets +dim-move --url "..." --sheet-id "$SID" --source-range "C:F" --target H
+work-cli sheets +dim-move --url "..." --sheet-id "$SID" --source-range "C:F" --target H
 ```
 
 ### `+rows-resize` / `+cols-resize`
@@ -206,10 +206,10 @@ lark-cli sheets +dim-move --url "..." --sheet-id "$SID" --source-range "C:F" --t
 
 ```bash
 # 冻结前 1 行 + 前 2 列（一次给全）
-lark-cli sheets +dim-freeze --url "..." --sheet-id "$SID" --rows 1 --cols 2
+work-cli sheets +dim-freeze --url "..." --sheet-id "$SID" --rows 1 --cols 2
 
 # 解除行冻结但保住列：把要保留的轴一并写出
-lark-cli sheets +dim-freeze --url "..." --sheet-id "$SID" --rows 0 --cols 2
+work-cli sheets +dim-freeze --url "..." --sheet-id "$SID" --rows 0 --cols 2
 ```
 
 ### `+dim-group` / `+dim-ungroup`（大纲）

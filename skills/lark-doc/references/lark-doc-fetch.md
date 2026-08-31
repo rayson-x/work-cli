@@ -6,17 +6,17 @@
 
 ```bash
 # 读取整篇文档，并附带当前用户可见的未解决评论；
-lark-cli docs +fetch --doc "文档URL或token"
+work-cli docs +fetch --doc "文档URL或token"
 
 # 按 URL 中的 #share 锚点局部读取
-lark-cli docs +fetch --doc '文档URL#share-anchor'
+work-cli docs +fetch --doc '文档URL#share-anchor'
 
 # 按关键词定位
-lark-cli docs +fetch --doc Z1Fj...tnAc --scope keyword --keyword "部署|发布|上线"
+work-cli docs +fetch --doc Z1Fj...tnAc --scope keyword --keyword "部署|发布|上线"
 
 # 先查看目录，再读取指定章节
-lark-cli docs +fetch --doc Z1Fj...tnAc --scope outline --max-depth 3
-lark-cli docs +fetch --doc Z1Fj...tnAc --scope section --start-block-id blkTitle
+work-cli docs +fetch --doc Z1Fj...tnAc --scope outline --max-depth 3
+work-cli docs +fetch --doc Z1Fj...tnAc --scope section --start-block-id blkTitle
 ```
 
 ## 参数

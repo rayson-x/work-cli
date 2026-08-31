@@ -7,10 +7,10 @@
 
 ```bash
 # 单个 / 批量（逗号分隔，最多 50 个）
-lark-cli vc +detail --meeting-ids <meeting_id1>,<meeting_id2>
+work-cli vc +detail --meeting-ids <meeting_id1>,<meeting_id2>
 
 # 应用身份（只能查应用有权限的会议）
-lark-cli vc +detail --meeting-ids <meeting_id1>,<meeting_id2> --as bot
+work-cli vc +detail --meeting-ids <meeting_id1>,<meeting_id2> --as bot
 ```
 
 ## 输出字段

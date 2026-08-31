@@ -9,7 +9,7 @@
 
 ```bash
 # 更新标题、描述、时间
-lark-cli calendar +update \
+work-cli calendar +update \
   --event-id "<EVENT_ID>" \
   --summary "产品评审" \
   --description "评审需求范围、排期与风险" \
@@ -17,17 +17,17 @@ lark-cli calendar +update \
   --end "2026-03-12T15:00+08:00"
 
 # 增量添加参会人和会议室
-lark-cli calendar +update \
+work-cli calendar +update \
   --event-id "<EVENT_ID>" \
   --add-attendee-ids "ou_aaa,ou_bbb,omm_room"
 
 # 移除参会人和会议室
-lark-cli calendar +update \
+work-cli calendar +update \
   --event-id "<EVENT_ID>" \
   --remove-attendee-ids "ou_aaa,omm_room"
 
 # 同时更新日程信息、移除旧会议室、添加新会议室
-lark-cli calendar +update \
+work-cli calendar +update \
   --event-id "<EVENT_ID>" \
   --summary "产品评审" \
   --start "2026-03-12T15:00+08:00" \
@@ -76,7 +76,7 @@ lark-cli calendar +update \
 
 `+update` 只覆盖标题、描述、时间、重复规则，以及参会人/会议室的增量添加或移除。
 
-如需更新 `location`（地理位置，不含会议室位置）、`visibility`（日程公开范围）、自定义 `reminders`（提醒设置）、自定义 `attendee_ability`（参与人权限）、自定义 `free_busy_status`（日程忙闲状态）、`color`（颜色）、附件、视频会议信息、全天日程，或在新增参会人时配置可选参加状态 等高级参数，请改用完整的 API 命令。建议先通过 `lark-cli schema calendar.events.patch`、`lark-cli schema calendar.event.attendees.create`、`lark-cli schema calendar.event.attendees.batch_delete` 查看完整参数定义。
+如需更新 `location`（地理位置，不含会议室位置）、`visibility`（日程公开范围）、自定义 `reminders`（提醒设置）、自定义 `attendee_ability`（参与人权限）、自定义 `free_busy_status`（日程忙闲状态）、`color`（颜色）、附件、视频会议信息、全天日程，或在新增参会人时配置可选参加状态 等高级参数，请改用完整的 API 命令。建议先通过 `work-cli schema calendar.events.patch`、`work-cli schema calendar.event.attendees.create`、`work-cli schema calendar.event.attendees.batch_delete` 查看完整参数定义。
 
 > 完整 API 命令的时间参数是 **Unix 秒字符串**（非 ISO 8601）。换算时**禁止依赖容器默认时区**（常为 UTC，会导致 8 小时偏移），必须显式指定目标时区。
 

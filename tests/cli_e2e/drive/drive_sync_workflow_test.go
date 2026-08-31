@@ -37,7 +37,7 @@ func TestDrive_SyncWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-sync-"+suffix, "")
+	folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-sync-"+suffix, "")
 
 	workDir := t.TempDir()
 	if err := os.MkdirAll(filepath.Join(workDir, "local"), 0o755); err != nil {
@@ -256,7 +256,7 @@ func TestDrive_SyncEmptyDirWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-sync-emptydir-"+suffix, "")
+	folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-sync-emptydir-"+suffix, "")
 
 	workDir := t.TempDir()
 	// Create an empty subdirectory under local.

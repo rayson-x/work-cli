@@ -9,7 +9,7 @@
 ## 命令
 
 ```bash
-lark-cli slides xml_presentation.slide replace --as user --params '<json_params>' --data '<json_data>'
+work-cli slides xml_presentation.slide replace --as user --params '<json_params>' --data '<json_data>'
 ```
 
 ## 参数说明
@@ -77,7 +77,7 @@ lark-cli slides xml_presentation.slide replace --as user --params '<json_params>
 ### block_replace：换一个 shape 的整体内容
 
 ```bash
-lark-cli slides xml_presentation.slide replace --as user --params '{
+work-cli slides xml_presentation.slide replace --as user --params '{
   "xml_presentation_id": "slides_example_presentation_id",
   "slide_id": "slide_example_id"
 }' --data '{
@@ -95,9 +95,9 @@ lark-cli slides xml_presentation.slide replace --as user --params '{
 
 ```bash
 # 先拿 file_token
-TOKEN=$(lark-cli slides +media-upload --file ./pic.png --presentation "$PRES_ID" --as user --jq '.data.file_token')
+TOKEN=$(work-cli slides +media-upload --file ./pic.png --presentation "$PRES_ID" --as user --jq '.data.file_token')
 
-lark-cli slides xml_presentation.slide replace --as user --params "{
+work-cli slides xml_presentation.slide replace --as user --params "{
   \"xml_presentation_id\": \"$PRES_ID\",
   \"slide_id\": \"$SID\"
 }" --data "$(jq -n --arg token "$TOKEN" '{
@@ -113,7 +113,7 @@ lark-cli slides xml_presentation.slide replace --as user --params "{
 ### 多条 parts 原子执行
 
 ```bash
-lark-cli slides xml_presentation.slide replace --as user --params '{
+work-cli slides xml_presentation.slide replace --as user --params '{
   "xml_presentation_id": "slides_example_presentation_id",
   "slide_id": "slide_example_id"
 }' --data '{
@@ -178,7 +178,7 @@ lark-cli slides xml_presentation.slide replace --as user --params '{
 4. **不能字段级 patch**：要改一个块的某个属性（比如只改 `topLeftX`），得写整块新 XML 走 `block_replace`；API 不支持"只改一个字段"。
 5. **`block_replace` 要求 `replacement` 根元素带 `id="<block_id>"`**：底层 API 的硬约束，缺失会返回 3350001。推荐走 shortcut [`+replace-slide`](lark-slides-replace-slide.md)——它会自动把 `id` 注入到 `replacement` 根元素上，用户写 XML 时不用自己加。
 6. **`<shape>` 必须有 `<content/>` 子元素**：SML 2.0 schema 要求，缺失同样触发 3350001。shortcut [`+replace-slide`](lark-slides-replace-slide.md) 会自动注入 `<content/>`，直接调底层 API 需要自己加。
-7. **执行前必做**：`lark-cli schema slides.xml_presentation.slide.replace` 查看最新参数结构。
+7. **执行前必做**：`work-cli schema slides.xml_presentation.slide.replace` 查看最新参数结构。
 
 ## 相关命令
 

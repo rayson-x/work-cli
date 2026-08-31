@@ -1,6 +1,6 @@
 # apps cache 域命令（应用运行时缓存调试）
 
-调试妙搭应用的运行时缓存：查看某个缓存 key 的内容、删除单个 key、清空某个环境的全部缓存。缓存是应用为了加速而临时存放的数据，删除或清空后，应用下次用到时会自动重新取最新数据。命令事实以 `lark-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
+调试妙搭应用的运行时缓存：查看某个缓存 key 的内容、删除单个 key、清空某个环境的全部缓存。缓存是应用为了加速而临时存放的数据，删除或清空后，应用下次用到时会自动重新取最新数据。命令事实以 `work-cli apps +<cmd> --help` 为准；认证、`--as user`、exit 码、`_notice` 等通用处理见 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 与本域 [`SKILL.md`](../SKILL.md)。
 
 ## 何时用
 
@@ -31,8 +31,8 @@
 > 每次查询都会连内容一起返回（没有「只看信息、不取内容」的模式），内容可能较大——只是想确认「在不在 / 还有多久过期」时，留意别占用太多上下文。
 
 ```bash
-lark-cli apps +cache-get --app-id app_xxx --key spotbonus:2026:winners:list:v1
-lark-cli apps +cache-get --app-id app_xxx --environment online --key <key> --format pretty
+work-cli apps +cache-get --app-id app_xxx --key spotbonus:2026:winners:list:v1
+work-cli apps +cache-get --app-id app_xxx --environment online --key <key> --format pretty
 ```
 
 ### +cache-delete
@@ -48,7 +48,7 @@ lark-cli apps +cache-get --app-id app_xxx --environment online --key <key> --for
 要证明「删除生效了」，用「删前 `+cache-get` 确认存在 → `+cache-delete` 拿到 `deleted_key_count=1` → 删后 `+cache-get` 得到 `exists=false`」这条链；只靠删后一次 miss 是不够的，因为 key 从一开始就不存在时（`deleted_key_count=0`）结果完全一样。
 
 ```bash
-lark-cli apps +cache-delete --app-id app_xxx --environment dev --key <key>
+work-cli apps +cache-delete --app-id app_xxx --environment dev --key <key>
 ```
 
 ### +cache-clear（高危）
@@ -76,10 +76,10 @@ lark-cli apps +cache-delete --app-id app_xxx --environment dev --key <key>
 
 ```bash
 # 1) 未确认：只预览，不清理（--dry-run 不触发门禁、不产生真实动作）
-lark-cli apps +cache-clear --app-id app_xxx --environment online --dry-run
+work-cli apps +cache-clear --app-id app_xxx --environment online --dry-run
 
 # 2) 用户确认后：补 --yes 执行
-lark-cli apps +cache-clear --app-id app_xxx --environment dev --yes
+work-cli apps +cache-clear --app-id app_xxx --environment dev --yes
 ```
 
 ## 错误与边界

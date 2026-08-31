@@ -20,7 +20,7 @@ import (
 // Note: os.Exit skips deferred functions, so cleanup runs explicitly after
 // m.Run before exiting.
 func TestMain(m *testing.M) {
-	root, err := os.MkdirTemp("", "lark-cli-cmd-auth-test-*")
+	root, err := os.MkdirTemp("", "work-cli-cmd-auth-test-*")
 	if err != nil {
 		println("cmd/auth test setup: MkdirTemp failed:", err.Error())
 		os.Exit(2)

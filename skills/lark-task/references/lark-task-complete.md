@@ -8,10 +8,10 @@ Mark a task as completed.
 
 ```bash
 # Complete a task
-lark-cli task +complete --task-id "<task_guid>"
+work-cli task +complete --task-id "<task_guid>"
 
 # A task applink is accepted directly; the CLI extracts its guid query value
-lark-cli task +complete --task-id "https://applink.larksuite.com/client/todo/task?guid=<task_guid>"
+work-cli task +complete --task-id "https://applink.larksuite.com/client/todo/task?guid=<task_guid>"
 ```
 
 ## Parameters

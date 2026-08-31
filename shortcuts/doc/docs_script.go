@@ -186,9 +186,9 @@ type docsScriptFetchResponse struct {
 
 func installDocsScriptHelp(cmd *cobra.Command) {
 	installDocsContentPathCapture(cmd)
-	cmd.Example = `  lark-cli docs +script --command init-draft --presentation-decision '<JSON>'
-  lark-cli docs +script --command parse --content "@./draft.xml"
-  lark-cli docs +script --command parse --doc "https://example.larksuite.com/docx/doxcn..."`
+	cmd.Example = `  work-cli docs +script --command init-draft --presentation-decision '<JSON>'
+  work-cli docs +script --command parse --content "@./draft.xml"
+  work-cli docs +script --command parse --doc "https://example.larksuite.com/docx/doxcn..."`
 }
 
 func validateDocsScript(_ context.Context, runtime *common.RuntimeContext) error {

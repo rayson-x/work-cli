@@ -22,11 +22,11 @@ PRES_ID="xml_presentation_id_here"
 SID="slide_id_here"
 
 # 1. 读原页，从 XML 里挑出要改的块的 3 位 short id（如 bUn / bab）
-lark-cli slides xml_presentation.slide get --as user \
+work-cli slides xml_presentation.slide get --as user \
   --params "{\"xml_presentation_id\":\"$PRES_ID\",\"slide_id\":\"$SID\"}"
 
 # 2. 用 +replace-slide 直接改那个块（不需要搬原 XML）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts '[{"action":"block_replace","block_id":"bUn","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"}]'
 ```
@@ -41,12 +41,12 @@ lark-cli slides +replace-slide --as user \
 
 ```bash
 # 读时拿当前 revision_id
-REV=$(lark-cli slides xml_presentation.slide get --as user \
+REV=$(work-cli slides xml_presentation.slide get --as user \
   --params "{\"xml_presentation_id\":\"$PRES_ID\",\"slide_id\":\"$SID\"}" \
   --jq '.data.revision_id')
 
 # 写时传该版本号，服务端以此为 base
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" --revision-id "$REV" \
   --parts '[{"action":"block_replace","block_id":"bUn","replacement":"<shape type=\"rect\" topLeftX=\"100\" topLeftY=\"100\" width=\"200\" height=\"100\"/>"}]'
 ```
@@ -64,7 +64,7 @@ lark-cli slides +replace-slide --as user \
 适合"已知块 ID，要换这块整体内容"的场景。`replacement` 根元素的 `id="<block_id>"` 由 CLI 自动注入（用户手写的 XML 如果没带 `id` 直接省略即可；如果带了错的会被覆盖为正确值）。
 
 ```bash
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts '[{"action":"block_replace","block_id":"bab","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"}]'
 ```
@@ -82,7 +82,7 @@ lark-cli slides +replace-slide --as user \
 适合"只想加一个元素，不动现有元素"的场景（典型：给已有页加图）。
 
 ```bash
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts "$(jq -n --arg token "$FILE_TOKEN" \
     '[{action:"block_insert",insertion:("<img src=\""+$token+"\" topLeftX=\"500\" topLeftY=\"100\" width=\"200\" height=\"150\"/>"),insert_before_block_id:"baa"}]')"
@@ -103,7 +103,7 @@ lark-cli slides +replace-slide --as user \
 一次 `--parts` 最多 200 条，按数组顺序串行执行。`block_replace` 和 `block_insert` 可以在同一批次混用。举例：一次性把标题块替换、然后在末尾追加一个装饰图。
 
 ```bash
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts '[{"action":"block_replace","block_id":"bab","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"},{"action":"block_insert","insertion":"<img src=\"<file_token>\" topLeftX=\"700\" topLeftY=\"400\" width=\"180\" height=\"100\"/>"}]'
 ```
@@ -116,11 +116,11 @@ lark-cli slides +replace-slide --as user \
 
 ```bash
 # 从文件读
-lark-cli slides +replace-slide --as user --presentation "$PRES_ID" --slide-id "$SID" \
+work-cli slides +replace-slide --as user --presentation "$PRES_ID" --slide-id "$SID" \
   --parts @parts.json
 
 # 从 stdin 读
-cat parts.json | lark-cli slides +replace-slide --as user --presentation "$PRES_ID" --slide-id "$SID" \
+cat parts.json | work-cli slides +replace-slide --as user --presentation "$PRES_ID" --slide-id "$SID" \
   --parts -
 ```
 

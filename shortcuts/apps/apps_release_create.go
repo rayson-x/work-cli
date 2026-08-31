@@ -20,8 +20,8 @@ var AppsReleaseCreate = common.Shortcut{
 	Description: "Create a release for an app (returns release_id for status polling)",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +release-create --app-id <app_id>",
-		"Example: lark-cli apps +release-create --app-id <app_id> --branch sprint/default --dry-run",
+		"Example: work-cli apps +release-create --app-id <app_id>",
+		"Example: work-cli apps +release-create --app-id <app_id> --branch sprint/default --dry-run",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -55,7 +55,7 @@ var AppsReleaseCreate = common.Shortcut{
 		path := fmt.Sprintf(releaseCreatePath, validate.EncodePathSegment(appID))
 		data, err := rctx.CallAPITyped("POST", path, nil, buildPublishBody(branch))
 		if err != nil {
-			return withAppsHint(err, "if the push was rejected (non-fast-forward), sync first with `git pull --rebase origin sprint/default` then retry; inspect the failure via `lark-cli apps +release-get --app-id "+appID+" --release-id <release_id>`")
+			return withAppsHint(err, "if the push was rejected (non-fast-forward), sync first with `git pull --rebase origin sprint/default` then retry; inspect the failure via `work-cli apps +release-get --app-id "+appID+" --release-id <release_id>`")
 		}
 		out := map[string]interface{}{
 			"release_id": common.GetString(data, "release_id"),

@@ -59,7 +59,7 @@ func TestDriveImportDryRunFolderTokenWikiProbe(t *testing.T) {
 		t.Fatalf("data.api.2.url = %q, want report_file_event\nstdout:\n%s", got, out)
 	}
 	reportChecks := map[string]string{
-		"api.2.body.file_scene":         "lark-cli",
+		"api.2.body.file_scene":         "work-cli",
 		"api.2.body.scene":              "upload",
 		"api.2.body.operation":          "upload",
 		"api.2.body.tags.api_path":      "/open-apis/drive/v1/medias/upload_all",

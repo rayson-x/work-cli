@@ -7,8 +7,8 @@ description: >
   and contains weird chars: !@#$%^&*()
 metadata:
   requires:
-    bins: ["lark-cli", "node"]
-  cliHelp: "lark-cli something --help"
+    bins: ["work-cli", "node"]
+  cliHelp: "work-cli something --help"
   customField: "customValue"
 ---
 

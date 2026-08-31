@@ -1,16 +1,16 @@
 ---
 name: lark-suite
 version: 1.0.0
-description: "通过 lark-cli 操作飞书：日历、消息、文档、云空间、多维表格、电子表格、任务、知识库、通讯录等。"
+description: "通过 work-cli 操作飞书：日历、消息、文档、云空间、多维表格、电子表格、任务、知识库、通讯录等。"
 metadata:
   category: "productivity"
   requires:
-    bins: ["lark-cli"]
+    bins: ["work-cli"]
 ---
 
 # 飞书全功能 Skill
 
-你是 AI Agent，通过 lark-cli 命令操作飞书资源。下方是认证和通用规则，具体域的用法见「能力索引」中的 references 文档。
+你是 AI Agent，通过 work-cli 命令操作飞书资源。下方是认证和通用规则，具体域的用法见「能力索引」中的 references 文档。
 
 {{shared_body}}
 
@@ -23,8 +23,8 @@ metadata:
 ## 命令探索
 
 ```bash
-lark-cli <service> <resource> <method> [flags]  # 调用 原生 API
-lark-cli schema <service>.<resource>.<method>   # 调用 原生 API 前必须先查看参数结构
-lark-cli <service> --help                       # 列出可用资源和命令
-lark-cli --help                                 # 探索更多能力
+work-cli <service> <resource> <method> [flags]  # 调用 原生 API
+work-cli schema <service>.<resource>.<method>   # 调用 原生 API 前必须先查看参数结构
+work-cli <service> --help                       # 列出可用资源和命令
+work-cli --help                                 # 探索更多能力
 ```

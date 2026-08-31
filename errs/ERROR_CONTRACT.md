@@ -1,4 +1,4 @@
-# lark-cli Error Contract
+# work-cli Error Contract
 
 `errs/` defines a typed, RFC 7807–aligned error taxonomy for the CLI. Three
 audiences depend on it: **AI agents and shell scripts** parsing the JSON
@@ -44,7 +44,7 @@ Typed errors render to **stderr** as one JSON object per process exit:
     "subtype": "missing_scope",
     "code": 99991679,
     "message": "missing scope `calendar:event:create` for app cli_xxx",
-    "hint": "run `lark-cli auth login --scope \"calendar:event:create\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `lark-cli auth login --device-code <device_code>` in a later turn to finish login",
+    "hint": "run `work-cli auth login --scope \"calendar:event:create\" --no-wait --json` to get device_code and verification_url; present verification_url to the user exactly and end this turn; after the user confirms authorization, run `work-cli auth login --device-code <device_code>` in a later turn to finish login",
     "log_id": "20260520-0a1b2c3d",
     "missing_scopes": ["calendar:event:create"]
   }
@@ -197,7 +197,7 @@ This opt-in behavior does not change the other command-resolution contracts:
 
 A small class of commands is **predicates**: they answer a yes/no
 question and signal the answer through the shell exit code so callers
-can write `if cmd; then ... fi`. `lark-cli auth check` is the canonical
+can write `if cmd; then ... fi`. `work-cli auth check` is the canonical
 example — its `README` contract is `exit 0 = ok, 1 = missing`.
 
 These commands deliberately:
@@ -280,7 +280,7 @@ exitCode := output.ExitCodeOf(err) // ExitInternal for non-typed errors
 ### Shell / AI
 
 ```bash
-out=$(lark-cli ... 2>&1)
+out=$(work-cli ... 2>&1)
 code=$?
 
 # Defensive guard: tolerate any non-JSON output before parsing with jq.
@@ -386,7 +386,7 @@ Each field carries a distinct role:
 | Field | Carries | Style |
 |-------|---------|-------|
 | `Message` | What is wrong | Direct, lowercase first letter, no trailing period |
-| `Hint` | What to do next | Imperative ("run `lark-cli auth login`", "use `--as user`") |
+| `Hint` | What to do next | Imperative ("run `work-cli auth login`", "use `--as user`") |
 | `Cause` | The wrapped upstream `error`, not a stringified copy | Typed; serialized as `json:"-"` |
 
 `Hint` must not be merged into `Message`. AI agents and humans read them

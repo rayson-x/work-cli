@@ -46,7 +46,7 @@ func TestAppsMemberCLIHelperProcess(t *testing.T) {
 		fmt.Fprintln(os.Stderr, "seed API metadata fixture:", err)
 		os.Exit(2)
 	}
-	os.Args = append([]string{"lark-cli"}, os.Args[separator+1:]...)
+	os.Args = append([]string{"work-cli"}, os.Args[separator+1:]...)
 	os.Exit(cmd.Execute())
 }
 

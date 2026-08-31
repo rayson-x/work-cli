@@ -2,7 +2,7 @@
 
 > **前置条件：** 先阅读 [`../SKILL.md`](../SKILL.md) 和 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和路由规则。
 
-当用户要操作思维笔记时，入口属于 `lark-doc`，但实际执行命令使用 `lark-cli mindnotes nodes list/create`，不是 `docs +...`。
+当用户要操作思维笔记时，入口属于 `lark-doc`，但实际执行命令使用 `work-cli mindnotes nodes list/create`，不是 `docs +...`。
 
 > [!IMPORTANT]
 > 当前这条链路只支持**读取已有思维笔记**，以及在**已有思维笔记**里读取节点、创建子节点。
@@ -11,11 +11,11 @@
 
 ## 获取 `mindnote_id`
 
-`--mindnote-id` 传 **Mindnote 文档 token**，不是节点 ID。`lark-cli mindnotes` 只负责读取和写入思维笔记内部节点。
+`--mindnote-id` 传 **Mindnote 文档 token**，不是节点 ID。`work-cli mindnotes` 只负责读取和写入思维笔记内部节点。
 
 ```bash
 # 用户给了 Mindnote URL，或给了可能包着 Mindnote 的 Wiki URL
-lark-cli drive +inspect --url "<mindnote_or_wiki_url>"
+work-cli drive +inspect --url "<mindnote_or_wiki_url>"
 ```
 
 处理规则：
@@ -27,19 +27,19 @@ lark-cli drive +inspect --url "<mindnote_or_wiki_url>"
 
 ```bash
 # 先看命令帮助
-lark-cli mindnotes nodes list --help
-lark-cli mindnotes nodes create --help
+work-cli mindnotes nodes list --help
+work-cli mindnotes nodes create --help
 
 # 读取节点列表
-lark-cli mindnotes nodes list --mindnote-id "<mindnote_token>"
+work-cli mindnotes nodes list --mindnote-id "<mindnote_token>"
 
 # 创建子节点
-lark-cli mindnotes nodes create \
+work-cli mindnotes nodes create \
   --mindnote-id "<mindnote_token>" \
   --data '{"client_token":"<client_token>","nodes":[{"parent_id":"node_parent123","texts":[{"element_type":"text","text":{"content":"子节点内容"}}],"highlight":"yellow","finish":false}]}'
 
 # 更新已有节点
-lark-cli mindnotes nodes create \
+work-cli mindnotes nodes create \
   --mindnote-id "<mindnote_token>" \
   --data '{"client_token":"<client_token>","nodes":[{"node_id":"node_existing123","texts":[{"element_type":"text","text":{"content":"更新后的节点内容"}}],"highlight":"blue","finish":true}]}'
 ```
@@ -89,10 +89,10 @@ lark-cli mindnotes nodes create \
 
 ```bash
 # 先上传图片，拿到 token
-lark-cli docs +media-upload --file ./image.png --parent-type mindnote_image --parent-node <mindnote_token>
+work-cli docs +media-upload --file ./image.png --parent-type mindnote_image --parent-node <mindnote_token>
 
 # 再把 token 写进节点
-lark-cli mindnotes nodes create \
+work-cli mindnotes nodes create \
   --mindnote-id "<mindnote_token>" \
   --data '{"client_token":"<client_token>","nodes":[{"node_id":"node_existing123","images":[{"token":"canonical_token"}]}]}'
 ```

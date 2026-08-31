@@ -49,7 +49,7 @@ func profileRemoveRun(f *cmdutil.Factory, name string) error {
 		return recovery.Attach(
 			errs.NewValidationError(errs.SubtypeFailedPrecondition, "cannot remove the only profile"),
 			recovery.Join("",
-				recovery.Command(recovery.TargetProfileAdd, "add another profile first: lark-cli profile add"),
+				recovery.Command(recovery.TargetProfileAdd, "add another profile first: work-cli profile add"),
 			).WithFallback("configure another profile through this distribution before removing the only profile"),
 		)
 	}

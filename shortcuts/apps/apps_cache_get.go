@@ -22,8 +22,8 @@ var AppsCacheGet = common.Shortcut{
 	Description: "Get a business cache key's value and metadata",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +cache-get --app-id <app_id> --key spotbonus:2026:winners:list:v1",
-		"Example: lark-cli apps +cache-get --app-id <app_id> --environment online --key <key>",
+		"Example: work-cli apps +cache-get --app-id <app_id> --key spotbonus:2026:winners:list:v1",
+		"Example: work-cli apps +cache-get --app-id <app_id> --environment online --key <key>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},

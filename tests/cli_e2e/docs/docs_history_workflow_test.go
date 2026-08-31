@@ -27,8 +27,8 @@ func TestDocs_HistoryWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-docs-history-folder-" + suffix
-	docTitle := "lark-cli-e2e-docs-history-" + suffix
+	folderName := "work-cli-e2e-docs-history-folder-" + suffix
+	docTitle := "work-cli-e2e-docs-history-" + suffix
 	originalMarker := "original history marker " + suffix
 	updatedMarker := "updated history marker " + suffix
 	const defaultAs = "user"

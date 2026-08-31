@@ -143,7 +143,7 @@ func TestEmitterMatchesRuntimeContextLegacyOracle(t *testing.T) {
 				return []interface{}{map[string]interface{}{"id": "1"}}
 			},
 			ok:   true,
-			meta: &output.Meta{Count: 1, Rollback: "lark-cli fixture rollback"},
+			meta: &output.Meta{Count: 1, Rollback: "work-cli fixture rollback"},
 		},
 		{
 			name: "jq_scalar",
@@ -304,7 +304,7 @@ func TestEmitterMatchesRuntimeContextLegacyOracle(t *testing.T) {
 				pretty:    tc.pretty,
 			}
 			current := runEmitterWithRuntimeContextContract(tc.data(), output.EmitterConfig{
-				CommandPath:    "lark-cli fixture +emit",
+				CommandPath:    "work-cli fixture +emit",
 				Identity:       "bot",
 				NoticeProvider: func() map[string]interface{} { return notice },
 			}, tc.ok, output.EmitOptions{
@@ -387,7 +387,7 @@ func runRuntimeContextOracle(t *testing.T, data interface{}, opts runtimeOracleO
 	t.Helper()
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
-	parent := &cobra.Command{Use: "lark-cli"}
+	parent := &cobra.Command{Use: "work-cli"}
 	cmd := &cobra.Command{Use: "fixture"}
 	leaf := &cobra.Command{Use: "+emit"}
 	parent.AddCommand(cmd)
@@ -535,7 +535,7 @@ func TestEmitterMatchesWriteSuccessEnvelopeLegacyOracle(t *testing.T) {
 			}
 
 			current := runEmitterSuccess(tc.data(), output.EmitterConfig{
-				CommandPath:    "lark-cli fixture +emit",
+				CommandPath:    "work-cli fixture +emit",
 				Identity:       "bot",
 				NoticeProvider: func() map[string]interface{} { return notice },
 			}, true, output.EmitOptions{
@@ -574,7 +574,7 @@ func runWriteSuccessEnvelopeOracle(data interface{}, dryRun bool, jq string) emi
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
 	err := output.WriteSuccessEnvelope(data, output.SuccessEnvelopeOptions{
-		CommandPath: "lark-cli fixture +emit",
+		CommandPath: "work-cli fixture +emit",
 		Identity:    "bot",
 		DryRun:      dryRun,
 		JqExpr:      jq,
@@ -647,7 +647,7 @@ func runPaginationOracle(pages []interface{}, format output.Format) emitterCaptu
 	formatter := output.NewPaginatedFormatter(stdout, format)
 	var emitErr error
 	for _, page := range pages {
-		scanResult := output.ScanForSafety("lark-cli fixture +emit", page, stderr)
+		scanResult := output.ScanForSafety("work-cli fixture +emit", page, stderr)
 		if scanResult.Blocked {
 			emitErr = scanResult.BlockErr
 			break
@@ -666,7 +666,7 @@ func runEmitterStreamPages(pages []interface{}, format string) emitterCapture {
 	emitter := output.NewEmitter(output.EmitterConfig{
 		Out:         stdout,
 		ErrOut:      stderr,
-		CommandPath: "lark-cli fixture +emit",
+		CommandPath: "work-cli fixture +emit",
 		Identity:    "bot",
 	})
 	var emitErr error
@@ -692,7 +692,7 @@ func TestEmitterCapturesNoticeAndColorDependencies(t *testing.T) {
 	emitter := output.NewEmitter(output.EmitterConfig{
 		Out:          stdout,
 		ErrOut:       stderr,
-		CommandPath:  "lark-cli fixture +emit",
+		CommandPath:  "work-cli fixture +emit",
 		Identity:     "bot",
 		ColorEnabled: true,
 		NoticeProvider: func() map[string]interface{} {
@@ -741,7 +741,7 @@ func TestEmitterPropagatesOutputError(t *testing.T) {
 	emitter := output.NewEmitter(output.EmitterConfig{
 		Out:         failingEmitterWriter{err: sentinel},
 		ErrOut:      io.Discard,
-		CommandPath: "lark-cli fixture +emit",
+		CommandPath: "work-cli fixture +emit",
 	})
 	err := emitter.Success(map[string]interface{}{"id": "1"}, output.EmitOptions{
 		Raw: true, Format: "json",

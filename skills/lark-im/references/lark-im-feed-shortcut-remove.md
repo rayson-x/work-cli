@@ -2,7 +2,7 @@
 
 > **Prerequisite:** Read [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) for authentication, global parameters, and security rules.
 
-This skill maps to shortcut: `lark-cli im +feed-shortcut-remove`. Underlying API: `POST /open-apis/im/v2/feed_shortcuts/remove`.
+This skill maps to shortcut: `work-cli im +feed-shortcut-remove`. Underlying API: `POST /open-apis/im/v2/feed_shortcuts/remove`.
 
 ## What it does
 
@@ -17,14 +17,14 @@ Removes one or more chats from the **current user's** feed shortcuts.
 
 ```bash
 # Remove a single feed shortcut
-lark-cli im +feed-shortcut-remove --as user --chat-id oc_xxx
+work-cli im +feed-shortcut-remove --as user --chat-id oc_xxx
 
 # Remove multiple feed shortcuts in one call
-lark-cli im +feed-shortcut-remove --as user --chat-id oc_a,oc_b
-lark-cli im +feed-shortcut-remove --as user --chat-id oc_a --chat-id oc_b
+work-cli im +feed-shortcut-remove --as user --chat-id oc_a,oc_b
+work-cli im +feed-shortcut-remove --as user --chat-id oc_a --chat-id oc_b
 
 # Preview the request
-lark-cli im +feed-shortcut-remove --as user --chat-id oc_xxx --dry-run
+work-cli im +feed-shortcut-remove --as user --chat-id oc_xxx --dry-run
 ```
 
 ## Parameters

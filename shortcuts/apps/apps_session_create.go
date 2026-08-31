@@ -20,7 +20,7 @@ var AppsSessionCreate = common.Shortcut{
 	Description: "Create a session under an app",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +session-create --app-id <app_id>",
+		"Example: work-cli apps +session-create --app-id <app_id>",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

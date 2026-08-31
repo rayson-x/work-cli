@@ -54,7 +54,7 @@ func TestGuardAgentWorkspace_BindRecoveryUsesBuildLocalSurface(t *testing.T) {
 	if !errors.As(source, &original) {
 		t.Fatalf("guardAgentWorkspace() error = %T, want *errs.ConfigError", source)
 	}
-	const visibleHint = "see `lark-cli config bind --help` to bind lark-cli to the Agent's existing app instead. Pass --force-init only if the user explicitly wants a separate app in this workspace."
+	const visibleHint = "see `work-cli config bind --help` to bind work-cli to the Agent's existing app instead. Pass --force-init only if the user explicitly wants a separate app in this workspace."
 	if original.Hint != visibleHint {
 		t.Fatalf("producer hint = %q, want %q", original.Hint, visibleHint)
 	}
@@ -88,7 +88,7 @@ completes setup in the browser. Run it in the background and retrieve the
 verification URL from its output.
 
 Inside an Agent context (OPENCLAW_HOME / HERMES_HOME set) this command
-refuses by default — use 'lark-cli config bind' to bind to the Agent's
+refuses by default — use 'work-cli config bind' to bind to the Agent's
 existing app instead of creating a parallel one. Pass --force-init only
 if the user explicitly wants a separate app inside the Agent workspace.`
 	const defaultForceInitUsage = "allow init inside an Agent workspace (OPENCLAW_HOME / HERMES_HOME); use config bind instead unless you really want a separate app"

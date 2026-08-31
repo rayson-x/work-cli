@@ -9,18 +9,18 @@
 ## 推荐命令
 
 ```bash
-lark-cli base +field-create \
+work-cli base +field-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --json '{"name":"预算","type":"number","style":{"type":"plain","precision":2}}'
 
-lark-cli base +field-create \
+work-cli base +field-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --json '{"name":"状态","type":"select","multiple":false,"default_value":["Todo"],"options":[{"name":"Todo","hue":"Blue","lightness":"Lighter"},{"name":"Done","hue":"Green","lightness":"Light"}]}'
 
 # 多个字段复用相同字段 JSON 形状，一次传非空数组
-lark-cli base +field-create \
+work-cli base +field-create \
   --base-token <base_token> \
   --table-id <table_id> \
   --json '[{"name":"备注","type":"text"},{"name":"优先级","type":"select","multiple":false,"options":[{"name":"高"},{"name":"低"}]}]'

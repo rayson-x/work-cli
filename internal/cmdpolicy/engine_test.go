@@ -18,7 +18,7 @@ import (
 
 // buildTree assembles a tiny realistic tree for engine tests:
 //
-//	lark-cli (root)
+//	work-cli (root)
 //	├── docs
 //	│   ├── +fetch       risk=read    identities=[user,bot]
 //	│   ├── +update      risk=write   identities=[user]
@@ -26,7 +26,7 @@ import (
 //	└── im
 //	    └── +send        risk=write   identities=[bot]
 func buildTree() *cobra.Command {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 
 	docs := &cobra.Command{Use: "docs"}
 	cmdmeta.SetDomain(docs, "docs")
@@ -136,7 +136,7 @@ func TestEvaluate_maxRiskCutoff(t *testing.T) {
 // outside that vocabulary and is denied with reason_code
 // "risk_not_annotated", regardless of whether the rule sets MaxRisk.
 func TestEvaluate_unannotatedRiskIsDeny(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 	// Note: no SetRisk on this command -> unannotated
@@ -188,7 +188,7 @@ func TestEvaluate_unannotatedRiskIsDeny(t *testing.T) {
 // rejects, MaxRisk is skipped (no rank to compare), Allow/Identities still
 // apply.
 func TestEvaluate_allowUnannotatedOptsOutOfDeny(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 	orphan := &cobra.Command{Use: "+orphan", RunE: noop}
@@ -229,7 +229,7 @@ func TestEvaluate_allowUnannotatedOptsOutOfDeny(t *testing.T) {
 // risk_invalid (typo) is unaffected by AllowUnannotated and emits a
 // "did you mean" suggestion in the reason text.
 func TestEvaluate_invalidRiskAlwaysDeny_andSuggests(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 	typo := &cobra.Command{Use: "+typo", RunE: noop}
@@ -260,7 +260,7 @@ func TestEvaluate_invalidRiskAlwaysDeny_andSuggests(t *testing.T) {
 // because RiskRank returned ok=false and the comparison was skipped --
 // a typo SetRisk would silently slip past an "agent read-only" rule.
 func TestEvaluate_invalidRiskIsDeny(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 	typo := &cobra.Command{Use: "+typo", RunE: noop}
@@ -385,7 +385,7 @@ func TestEvaluate_reasonCarriesAttemptAndConstraint(t *testing.T) {
 // Unknown identities defaults to ALLOW. A command with risk annotated
 // but without supportedIdentities passes any identity filter.
 func TestEvaluate_unknownIdentitiesIsAllow(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	cmd := &cobra.Command{Use: "+x", RunE: noop}
 	cmdutil.SetRisk(cmd, "read")
 	root.AddCommand(cmd)
@@ -565,8 +565,8 @@ func TestCanonicalPath(t *testing.T) {
 	if got := cmdpolicy.CanonicalPath(update); got != "docs/+update" {
 		t.Fatalf("CanonicalPath = %q, want docs/+update", got)
 	}
-	if got := cmdpolicy.CanonicalPath(root); got != "lark-cli" {
-		t.Fatalf("CanonicalPath(root) = %q, want lark-cli (orphan fallback)", got)
+	if got := cmdpolicy.CanonicalPath(root); got != "work-cli" {
+		t.Fatalf("CanonicalPath(root) = %q, want work-cli (orphan fallback)", got)
 	}
 }
 

@@ -24,7 +24,7 @@ var BaseRecordDelete = common.Shortcut{
 	},
 	Tips: []string{
 		baseHighRiskYesTip,
-		`Example: lark-cli base +record-delete --base-token <base_token> --table-id <table_id> --record-id <record_id_1> --record-id <record_id_2> --yes`,
+		`Example: work-cli base +record-delete --base-token <base_token> --table-id <table_id> --record-id <record_id_1> --record-id <record_id_2> --yes`,
 	},
 	Validate: func(ctx context.Context, runtime *common.RuntimeContext) error {
 		return validateRecordSelection(runtime)

@@ -361,7 +361,7 @@ func TestPlatformGetSurfacesKeychainBlocked(t *testing.T) {
 }
 
 // TestWrapErrorHintMentionsDowngradeForRecoverableCases is the regression
-// guard for the bug where `lark-cli api ...` inside a sandbox surfaced
+// guard for the bug where `work-cli api ...` inside a sandbox surfaced
 // "keychain access blocked" but the hint did NOT mention keychain-downgrade
 // — the very command meant to recover from that exact situation. Root cause:
 // the blocked path used an anonymous errors.New string, so the extraHint

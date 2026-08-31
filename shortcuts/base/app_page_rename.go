@@ -22,7 +22,7 @@ var BaseAppPageRename = common.Shortcut{
 		{Name: "name", Desc: "new page name", Required: true},
 	},
 	Tips: []string{
-		`lark-cli base +app-page-update --app-token <app_token> --page-id <page_id> --name "Overview"`,
+		`work-cli base +app-page-update --app-token <app_token> --page-id <page_id> --name "Overview"`,
 		"Page names must be unique within an app; the CLI excludes the current page while checking.",
 		"Renaming does not move the page; ordering and parent stay unchanged.",
 	},

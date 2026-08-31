@@ -43,7 +43,7 @@ go build -o readonly-cli .
   write / high-risk-write.
 - `AllowUnannotated` is left default (false): unannotated commands
   are denied with `risk_not_annotated`. Set it to true if you need
-  a gradual-adoption window for the lark-cli main tree.
+  a gradual-adoption window for the work-cli main tree.
 - A fork that wants denied commands to present as absent can opt in from
   `main` with `cmd.ExecuteWithOptions(cmd.ConcealRestrictedCommands(...))`.
 

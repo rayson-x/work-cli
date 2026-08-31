@@ -12,25 +12,25 @@
 
 ```bash
 # 先预览请求，不实际执行
-lark-cli approval tasks approve \
+work-cli approval tasks approve \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","comment":"同意"}' \
   --as user \
   --dry-run
 
 # 同意审批任务，并附带审批意见
-lark-cli approval tasks approve \
+work-cli approval tasks approve \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","comment":"同意"}' \
   --as user \
   --yes
 
 # 需要回填表单时，传入 form（按当前命令定义，form 为字符串化 JSON）
-lark-cli approval tasks approve \
+work-cli approval tasks approve \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","comment":"同意并补充信息","form":"[{\"id\":\"user_name\",\"type\":\"input\",\"value\":\"Alice\"}]"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体，适合较长 comment / form
-lark-cli approval tasks approve \
+work-cli approval tasks approve \
   --data @./approve-body.json \
   --as user \
   --yes
@@ -55,7 +55,7 @@ lark-cli approval tasks approve \
 先查到待办任务：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的两个字段：
@@ -68,7 +68,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需先确认表单、节点、审批流进度，可继续查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

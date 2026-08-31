@@ -4,7 +4,7 @@
 package command
 
 // ValidateHostResult checks one erased Execute result against the protocol the
-// framework depends on. Both lark-cli's host adapter and commandtest call it,
+// framework depends on. Both work-cli's host adapter and commandtest call it,
 // so a Result the real CLI refuses can no longer pass a business command's own
 // tests -- the divergence that mattered was a zero-value Result reading as a
 // successful call in commandtest while every real invocation failed.

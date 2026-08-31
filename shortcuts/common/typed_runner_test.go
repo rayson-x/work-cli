@@ -69,7 +69,7 @@ func runTypedFixture(t *testing.T, definition typedDefinition[typedRunnerArgs, t
 	t.Helper()
 	factory, stdout, stderr, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "typed-app", AppSecret: "typed-secret", Brand: core.BrandFeishu})
 	factory.IOStreams.In = strings.NewReader(stdin)
-	root := &cobra.Command{Use: "lark-cli", SilenceUsage: true, SilenceErrors: true}
+	root := &cobra.Command{Use: "work-cli", SilenceUsage: true, SilenceErrors: true}
 	service := &cobra.Command{Use: "fixture"}
 	root.AddCommand(service)
 	defineTypedShortcut(definition).Mount(service, factory)
@@ -166,7 +166,7 @@ func TestTypedMountRejectsPostMountContractMutation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{})
-			root := &cobra.Command{Use: "lark-cli"}
+			root := &cobra.Command{Use: "work-cli"}
 			service := &cobra.Command{Use: "fixture"}
 			root.AddCommand(service)
 			shortcut := defineTypedShortcut(typedRunnerDefinition(nil, false))
@@ -192,7 +192,7 @@ func TestTypedMountAllowsNoOpPostMount(t *testing.T) {
 
 func TestTypedRunnerInstallsGroupedHelpFromCompiledFacts(t *testing.T) {
 	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{})
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	service := &cobra.Command{Use: "fixture"}
 	root.AddCommand(service)
 	definition := typedRunnerDefinition(nil, false)
@@ -377,7 +377,7 @@ func TestTypedRunnerDryRunUsesProductionStrictIdentity(t *testing.T) {
 	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{
 		AppID: "typed-app", AppSecret: "typed-secret", Brand: core.BrandFeishu, SupportedIdentities: 1,
 	})
-	root := &cobra.Command{Use: "lark-cli", SilenceUsage: true, SilenceErrors: true}
+	root := &cobra.Command{Use: "work-cli", SilenceUsage: true, SilenceErrors: true}
 	service := &cobra.Command{Use: "fixture"}
 	root.AddCommand(service)
 	defineTypedShortcut(definition).Mount(service, factory)

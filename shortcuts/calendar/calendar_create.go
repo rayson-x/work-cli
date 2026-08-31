@@ -109,7 +109,7 @@ func guideApprovalRoomReasonError(err error, attendees []map[string]string) erro
 	if !ok || !strings.Contains(strings.ToLower(p.Hint), "approval_reason") {
 		return err
 	}
-	return withStepContext(err, "approval meeting rooms require attendees[].approval_reason; calendar +create does not expose this low-frequency field. Create the event with the raw API flow, then use `lark-cli calendar event.attendees create --as user` with attendees[].approval_reason for the room attendee.")
+	return withStepContext(err, "approval meeting rooms require attendees[].approval_reason; calendar +create does not expose this low-frequency field. Create the event with the raw API flow, then use `work-cli calendar event.attendees create --as user` with attendees[].approval_reason for the room attendee.")
 }
 
 var CalendarCreate = common.Shortcut{

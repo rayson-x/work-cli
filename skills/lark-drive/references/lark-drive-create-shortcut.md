@@ -9,25 +9,25 @@
 
 ```bash
 # 为普通文件创建快捷方式
-lark-cli drive +create-shortcut \
+work-cli drive +create-shortcut \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --file-token <FILE_TOKEN> \
   --type file
 
 # 为新版文档创建快捷方式
-lark-cli drive +create-shortcut \
+work-cli drive +create-shortcut \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --file-token <DOCX_TOKEN> \
   --type docx
 
 # 为电子表格创建快捷方式
-lark-cli drive +create-shortcut \
+work-cli drive +create-shortcut \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --file-token <SHEET_TOKEN> \
   --type sheet
 
 # 仅预览即将发起的请求，不真正执行
-lark-cli drive +create-shortcut \
+work-cli drive +create-shortcut \
   --folder-token <TARGET_FOLDER_TOKEN> \
   --file-token <DOCX_TOKEN> \
   --type docx \

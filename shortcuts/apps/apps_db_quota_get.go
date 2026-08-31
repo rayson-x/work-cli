@@ -21,8 +21,8 @@ var AppsDBQuotaGet = common.Shortcut{
 	Description: "Get an app's database storage usage",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-quota-get --app-id <app_id>",
-		"Example: lark-cli apps +db-quota-get --app-id <app_id> --environment dev",
+		"Example: work-cli apps +db-quota-get --app-id <app_id>",
+		"Example: work-cli apps +db-quota-get --app-id <app_id> --environment dev",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},

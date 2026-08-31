@@ -8,19 +8,19 @@
 
 ```bash
 # 获取目标进展记录第一页 (默认页大小为 100，一般不用翻页)
-lark-cli okr +progress-list \
+work-cli okr +progress-list \
   --target-id 1234567890123456789 \
   --target-type objective
 
 # 获取下一页进展记录 
-lark-cli okr +progress-list \
+work-cli okr +progress-list \
   --target-id 1234567890123456789 \
   --target-type objective \
   --page-size 100 \
   --page-token "7000000000000000002"
 
 # 获取关键结果进展记录第一页
-lark-cli okr +progress-list \
+work-cli okr +progress-list \
   --target-id 9876543210987654321 \
   --target-type key_result
 ```
@@ -41,7 +41,7 @@ lark-cli okr +progress-list \
 ## 工作流程
 
 1. 使用 `+cycle-list` 和 `+cycle-detail` 获取目标或关键结果的 ID。
-2. 执行 `lark-cli okr +progress-list --target-id "..." --target-type objective --page-size 100`。
+2. 执行 `work-cli okr +progress-list --target-id "..." --target-type objective --page-size 100`。
 3. 如果响应中 `has_more=true`，继续用返回的 `page_token` 调用下一页。
 4. 获取该目标或关键结果下的进展记录列表。
 

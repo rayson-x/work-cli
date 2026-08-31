@@ -22,7 +22,7 @@ var BaseBaseBlockRename = common.Shortcut{
 		{Name: "name", Desc: "new unique block name; must not duplicate another block name in this base", Required: true},
 	},
 	Tips: []string{
-		"Example: lark-cli base +base-block-rename --base-token <base_token> --block-id <block_id> --name \"New name\"",
+		"Example: work-cli base +base-block-rename --base-token <base_token> --block-id <block_id> --name \"New name\"",
 		"Renames the block identified by --block-id.",
 		"Block names must be unique in the base; use +base-block-list first when you need to check existing names.",
 		"Use +base-block-list first when you need to resolve the target block id from a visible name.",

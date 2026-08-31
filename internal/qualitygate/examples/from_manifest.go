@@ -15,7 +15,7 @@ func FromManifest(m manifest.Manifest) []skillscan.Example {
 	for _, cmd := range m.Commands {
 		for i, line := range strings.Split(cmd.Example, "\n") {
 			line = strings.TrimSpace(line)
-			if !strings.HasPrefix(line, "lark-cli ") {
+			if !strings.HasPrefix(line, "work-cli ") {
 				continue
 			}
 			out = append(out, skillscan.Example{

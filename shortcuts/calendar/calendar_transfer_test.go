@@ -300,9 +300,9 @@ func TestTransfer_UpstreamCodes_CarryScopedRecovery(t *testing.T) {
 		msg      string
 		wantHint []string
 	}{
-		{larkErrCalendarNoAccessRole, "no calendar access_role", []string{"--as", "do not run `lark-cli auth login`"}},
+		{larkErrCalendarNoAccessRole, "no calendar access_role", []string{"--as", "do not run `work-cli auth login`"}},
 		{larkErrCalendarWrongCalendarType, "invalid calendar type", []string{"primary or shared calendar"}},
-		{larkErrCalendarCannotInviteReceiver, "no permission to invite the receiver", []string{"do not run `lark-cli auth login`", "another receiver"}},
+		{larkErrCalendarCannotInviteReceiver, "no permission to invite the receiver", []string{"do not run `work-cli auth login`", "another receiver"}},
 		{larkErrCalendarEventNotInOrganizer, "the event is not in the organizer calendar", []string{"--calendar-id", "shared calendar"}},
 		{larkErrCalendarCrossTenantTransfer, "cannot transfer the event to another tenant", []string{"attendee"}},
 	}

@@ -12,7 +12,7 @@ import (
 )
 
 // NewCmdConfigKeychainDowngrade is registered on all platforms so that
-// `lark-cli config --help` reads the same everywhere. On non-macOS it
+// `work-cli config --help` reads the same everywhere. On non-macOS it
 // refuses with a clear message.
 func NewCmdConfigKeychainDowngrade(f *cmdutil.Factory) *cobra.Command {
 	_ = f

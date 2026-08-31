@@ -3,9 +3,9 @@
 通过 Agent Bot API 邀请指定用户，或一键邀请符合条件的 Calendar 参会人。
 
 ```bash
-lark-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type SELECTED --open-ids ou_xxx,ou_yyy
-lark-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type ALL_SUGGESTED
-lark-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type ALL_SUGGESTED --dry-run
+work-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type SELECTED --open-ids ou_xxx,ou_yyy
+work-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type ALL_SUGGESTED
+work-cli vc +meeting-invite --as bot --meeting-id 7628568141510692381 --type ALL_SUGGESTED --dry-run
 ```
 
 ## 参数

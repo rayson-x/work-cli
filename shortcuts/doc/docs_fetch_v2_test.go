@@ -1103,7 +1103,7 @@ func TestDocsFetchRejectsLegacyFlags(t *testing.T) {
 				"the old v1 interface has been shut down",
 				"legacy v1 flag(s) --offset are no longer supported",
 				"--offset -> use --scope outline/range/keyword/section",
-				"lark-cli docs +fetch --help",
+				"work-cli docs +fetch --help",
 			},
 		},
 	}

@@ -17,7 +17,7 @@ var AppsOpenAPIKeyUpdate = common.Shortcut{
 	Description: "Update an open API key's name and/or scope",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +openapi-key-update --app-id <app_id> --key-id <key_id> --name partner-prod",
+		"Example: work-cli apps +openapi-key-update --app-id <app_id> --key-id <key_id> --name partner-prod",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

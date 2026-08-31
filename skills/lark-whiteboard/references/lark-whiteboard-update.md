@@ -43,7 +43,7 @@ Bob -> Alice: Hi
 EOF
 
 # 通过管道传递给命令
-cat diagram.puml | lark-cli whiteboard +update \
+cat diagram.puml | work-cli whiteboard +update \
   --whiteboard-token <画板Token> \
   --input_format plantuml --source -\
   --overwrite --as user
@@ -62,7 +62,7 @@ graph TD
 EOF
 
 # 从文件读取并更新
-lark-cli whiteboard +update \
+work-cli whiteboard +update \
   --whiteboard-token <画板Token> \
   --input_format mermaid \
   --source @./diagram.mmd \
@@ -76,7 +76,7 @@ whiteboard-cli 工具的具体用法请参考 [§ 渲染 & 写入画板](lark-wh
 ```bash
 # 使用 whiteboard-cli 生成 OpenAPI 格式并通过管道传递
 npx -y @larksuite/whiteboard-cli@^0.2.13 -i <产物文件> --to openapi --format json \
-  | lark-cli whiteboard +update \
+  | work-cli whiteboard +update \
     --whiteboard-token <画板Token> \
     --source - --input_format raw \
     --idempotent-token <10+字符唯一串> \
@@ -92,7 +92,7 @@ whiteboard-cli 工具的具体用法请参考 [§ 渲染 & 写入画板](lark-wh
 npx -y @larksuite/whiteboard-cli@^0.2.13 -i <DSL 文件> --to openapi --format json -o ./temp.json
 
 # 从文件读取并更新
-lark-cli whiteboard +update \
+work-cli whiteboard +update \
   --whiteboard-token <画板Token> \
   --idempotent-token <10+字符唯一串> \
   --input_format raw \
@@ -114,7 +114,7 @@ cat > diagram.svg << 'EOF'
 EOF
 
 # 从文件读取并更新
-lark-cli whiteboard +update \
+work-cli whiteboard +update \
   --whiteboard-token <画板Token> \
   --input_format svg \
   --source @./diagram.svg \

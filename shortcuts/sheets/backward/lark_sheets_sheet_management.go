@@ -287,7 +287,7 @@ func mergeSheetOutputs(base, overlay map[string]interface{}) map[string]interfac
 }
 
 func copySheetMoveRetryCommand(token, sheetID string, index int) string {
-	return fmt.Sprintf("lark-cli sheets +update-sheet --spreadsheet-token %s --sheet-id %s --index %d", token, sheetID, index)
+	return fmt.Sprintf("work-cli sheets +update-sheet --spreadsheet-token %s --sheet-id %s --index %d", token, sheetID, index)
 }
 
 // wrapCopySheetMoveError reports a +copy-sheet that created the new sheet but

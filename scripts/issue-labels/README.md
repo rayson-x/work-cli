@@ -23,7 +23,7 @@ Related GitHub Actions workflow: `.github/workflows/issue-labels.yml`.
 - Label format: `domain/<service>` (e.g. `domain/base`, `domain/im`)
 - Signals (strong → weak):
   1) Explicit `domain/<service>` in text
-  2) Command mention: `lark-cli <service>` / `lark cli <service>` (maps `docs` → `doc`)
+  2) Command mention: `work-cli <service>` / `lark cli <service>` (maps `docs` → `doc`)
   3) Loose title match (careful; excludes English `im` to reduce false positives)
   4) A small set of conservative keyword heuristics as fallback
 - By default, the script only adds missing domain labels and never removes existing ones.

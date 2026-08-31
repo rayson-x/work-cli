@@ -65,7 +65,7 @@ func TestConfigBindRun_BotOnlyIdentity_NoImpersonationWarning(t *testing.T) {
 
 func TestUserDefaultBindMessageProjectsConcealedLogin(t *testing.T) {
 	visible := userDefaultBindMessage(bindMsgEn, "cli_test", "Hermes", nil)
-	if !strings.Contains(visible, "lark-cli auth login --recommend") {
+	if !strings.Contains(visible, "work-cli auth login --recommend") {
 		t.Fatalf("default message lost established login action: %q", visible)
 	}
 

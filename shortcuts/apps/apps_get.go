@@ -20,9 +20,9 @@ var AppsGet = common.Shortcut{
 	Description: "Get a single app's detail by app ID or meta token (returns app_type, name, description, publish status, etc.)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +get --app-id <app_id>",
-		"Example: lark-cli apps +get --app-id <meta_token>",
-		"Example: lark-cli apps +get --app-id <app_id> --dry-run",
+		"Example: work-cli apps +get --app-id <app_id>",
+		"Example: work-cli apps +get --app-id <meta_token>",
+		"Example: work-cli apps +get --app-id <app_id> --dry-run",
 		"Tip: extract app type with --jq '.data.app.app_type'",
 	},
 	Scopes:    []string{"spark:app:read"},

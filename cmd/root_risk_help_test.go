@@ -28,7 +28,7 @@ func rendersHelp(t *testing.T, cmd *cobra.Command) string {
 }
 
 func TestHelpFunc_RendersRiskLineWhenAnnotated(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	installTipsHelpFunc(root, nilSkills, nil, nil)
 
 	child := &cobra.Command{Use: "delete", Short: "delete a file"}
@@ -42,7 +42,7 @@ func TestHelpFunc_RendersRiskLineWhenAnnotated(t *testing.T) {
 }
 
 func TestHelpFunc_NoRiskLineWhenUnannotated(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	installTipsHelpFunc(root, nilSkills, nil, nil)
 
 	child := &cobra.Command{Use: "list", Short: "list items"}
@@ -55,7 +55,7 @@ func TestHelpFunc_NoRiskLineWhenUnannotated(t *testing.T) {
 }
 
 func TestHelpFunc_RiskLinePrecedesTips(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	installTipsHelpFunc(root, nilSkills, nil, nil)
 
 	child := &cobra.Command{Use: "delete", Short: "delete a file"}

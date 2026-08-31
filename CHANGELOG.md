@@ -730,7 +730,7 @@ All notable changes to this project will be documented in this file.
 
 - **vc**: Add meeting message send shortcut (#1643)
 - **doc**: Add document word statistics helper (#1697)
-- **cli**: Interactive upgrade prompt for bare `lark-cli` invocation (#1498)
+- **cli**: Interactive upgrade prompt for bare `work-cli` invocation (#1498)
 - **install**: Fail closed when `checksums.txt` is missing during install (#1503)
 
 ### Bug Fixes
@@ -1359,7 +1359,7 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - **install**: Skip interactive prompts in non-TTY environments (#888)
-- **update**: Recommend `lark-cli update` over `npm install` for AI agents (#884)
+- **update**: Recommend `work-cli update` over `npm install` for AI agents (#884)
 - **im**: Add `--exclude-muted` to `+chat-search` and new `+chat-list` shortcut (#820)
 - **auth**: Add `--exclude` flag and allow combining `--scope` with `--domain`/`--recommend` (#844)
 - **drive**: Add modified-time smart sync mode (#859)
@@ -1386,7 +1386,7 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - **vc**: Add agent meeting join, leave, and events shortcuts (#824)
-- **mail**: Add unknown-flag fuzzy match for `lark-cli mail` commands (#806)
+- **mail**: Add unknown-flag fuzzy match for `work-cli mail` commands (#806)
 - **whiteboard**: Pin `whiteboard-cli` to `v0.2.11` in `lark-whiteboard` skill (#850)
 
 ### Bug Fixes
@@ -1817,7 +1817,7 @@ All notable changes to this project will be documented in this file.
 
 - **api**: Support stdin and quoted JSON inputs on Windows (#367)
 - **doc**: Post-process `docs +fetch` output to improve round-trip fidelity (#214)
-- **run**: Add missing binary check for lark-cli execution (#362)
+- **run**: Add missing binary check for work-cli execution (#362)
 - **config**: Validate appId and appSecret keychain key consistency (#295)
 
 ### Refactor
@@ -1919,7 +1919,7 @@ All notable changes to this project will be documented in this file.
 
 ### CI
 
-- Add a CLI E2E testing framework for lark-cli, task domain testcase and ci action (#236)
+- Add a CLI E2E testing framework for work-cli, task domain testcase and ci action (#236)
 
 ## [v1.0.3] - 2026-04-02
 
@@ -1985,7 +1985,7 @@ All notable changes to this project will be documented in this file.
 
 - **base**: Use base history read scope for record history list (#96)
 - Remove sensitive send scope from reply and forward shortcuts (#92)
-- Resolve silent failure in `lark-cli api` error output (#85)
+- Resolve silent failure in `work-cli api` error output (#85)
 
 ### Documentation
 

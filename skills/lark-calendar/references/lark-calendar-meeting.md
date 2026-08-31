@@ -7,10 +7,10 @@
 
 ```bash
 # 单个 / 批量（逗号分隔，最多 50 个）
-lark-cli calendar +meeting --event-ids <event_id1>,<event_id2>
+work-cli calendar +meeting --event-ids <event_id1>,<event_id2>
 
 # 默认使用主日历，需要时显式传 --calendar-id
-lark-cli calendar +meeting --event-ids <event_id> --calendar-id <calendar_id>
+work-cli calendar +meeting --event-ids <event_id> --calendar-id <calendar_id>
 ```
 
 ## 输出字段
@@ -27,14 +27,14 @@ lark-cli calendar +meeting --event-ids <event_id> --calendar-id <calendar_id>
 
 ```bash
 # 1. meeting_id → note_id + minute_token（同一会议两份产物，可能各自为空）
-lark-cli vc +detail --meeting-ids <meeting_id>
+work-cli vc +detail --meeting-ids <meeting_id>
 
 # 2a. note_id → 纪要文档 token（note_doc_token / verbatim_doc_token / shared_doc_tokens）
-lark-cli note +detail --note-id <note_id>
+work-cli note +detail --note-id <note_id>
 
 # 2b. minute_token → 妙记 AI 产物（按需获取，不传不返回任何 AI 内容）
-lark-cli minutes +detail --minute-tokens <minute_token> --summary --todo --chapter --keyword --transcript
+work-cli minutes +detail --minute-tokens <minute_token> --summary --todo --chapter --keyword --transcript
 
 # 3. 任意文档 token（meeting_note / note_doc_token / verbatim_doc_token / shared_doc_token）→ 正文
-lark-cli docs +fetch --api-version v2 --doc <doc_token> --doc-format markdown
+work-cli docs +fetch --api-version v2 --doc <doc_token> --doc-format markdown
 ```

@@ -23,11 +23,11 @@
 当前 CLI 只支持用 `+workspace-move-in` 把 Base 或 BaseApp 移入 Workspace，不支持从 Workspace 移出或移除资源，也没有 `workspace move-out` / `workspace remove` 命令。这类请求必须先完成只读定位，再说明限制并停止，顺序不可调换：
 
 1. Workspace URL 含 `/base/workspace/<workspace_token>` 时，提取其中的真实 `workspace_token`，不要把完整 URL 当作命令参数。
-2. 在同一轮立即执行 `lark-cli base +workspace-entity-list --workspace-token <workspace_token> --page-size 100 --as user`；若 `has_more=true`，继续分页直到完整。该查询是必要的只读定位步骤，不要把它留成等待用户再次选择的可选项，也不要用 `--help` 代替真实查询。
+2. 在同一轮立即执行 `work-cli base +workspace-entity-list --workspace-token <workspace_token> --page-size 100 --as user`；若 `has_more=true`，继续分页直到完整。该查询是必要的只读定位步骤，不要把它留成等待用户再次选择的可选项，也不要用 `--help` 代替真实查询。
 3. 用服务端返回的 `entities[].name`、`entity_type`、`token` 和 `url` 忠实判断目标。名称完全匹配时报告真实对象；没有完全匹配时明确说明不存在精确同名实体，并原样列出可能相关的候选。不得自动去掉或补齐前后缀，也不得仅凭名称相似就声称已经定位目标。用户直接给出 token 时仍要忠实报告该 token 对应的实际名称。
 4. 定位结果报告完后，明确说明当前 CLI 无法执行 Workspace 移出/移除，并停止，不要发起任何写请求。用户在任一步骤中取消时立即停止，取消后不再调用工具。
 
-`lark-cli drive +move` 只改变 Base 或 BaseApp 在云盘中的目录位置，不改变其 Workspace 归属，不能作为移出 Workspace 的替代方案。不要继续探索 Drive move/delete、另一个 Workspace 的 `+workspace-move-in`、浏览器、OpenAPI 或源码来拼装或冒充该操作；只有用户后续明确提出另一项受支持的操作时，才执行新的写入。
+`work-cli drive +move` 只改变 Base 或 BaseApp 在云盘中的目录位置，不改变其 Workspace 归属，不能作为移出 Workspace 的替代方案。不要继续探索 Drive move/delete、另一个 Workspace 的 `+workspace-move-in`、浏览器、OpenAPI 或源码来拼装或冒充该操作；只有用户后续明确提出另一项受支持的操作时，才执行新的写入。
 
 ## Token 与命令
 
@@ -41,18 +41,18 @@
 
 页面和组件命令使用 `app_token`；Base 数据命令使用 `base_token`。`+app-block-get-data` 使用 `app_token + base_token + chart_token`：CLI 参数名仍为 `--block-id`，但必须传组件返回的 `chart_token`，不能传普通 `block_id`。请求路径与仪表盘图表数据接口相同。
 
-BaseApp / AppMode 是 Base 域能力。用户提供 `/app/` 链接时，先用 `+url-resolve`；它会返回 `app_token`，并忠实提取链接实际携带的 `workspace_token` 与 `page_id`。直接使用本指引和 `lark-cli base +...`，不要先尝试 `lark-cli apps`。
+BaseApp / AppMode 是 Base 域能力。用户提供 `/app/` 链接时，先用 `+url-resolve`；它会返回 `app_token`，并忠实提取链接实际携带的 `workspace_token` 与 `page_id`。直接使用本指引和 `work-cli base +...`，不要先尝试 `work-cli apps`。
 
 ## 查询应用
 
 ```bash
-lark-cli base +app-get --app-token <app_token>
+work-cli base +app-get --app-token <app_token>
 ```
 
-- 没有 `lark-cli base +app-list`。需要列出某个 Workspace 内的 BaseApp 时，唯一列表入口是：
+- 没有 `work-cli base +app-list`。需要列出某个 Workspace 内的 BaseApp 时，唯一列表入口是：
 
   ```bash
-  lark-cli base +workspace-entity-list \
+  work-cli base +workspace-entity-list \
     --workspace-token <workspace_token> \
     --type baseapp \
     --page-size 100
@@ -65,8 +65,8 @@ lark-cli base +app-get --app-token <app_token>
 ## 查询页面与组件
 
 ```bash
-lark-cli base +app-page-list --app-token <app_token> --page-size 100
-lark-cli base +app-block-list \
+work-cli base +app-page-list --app-token <app_token> --page-size 100
+work-cli base +app-block-list \
   --app-token <app_token> \
   --page-id <page_id> \
   --page-size 100
@@ -80,7 +80,7 @@ lark-cli base +app-block-list \
 ## 创建 Workspace
 
 ```bash
-lark-cli base +workspace-create \
+work-cli base +workspace-create \
   --name "AppMode-空白评测空间" \
   --as user
 ```
@@ -88,7 +88,7 @@ lark-cli base +workspace-create \
 ## 创建应用
 
 ```bash
-lark-cli base +app-create \
+work-cli base +app-create \
   --name "销售应用" \
   --workspace-token <workspace_token> \
   --as user
@@ -104,8 +104,8 @@ lark-cli base +app-create \
 `+app-create` 会同时生成一个系统默认 Page，但创建响应不返回它的 `page_id`。用户未明确要求其他页面结构时，创建 App 后先读取应用取得该 Page，将其重命名并直接用作用户所需的第一个页面；不要用 `+app-page-create` 另建第一个页面：
 
 ```bash
-lark-cli base +app-get --app-token <app_token> --as user
-lark-cli base +app-page-update \
+work-cli base +app-get --app-token <app_token> --as user
+work-cli base +app-page-update \
   --app-token <app_token> \
   --page-id <default_page_id> \
   --name "<page_name>" \
@@ -134,7 +134,7 @@ lark-cli base +app-page-update \
 ## 读取图表计算结果
 
 ```bash
-lark-cli base +app-block-get-data \
+work-cli base +app-block-get-data \
   --app-token <app_token> \
   --base-token <base_token> \
   --block-id <chart_token>
@@ -148,7 +148,7 @@ lark-cli base +app-block-get-data \
 ## 重命名应用
 
 ```bash
-lark-cli drive files patch \
+work-cli drive files patch \
   --file-token <app_token> \
   --type bitable \
   --data '{"new_title":"新名称"}'
@@ -159,7 +159,7 @@ BaseApp 与 Base 在 Drive 文件接口中都使用 `type=bitable`。`new_title`
 ## 删除应用
 
 ```bash
-lark-cli drive +delete --file-token <app_token> --type bitable --yes
+work-cli drive +delete --file-token <app_token> --type bitable --yes
 ```
 
 - 删除 BaseApp 应用本体需要切到 `lark-drive`。
@@ -182,10 +182,10 @@ Page 复制和页面图标均不在本期范围。用户提出复制 Page、复�
 只有用户后续明确要求新建空 Page，才可以调用 `+app-page-create`。
 
 ```bash
-lark-cli base +app-page-list --app-token <app_token>
-lark-cli base +app-page-create --app-token <app_token> --name "总览"
-lark-cli base +app-page-update --app-token <app_token> --page-id <page_id> --name "经营总览"
-lark-cli base +app-page-delete --app-token <app_token> --page-id <page_id> --yes
+work-cli base +app-page-list --app-token <app_token>
+work-cli base +app-page-create --app-token <app_token> --name "总览"
+work-cli base +app-page-update --app-token <app_token> --page-id <page_id> --name "经营总览"
+work-cli base +app-page-delete --app-token <app_token> --page-id <page_id> --yes
 ```
 
 - 对新建 App，用户未明确要求其他页面结构时，必须按[新建应用的默认 Page 复用](#新建应用的默认-page-复用)将系统默认 Page 用作用户所需的第一个页面；`+app-page-create` 只用于用户要求的额外页面。
@@ -213,7 +213,7 @@ lark-cli base +app-page-delete --app-token <app_token> --page-id <page_id> --yes
 创建列表时使用 `--type list` 与 `--sub-type standard|grouped|collapsible|card|detail`。省略 `--sub-type` 时默认 `standard`。
 
 ```bash
-lark-cli base +app-block-create \
+work-cli base +app-block-create \
   --app-token <app_token> \
   --page-id <page_id> \
   --name "待处理订单" \

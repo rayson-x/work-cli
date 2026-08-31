@@ -93,7 +93,7 @@
 💡 **多个不连续区域写入（批量修公式的正解）**：散布多处（可跨 sheet）的值 / 公式写入，用 `--writes` 一次批量交付（fail-fast，失败后先回读再补发）——每项 `{sheet_name, range, cells}`（sheet 定位必须写在每项里），不要为此拼 `+batch-update` 的 `--operations`，也不要逐区域多次调用（多次往返、中途失败难恢复）：
 
 ```bash
-lark-cli sheets +cells-set --url "..." --writes - <<'JSON'
+work-cli sheets +cells-set --url "..." --writes - <<'JSON'
 [
   {"sheet_name":"明细","range":"D5","cells":[[{"formula":"=IFERROR(C5/B5,0)"}]]},
   {"sheet_name":"汇总","range":"B3","cells":[[{"formula":"=SUM(明细!C:C)"}]]}
@@ -172,7 +172,7 @@ Step 2: `+styles-put` — 对 A2:A100 声明统一的 fill + border 样式
 
 ## 富文本单元格：超链接 / @人 / @文档（`rich_text`）
 
-带显示文本的超链接、@人、@文档这类富内容**建议**走 `+cells-set` 的 `rich_text` 字段（`cells[].rich_text` 数组，每段一个对象、带 `type`），**不能**直接传普通字符串——纯字符串只会被当作纯文本存进单元格。完整字段跑 `lark-cli sheets +cells-set --print-schema --flag-name cells`，常用段类型：
+带显示文本的超链接、@人、@文档这类富内容**建议**走 `+cells-set` 的 `rich_text` 字段（`cells[].rich_text` 数组，每段一个对象、带 `type`），**不能**直接传普通字符串——纯字符串只会被当作纯文本存进单元格。完整字段跑 `work-cli sheets +cells-set --print-schema --flag-name cells`，常用段类型：
 
 - **超链接（带显示文本）**：`{"type":"link","text":"飞书","link":"https://www.feishu.cn"}`。纯 URL 不需要 `rich_text`，直接写普通字符串即可。
 - **@人**：`{"type":"mention","mention_token":"<userId>","notify":false}`。**仅支持同租户用户，单次写入最多 50 人。** `notify` **默认 `true`**（会给被 @ 的人发通知），不想发务必显式传 `false`。
@@ -212,7 +212,7 @@ Step 2: `+styles-put` — 对 A2:A100 声明统一的 fill + border 样式
 **`--options` 模式 — 默认色板（最常见）**：
 
 ```
-lark-cli sheets +dropdown-set \
+work-cli sheets +dropdown-set \
   --url https://... --sheet-id <id> \
   --range A2:A100 \
   --options '["待开始","进行中","已完成","已取消"]'
@@ -221,7 +221,7 @@ lark-cli sheets +dropdown-set \
 **`--options` 模式 — 指定颜色**（4 个选项配 3 个颜色，第 4 个按色板补）：
 
 ```
-lark-cli sheets +dropdown-set \
+work-cli sheets +dropdown-set \
   --url https://... --sheet-id <id> \
   --range A2:A100 \
   --options '["待开始","进行中","已完成","已取消"]' \
@@ -231,7 +231,7 @@ lark-cli sheets +dropdown-set \
 **`--source-range` 模式**（先在 `'Sheet1'!T1:T3` 维护「男/女/保密」三行，再让 `B2:B21` 引用它）：
 
 ```
-lark-cli sheets +dropdown-set \
+work-cli sheets +dropdown-set \
   --url https://... --sheet-id <id> \
   --range B2:B21 \
   --source-range ''\''Sheet1'\''!T1:T3' \
@@ -241,7 +241,7 @@ lark-cli sheets +dropdown-set \
 **纯白下拉**（明确告诉用户"不要彩色"时才用）：
 
 ```
-lark-cli sheets +dropdown-set \
+work-cli sheets +dropdown-set \
   --url https://... --sheet-id <id> \
   --range A2:A100 \
   --options '["低","中","高"]' \
@@ -435,12 +435,12 @@ _一个或多个子表的 typed 数据，每个数组元素写入一张子表；
 
 ```bash
 # 纯值（数组形态）；默认即覆盖非空 cell，无需显式传 --allow-overwrite
-lark-cli sheets +cells-set --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +cells-set --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --range "A1:B2" \
   --cells '[[{"value":"name"},{"value":"score"}],[{"value":"alice"},{"value":95}]]'
 
 # 富 cell（公式 + 样式，cells 是二维矩阵每元素一个 cell schema）
-lark-cli sheets +cells-set --spreadsheet-token shtXXX --sheet-id "$SID" \
+work-cli sheets +cells-set --spreadsheet-token shtXXX --sheet-id "$SID" \
   --range "C2:C10" --cells @rich-cells.json
 ```
 
@@ -456,11 +456,11 @@ lark-cli sheets +cells-set --spreadsheet-token shtXXX --sheet-id "$SID" \
 
 ```bash
 # 加粗 + 黄底
-lark-cli sheets +cells-set-style --url "..." --sheet-name "Sheet1" \
+work-cli sheets +cells-set-style --url "..." --sheet-name "Sheet1" \
   --range "A1:B2" --font-weight bold --background-color "#FFFF00"
 
 # 配套边框
-lark-cli sheets +cells-set-style --url "..." --sheet-id "$SID" \
+work-cli sheets +cells-set-style --url "..." --sheet-id "$SID" \
   --range "A1:D10" --font-size 12 --horizontal-alignment center \
   --border-styles '{"top":{"style":"solid","color":"#000","weight":"thin"},"bottom":{"style":"solid","color":"#000","weight":"thin"}}'
 ```
@@ -470,7 +470,7 @@ lark-cli sheets +cells-set-style --url "..." --sheet-id "$SID" \
 把单张图片嵌入 cell（必须单 cell 范围）：
 
 ```bash
-lark-cli sheets +cells-set-image --url "..." --sheet-name "Sheet1" \
+work-cli sheets +cells-set-image --url "..." --sheet-name "Sheet1" \
   --range "A1" --image ./logo.png
 ```
 
@@ -480,12 +480,12 @@ lark-cli sheets +cells-set-image --url "..." --sheet-name "Sheet1" \
 
 ```bash
 # 内联 CSV
-lark-cli sheets +csv-put --url "https://example.feishu.cn/sheets/shtXXX" \
+work-cli sheets +csv-put --url "https://example.feishu.cn/sheets/shtXXX" \
   --sheet-name "Sheet1" --start-cell "A1" \
   --csv $'name,score\nalice,95\nbob,87'
 
 # 从文件
-lark-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
+work-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
   --start-cell "A1" --csv @data.csv
 ```
 
@@ -494,7 +494,7 @@ lark-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
 > ✅ `=` 开头的单元格会被当作公式计算（不是字面量文本）：
 >
 > ```bash
-> lark-cli sheets +csv-put --url "..." --sheet-name "Sheet1" \
+> work-cli sheets +csv-put --url "..." --sheet-name "Sheet1" \
 >   --start-cell "A1" \
 >   --csv $'name,score\nalice,=SUM(B2:B10)'
 > # ↑ B2 写入公式 =SUM(B2:B10)，读回 formula 保留、value 为计算结果。
@@ -505,7 +505,7 @@ lark-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
 >
 > ```bash
 > # 从 G4 写一个 2 列 3 行的统计块；=COUNTIF 含逗号 + 内部引号，建议转义
-> lark-cli sheets +csv-put --url "..." --sheet-name "Sheet1" \
+> work-cli sheets +csv-put --url "..." --sheet-name "Sheet1" \
 >   --start-cell "G4" \
 >   --csv $'统计项,结果\n成绩总和,=SUM(C5:C22)\n及格人数,"=COUNTIF(D5:D22,""及格"")"'
 > # ↑ "=COUNTIF(D5:D22,""及格"")"：外层双引号包裹整格，内部 "及格" 的引号翻倍成 ""及格""。
@@ -516,7 +516,7 @@ lark-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
 >
 > ```bash
 > # 同样的统计块，结构化写入无需任何转义
-> lark-cli sheets +cells-set --url "..." --sheet-name "Sheet1" --range "G4:H6" \
+> work-cli sheets +cells-set --url "..." --sheet-name "Sheet1" --range "G4:H6" \
 >   --cells '[[{"value":"统计项"},{"value":"结果"}],[{"value":"成绩总和"},{"formula":"=SUM(C5:C22)"}],[{"value":"及格人数"},{"formula":"=COUNTIF(D5:D22,\"及格\")"}]]'
 > ```
 
@@ -534,11 +534,11 @@ lark-cli sheets +csv-put --spreadsheet-token shtXXX --sheet-id "$SID" \
 
 ```bash
 # sheet 按 name 匹配、缺则新建；多 DataFrame 经 stdin 一次写多 sheet
-python export.py | lark-cli sheets +table-put --url "<表URL>" --sheets -
+python export.py | work-cli sheets +table-put --url "<表URL>" --sheets -
 # 某 sheet 带 "mode":"append" 追加到已有数据末尾、默认不重复表头
-lark-cli sheets +table-put --spreadsheet-token "<token>" --sheets @payload.json
+work-cli sheets +table-put --spreadsheet-token "<token>" --sheets @payload.json
 # --sheets 与 --styles 都是大 JSON 时：stdin 每次调用只能给一个 flag，一个走 -、另一个走 @cwd 相对路径
-lark-cli sheets +table-put --url "<表URL>" --sheets - --styles @styles.json < sheets.json
+work-cli sheets +table-put --url "<表URL>" --sheets - --styles @styles.json < sheets.json
 ```
 
 每个 sheet 还可带 `"allow_overwrite": false`（遇非空拒写、保护原数据）、`"header": false`（只写数据不写表头）。完整字段跑 `+table-put --print-schema --flag-name sheets`。
@@ -588,7 +588,7 @@ payload = {"sheets": [{
 `--styles` 在 typed 写入后顺带应用视觉处理，省掉一次 `+cells-set-style` 往返。协议与 `+workbook-create --styles` **完全同构**（详见 workbook reference）：顶层 `{styles:[...]}`，数组每项对应一个被写入的子表、含 `name`，并按能力拆成四类可选数组——`cell_styles`（A1 单元格 range + 扁平样式字段，含 `number_format` / 颜色 / 对齐 / `border_styles`，随内容在同一次写入里一并应用）、`cell_merges`、`row_sizes`、`col_sizes`。styles 数组的长度 / 顺序 / name 必须与被写入的子表对应（与 `--sheets.sheets` 一一对应）。
 
 ```bash
-lark-cli sheets +table-put --url "<表URL>" \
+work-cli sheets +table-put --url "<表URL>" \
   --sheets '{"sheets":[{"name":"明细","columns":["日期","金额"],"dtypes":{"日期":"datetime64[ns]","金额":"float64"},"formats":{"金额":"#,##0.00"},"data":[["2024-01-15",1234.5]]}]}' \
   --styles '{"styles":[{"name":"明细",
     "cell_styles":[{"range":"A1:B1","font_weight":"bold","background_color":"#f5f5f5","horizontal_alignment":"center"}],

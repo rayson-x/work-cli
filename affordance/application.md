@@ -10,7 +10,7 @@ Use this to inspect the current app's slash commands and obtain a stable `comman
 
 **List all slash commands of the currently bound app**
 ```bash
-lark-cli application +slash-command-list
+work-cli application +slash-command-list
 ```
 
 ## +slash-command-create
@@ -26,7 +26,7 @@ Use this for a new command name. On a name collision, update the existing comman
 
 **Create a localized slash command**
 ```bash
-lark-cli application +slash-command-create --command greet --description "say hi" --description-i18n zh_cn=问候
+work-cli application +slash-command-create --command greet --description "say hi" --description-i18n zh_cn=问候
 ```
 
 ## +slash-command-update
@@ -43,7 +43,7 @@ Use this to change description, localized descriptions, or icon while retaining 
 
 **Update by name (the CLI resolves the current command id first)**
 ```bash
-lark-cli application +slash-command-update --command greet --description "new text"
+work-cli application +slash-command-update --command greet --description "new text"
 ```
 
 ## +slash-command-delete
@@ -61,5 +61,5 @@ Use this only after the user explicitly confirms the target and the irreversible
 
 **Delete by name after explicit user confirmation**
 ```bash
-lark-cli application +slash-command-delete --command greet --yes
+work-cli application +slash-command-delete --command greet --yes
 ```

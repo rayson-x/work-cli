@@ -13,9 +13,9 @@ import (
 )
 
 var opaqueCommandRecoveryLiterals = []string{
-	"lark-cli auth login",
-	"lark-cli config bind",
-	"lark-cli profile add",
+	"work-cli auth login",
+	"work-cli config bind",
+	"work-cli profile add",
 }
 
 // CheckStructuredRecovery rejects framework commands embedded as opaque

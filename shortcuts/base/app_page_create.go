@@ -21,7 +21,7 @@ var BaseAppPageCreate = common.Shortcut{
 		{Name: "name", Desc: "page name", Required: true},
 	},
 	Tips: []string{
-		`lark-cli base +app-page-create --app-token <app_token> --name "Overview"`,
+		`work-cli base +app-page-create --app-token <app_token> --name "Overview"`,
 		"Page names must be unique within an app; the CLI checks existing pages before creation.",
 		"Record the returned page_id; every +app-block-* command needs it.",
 		"This release creates top-level pages only; PageGroup placement is not supported.",

@@ -18,7 +18,7 @@ var BaseTableDelete = common.Shortcut{
 	AuthTypes:   authTypes(),
 	Flags:       []common.Flag{baseTokenFlag(true), tableRefFlag(true)},
 	Tips: []string{
-		`Example: lark-cli base +table-delete --base-token <base_token> --table-id "Old Tasks" --yes`,
+		`Example: work-cli base +table-delete --base-token <base_token> --table-id "Old Tasks" --yes`,
 		"table-id accepts a table ID (tbl...) or the table name in the current Base.",
 		baseHighRiskYesTip,
 	},

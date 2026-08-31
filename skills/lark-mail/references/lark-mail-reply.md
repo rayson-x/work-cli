@@ -9,7 +9,7 @@
 
 > **默认草稿模式**：`+reply` 默认保存为草稿，不会立即发送。如需立即发送，使用 `--confirm-send` 参数（须经用户明确确认）。**优先使用 `+reply` 而不是 `+draft-create` 来创建回复草稿**，因为 `+reply` 会自动处理主题、收件人和会话头。
 
-本 skill 对应 shortcut：`lark-cli mail +reply`，内部步骤：
+本 skill 对应 shortcut：`work-cli mail +reply`，内部步骤：
 1. `GET /open-apis/mail/v1/user_mailboxes/me/messages/{message_id}` — 获取原邮件元数据
 2. `GET /open-apis/mail/v1/user_mailboxes/me/profile` — 获取邮箱主地址（`primary_email_address`，填入默认 From 头）
 3. `POST /open-apis/mail/v1/user_mailboxes/me/drafts` — 创建草稿
@@ -23,7 +23,7 @@
 
 **方式 A（推荐）** — 创建回复草稿（不带 `--confirm-send`）：
 ```bash
-lark-cli mail +reply --message-id <邮件ID> --body '<回复正文>'
+work-cli mail +reply --message-id <邮件ID> --body '<回复正文>'
 ```
 → 返回 `draft_id`
 
@@ -31,7 +31,7 @@ lark-cli mail +reply --message-id <邮件ID> --body '<回复正文>'
 
 用户明确同意后，发送该草稿：
 ```bash
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<Step 1 返回的 draft_id>"}'
 ```
 
 **方式 B（允许）** — 用户已经明确确认回复对象和内容时，可直接使用 `--confirm-send` 立即发送。
@@ -42,25 +42,25 @@ lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_
 
 ```bash
 # 回复一封邮件（默认保存为草稿，返回 draft_id）— HTML 推荐
-lark-cli mail +reply --message-id <邮件ID> --body '<p><b>已收到</b>，稍后跟进。</p>'
+work-cli mail +reply --message-id <邮件ID> --body '<p><b>已收到</b>，稍后跟进。</p>'
 
 # 回复并追加收件人/抄送（保存为草稿）
-lark-cli mail +reply --message-id <邮件ID> --body '<p>已处理</p>' --to 'lead@example.com' --cc 'colleague@example.com'
+work-cli mail +reply --message-id <邮件ID> --body '<p>已处理</p>' --to 'lead@example.com' --cc 'colleague@example.com'
 
 # 回复时插入内嵌图片（推荐：直接用相对路径，自动解析）
-lark-cli mail +reply --message-id <邮件ID> --body '<p>详见图示：<img src="./logo.png" /></p>'
+work-cli mail +reply --message-id <邮件ID> --body '<p>详见图示：<img src="./logo.png" /></p>'
 
 # 纯文本回复（仅在内容极简时使用）
-lark-cli mail +reply --message-id <邮件ID> --body '收到，谢谢！'
+work-cli mail +reply --message-id <邮件ID> --body '收到，谢谢！'
 
 # 指定发件人地址
-lark-cli mail +reply --message-id <邮件ID> --body '收到' --from me@example.com
+work-cli mail +reply --message-id <邮件ID> --body '收到' --from me@example.com
 
 # 确认发送回复（用户明确确认后使用）
-lark-cli mail +reply --message-id <邮件ID> --body '<p>收到，谢谢！</p>' --confirm-send
+work-cli mail +reply --message-id <邮件ID> --body '<p>收到，谢谢！</p>' --confirm-send
 
 # Dry Run（仅打印请求，不执行）
-lark-cli mail +reply --message-id <邮件ID> --body '<p>测试</p>' --dry-run
+work-cli mail +reply --message-id <邮件ID> --body '<p>测试</p>' --dry-run
 ```
 
 ## 参数
@@ -98,7 +98,7 @@ lark-cli mail +reply --message-id <邮件ID> --body '<p>测试</p>' --dry-run
   "ok": true,
   "data": {
     "draft_id": "草稿ID",
-    "tip": "draft saved. To send: lark-cli mail user_mailbox.drafts send --params '{...}'"
+    "tip": "draft saved. To send: work-cli mail user_mailbox.drafts send --params '{...}'"
   }
 }
 ```
@@ -129,41 +129,41 @@ lark-cli mail +reply --message-id <邮件ID> --body '<p>测试</p>' --dry-run
 
 ### 场景 1：用户说"帮我写个回复草稿"（只创建草稿）
 ```bash
-lark-cli mail +reply --message-id <邮件ID> --body '<p>收到，谢谢！</p>'
+work-cli mail +reply --message-id <邮件ID> --body '<p>收到，谢谢！</p>'
 ```
 → 返回 `draft_id`，告诉用户回复草稿已创建。**注意：用 `+reply` 而不是 `+draft-create`**，这样草稿会自动关联原邮件的主题、收件人和会话头。
 
 ### 场景 2：用户说"回复这封邮件说已处理"（需要发送）
 ```bash
 # 方式 A: 创建回复草稿
-lark-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>'
+work-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>'
 # → 返回 draft_id
 
 # 向用户确认 "回复给 alice@example.com，内容「已处理，谢谢。」如果你想先看效果，也可以先去飞书邮件里查看草稿。确认发送吗？"
 
 # 用户确认后发送
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 
 # 方式 B: 用户已明确确认时，直接发送
-lark-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>' --confirm-send
+work-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>' --confirm-send
 ```
 
 ### 场景 3：用户说"下午 3 点回复这封邮件说已处理"（定时发送）
 ```bash
 # Step 1: 创建回复草稿
-lark-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>'
+work-cli mail +reply --message-id <邮件ID> --body '<p>已处理，谢谢。</p>'
 # → 返回 draft_id
 
 # Step 2: 向用户确认 "回复草稿已创建：回复给 alice@example.com，内容「已处理，谢谢。」定时 <目标时间> 发送。确认吗？"
 
 # Step 3: 用户确认后定时发送（send_time 为 Unix 时间戳，需至少当前时间 + 5 分钟）
-lark-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
+work-cli mail user_mailbox.drafts send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}' --data '{"send_time":"<unix_timestamp>"}'
 ```
 
 ### 场景 4：用户说"等等，先不回复了"（取消定时发送）
 ```bash
 # 取消定时发送（取消后邮件变回草稿）
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 → 取消成功后邮件恢复为草稿状态，用户可重新编辑或在之后重新发送。
 
@@ -198,7 +198,7 @@ References:  <原邮件references + smtp_message_id>
 用返回的 `message_id` 查询投递状态：
 
 ```bash
-lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
+work-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me","message_id":"<发送返回的 message_id>"}'
 ```
 
 状态码：1=正在投递, 2=投递失败重试, 3=退信, 4=投递成功, 5=待审批, 6=审批拒绝。向用户简要报告投递结果，异常状态需重点提示。
@@ -210,7 +210,7 @@ lark-cli mail user_mailbox.messages send_status --params '{"user_mailbox_id":"me
 如需取消定时发送：
 
 ```bash
-lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
+work-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox_id":"me","draft_id":"<draft_id>"}'
 ```
 
 **取消后邮件会变回草稿**，可继续编辑或在之后重新发送。
@@ -218,7 +218,7 @@ lark-cli mail user_mailbox.drafts cancel_scheduled_send --params '{"user_mailbox
 **2. 标记已读**（可选）— 询问用户是否需要将原邮件标记为已读。如果用户同意：
 
 ```bash
-lark-cli mail +message-modify --message-ids <原邮件ID> --remove-label-ids UNREAD
+work-cli mail +message-modify --message-ids <原邮件ID> --remove-label-ids UNREAD
 ```
 
 ## 编辑回复草稿
@@ -230,20 +230,20 @@ lark-cli mail +message-modify --message-ids <原邮件ID> --remove-label-ids UNR
 cat > ./patch.json << 'EOF'
 { "ops": [{ "op": "set_reply_body", "value": "<p>修改后的回复内容</p>" }] }
 EOF
-lark-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
+work-cli mail +draft-edit --draft-id <draft_id> --patch-file ./patch.json
 ```
 
 如果用户要修改引用区内容或去掉引用区，则使用 `set_body` 全量替换。
 
 ## 注意事项
 
-- 需要已登录（`lark-cli auth login --scope "mail:user_mailbox.message:modify mail:user_mailbox.message:readonly mail:user_mailbox:readonly"`）且具备写/读邮件权限
-- 邮件 ID 可从 `lark-cli mail user_mailbox.messages list` 获取
+- 需要已登录（`work-cli auth login --scope "mail:user_mailbox.message:modify mail:user_mailbox.message:readonly mail:user_mailbox:readonly"`）且具备写/读邮件权限
+- 邮件 ID 可从 `work-cli mail user_mailbox.messages list` 获取
 - `--bcc` 仅在发送链路中生效，通常不会在收件方看到
 
 ## 相关命令
 
-- `lark-cli mail user_mailbox.messages list` — 列出邮件
-- `lark-cli mail user_mailbox.messages get` — 读取邮件详情
-- `lark-cli mail +reply-all` — 回复全部
-- `lark-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.messages list` — 列出邮件
+- `work-cli mail user_mailbox.messages get` — 读取邮件详情
+- `work-cli mail +reply-all` — 回复全部
+- `work-cli mail +forward` — 转发邮件

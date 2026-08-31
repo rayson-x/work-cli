@@ -13,25 +13,25 @@
 - 每条邮件的输出结构已归一化
 - 不可用的 message ID 会被显式列出
 
-本 skill 对应 shortcut `lark-cli mail +messages`；每条返回的邮件使用与 `+message` 相同的规则归一化输出。
+本 skill 对应 shortcut `work-cli mail +messages`；每条返回的邮件使用与 `+message` 相同的规则归一化输出。
 
 ## 命令
 
 ```bash
 # 读取多封邮件（默认包含 HTML 正文）
-lark-cli mail +messages --message-ids <id1>,<id2>,<id3>
+work-cli mail +messages --message-ids <id1>,<id2>,<id3>
 
 # 仅纯文本正文（更小的负载，适合 AI 处理）
-lark-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false
+work-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false
 
 # 指定邮箱
-lark-cli mail +messages --mailbox user@example.com --message-ids <id1>,<id2>
+work-cli mail +messages --mailbox user@example.com --message-ids <id1>,<id2>
 
 # JSON 输出
-lark-cli mail +messages --message-ids <id1>,<id2> --format json
+work-cli mail +messages --message-ids <id1>,<id2> --format json
 
 # Dry Run
-lark-cli mail +messages --message-ids <id1>,<id2> --dry-run
+work-cli mail +messages --message-ids <id1>,<id2> --dry-run
 ```
 
 ## 参数
@@ -85,7 +85,7 @@ lark-cli mail +messages --message-ids <id1>,<id2> --dry-run
 
 ```bash
 # 一次性读取多封邮件
-lark-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false --format json
+work-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false --format json
 
 # 让 LLM 分析 .data.messages[].body_plain_text 并生成分组摘要
 ```
@@ -94,15 +94,15 @@ lark-cli mail +messages --message-ids <id1>,<id2>,<id3> --html=false --format js
 
 ```bash
 # 获取多封邮件的归一化输出
-lark-cli mail +messages --message-ids <id1>,<id2> --html=false --format json
+work-cli mail +messages --message-ids <id1>,<id2> --html=false --format json
 
 # 检查 subject/from/body_preview 或 body_plain_text，对比意图和下一步操作
 ```
 
 ## 相关命令
 
-- `lark-cli mail +message` — 读取单封邮件
-- `lark-cli mail +thread` — 读取会话中所有邮件
-- `lark-cli mail +reply` — 回复邮件
-- `lark-cli mail +forward` — 转发邮件
-- `lark-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL
+- `work-cli mail +message` — 读取单封邮件
+- `work-cli mail +thread` — 读取会话中所有邮件
+- `work-cli mail +reply` — 回复邮件
+- `work-cli mail +forward` — 转发邮件
+- `work-cli mail user_mailbox.message.attachments download_url` — 按需获取邮件附件/图片下载 URL

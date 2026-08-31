@@ -25,7 +25,7 @@ func TestTask_ReminderWorkflow(t *testing.T) {
 		Args:      []string{"task", "+create"},
 		DefaultAs: "bot",
 		Data: map[string]any{
-			"summary":     "lark-cli-e2e-reminder-" + suffix,
+			"summary":     "work-cli-e2e-reminder-" + suffix,
 			"description": "created by tests/cli_e2e/task reminder workflow",
 			"due": map[string]any{
 				"timestamp":  time.Now().Add(48 * time.Hour).UnixMilli(),

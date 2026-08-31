@@ -5,7 +5,7 @@ Get a wiki node's details by `node_token`, `obj_token`, or a Lark URL. Use this 
 ## Usage
 
 ```bash
-lark-cli wiki +node-get \
+work-cli wiki +node-get \
   --node-token <node_token | obj_token | Lark URL> \
   [--obj-type <doc|docx|sheet|bitable|mindnote|slides|file>] \
   [--space-id <space_id>] \

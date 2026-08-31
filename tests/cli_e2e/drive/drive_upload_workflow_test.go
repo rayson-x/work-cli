@@ -23,7 +23,7 @@ func TestDrive_UploadWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolder(t, parentT, ctx, "lark-cli-e2e-drive-upload-"+suffix, "")
+	folderToken := createDriveFolder(t, parentT, ctx, "work-cli-e2e-drive-upload-"+suffix, "")
 	workDir := t.TempDir()
 
 	cleanupTokens := map[string]struct{}{}

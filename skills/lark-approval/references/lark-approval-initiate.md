@@ -36,7 +36,7 @@
 先搜索定义：
 
 ```bash
-lark-cli approval approvals search --data '{"keyword":"请假"}'
+work-cli approval approvals search --data '{"keyword":"请假"}'
 ```
 
 处理规则：
@@ -51,7 +51,7 @@ lark-cli approval approvals search --data '{"keyword":"请假"}'
 拿到 `approval_code` 后，读取定义详情：
 
 ```bash
-lark-cli approval approvals get \
+work-cli approval approvals get \
   --params '{"approval_code":"7C468A54-8745-2245-9675-08B7C63E7A85"}'
 ```
 
@@ -160,7 +160,7 @@ lark-cli approval approvals get \
 确认最终表单值和节点参数后再执行：
 
 ```bash
-lark-cli approval instances create \
+work-cli approval instances create \
   --data '{
     "approval_code":"7C468A54-8745-2245-9675-08B7C63E7A85",
     "form":"[{\"id\":\"widget1\",\"type\":\"input\",\"value\":\"请假半天\"}]",

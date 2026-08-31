@@ -36,7 +36,7 @@ var AppsDBDataExport = common.Shortcut{
 	Description: "Export rows from a Miaoda app table to a local file (csv/json/sql)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-data-export --app-id <app_id> --table orders --output ./orders.csv",
+		"Example: work-cli apps +db-data-export --app-id <app_id> --table orders --output ./orders.csv",
 		"Format follows the --output extension: .csv / .json / .sql (default csv).",
 	},
 	Scopes:    []string{"spark:app:read"},

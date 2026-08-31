@@ -40,7 +40,7 @@ const (
 // subcommands wired to a test factory, simulating the real CLI command tree.
 func buildIntegrationRootCmd(t *testing.T, f *cmdutil.Factory) *cobra.Command {
 	t.Helper()
-	rootCmd := &cobra.Command{Use: "lark-cli"}
+	rootCmd := &cobra.Command{Use: "work-cli"}
 	rootCmd.SilenceErrors = true
 	rootCmd.SetOut(f.IOStreams.Out)
 	rootCmd.SetErr(f.IOStreams.ErrOut)
@@ -111,7 +111,7 @@ func buildStrictModeIntegrationRootCmd(t *testing.T, f *cmdutil.Factory) *cobra.
 
 func buildStrictModeIntegrationRootCmdWithCatalog(t *testing.T, f *cmdutil.Factory, catalog *apicatalog.Catalog) *cobra.Command {
 	t.Helper()
-	rootCmd := &cobra.Command{Use: "lark-cli"}
+	rootCmd := &cobra.Command{Use: "work-cli"}
 	rootCmd.SilenceErrors = true
 	rootCmd.SetOut(f.IOStreams.Out)
 	rootCmd.SetErr(f.IOStreams.ErrOut)
@@ -590,12 +590,12 @@ func TestSetupNotices_Drift(t *testing.T) {
 	if skills["current"] != "1.0.20" || skills["target"] != "1.0.21" {
 		t.Errorf("notice.skills = %+v, want {current:\"1.0.20\", target:\"1.0.21\"}", skills)
 	}
-	want := "lark-cli skills 1.0.20 out of sync with binary 1.0.21, run: lark-cli update"
+	want := "work-cli skills 1.0.20 out of sync with binary 1.0.21, run: work-cli update"
 	if msg, _ := skills["message"].(string); msg != want {
 		t.Errorf("notice.skills.message = %q, want %q", msg, want)
 	}
-	if cmd, _ := skills["command"].(string); cmd != "lark-cli update" {
-		t.Errorf("notice.skills.command = %q, want %q", cmd, "lark-cli update")
+	if cmd, _ := skills["command"].(string); cmd != "work-cli update" {
+		t.Errorf("notice.skills.command = %q, want %q", cmd, "work-cli update")
 	}
 }
 
@@ -647,15 +647,15 @@ func TestSetupNotices_BothUpdateAndSkills(t *testing.T) {
 	if !ok {
 		t.Fatalf("notice.update missing or wrong type: %+v", notice)
 	}
-	if cmd, _ := upd["command"].(string); cmd != "lark-cli update" {
-		t.Errorf("notice.update.command = %q, want %q", cmd, "lark-cli update")
+	if cmd, _ := upd["command"].(string); cmd != "work-cli update" {
+		t.Errorf("notice.update.command = %q, want %q", cmd, "work-cli update")
 	}
 	sk, ok := notice["skills"].(map[string]interface{})
 	if !ok {
 		t.Fatalf("notice.skills missing or wrong type: %+v", notice)
 	}
-	if cmd, _ := sk["command"].(string); cmd != "lark-cli update" {
-		t.Errorf("notice.skills.command = %q, want %q", cmd, "lark-cli update")
+	if cmd, _ := sk["command"].(string); cmd != "work-cli update" {
+		t.Errorf("notice.skills.command = %q, want %q", cmd, "work-cli update")
 	}
 }
 

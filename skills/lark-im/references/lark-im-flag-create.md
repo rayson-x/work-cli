@@ -2,7 +2,7 @@
 
 > **Prerequisite:** Read [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) for authentication, global parameters, and security rules.
 
-This skill maps to shortcut: `lark-cli im +flag-create`. Underlying API: `POST /open-apis/im/v1/flags`.
+This skill maps to shortcut: `work-cli im +flag-create`. Underlying API: `POST /open-apis/im/v1/flags`.
 
 ## Default Behavior
 
@@ -15,16 +15,16 @@ This skill maps to shortcut: `lark-cli im +flag-create`. Underlying API: `POST /
 
 ```bash
 # Flag a message (default: message-layer)
-lark-cli im +flag-create --as user --message-id om_xxx
+work-cli im +flag-create --as user --message-id om_xxx
 
 # Create feed-layer flag (auto-detects chat type)
-lark-cli im +flag-create --as user --message-id om_xxx --flag-type feed
+work-cli im +flag-create --as user --message-id om_xxx --flag-type feed
 
 # Explicit item-type override (rarely needed)
-lark-cli im +flag-create --as user --message-id om_xxx --item-type thread --flag-type feed
+work-cli im +flag-create --as user --message-id om_xxx --item-type thread --flag-type feed
 
 # Preview request (dry-run, doesn't send)
-lark-cli im +flag-create --as user --message-id om_xxx --dry-run
+work-cli im +flag-create --as user --message-id om_xxx --dry-run
 ```
 
 ## Parameters
@@ -48,7 +48,7 @@ The server only accepts these `(item_type, flag_type)` pairs:
 
 - Required scopes: `im:feed.flag:write`, `im:message.group_msg:get_as_user`, `im:message.p2p_msg:get_as_user`, `im:chat:read`
 - The message/chat read scopes are used when `--flag-type feed` is used without explicit `--item-type` so the CLI can auto-detect chat type.
-- If missing, CLI will prompt with `lark-cli auth login --scope "..."`
+- If missing, CLI will prompt with `work-cli auth login --scope "..."`
 
 ## Note
 
@@ -63,5 +63,5 @@ If you have message content but not the message ID:
 
 ```bash
 # Search by message content to find message_id
-lark-cli im +messages-search --as user --query "message content here" -q '.data.items[0].message_id'
+work-cli im +messages-search --as user --query "message content here" -q '.data.items[0].message_id'
 ```

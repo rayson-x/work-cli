@@ -32,7 +32,7 @@ func newCSTestContext(t *testing.T) (*RuntimeContext, *bytes.Buffer, *bytes.Buff
 	t.Helper()
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
-	parentCmd := &cobra.Command{Use: "lark-cli"}
+	parentCmd := &cobra.Command{Use: "work-cli"}
 	cmd := &cobra.Command{Use: "test"}
 	parentCmd.AddCommand(cmd)
 	rctx := &RuntimeContext{

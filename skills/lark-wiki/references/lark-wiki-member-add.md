@@ -8,7 +8,7 @@ Add a member to a wiki space. OpenAPI: `POST /open-apis/wiki/v2/spaces/:space_id
 
 ```bash
 # Add a user as a regular member
-lark-cli wiki +member-add \
+work-cli wiki +member-add \
   --space-id <space_id> \
   --member-id <open_id|email|user_id|app_id|...> \
   --member-type <openid|email|userid|unionid|openchat|opendepartmentid|appid> \
@@ -17,13 +17,13 @@ lark-cli wiki +member-add \
   [--as user|bot]
 
 # Personal library (resolves my_library to the per-user real space first)
-lark-cli wiki +member-add \
+work-cli wiki +member-add \
   --space-id my_library \
   --member-id ou_xxx --member-type openid --member-role member \
   --as user
 
 # Preview the call chain without writing
-lark-cli wiki +member-add \
+work-cli wiki +member-add \
   --space-id <space_id> --member-id <id> --member-type openid --member-role admin \
   --dry-run
 ```
@@ -58,7 +58,7 @@ lark-cli wiki +member-add \
 - **Bot + `my_library` is rejected upfront** — `my_library` is a per-user alias with no meaning for a tenant token. Pass an explicit `--space-id` when `--as bot`.
 - **Bot + `opendepartmentid` is a known unsupported path on the backend.** The CLI does not pre-block it (the API may evolve), but the call will fail. Use `--as user` for department adds.
 - **App member uses `--member-type=appid`.** The corresponding `--member-id` is the app ID, commonly formatted as `cli_xxx`.
-- Resolve `--member-id` **before** calling: `lark-cli contact +search-user` for users, `lark-cli im +chat-search` for groups, `lark-cli api POST /open-apis/contact/v3/departments/search` for departments. Do not call `+member-add` first and reverse-engineer the type from the error.
+- Resolve `--member-id` **before** calling: `work-cli contact +search-user` for users, `work-cli im +chat-search` for groups, `work-cli api POST /open-apis/contact/v3/departments/search` for departments. Do not call `+member-add` first and reverse-engineer the type from the error.
 - The role switch (`admin` ⇄ `member`) is not a single update — call [`+member-remove`](lark-wiki-member-remove.md) for the old role first, then `+member-add` with the new one.
 - `--dry-run` previews 2 steps when `--space-id my_library` (resolve → add), 1 step otherwise.
 

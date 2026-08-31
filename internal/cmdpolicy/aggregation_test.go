@@ -43,7 +43,7 @@ func TestEvaluateAll_skipsPureGroups(t *testing.T) {
 // child is denied must itself get an aggregated Denial in the map.
 func TestBuildDeniedByPath_parentAggregationAllChildrenDenied(t *testing.T) {
 	// Custom tree where ALL children of "im" will be denied.
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	im := &cobra.Command{Use: "im"}
 	root.AddCommand(im)
 	send := &cobra.Command{Use: "+send", RunE: noop}
@@ -93,7 +93,7 @@ func TestBuildDeniedByPath_parentAggregationAllChildrenDenied(t *testing.T) {
 // counter-case to the previous regression: docs/** allowed children stays
 // alive even if some siblings are denied.
 func TestBuildDeniedByPath_partialDenialKeepsParent(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 
@@ -134,7 +134,7 @@ func TestBuildDeniedByPath_rootNeverDenied(t *testing.T) {
 	// Every leaf should be denied. We do not assert on the root entry
 	// because Apply skips the root regardless; the contract is "root
 	// stays dispatchable".
-	if _, ok := denied["lark-cli"]; ok {
+	if _, ok := denied["work-cli"]; ok {
 		t.Errorf("root should not be in denied map")
 	}
 }
@@ -143,7 +143,7 @@ func TestBuildDeniedByPath_rootNeverDenied(t *testing.T) {
 // requires both own RunE denied AND all children denied for the parent
 // itself to be marked denied.
 func TestBuildDeniedByPath_hybridParentOwnAllowedKeepsAlive(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs", RunE: noop} // hybrid: own RunE + subs
 	cmdutil.SetRisk(docs, "read")
 	root.AddCommand(docs)
@@ -240,7 +240,7 @@ func TestApply_runEReturnsExitErrorAndCommandDeniedError(t *testing.T) {
 // `max_risk: read` would deny every `<group> --help` invocation with
 // reason_code = risk_not_annotated.
 func TestEvaluateAll_skipsAnnotatedPureGroup(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	drive := &cobra.Command{
 		Use:  "drive",
 		RunE: func(*cobra.Command, []string) error { return nil }, // emulate guard injection
@@ -272,7 +272,7 @@ func TestEvaluateAll_skipsAnnotatedPureGroup(t *testing.T) {
 // (allLiveChildrenDenied flips to false because the pure group is
 // neither runnable nor in `denied`).
 func TestHasRunnableDescendant_ignoresAnnotatedPureGroup(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	docs := &cobra.Command{Use: "docs"}
 	root.AddCommand(docs)
 
@@ -314,7 +314,7 @@ func TestHasRunnableDescendant_ignoresAnnotatedPureGroup(t *testing.T) {
 // for an own-RunE denial entry and skip aggregation, leaving `<group>
 // --help` reachable even when every live child is denied.
 func TestBuildDeniedByPath_aggregatesAnnotatedPureGroup(t *testing.T) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	drive := &cobra.Command{
 		Use:  "drive",
 		RunE: func(*cobra.Command, []string) error { return nil },
@@ -344,7 +344,7 @@ func TestBuildDeniedByPath_aggregatesAnnotatedPureGroup(t *testing.T) {
 func TestApply_neverInstallsOnRoot(t *testing.T) {
 	root := buildTree()
 	denied := map[string]cmdpolicy.Denial{
-		"lark-cli": {Layer: "policy", ReasonCode: "all_children_denied"},
+		"work-cli": {Layer: "policy", ReasonCode: "all_children_denied"},
 	}
 	cmdpolicy.Apply(root, denied)
 	if root.RunE != nil {

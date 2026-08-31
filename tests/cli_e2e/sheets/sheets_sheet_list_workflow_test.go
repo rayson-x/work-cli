@@ -36,7 +36,7 @@ func TestSheets_SheetListWorkflow(t *testing.T) {
 	createdSheetID := ""
 
 	t.Run("create spreadsheet as bot", func(t *testing.T) {
-		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-sheet-list-"+suffix, "bot")
+		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "work-cli-e2e-sheet-list-"+suffix, "bot")
 	})
 
 	// A second sub-sheet makes the list non-trivial: a one-entry array would pass

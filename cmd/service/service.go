@@ -497,7 +497,7 @@ func checkServiceScopes(ctx context.Context, cred *credential.CredentialProvider
 // ConsoleURL is deliberately omitted: the dispatcher only sets it for
 // SubtypeAppScopeNotApplied (bot-perspective dev-action recovery), and this
 // pre-flight path is user-perspective SubtypeMissingScope whose recovery is
-// `lark-cli auth login --scope ...`, not a console deep-link.
+// `work-cli auth login --scope ...`, not a console deep-link.
 func newPreflightMissingScopeError(brand, appID, identity string, missing []string) error {
 	return errclass.NewMissingScopeError(brand, appID, identity, missing)
 }
@@ -536,7 +536,7 @@ func missingParamHint(opts *ServiceMethodOptions, f meta.Field) recovery.Hint {
 	}
 	return recovery.Join("; ",
 		recovery.Text(input),
-		recovery.Command(recovery.TargetSchema, "see: lark-cli schema "+opts.SchemaPath),
+		recovery.Command(recovery.TargetSchema, "see: work-cli schema "+opts.SchemaPath),
 	)
 }
 

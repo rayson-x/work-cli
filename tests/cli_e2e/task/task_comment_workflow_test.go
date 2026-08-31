@@ -21,12 +21,12 @@ func TestTask_CommentWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	commentContent := "lark-cli-e2e-comment-" + suffix
+	commentContent := "work-cli-e2e-comment-" + suffix
 	taskGUID := createTask(t, parentT, ctx, clie2e.Request{
 		Args:      []string{"task", "+create"},
 		DefaultAs: "bot",
 		Data: map[string]any{
-			"summary":     "lark-cli-e2e-comment-task-" + suffix,
+			"summary":     "work-cli-e2e-comment-task-" + suffix,
 			"description": "created by tests/cli_e2e/task comment workflow",
 		},
 	})

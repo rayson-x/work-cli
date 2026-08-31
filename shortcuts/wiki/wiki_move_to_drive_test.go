@@ -275,7 +275,7 @@ func TestRunWikiMoveToDriveTimeoutReturnsResumeCommand(t *testing.T) {
 		t.Fatalf("timeout output = %#v", out)
 	}
 	nextCommand, _ := out["next_command"].(string)
-	if !strings.HasPrefix(nextCommand, "lark-cli --profile secondary drive +task_result") ||
+	if !strings.HasPrefix(nextCommand, "work-cli --profile secondary drive +task_result") ||
 		!strings.Contains(nextCommand, "--scenario wiki_move_to_drive") ||
 		!strings.Contains(nextCommand, "--as bot") {
 		t.Fatalf("next_command = %q", nextCommand)

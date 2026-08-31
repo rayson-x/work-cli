@@ -8,10 +8,10 @@
 
 ```bash
 # 删除指定 ID 的进展记录
-lark-cli okr +progress-delete --progress-id 1234567890123456789
+work-cli okr +progress-delete --progress-id 1234567890123456789
 
 # 预览 API 调用而不实际执行
-lark-cli okr +progress-delete --progress-id 1234567890123456789 --dry-run
+work-cli okr +progress-delete --progress-id 1234567890123456789 --dry-run
 ```
 
 ## 参数
@@ -25,7 +25,7 @@ lark-cli okr +progress-delete --progress-id 1234567890123456789 --dry-run
 ## 工作流程
 
 1. 使用 `+progress-get` 确认要删除的进展记录 ID 和内容。
-2. 执行 `lark-cli okr +progress-delete --progress-id "1234567890123456789"`。
+2. 执行 `work-cli okr +progress-delete --progress-id "1234567890123456789"`。
 3. 报告结果：已删除的进展记录 ID。
 
 > **注意**：此操作不可恢复，建议在删除前先用 `+progress-get` 确认记录内容。

@@ -20,9 +20,9 @@ var AppsOpenAPIKeyCreate = common.Shortcut{
 	Description: "Create an open API key (returns the raw secret once)",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +openapi-key-create --app-id <app_id> --name partner-test",
-		"Example: lark-cli apps +openapi-key-create --app-id <app_id> --name orders-readonly --scope-api 'GET /openapi/orders'",
-		"Example: lark-cli apps +openapi-key-create --app-id <app_id> --name full-access --scope-all",
+		"Example: work-cli apps +openapi-key-create --app-id <app_id> --name partner-test",
+		"Example: work-cli apps +openapi-key-create --app-id <app_id> --name orders-readonly --scope-api 'GET /openapi/orders'",
+		"Example: work-cli apps +openapi-key-create --app-id <app_id> --name full-access --scope-all",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -95,7 +95,7 @@ func outputIssuedKey(rctx *common.RuntimeContext, data map[string]interface{}) e
 		"api_key":    raw,
 		"info":       redactKeyInfo(info),
 	}
-	fmt.Fprintln(rctx.IO().ErrOut, "warning: this api_key is shown only once and is NOT stored by lark-cli — copy it now and store it in your own secret manager.")
+	fmt.Fprintln(rctx.IO().ErrOut, "warning: this api_key is shown only once and is NOT stored by work-cli — copy it now and store it in your own secret manager.")
 	rctx.OutFormat(out, nil, func(w io.Writer) {
 		fmt.Fprintf(w, "API key ID: %v\nAPI key: %v  (shown once)\n", out["api_key_id"], raw)
 	})

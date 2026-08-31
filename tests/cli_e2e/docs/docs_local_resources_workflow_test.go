@@ -67,7 +67,7 @@ func testDocsLocalResourcesWorkflow(t *testing.T, defaultAs string) {
 		// the shared PPE bot intentionally lacks Drive delete scopes.
 		cleanupAs = "user"
 	} else {
-		folderToken = drive.CreateDriveFolder(t, parentT, ctx, "lark-cli-e2e-local-resources-"+suffix, defaultAs, "")
+		folderToken = drive.CreateDriveFolder(t, parentT, ctx, "work-cli-e2e-local-resources-"+suffix, defaultAs, "")
 	}
 	var docToken string
 	var roundTripDocToken string
@@ -79,7 +79,7 @@ func testDocsLocalResourcesWorkflow(t *testing.T, defaultAs string) {
 	t.Run("create image and source", func(t *testing.T) {
 		args := []string{
 			"docs", "+create",
-			"--title", "lark-cli local resources " + suffix,
+			"--title", "work-cli local resources " + suffix,
 			"--content", `<p>created resources</p><img path="@created.png" caption="created image" width="50"/><source path="@created.txt" name="created-report.txt" size="0"/>`,
 		}
 		if folderToken != "" {
@@ -290,7 +290,7 @@ func testDocsLocalResourcesWorkflow(t *testing.T, defaultAs string) {
 		require.NotEmpty(t, roundTripContent, "Markdown content should be fetched before replay")
 		args := []string{
 			"docs", "+create",
-			"--title", "lark-cli markdown replay " + suffix,
+			"--title", "work-cli markdown replay " + suffix,
 			"--doc-format", "markdown",
 			"--content", "-",
 		}

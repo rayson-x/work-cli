@@ -20,7 +20,7 @@ func TestBaseRecordBatchUpdatePerRecordWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
 	t.Cleanup(cancel)
 
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-batch-update-"+clie2e.GenerateSuffix())
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-batch-update-"+clie2e.GenerateSuffix())
 	tableID, _, _ := createTableWithRetry(
 		t,
 		parentT,

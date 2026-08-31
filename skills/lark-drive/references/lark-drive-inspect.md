@@ -9,16 +9,16 @@
 
 ```bash
 # 检视一个 docx URL
-lark-cli drive +inspect --url 'https://xxx.feishu.cn/docx/doxcnXXX'
+work-cli drive +inspect --url 'https://xxx.feishu.cn/docx/doxcnXXX'
 
 # 检视一个 wiki URL（自动解包到底层文档）
-lark-cli drive +inspect --url 'https://xxx.feishu.cn/wiki/wikcnXXX'
+work-cli drive +inspect --url 'https://xxx.feishu.cn/wiki/wikcnXXX'
 
 # bare token 需要指定 --type
-lark-cli drive +inspect --url doxcnXXX --type docx
+work-cli drive +inspect --url doxcnXXX --type docx
 
 # 格式化输出
-lark-cli drive +inspect --url 'https://xxx.feishu.cn/base/bascnXXX' --format pretty
+work-cli drive +inspect --url 'https://xxx.feishu.cn/base/bascnXXX' --format pretty
 ```
 
 ## 输出
@@ -38,9 +38,9 @@ JSON 输出包含以下字段：
 
 | 场景 | 命令 |
 |------|------|
-| 用户给了一个 URL，想知道它是什么类型的文档 | `lark-cli drive +inspect --url '<url>'` |
-| wiki 链接需要拿到底层文档的 token 来做后续操作 | `lark-cli drive +inspect --url '<wiki_url>'`，取输出中的 `token` |
-| 只有 token 没有 URL | `lark-cli drive +inspect --url <token> --type <type>` |
+| 用户给了一个 URL，想知道它是什么类型的文档 | `work-cli drive +inspect --url '<url>'` |
+| wiki 链接需要拿到底层文档的 token 来做后续操作 | `work-cli drive +inspect --url '<wiki_url>'`，取输出中的 `token` |
+| 只有 token 没有 URL | `work-cli drive +inspect --url <token> --type <type>` |
 
 ## 注意事项
 

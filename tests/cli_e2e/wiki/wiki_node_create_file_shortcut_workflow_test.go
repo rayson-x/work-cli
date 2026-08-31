@@ -23,10 +23,10 @@ func TestWiki_NodeCreateFileShortcutWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderToken := createDriveFolderOrSkipWikiSource(t, parentT, ctx, "lark-cli-e2e-wiki-file-shortcut-"+suffix)
+	folderToken := createDriveFolderOrSkipWikiSource(t, parentT, ctx, "work-cli-e2e-wiki-file-shortcut-"+suffix)
 	fileToken := uploadWikiSourceFixture(t, parentT, ctx, folderToken, "file-shortcut.txt", "wiki file shortcut "+suffix+"\n")
 
-	_, parentNode := createWikiNodeUnderAnyHost(t, parentT, ctx, "lark-cli-e2e-wiki-file-shortcut-parent-"+suffix)
+	_, parentNode := createWikiNodeUnderAnyHost(t, parentT, ctx, "work-cli-e2e-wiki-file-shortcut-parent-"+suffix)
 	spaceID := parentNode.Get("space_id").String()
 	parentNodeToken := parentNode.Get("node_token").String()
 	require.NotEmpty(t, spaceID)
@@ -43,7 +43,7 @@ func TestWiki_NodeCreateFileShortcutWorkflow(t *testing.T) {
 			"--node-type", "shortcut",
 			"--obj-type", "file",
 			"--origin-node-token", fileNodeToken,
-			"--title", "lark-cli-e2e-wiki-file-shortcut-" + suffix,
+			"--title", "work-cli-e2e-wiki-file-shortcut-" + suffix,
 		},
 		DefaultAs: "bot",
 	})

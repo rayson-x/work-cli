@@ -12,31 +12,31 @@
 
 ```bash
 # 先预览请求，不实际执行
-lark-cli approval tasks rollback \
+work-cli approval tasks rollback \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","node_ids":["<NODE_ID>"],"comment":"退回补充材料"}' \
   --as user \
   --dry-run
 
 # 退回到单个节点
-lark-cli approval tasks rollback \
+work-cli approval tasks rollback \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","node_ids":["<NODE_ID>"],"comment":"请补充附件后重新提交"}' \
   --as user \
   --yes
 
 # 退回到发起节点（发起节点 ID 为 START）
-lark-cli approval tasks rollback \
+work-cli approval tasks rollback \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","node_ids":["START"],"comment":"退回发起人补充材料"}' \
   --as user \
   --yes
 
 # 传多个候选节点 ID（以实际审批定义支持情况为准）
-lark-cli approval tasks rollback \
+work-cli approval tasks rollback \
   --data '{"instance_code":"<INSTANCE_CODE>","task_id":"<TASK_ID>","node_ids":["<NODE_ID_1>","<NODE_ID_2>"],"comment":"退回上一处理节点"}' \
   --as user \
   --yes
 
 # 通过文件传入请求体，适合较长 comment 或较多 node_ids
-lark-cli approval tasks rollback \
+work-cli approval tasks rollback \
   --data @./rollback-body.json \
   --as user \
   --yes
@@ -61,7 +61,7 @@ lark-cli approval tasks rollback \
 先查到待办任务：
 
 ```bash
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
 ```
 
 常用到的字段：
@@ -75,7 +75,7 @@ lark-cli approval tasks query --params '{"topic":"1"}' --as user
 如需确认流程节点、当前进度和可退回位置，可先查看实例详情：
 
 ```bash
-lark-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
+work-cli approval instances get --params '{"instance_code":"<INSTANCE_CODE>"}' --as user
 ```
 
 ## 使用建议

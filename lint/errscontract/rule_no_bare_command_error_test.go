@@ -96,7 +96,7 @@ import (
 )
 
 func runFoo(cmd *cobra.Command, args []string) error {
-	err := errs.NewValidationError("bad user input").WithHint("run lark-cli foo --help")
+	err := errs.NewValidationError("bad user input").WithHint("run work-cli foo --help")
 	return err
 }
 

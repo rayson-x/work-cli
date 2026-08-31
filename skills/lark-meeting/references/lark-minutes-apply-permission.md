@@ -2,19 +2,19 @@
 
 向妙记所有者发起查看或编辑权限申请。**写操作**，只在用户明确要求申请权限时才调用；调用后不代表立即获得权限，只是提交了一条申请。
 
-本 skill 对应 shortcut：`lark-cli minutes +apply-permission`（调用 `POST /open-apis/minutes/v1/minutes/{minute_token}/permissions/apply`）。支持 `--as user` / `--as bot`。
+本 skill 对应 shortcut：`work-cli minutes +apply-permission`（调用 `POST /open-apis/minutes/v1/minutes/{minute_token}/permissions/apply`）。支持 `--as user` / `--as bot`。
 
 ## 命令
 
 ```bash
 # 以 user 身份申请查看权限
-lark-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm view --as user
+work-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm view --as user
 
 # 以 bot 身份申请编辑权限
-lark-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm edit --as bot
+work-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm edit --as bot
 
 # 预览 API 调用
-lark-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm view --dry-run
+work-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --perm view --dry-run
 ```
 
 ## 参数
@@ -77,8 +77,8 @@ lark-cli minutes +apply-permission --minute-token obcnxxxxxxxxxxxxxxxxxxxx --per
 | 来源 | 获取方式 |
 |------|---------|
 | 妙记 URL | 从 URL 末尾提取，如 `https://sample.feishu.cn/minutes/obcnxxxxxxxxxxxxxxxxxxxx` |
-| 妙记搜索 | `lark-cli minutes +search --query "关键词"` |
-| 会议产物查询 | `lark-cli vc +recording --meeting-ids <id>`，拿到 `minute_token`（沿用同一 `--as`） |
+| 妙记搜索 | `work-cli minutes +search --query "关键词"` |
+| 会议产物查询 | `work-cli vc +recording --meeting-ids <id>`，拿到 `minute_token`（沿用同一 `--as`） |
 
 ## 常见错误与排查
 

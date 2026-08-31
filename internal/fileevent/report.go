@@ -263,7 +263,7 @@ func buildUploadReportRequest(runtime Runtime, meta UploadMeta) map[string]inter
 		"file_token":    strings.TrimSpace(meta.FileToken),
 	}
 	return map[string]interface{}{
-		"file_scene": "lark-cli",
+		"file_scene": "work-cli",
 		"scene":      "upload",
 		"operation":  "upload",
 		"tags":       tags,
@@ -302,7 +302,7 @@ func commandPathOrName(runtime Runtime) string {
 		return ""
 	}
 	path := strings.TrimSpace(runtime.CommandPath())
-	path = strings.TrimPrefix(path, "lark-cli ")
+	path = strings.TrimPrefix(path, "work-cli ")
 	path = strings.TrimPrefix(path, "lark ")
 	if path != "" {
 		return path

@@ -157,7 +157,7 @@ _创建/更新的条件格式属性_
 
 ```bash
 # 列出当前 sheet 全部条件格式规则（拿 rule_id 供 update/delete）
-lark-cli sheets +cond-format-list --url "..." --sheet-id "$SID"
+work-cli sheets +cond-format-list --url "..." --sheet-id "$SID"
 ```
 
 ### `+cond-format-create`
@@ -166,20 +166,20 @@ lark-cli sheets +cond-format-list --url "..." --sheet-id "$SID"
 
 ```bash
 # 重复值高亮
-lark-cli sheets +cond-format-create --url "..." --sheet-id "$SID" \
+work-cli sheets +cond-format-create --url "..." --sheet-id "$SID" \
   --rule-type duplicateValues --ranges '["A1:A100"]' \
   --properties '{"style":{"back_color":"#FFD7D7"}}'
 
 # 数据条
-lark-cli sheets +cond-format-create --url "..." --sheet-id "$SID" \
+work-cli sheets +cond-format-create --url "..." --sheet-id "$SID" \
   --rule-type dataBar --ranges '["B2:B100"]' \
   --properties @rule.json
 
 # 创建后先确认规则对象存在
-lark-cli sheets +cond-format-list --url "..." --sheet-id "$SID"
+work-cli sheets +cond-format-list --url "..." --sheet-id "$SID"
 
 # 再抽查条件格式计算结果：读取哨兵单元格的命中样式
-lark-cli sheets +cond-format-result-get --url "..." --sheet-id "$SID" \
+work-cli sheets +cond-format-result-get --url "..." --sheet-id "$SID" \
   --range "B2:B10"
 ```
 
@@ -191,11 +191,11 @@ CLI 会对白名单字段做输出裁剪：顶层只保留警告、分页和返�
 
 ```bash
 # 读取 B2:B10 的条件格式命中样式，返回 cell_styles.background_color / font_color 等
-lark-cli sheets +cond-format-result-get --url "..." --sheet-id "$SID" \
+work-cli sheets +cond-format-result-get --url "..." --sheet-id "$SID" \
   --range "B2:B10"
 
 # 如果只想在普通读取里临时合并条件格式，也可用 +cells-get --include conditional_format
-lark-cli sheets +cells-get --url "..." --sheet-id "$SID" \
+work-cli sheets +cells-get --url "..." --sheet-id "$SID" \
   --range "B2:B10" --include conditional_format
 ```
 
@@ -206,7 +206,7 @@ lark-cli sheets +cells-get --url "..." --sheet-id "$SID" \
 ### `+cond-format-delete`
 
 ```bash
-lark-cli sheets +cond-format-delete --url "..." --sheet-id "$SID" --rule-id "$RULE_ID" --yes
+work-cli sheets +cond-format-delete --url "..." --sheet-id "$SID" --rule-id "$RULE_ID" --yes
 ```
 
 > 一次只删一个 `--rule-id`。要删**多个**条件格式时，先 `+cond-format-list` 拿到各 `rule-id`，再用 `+batch-update` 把多个 `+cond-format-delete` 合并为单次批量提交（fail-fast，失败处置见 `lark-sheets-batch-update`），不要逐个调用。

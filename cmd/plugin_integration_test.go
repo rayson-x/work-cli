@@ -25,7 +25,7 @@ import (
 
 // These integration tests exercise the Hook framework's plumbing
 // (Plugin -> InstallAll -> Registry -> wireHooks -> RunE wrapper)
-// against a SYNTHETIC command tree, not the real lark-cli shortcut
+// against a SYNTHETIC command tree, not the real work-cli shortcut
 // tree. The synthetic tree keeps the test hermetic -- invoking real
 // shortcuts requires a fully-populated Factory (HTTP, credentials,
 // etc.) which is out of scope for a hook plumbing test.
@@ -86,7 +86,7 @@ func (p *fakeIntegrationPlugin) Install(r platform.Registrar) error {
 // syntheticTree builds a small command tree we own end-to-end. The leaf
 // has risk=write so the Wrap's ByWrite() selector matches.
 func syntheticTree() (*cobra.Command, *cobra.Command) {
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	group := &cobra.Command{Use: "docs"}
 	root.AddCommand(group)
 	leaf := &cobra.Command{

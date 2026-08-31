@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 // Package plugin_e2e exercises the extension/platform plugin contract the way a
-// real customer does: it builds a fork of lark-cli with a plugin blank-imported,
+// real customer does: it builds a fork of work-cli with a plugin blank-imported,
 // then runs that fork as a subprocess and asserts the real stderr/stdout
 // envelopes and exit codes. This is L4 coverage — the in-process unit and
 // integration tests (extension/..., cmd/...) assert Go error values in the test
@@ -45,7 +45,7 @@ var cleanTree string
 // baseDir holds the archive tree plus every generated customer module.
 var baseDir string
 
-// repoRoot resolves the lark-cli module root from the test's working directory
+// repoRoot resolves the work-cli module root from the test's working directory
 // (which `go test` sets to the package dir, tests/plugin_e2e).
 func repoRoot() (string, error) {
 	out, err := exec.Command("git", "rev-parse", "--show-toplevel").Output()
@@ -192,7 +192,7 @@ func buildForkWithMainAndAffordance(t *testing.T, name, pluginSrc, mainSrc, affo
 	writeFile(t, filepath.Join(mod, "main.go"), mainSrc)
 	writeFile(t, filepath.Join(mod, "plugin", "plugin.go"), pluginSrc)
 
-	bin := filepath.Join(mod, "lark-cli")
+	bin := filepath.Join(mod, "work-cli")
 	build := exec.Command("go", "build", "-o", bin, ".")
 	build.Dir = mod
 	// -mod=mod fixes require annotations copied from cli's go.mod; the default

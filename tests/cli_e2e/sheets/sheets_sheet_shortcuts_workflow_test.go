@@ -27,7 +27,7 @@ func TestSheets_SheetShortcutsWorkflow(t *testing.T) {
 	copiedSheetID := ""
 
 	t.Run("create spreadsheet with +create as bot", func(t *testing.T) {
-		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "lark-cli-e2e-sheet-shortcuts-"+suffix, "bot")
+		spreadsheetToken = createSpreadsheet(t, parentT, ctx, "work-cli-e2e-sheet-shortcuts-"+suffix, "bot")
 	})
 
 	t.Run("get initial sheet info as bot", func(t *testing.T) {

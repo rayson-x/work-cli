@@ -5,7 +5,7 @@ description: 飞书/Lark 聚合能力入口：管理飞书/Lark 产品能力（<
 metadata:
   requires:
     bins:
-      - lark-cli
+      - work-cli
 ---
 
 # Lark Suite

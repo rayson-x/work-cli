@@ -2,7 +2,7 @@
 
 设置、延长、提前结束或关闭会中倒计时窗口。
 
-本 skill 对应 shortcut：`lark-cli vc +meeting-countdown`（调用 `POST /open-apis/vc/v1/bots/countdown`）。
+本 skill 对应 shortcut：`work-cli vc +meeting-countdown`（调用 `POST /open-apis/vc/v1/bots/countdown`）。
 
 ## 适用场景
 
@@ -38,7 +38,7 @@
 ## 设置倒计时
 
 ```bash
-lark-cli vc +meeting-countdown --as user \
+work-cli vc +meeting-countdown --as user \
   --meeting-id <meeting_id> \
   --action set \
   --duration 5 \
@@ -61,7 +61,7 @@ Dry-run 请求体示例：
 ## 延长倒计时
 
 ```bash
-lark-cli vc +meeting-countdown --as bot \
+work-cli vc +meeting-countdown --as bot \
   --meeting-id <meeting_id> \
   --action prolong \
   --duration 2
@@ -70,8 +70,8 @@ lark-cli vc +meeting-countdown --as bot \
 ## 提前结束或关闭倒计时
 
 ```bash
-lark-cli vc +meeting-countdown --as user --meeting-id <meeting_id> --action end_in_advance
-lark-cli vc +meeting-countdown --as user --meeting-id <meeting_id> --action close_window
+work-cli vc +meeting-countdown --as user --meeting-id <meeting_id> --action end_in_advance
+work-cli vc +meeting-countdown --as user --meeting-id <meeting_id> --action close_window
 ```
 
 提前结束或关闭倒计时窗口时不要传 `--duration`、`--need-play-audio-at-end` 或 `--reminder-before-end`。

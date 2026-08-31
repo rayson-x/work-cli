@@ -9,13 +9,13 @@
 
 ```bash
 # 按 approval_code 查询审批定义详情
-lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
+work-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
 
 # 表格格式输出，便于快速浏览顶层字段
-lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --format table --as user
+work-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --format table --as user
 
 # 预览 API 调用，不执行
-lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user --dry-run
+work-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user --dry-run
 ```
 
 ## 参数
@@ -34,13 +34,13 @@ lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' -
 如果你已经有 `approval_code`，可直接查询：
 
 ```bash
-lark-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
+work-cli approval approvals get --params '{"approval_code":"<APPROVAL_CODE>"}' --as user
 ```
 
 如果你还没有 `approval_code`，先搜索可发起审批定义：
 
 ```bash
-lark-cli approval approvals search --data '{"keyword":"请假"}' --as user
+work-cli approval approvals search --data '{"keyword":"请假"}' --as user
 ```
 
 ## 输出重点字段
@@ -98,7 +98,7 @@ lark-cli approval approvals search --data '{"keyword":"请假"}' --as user
 
 ```bash
 # 发起原生审批实例
-lark-cli approval instances create --data '{"approval_code":"<APPROVAL_CODE>","form":"[...]"}' --as user --yes
+work-cli approval instances create --data '{"approval_code":"<APPROVAL_CODE>","form":"[...]"}' --as user --yes
 ```
 
 如果需要进一步理解控件取值与节点参数，优先参考：

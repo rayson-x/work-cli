@@ -45,7 +45,7 @@
 ## 创建示例
 
 ```bash
-lark-cli base +app-block-create \
+work-cli base +app-block-create \
   --app-token <app_token> --page-id <page_id> \
   --name "订单列表" \
   --type list --sub-type standard \
@@ -59,7 +59,7 @@ lark-cli base +app-block-create \
 下面是只更新顶层 `filter` 的示例，适用于协议将 `filter` 定义在 `data_config` 顶层的组件（所有列表 subtype 均可使用）。组件类型在创建后不可修改，所以 update 命令不再传 `--type`。App 图表的 `filter` 定义在对应的 `data_sources[]` 元素中；更新图表筛选时必须按图表结构传入完整 `data_sources`，不能把 `filter` 提到顶层。
 
 ```bash
-lark-cli base +app-block-update \
+work-cli base +app-block-update \
   --app-token <app_token> --page-id <page_id> --block-id <block_id> \
   --data-config '{"filter":{"conjunction":"and","conditions":[{"field_name":"状态","operator":"is","value":"已完成"}]}}'
 ```
@@ -104,7 +104,7 @@ lark-cli base +app-block-update \
 对应命令（单数据源计数柱状图）：
 
 ```bash
-lark-cli base +app-block-create \
+work-cli base +app-block-create \
   --app-token <app_token> --page-id <page_id> \
   --name "文本分布" --type column \
   --data-config '{"base_token":"A2f5boKjfazMzesI9zKbmugTc4T","data_sources":[{"table_name":"数据表","count_all":true,"group_by":[{"field_name":"文本","mode":"integrated","sort":{"type":"value","order":"desc"}}]}]}'
@@ -113,7 +113,7 @@ lark-cli base +app-block-create \
 多数据源示例（两张表各出一条系列，按数据源拆分）：
 
 ```bash
-lark-cli base +app-block-create \
+work-cli base +app-block-create \
   --app-token <app_token> --page-id <page_id> \
   --name "销售与成本" --type combo \
   --data-config '{"base_token":"bas_xxx","data_source_mode":"compare","data_sources":[{"table_name":"销售表","group_by":[{"field_name":"月份","sort":{"type":"group","order":"asc"}}],"series":[{"field_name":"销售额","rollup":"SUM"}]},{"table_name":"成本表","group_by":[{"field_name":"月份","sort":{"type":"group","order":"asc"}}],"series":[{"field_name":"成本","rollup":"SUM"}]}],"sort":{"type":"group","order":"asc"}}'

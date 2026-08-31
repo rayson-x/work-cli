@@ -6,16 +6,16 @@
 
 ```bash
 # 1. 创建规则：主题包含指定文本时标记为已读
-lark-cli mail user_mailbox.rules create --as user \
+work-cli mail user_mailbox.rules create --as user \
   --params '{"user_mailbox_id":"me"}' \
   --data '{"name":"<rule_name>","is_enable":true,"ignore_the_rest_of_rules":false,"condition":{"match_type":1,"items":[{"type":6,"operator":1,"input":"<subject_text>"}]},"action":{"items":[{"type":3}]}}'
 
 # 2. 验证规则
-lark-cli mail user_mailbox.rules list --as user \
+work-cli mail user_mailbox.rules list --as user \
   --params '{"user_mailbox_id":"me"}'
 
 # 3. 删除规则
-lark-cli mail user_mailbox.rules delete --as user \
+work-cli mail user_mailbox.rules delete --as user \
   --params '{"user_mailbox_id":"me","rule_id":"<rule_id>"}'
 ```
 
@@ -26,6 +26,6 @@ Quick codes above: condition `type=6` = subject, `operator=1` = contains, action
 收信规则走 `user_mailbox.rules` 资源。参数不确定时先运行：
 
 ```bash
-lark-cli mail user_mailbox.rules -h
-lark-cli schema mail.user_mailbox.rules.<method>
+work-cli mail user_mailbox.rules -h
+work-cli schema mail.user_mailbox.rules.<method>
 ```

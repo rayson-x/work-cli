@@ -9,13 +9,13 @@
 
 ```bash
 # 源文档传 URL（自动识别类型和 token）
-lark-cli drive +copy --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --name '副本名称' --folder-token <TARGET_FOLDER_TOKEN>
+work-cli drive +copy --url "https://example.larksuite.com/docx/<DOCX_TOKEN>" --name '副本名称' --folder-token <TARGET_FOLDER_TOKEN>
 
 # Wiki URL（自动解包底层资源后复制到 Drive）
-lark-cli drive +copy --url "https://example.larksuite.com/wiki/<WIKI_TOKEN>" --name '副本名称' --folder-token <TARGET_FOLDER_TOKEN>
+work-cli drive +copy --url "https://example.larksuite.com/wiki/<WIKI_TOKEN>" --name '副本名称' --folder-token <TARGET_FOLDER_TOKEN>
 
 # Wiki token
-lark-cli drive +copy --token <WIKI_TOKEN> --type wiki --name '副本名称' --folder-token my_space
+work-cli drive +copy --token <WIKI_TOKEN> --type wiki --name '副本名称' --folder-token my_space
 ```
 
 ## 参数

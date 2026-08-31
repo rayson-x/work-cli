@@ -8,34 +8,34 @@
 
 ```bash
 # 用行内内容覆盖
-lark-cli markdown +overwrite \
+work-cli markdown +overwrite \
   --file-token boxcnxxxx \
   --content '# Updated'
 
 # 用本地 .md 文件覆盖
-lark-cli markdown +overwrite \
+work-cli markdown +overwrite \
   --file-token boxcnxxxx \
   --file ./README.md
 
 # 覆盖内容时顺便显式指定新文件名
-lark-cli markdown +overwrite \
+work-cli markdown +overwrite \
   --file-token boxcnxxxx \
   --name NEW-README.md \
   --content '# Updated'
 
 # 用 --content 从本地文件读取
-lark-cli markdown +overwrite \
+work-cli markdown +overwrite \
   --file-token boxcnxxxx \
   --content @./README.md
 
 # 用 stdin 覆盖
 printf '# Updated\n' | \
-  lark-cli markdown +overwrite \
+  work-cli markdown +overwrite \
     --file-token boxcnxxxx \
     --content -
 
 # 预览底层请求
-lark-cli markdown +overwrite \
+work-cli markdown +overwrite \
   --file-token boxcnxxxx \
   --content '# Updated' \
   --dry-run

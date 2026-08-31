@@ -756,7 +756,7 @@ func isIdentName(expr ast.Expr, name string) bool {
 	return ok && ident.Name == name
 }
 
-var hintActionPattern = regexp.MustCompile(`(--[a-z0-9-]+|lark-cli\s+[a-z0-9+ -]+|\b[a-z]{2}_[A-Z]{2}\b)`)
+var hintActionPattern = regexp.MustCompile(`(--[a-z0-9-]+|work-cli\s+[a-z0-9+ -]+|\b[a-z]{2}_[A-Z]{2}\b)`)
 
 func HintActionCount(hint string) int {
 	matches := hintActionPattern.FindAllString(hint, -1)

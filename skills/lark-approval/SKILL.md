@@ -4,14 +4,14 @@ version: 1.2.0
 description: "飞书审批：查询和处理审批待办/已办/实例，搜索可发起审批定义、查看定义详情并发起原生审批实例。当用户要处理审批任务、查看审批实例、搜索或发起审批时使用。审批待办不是飞书任务；非审批类待办走 lark-task。不负责创建审批定义；三方审批定义不走原生提单。"
 metadata:
   requires:
-    bins: ["lark-cli"]
-  cliHelp: "lark-cli approval --help"
+    bins: ["work-cli"]
+  cliHelp: "work-cli approval --help"
 ---
 
 
 **CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
 
-所有命令默认 `--as user`（审批是人的动作）。调用前先按需读取 references 下对应的文件，查参数结构，不要猜字段；**references 是第一信息源**，只有在 reference 未覆盖的原生 / 高级场景下，才额外用 `lark-cli ... --help`、`lark-cli schema` 等方式补充确认字段。
+所有命令默认 `--as user`（审批是人的动作）。调用前先按需读取 references 下对应的文件，查参数结构，不要猜字段；**references 是第一信息源**，只有在 reference 未覆盖的原生 / 高级场景下，才额外用 `work-cli ... --help`、`work-cli schema` 等方式补充确认字段。
 
 ## 路由优先级（先判断是不是审批，再选命令）
 
@@ -87,11 +87,11 @@ metadata:
 **特别注意：** 对拒绝 / 转交 / 撤回场景更要严格执行上述规则；这些场景最容易因状态切换而失败。
 
 ```bash
-lark-cli approval approvals search --data '{"keyword":"请假"}' --as user
-lark-cli approval approvals get --params '{"approval_code":"<code>"}' --as user
-lark-cli approval instances create --data '{"approval_code":"<code>","form":"[...]"}' --yes --as user
-lark-cli approval tasks query --params '{"topic":"1"}' --as user
-lark-cli approval tasks approve --data '{"instance_code":"<ic>","task_id":"<tid>","comment":"同意"}' --as user
+work-cli approval approvals search --data '{"keyword":"请假"}' --as user
+work-cli approval approvals get --params '{"approval_code":"<code>"}' --as user
+work-cli approval instances create --data '{"approval_code":"<code>","form":"[...]"}' --yes --as user
+work-cli approval tasks query --params '{"topic":"1"}' --as user
+work-cli approval tasks approve --data '{"instance_code":"<ic>","task_id":"<tid>","comment":"同意"}' --as user
 ```
 
 ## 不在本 skill 范围

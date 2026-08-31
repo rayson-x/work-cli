@@ -16,7 +16,7 @@ var AppsAutomationDisable = common.Shortcut{
 	Command:     "+automation-disable",
 	Description: "Disable an automation trigger (stops auto-firing; does not delete)",
 	Risk:        "write",
-	Tips:        []string{"Example: lark-cli apps +automation-disable --app-id <id> --name <trigger_name>"},
+	Tips:        []string{"Example: work-cli apps +automation-disable --app-id <id> --name <trigger_name>"},
 	Scopes:      []string{"spark:app:write"},
 	AuthTypes:   []string{"user"},
 	HasFormat:   true,

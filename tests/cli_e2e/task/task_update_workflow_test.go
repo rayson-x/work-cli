@@ -20,11 +20,11 @@ func TestTask_UpdateWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	taskSummary := "lark-cli-e2e-user-my-task-" + suffix
+	taskSummary := "work-cli-e2e-user-my-task-" + suffix
 	taskDescription := "created by tests/cli_e2e/task user workflow"
-	updatedTaskSummary := "lark-cli-e2e-user-my-task-updated-" + suffix
+	updatedTaskSummary := "work-cli-e2e-user-my-task-updated-" + suffix
 	updatedTaskDescription := "updated by task +update user workflow"
-	patchedTaskSummary := "lark-cli-e2e-user-my-task-patched-" + suffix
+	patchedTaskSummary := "work-cli-e2e-user-my-task-patched-" + suffix
 	patchedTaskDescription := "patched by task tasks patch user workflow"
 	taskGUID := ""
 

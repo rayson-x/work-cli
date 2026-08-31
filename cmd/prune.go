@@ -73,7 +73,7 @@ func strictModeStubFrom(child *cobra.Command, mode core.StrictMode) *cobra.Comma
 	stubMessage := fmt.Sprintf(
 		"strict mode is %q, only %s-identity commands are available",
 		mode, mode.ForcedIdentity())
-	const stubHint = "if the user explicitly wants to switch policy, see `lark-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)"
+	const stubHint = "if the user explicitly wants to switch policy, see `work-cli config strict-mode --help` (confirm with the user before switching; switching does NOT require re-bind)"
 	denial := cmdpolicy.Denial{
 		Layer:        cmdpolicy.LayerStrictMode,
 		PolicySource: "strict-mode",

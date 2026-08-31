@@ -4,7 +4,7 @@
 > server conforming to the wire protocol in `github.com/larksuite/cli/sidecar`.
 
 This example shows how to implement a sidecar auth proxy server that receives
-HMAC-signed requests from lark-cli sandbox clients and forwards them to the
+HMAC-signed requests from work-cli sandbox clients and forwards them to the
 Lark/Feishu API with real credentials injected.
 
 ## What this demo shows
@@ -34,21 +34,21 @@ Sidecar is split into **two separate binaries** with **different build tags**:
 
 | Side | Binary | Build tag | How to build |
 | --- | --- | --- | --- |
-| Sandbox (client) | `lark-cli` | `authsidecar` | `go build -tags authsidecar -o lark-cli .` |
+| Sandbox (client) | `work-cli` | `authsidecar` | `go build -tags authsidecar -o work-cli .` |
 | Trusted (server) | `sidecar-server-demo` | `authsidecar_demo` | `go build -tags authsidecar_demo -o sidecar-server-demo ./sidecar/server-demo/` |
 
-If the sandbox runs a standard `lark-cli` **without** `-tags authsidecar`, the
+If the sandbox runs a standard `work-cli` **without** `-tags authsidecar`, the
 `LARKSUITE_CLI_AUTH_PROXY` env var is ignored and requests bypass the sidecar
 entirely — real credentials (if any) leak to the sandbox.
 
 ## Prerequisites
 
-The demo reuses the lark-cli credential pipeline, so the trusted machine must
+The demo reuses the work-cli credential pipeline, so the trusted machine must
 have an app configured:
 
 ```bash
-lark-cli config init --new   # configure app_id / app_secret (required)
-lark-cli auth login          # store user refresh_token in keychain
+work-cli config init --new   # configure app_id / app_secret (required)
+work-cli auth login          # store user refresh_token in keychain
                               # (only required if sandbox will use --as user)
 ```
 
@@ -78,7 +78,7 @@ in the server shell before launching.
 | `--listen` | `127.0.0.1:16384` | Address to bind the HTTP listener |
 | `--key-file` | `<HOME>/.lark-sidecar/proxy.key` | Path to write the generated HMAC key (mode 0600) |
 | `--log-file` | *(empty, stderr)* | Audit log output path |
-| `--profile` | *(empty, active profile)* | lark-cli profile name for credential lookup |
+| `--profile` | *(empty, active profile)* | work-cli profile name for credential lookup |
 
 ### Startup output
 

@@ -19,7 +19,7 @@
 回读命令：
 
 ```bash
-lark-cli slides +xml-get --as user \
+work-cli slides +xml-get --as user \
   --presentation "YOUR_ID" \
   --output .lark-slides/plan/<deck-or-task-id>/readback.xml \
   --json

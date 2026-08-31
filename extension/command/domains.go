@@ -5,7 +5,7 @@ package command
 
 // The Lark business domains a command set may extend. The list is maintained by
 // hand rather than generated from the shortcut registry: a domain exists once
-// the CLI publishes it under `lark-cli --help`, which includes domains served
+// the CLI publishes it under `work-cli --help`, which includes domains served
 // only by typed and raw API commands. Generating from shortcuts.AllShortcuts
 // would silently drop those. TestDomainConstantsCoverEveryService in
 // internal/commandhost guards this list against the service registry.

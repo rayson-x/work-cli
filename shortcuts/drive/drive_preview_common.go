@@ -839,7 +839,7 @@ func wrapDrivePreviewNotReady(fileToken, requested string, candidate drivePrevie
 	if reason == "" {
 		reason = fmt.Sprintf("preview type %q is not downloadable yet (status=%s)", requested, candidate.Status)
 	}
-	hint := fmt.Sprintf("rerun `lark-cli drive +preview --file-token %s --list-only` to inspect current candidate status", fileToken)
+	hint := fmt.Sprintf("rerun `work-cli drive +preview --file-token %s --list-only` to inspect current candidate status", fileToken)
 	return errs.NewValidationError(errs.SubtypeFailedPrecondition, reason).WithHint(hint).WithParam("--type")
 }
 

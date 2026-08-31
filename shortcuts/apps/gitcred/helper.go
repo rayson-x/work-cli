@@ -254,7 +254,7 @@ func (m *Manager) Get(ctx context.Context, input CredentialInput, current Profil
 	issued, err := m.Issuer.Issue(ctx, record.AppID, current)
 	if err != nil {
 		writeCredentialError(errOut, "Git credential refresh failed", err)
-		fmt.Fprintf(errOut, "Next step: lark-cli apps +git-credential-init --app-id %s\n", record.AppID)
+		fmt.Fprintf(errOut, "Next step: work-cli apps +git-credential-init --app-id %s\n", record.AppID)
 		return nil
 	}
 	issuedURL, urlErr := NormalizeGitHTTPURL(issued.GitHTTPURL)
@@ -449,7 +449,7 @@ func (m *Manager) readConfirmed(url string, current ProfileContext) (CredentialR
 	}
 	if record.ProfileAppID != current.ProfileAppID || record.UserOpenID != current.UserOpenID {
 		return CredentialRecord{}, "", false, errs.NewValidationError(errs.SubtypeFailedPrecondition, "current login does not match initialized credential").
-			WithHint(fmt.Sprintf("run `lark-cli apps +git-credential-init --app-id %s` with the current login or switch back to the original account", record.AppID))
+			WithHint(fmt.Sprintf("run `work-cli apps +git-credential-init --app-id %s` with the current login or switch back to the original account", record.AppID))
 	}
 	pat, err := m.Secrets.Get(record.PATRef)
 	if err != nil {

@@ -1,6 +1,6 @@
 # apps +access-scope-get
 
-查看妙搭应用运行时可见范围。运行时命令事实以 `lark-cli apps +access-scope-get --help` 为准。
+查看妙搭应用运行时可见范围。运行时命令事实以 `work-cli apps +access-scope-get --help` 为准。
 
 ## 何时用
 
@@ -15,7 +15,7 @@
 ## 示例
 
 ```bash
-lark-cli apps +access-scope-get --app-id app_xxx
+work-cli apps +access-scope-get --app-id app_xxx
 ```
 
 ## 输出契约

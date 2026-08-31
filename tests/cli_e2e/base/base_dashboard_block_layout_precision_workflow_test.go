@@ -23,7 +23,7 @@ func TestBaseDashboardBlockLayoutPrecisionWorkflow(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Minute)
 	t.Cleanup(cancel)
 
-	baseToken := createBaseWithRetry(t, ctx, "lark-cli-e2e-dashboard-layout-"+clie2e.GenerateSuffix())
+	baseToken := createBaseWithRetry(t, ctx, "work-cli-e2e-dashboard-layout-"+clie2e.GenerateSuffix())
 	tableName := "Dashboard Metrics " + clie2e.GenerateSuffix()
 	createTableWithRetry(t, t, ctx, baseToken, tableName, `[{"name":"Name","type":"text"}]`, `{"name":"Main","type":"grid"}`)
 

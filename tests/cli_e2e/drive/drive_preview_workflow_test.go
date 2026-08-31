@@ -25,7 +25,7 @@ func TestDrive_PreviewAndCoverWorkflow(t *testing.T) {
 	t.Cleanup(cancel)
 
 	suffix := clie2e.GenerateSuffix()
-	folderName := "lark-cli-e2e-drive-preview-" + suffix
+	folderName := "work-cli-e2e-drive-preview-" + suffix
 	folderToken := createDriveFolderOrSkipPermission(t, parentT, ctx, folderName)
 
 	workDir := t.TempDir()
@@ -239,7 +239,7 @@ func TestShouldRetryCoverDownload(t *testing.T) {
 func writeCoverDownloadRetryFakeCLI(t *testing.T) string {
 	t.Helper()
 
-	path := filepath.Join(t.TempDir(), "fake-lark-cli")
+	path := filepath.Join(t.TempDir(), "fake-work-cli")
 	script := `#!/bin/sh
 state="$1"
 succeed_after="$2"

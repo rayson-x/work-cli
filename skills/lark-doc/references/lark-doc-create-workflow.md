@@ -90,7 +90,7 @@
 不预建临时目录、草稿或决策文件。将上述 JSON 原样替换命令中的占位符并实际执行：
 
 ```bash
-lark-cli docs +script --command init-draft --presentation-decision '<上方完整 JSON>' --format json
+work-cli docs +script --command init-draft --presentation-decision '<上方完整 JSON>' --format json
 ```
 
 成功后：
@@ -108,7 +108,7 @@ lark-cli docs +script --command init-draft --presentation-decision '<上方完�
 
 ### Step 6：执行 Draft Profile Check。
 
-1. 执行 `lark-cli docs +script --command parse --content "@./<draft_path>" --format json`。顶层 `ok` 仅表示命令执行成功，是否通过看 `data.assessment.status`。失败时按 `data.diagnostics[]` 局部修复；只有草稿为空、截断或结构无效时才全文重建。`parse` 不替代 XML 规则或服务端校验。
+1. 执行 `work-cli docs +script --command parse --content "@./<draft_path>" --format json`。顶层 `ok` 仅表示命令执行成功，是否通过看 `data.assessment.status`。失败时按 `data.diagnostics[]` 局部修复；只有草稿为空、截断或结构无效时才全文重建。`parse` 不替代 XML 规则或服务端校验。
 2. Profile Check 通过后，按 [`lark-doc-xml.md`](lark-doc-xml.md) 复查标签、属性和值，并依据 Philosophy 检查事实与来源、用户硬约束、适用 contract / adapter 以及 `visual_plan`。最终 XML 能否写入以 `docs +create` 的服务端结果为准。
 
 ### Step 7：创建文档并处理局部失败。

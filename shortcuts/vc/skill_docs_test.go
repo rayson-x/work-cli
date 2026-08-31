@@ -96,8 +96,8 @@ func TestMeetingArtifactSceneDelegatesToDomainOwners(t *testing.T) {
 	}
 
 	for _, duplicatedCommand := range []string{
-		"lark-cli note +detail",
-		"lark-cli minutes +detail",
+		"work-cli note +detail",
+		"work-cli minutes +detail",
 	} {
 		if strings.Contains(scene, duplicatedCommand) {
 			t.Errorf("query-meeting-and-artifacts.md must not duplicate downstream command %q", duplicatedCommand)

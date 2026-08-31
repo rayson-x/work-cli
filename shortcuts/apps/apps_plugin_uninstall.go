@@ -23,7 +23,7 @@ var AppsPluginUninstall = common.Shortcut{
 	Scopes:      []string{},
 	Tips: []string{
 		"Run in project root (like npm); does NOT take --app-id",
-		"Example: lark-cli apps +plugin-uninstall --name @official-plugins/ai-text-generate",
+		"Example: work-cli apps +plugin-uninstall --name @official-plugins/ai-text-generate",
 	},
 	Flags: []common.Flag{
 		{Name: "name", Desc: "plugin key (e.g. @official-plugins/ai-text-generate)", Required: true},

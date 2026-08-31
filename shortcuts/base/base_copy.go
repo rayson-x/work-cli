@@ -26,7 +26,7 @@ var BaseBaseCopy = common.Shortcut{
 	},
 	Tips: []string{
 		"BaseApp/AppMode copy is unsupported. Do not pass an app_token or use this command as a substitute.",
-		`Example: lark-cli base +base-copy --base-token <base_token> --name "Copy of Project Tracker"`,
+		`Example: work-cli base +base-copy --base-token <base_token> --name "Copy of Project Tracker"`,
 		"Use --without-content when the user wants only structure.",
 		"If copied as bot, output may include permission_grant; report it so the user knows whether they can open the new Base.",
 	},

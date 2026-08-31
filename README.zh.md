@@ -20,7 +20,7 @@ work-cli workline --help
 
 [安装](#安装与快速开始) · [AI Agent Skills](#agent-skills) · [认证](#认证) · [命令](#三层命令调用) · [进阶用法](#进阶用法) · [企业接入](#个人使用还是企业集成) · [安全](#安全与风险提示使用前必读) · [贡献](#贡献)
 
-## 为什么选 lark-cli？
+## 为什么选 work-cli？
 
 - **为 Agent 原生设计** — 26 个 [Skills](./skills/) 开箱即用，适配主流 AI 工具，Agent 无需额外适配即可操作飞书
 - **覆盖面广** — 18 大业务域、200+ 精选命令、26 个 AI Agent [Skills](./skills/)
@@ -35,7 +35,7 @@ work-cli workline --help
 | 你是... | 推荐路径 |
 | ------- | -------- |
 | **个人开发者** — 在终端里直接使用，或搭配自己的 AI Agent | 按下方[快速开始](#安装与快速开始)操作 |
-| **企业 IT / ISV** — 把 lark-cli 内嵌到自研 Agent 或平台中，需要中心化凭证管理（数据库 / Vault / 配置中心）、统一审计日志、命令能力裁剪 | 阅读[《自研 Agent 接入飞书 CLI》](https://open.larkoffice.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent)与 [`extension/`](./extension/) 扩展包 — 通过 wrapper `main` 扩展，无需修改 CLI 源码 |
+| **企业 IT / ISV** — 把 work-cli 内嵌到自研 Agent 或平台中，需要中心化凭证管理（数据库 / Vault / 配置中心）、统一审计日志、命令能力裁剪 | 阅读[《自研 Agent 接入飞书 CLI》](https://open.larkoffice.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent)与 [`extension/`](./extension/) 扩展包 — 通过 wrapper `main` 扩展，无需修改 CLI 源码 |
 
 > 💡 **给 AI Agent：** 任意开放平台文档 URL 加 `.md` 后缀即可直接获取原始 Markdown，例如 [`embed-feishu-cli-in-agent.md`](https://open.larkoffice.com/document/mcp_open_tools/feishu-cli/embed-feishu-cli-in-agent.md)。
 
@@ -102,13 +102,13 @@ npx skills add larksuite/cli -y -g
 
 ```bash
 # 1. 配置应用凭证（仅需一次，交互式引导完成）
-lark-cli config init
+work-cli config init
 
 # 2. 登录授权（--recommend 自动选择常用权限）
-lark-cli auth login --recommend
+work-cli auth login --recommend
 
 # 3. 开始使用
-lark-cli calendar +agenda
+work-cli calendar +agenda
 ```
 
 ### 快速开始（AI Agent）
@@ -126,7 +126,7 @@ npx @larksuite/cli@latest install
 > 在后台运行此命令，命令会输出一个授权链接，提取该链接并发送给用户，用户在浏览器中完成配置后命令会自动退出。
 
 ```bash
-lark-cli config init --new
+work-cli config init --new
 ```
 
 **第 3 步 — 登录**
@@ -134,13 +134,13 @@ lark-cli config init --new
 > 同上，后台运行，提取授权链接发给用户。
 
 ```bash
-lark-cli auth login --recommend
+work-cli auth login --recommend
 ```
 
 **第 4 步 — 验证**
 
 ```bash
-lark-cli auth status
+work-cli auth status
 ```
 
 
@@ -185,25 +185,25 @@ lark-cli auth status
 
 ```bash
 # 交互式登录（TUI 引导选择业务域和权限级别）
-lark-cli auth login
+work-cli auth login
 
 # 按域筛选
-lark-cli auth login --domain calendar,task
+work-cli auth login --domain calendar,task
 
 # 推荐的自动审批 scopes
-lark-cli auth login --recommend
+work-cli auth login --recommend
 
 # 精确 scope
-lark-cli auth login --scope "calendar:calendar:read"
+work-cli auth login --scope "calendar:calendar:read"
 
 # Agent 模式：立即返回验证 URL，不阻塞
-lark-cli auth login --domain calendar --no-wait
+work-cli auth login --domain calendar --no-wait
 # 稍后恢复轮询
-lark-cli auth login --device-code <DEVICE_CODE>
+work-cli auth login --device-code <DEVICE_CODE>
 
 # 身份切换：以用户或机器人身份执行命令
-lark-cli calendar +agenda --as user
-lark-cli im +messages-send --as bot --chat-id "oc_xxx" --text "Hello"
+work-cli calendar +agenda --as user
+work-cli im +messages-send --as bot --chat-id "oc_xxx" --text "Hello"
 ```
 
 ## 三层命令调用
@@ -215,20 +215,20 @@ CLI 提供三种粒度的调用方式，覆盖从快速操作到完全自定义�
 以 `+` 为前缀，对人类与 AI 友好化封装，内置智能默认值、表格输出和 dry-run 预览。
 
 ```bash
-lark-cli calendar +agenda
-lark-cli im +messages-send --chat-id "oc_xxx" --text "Hello"
-lark-cli docs +create --doc-format markdown --content $'<title>周报</title>\n# 本周进展\n- 完成了 X 功能'
+work-cli calendar +agenda
+work-cli im +messages-send --chat-id "oc_xxx" --text "Hello"
+work-cli docs +create --doc-format markdown --content $'<title>周报</title>\n# 本周进展\n- 完成了 X 功能'
 ```
 
-运行 `lark-cli <service> --help` 查看所有快捷命令。
+运行 `work-cli <service> --help` 查看所有快捷命令。
 
 ### 2. API 命令
 
 从飞书 OAPI 元数据自动生成，经过评测与准入筛选，100+ 精选命令与平台端点一一对应。
 
 ```bash
-lark-cli calendar calendars list
-lark-cli calendar events instance_view --params '{"calendar_id":"primary","start_time":"1700000000","end_time":"1700086400"}'
+work-cli calendar calendars list
+work-cli calendar events instance_view --params '{"calendar_id":"primary","start_time":"1700000000","end_time":"1700086400"}'
 ```
 
 ### 3. 通用 API 调用
@@ -236,8 +236,8 @@ lark-cli calendar events instance_view --params '{"calendar_id":"primary","start
 直接调用任意飞书开放平台端点，覆盖 2500+ API。
 
 ```bash
-lark-cli api GET /open-apis/calendar/v4/calendars
-lark-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"chat_id"}' --data '{"receive_id":"oc_xxx","msg_type":"text","content":"{\"text\":\"Hello\"}"}'
+work-cli api GET /open-apis/calendar/v4/calendars
+work-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"chat_id"}' --data '{"receive_id":"oc_xxx","msg_type":"text","content":"{\"text\":\"Hello\"}"}'
 ```
 
 ## 进阶用法
@@ -283,7 +283,7 @@ lark-cli api POST /open-apis/im/v1/messages --params '{"receive_id_type":"chat_i
 对可能产生副作用的命令，建议先用 --dry-run 预览请求：
 
 ```bash
-lark-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
+work-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
 ```
 
 ### Schema 自省
@@ -291,9 +291,9 @@ lark-cli im +messages-send --chat-id oc_xxx --text "hello" --dry-run
 使用 schema 查看任意 API 方法的参数、请求体、响应结构、支持身份和 scopes：
 
 ```bash
-lark-cli schema
-lark-cli schema calendar.events.instance_view
-lark-cli schema im.messages.delete
+work-cli schema
+work-cli schema calendar.events.instance_view
+work-cli schema im.messages.delete
 ```
 
 ## 安全与风险提示（使用前必读）
@@ -312,19 +312,19 @@ lark-cli schema im.messages.delete
 如需让当前 workspace 退出该保护，可执行以下命令：
 
 ```bash
-lark-cli config risk-control off
+work-cli config risk-control off
 ```
 
 如需开启当前 workspace 的保护，可执行以下命令：
 
 ```bash
-lark-cli config risk-control on
+work-cli config risk-control on
 ```
 
 恢复当前 workspace 默认策略可执行：
 
 ```bash
-lark-cli config risk-control default
+work-cli config risk-control default
 ```
 
 请您充分知悉全部使用风险，使用本工具即视为您自愿承担相关所有责任。

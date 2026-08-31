@@ -37,7 +37,7 @@ func runCheck(args []string) int {
 	var printLegacyCommandCandidates bool
 	var printLegacyFlagCandidates bool
 	fs.StringVar(&opts.Repo, "repo", ".", "repository root")
-	fs.StringVar(&opts.CLIBin, "cli-bin", "./lark-cli", "lark-cli binary used for dry-run validation")
+	fs.StringVar(&opts.CLIBin, "cli-bin", "./lark-cli", "work-cli binary used for dry-run validation")
 	fs.StringVar(&opts.ChangedFrom, "changed-from", "", "base revision for incremental checks")
 	fs.StringVar(&opts.FactsOut, "facts-out", "", "write facts JSON to this path")
 	fs.StringVar(&opts.ManifestPath, "manifest", "", "hand-authored command manifest JSON")

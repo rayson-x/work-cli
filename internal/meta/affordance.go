@@ -10,7 +10,7 @@ import "encoding/json"
 // vocabulary is defined once; the JSON tags double as the envelope wire shape.
 // Skills entries are either a bare skill name (e.g. "lark-doc") or a
 // name/relative-path reference (e.g. "lark-contact/references/x.md"); both
-// render as runnable `lark-cli skills read <entry>` pointers. Help validates
+// render as runnable `work-cli skills read <entry>` pointers. Help validates
 // each against the embedded skill tree (a name → its SKILL.md, a reference →
 // that path) and drops any that do not resolve.
 type Affordance struct {

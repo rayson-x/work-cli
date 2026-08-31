@@ -572,7 +572,7 @@ func TestServiceMethod_PageAll_DefaultJSONRunsContentSafety(t *testing.T) {
 
 	spec := meta.ServiceFromMap(map[string]interface{}{"name": "svc", "servicePath": "/open-apis/svc/v1"})
 	method := meta.FromMap(map[string]interface{}{"path": "items", "httpMethod": "GET", "parameters": map[string]interface{}{}})
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddCommand(NewCmdServiceMethod(f, spec, method, "list", "items", nil))
 	root.SetArgs([]string{"list", "--as", "bot", "--page-all"})
 
@@ -626,7 +626,7 @@ func TestServiceMethod_PageAll_StreamFormatRunsContentSafety(t *testing.T) {
 
 	spec := meta.ServiceFromMap(map[string]interface{}{"name": "svc", "servicePath": "/open-apis/svc/v1"})
 	method := meta.FromMap(map[string]interface{}{"path": "items", "httpMethod": "GET", "parameters": map[string]interface{}{}})
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddCommand(NewCmdServiceMethod(f, spec, method, "list", "items", nil))
 	root.SetArgs([]string{"list", "--as", "bot", "--page-all", "--format", "ndjson"})
 
@@ -685,7 +685,7 @@ func TestServiceMethod_PageAll_StreamFormatBlockSkipsBlockedPage(t *testing.T) {
 
 	spec := meta.ServiceFromMap(map[string]interface{}{"name": "svc", "servicePath": "/open-apis/svc/v1"})
 	method := meta.FromMap(map[string]interface{}{"path": "items", "httpMethod": "GET", "parameters": map[string]interface{}{}})
-	root := &cobra.Command{Use: "lark-cli"}
+	root := &cobra.Command{Use: "work-cli"}
 	root.AddCommand(NewCmdServiceMethod(f, spec, method, "list", "items", nil))
 	root.SetArgs([]string{"list", "--as", "bot", "--page-all", "--format", "ndjson"})
 

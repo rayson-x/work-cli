@@ -23,7 +23,7 @@ var BaseAppBlockList = common.Shortcut{
 		{Name: "page-token", Desc: "pagination token"},
 	},
 	Tips: []string{
-		"lark-cli base +app-block-list --app-token <app_token> --page-id <page_id>",
+		"work-cli base +app-block-list --app-token <app_token> --page-id <page_id>",
 		"A returned component with type=unsupported can only be identified in this list; +app-block-get, +app-block-get-data, and +app-block-update do not support it and will return an error.",
 		"Use block_id for +app-block-get/update. For chart data, pass chart_token to +app-block-get-data --block-id.",
 		"These are page blocks, not dashboard blocks: do not pass a block_id from here to +dashboard-block-get.",

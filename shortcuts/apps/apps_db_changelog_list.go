@@ -12,7 +12,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const dbChangelogHint = "verify --app-id is correct; if targeting --environment dev, create it first with `lark-cli apps +db-env-create --app-id <app_id> --environment dev`"
+const dbChangelogHint = "verify --app-id is correct; if targeting --environment dev, create it first with `work-cli apps +db-env-create --app-id <app_id> --environment dev`"
 
 // AppsDBChangelogList 列出应用数据库的 DDL 变更记录（建表/改表/索引等结构变更追溯）。
 //
@@ -25,7 +25,7 @@ var AppsDBChangelogList = common.Shortcut{
 	Description: "List a Miaoda app database's DDL change history (cursor pagination)",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-changelog-list --app-id <app_id>",
+		"Example: work-cli apps +db-changelog-list --app-id <app_id>",
 		"Pin a single change with --change-id; filter time with --since 7d / --until 2026-04-15.",
 	},
 	Scopes:    []string{"spark:app:read"},

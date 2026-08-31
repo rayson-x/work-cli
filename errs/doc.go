@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Lark Technologies Pte. Ltd.
 // SPDX-License-Identifier: MIT
 
-// Package errs is the public error-contract surface for lark-cli.
+// Package errs is the public error-contract surface for work-cli.
 //
 // It defines a closed taxonomy (9 Categories) and a small set of typed
 // errors that embed Problem — an RFC 7807-aligned shared shape. External

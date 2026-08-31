@@ -20,7 +20,7 @@ var AppsDBSyncUpdate = common.Shortcut{
 	Description: "Update a Base data sync task configuration",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-update --app-id <app_id> --task-id streaming_<id> --config @sync.json --yes",
+		"Example: work-cli apps +db-sync-update --app-id <app_id> --task-id streaming_<id> --config @sync.json --yes",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

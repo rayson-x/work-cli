@@ -14,63 +14,63 @@
 
 ```bash
 # 推荐：直接传 URL，CLI 自动解析类型和 token
-lark-cli drive +export \
+work-cli drive +export \
   --url "https://example.feishu.cn/docx/<DOCX_TOKEN>" \
   --file-extension pdf
 
 # Wiki URL 也推荐直接传，CLI 会先解析到底层 obj_token/obj_type
-lark-cli drive +export \
+work-cli drive +export \
   --url "https://example.feishu.cn/wiki/<WIKI_NODE_TOKEN>" \
   --file-extension pdf
 
 # 只有裸 Wiki node token 时，显式传 --doc-type wiki，让 CLI 先解析到底层文档类型
-lark-cli drive +export \
+work-cli drive +export \
   --token "<WIKI_NODE_TOKEN>" \
   --doc-type wiki \
   --file-extension pdf
 
 # 导出新版文档为 pdf，默认保存到当前目录
-lark-cli drive +export \
+work-cli drive +export \
   --token "<DOCX_TOKEN>" \
   --doc-type docx \
   --file-extension pdf
 
 # 导出旧版文档为 docx
-lark-cli drive +export \
+work-cli drive +export \
   --token "<DOC_TOKEN>" \
   --doc-type doc \
   --file-extension docx
 
 # 导出 docx 为 markdown（Lark-flavored Markdown）
 # 注意：markdown 只支持 docx
-lark-cli drive +export \
+work-cli drive +export \
   --token "<DOCX_TOKEN>" \
   --doc-type docx \
   --file-extension markdown
 
 # 导出电子表格为 xlsx
-lark-cli drive +export \
+work-cli drive +export \
   --token "<SHEET_TOKEN>" \
   --doc-type sheet \
   --file-extension xlsx \
   --output-dir ./exports
 
 # 导出幻灯片为 pptx
-lark-cli drive +export \
+work-cli drive +export \
   --token "<SLIDES_TOKEN>" \
   --doc-type slides \
   --file-extension pptx \
   --output-dir ./exports
 
 # 导出幻灯片为 pdf
-lark-cli drive +export \
+work-cli drive +export \
   --token "<SLIDES_TOKEN>" \
   --doc-type slides \
   --file-extension pdf \
   --output-dir ./exports
 
 # 指定本地文件名（会按导出格式自动补扩展名）
-lark-cli drive +export \
+work-cli drive +export \
   --token "<DOCX_TOKEN>" \
   --doc-type docx \
   --file-extension pdf \
@@ -78,7 +78,7 @@ lark-cli drive +export \
   --output-dir ./exports
 
 # 导出电子表格或多维表格为 csv 时，必须传 sub_id
-lark-cli drive +export \
+work-cli drive +export \
   --token "<SHEET_OR_BITABLE_TOKEN>" \
   --doc-type "<sheet|bitable>" \
   --file-extension csv \
@@ -86,14 +86,14 @@ lark-cli drive +export \
   --output-dir ./exports
 
 # 导出多维表格为 .base 快照（只支持 bitable）
-lark-cli drive +export \
+work-cli drive +export \
   --token "<BITABLE_TOKEN>" \
   --doc-type bitable \
   --file-extension base \
   --output-dir ./exports
 
 # 导出多维表格结构为 .base 快照（仅导出表结构，不导出记录数据）
-lark-cli drive +export \
+work-cli drive +export \
   --token "<BITABLE_TOKEN>" \
   --doc-type bitable \
   --file-extension base \
@@ -101,7 +101,7 @@ lark-cli drive +export \
   --output-dir ./exports
 
 # 允许覆盖已存在文件
-lark-cli drive +export \
+work-cli drive +export \
   --token "<DOCX_TOKEN>" \
   --doc-type docx \
   --file-extension pdf \
@@ -144,29 +144,29 @@ lark-cli drive +export \
 
 | 错误码 | 含义 | 处理方式 |
 |--------|------|----------|
-| `1069914` | token 非法或 token/type 不匹配；常见原因是把 Wiki node token 当作底层 `docx` / `sheet` / `bitable` token 使用，没有传 `--doc-type wiki` | 优先改用 `--url <Wiki URL>`；只有裸 Wiki token 时，用 `--token <WIKI_NODE_TOKEN> --doc-type wiki`。不确定 token 类型时，先用 `lark-cli drive +inspect --url <TOKEN> --type wiki` 检查是否能解包为 Wiki node；如果不是 Wiki token，再检查 token 来源、`--doc-type` 是否与实际资源类型一致 |
+| `1069914` | token 非法或 token/type 不匹配；常见原因是把 Wiki node token 当作底层 `docx` / `sheet` / `bitable` token 使用，没有传 `--doc-type wiki` | 优先改用 `--url <Wiki URL>`；只有裸 Wiki token 时，用 `--token <WIKI_NODE_TOKEN> --doc-type wiki`。不确定 token 类型时，先用 `work-cli drive +inspect --url <TOKEN> --type wiki` 检查是否能解包为 Wiki node；如果不是 Wiki token，再检查 token 来源、`--doc-type` 是否与实际资源类型一致 |
 | `1069902` | 没有当前导出任务所需权限 | 不要直接重试同一命令；先确认当前 `--as` 身份是否能访问该文档、是否有下载/导出权限，以及文档是否受分享、密级或租户策略限制。需要补权限时，让文档 owner 或管理员授权后再执行 |
 | `99991400` / `rate_limit` | OpenAPI 请求频率受限 | 立即停止并按错误 `hint` 处理：没有 `ticket` 时，至少等待 1 分钟后重跑原 `drive +export`；已有 `ticket` 时，只执行 `drive +task_result --scenario export` 续查，不要重复创建任务。持续限频时从 1 分钟开始指数退避 |
 | `9499` + `too many request(s)` | 导出任务接口的另一种限频响应；同一个 `9499` 在其它 Drive 接口也可能表示参数类型错误，CLI 会结合服务端消息区分 | 按 `rate_limit` 处理：立即停止，等待至少 1 分钟并指数退避；已有 `ticket` 时只续查该任务，不要重新创建 |
-| `99991679` | 缺少 OpenAPI scope | 按错误 envelope 中的 `missing_scopes` / `required_scope` / `hint` 补齐授权；常见方式是重新执行 `lark-cli auth login --scope "<缺失 scope>"`。补 scope 前不要反复重试导出命令 |
+| `99991679` | 缺少 OpenAPI scope | 按错误 envelope 中的 `missing_scopes` / `required_scope` / `hint` 补齐授权；常见方式是重新执行 `work-cli auth login --scope "<缺失 scope>"`。补 scope 前不要反复重试导出命令 |
 
 ## 推荐续跑方式
 
 ```bash
 # 第一步：先尝试直接导出
-lark-cli drive +export \
+work-cli drive +export \
   --url "<DOCX_URL>" \
   --file-extension pdf \
   --file-name "weekly-report.pdf"
 
 # 如果返回 ready=false / timed_out=true，再继续查
-lark-cli drive +task_result \
+work-cli drive +task_result \
   --scenario export \
   --ticket "<TICKET>" \
   --file-token "<DOCX_TOKEN>"
 
 # 查到 file_token 后下载
-lark-cli drive +export-download \
+work-cli drive +export-download \
   --file-token "<EXPORTED_FILE_TOKEN>" \
   --file-name "weekly-report.pdf" \
   --output-dir ./exports

@@ -19,7 +19,7 @@ var AppsOpenAPIKeyDelete = common.Shortcut{
 	Description: "Delete an open API key (irreversible; prefer +openapi-key-disable)",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +openapi-key-delete --app-id <app_id> --key-id <key_id> --yes",
+		"Example: work-cli apps +openapi-key-delete --app-id <app_id> --key-id <key_id> --yes",
 		"Preview: add --dry-run to see the request without deleting",
 	},
 	Scopes:    []string{"spark:app:write"},

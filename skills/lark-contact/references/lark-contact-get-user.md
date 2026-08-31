@@ -4,13 +4,13 @@
 
 ```bash
 # 取自己
-lark-cli contact +get-user --as user
+work-cli contact +get-user --as user
 
 # bot 按 ID 取他人
-lark-cli contact +get-user --user-id ou_xxx --as bot
+work-cli contact +get-user --user-id ou_xxx --as bot
 
 # 按 union_id / user_id 取(默认 open_id)
-lark-cli contact +get-user --user-id <id> --user-id-type union_id --as bot
+work-cli contact +get-user --user-id <id> --user-id-type union_id --as bot
 ```
 
 ## 注意事项

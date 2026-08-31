@@ -15,30 +15,30 @@
 
 ```bash
 # block_insert：在页末追加一个新元素
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation slidesXXXXXXXXXXXXXXXXXXXXXX \
   --slide-id pfG \
   --parts '[{"action":"block_insert","insertion":"<shape type=\"rect\" topLeftX=\"500\" topLeftY=\"100\" width=\"200\" height=\"100\"/>"}]'
 
 # block_replace：已知某块 id，整块替换（replacement 根 id 自动注入为 bUn）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation slidesXXXXXXXXXXXXXXXXXXXXXX \
   --slide-id pfG \
   --parts '[{"action":"block_replace","block_id":"bUn","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"}]'
 
 # 大 --parts 走文件或 stdin（auto-gen 命令不支持 @file，但 shortcut 支持）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation $PRES_ID --slide-id $SID --parts @parts.json
-cat parts.json | lark-cli slides +replace-slide --as user \
+cat parts.json | work-cli slides +replace-slide --as user \
   --presentation $PRES_ID --slide-id $SID --parts -
 
 # wiki URL 直接传（CLI 自动 get_node → 拿真实 xml_presentation_id）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "https://xxx.feishu.cn/wiki/wikcnXXXXXX" --slide-id pfG \
   --parts '[{"action":"block_insert","insertion":"<shape type=\"rect\" width=\"100\" height=\"100\"/>"}]'
 
 # 预览（不实际调用）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation $PRES_ID --slide-id $SID --parts "$PARTS" --dry-run
 ```
 
@@ -184,11 +184,11 @@ PRES_ID=xxx
 SID=yyy
 
 # 1) 上传图片
-TOKEN=$(lark-cli slides +media-upload --as user \
+TOKEN=$(work-cli slides +media-upload --as user \
   --file ./pic.png --presentation "$PRES_ID" --jq '.data.file_token')
 
 # 2) block_insert 到页末
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts "$(jq -n --arg token "$TOKEN" \
     '[{action:"block_insert",insertion:("<img src=\""+$token+"\" topLeftX=\"500\" topLeftY=\"100\" width=\"200\" height=\"150\"/>")}]')"
@@ -198,11 +198,11 @@ lark-cli slides +replace-slide --as user \
 
 ```bash
 # 先拿原页 XML，从里面找到标题块的 3 位 short id（如 bUn）
-lark-cli slides xml_presentation.slide get --as user \
+work-cli slides xml_presentation.slide get --as user \
   --params "{\"xml_presentation_id\":\"$PRES_ID\",\"slide_id\":\"$SID\"}"
 
 # block_replace 换掉整个标题块（id 自动注入）
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts '[{"action":"block_replace","block_id":"bUn","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"}]'
 ```
@@ -212,7 +212,7 @@ lark-cli slides +replace-slide --as user \
 `block_replace` 和 `block_insert` 可以在同一个 `--parts` 里混用，整批原子执行。
 
 ```bash
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" \
   --parts '[
     {"action":"block_replace","block_id":"bab","replacement":"<shape type=\"text\" topLeftX=\"80\" topLeftY=\"80\" width=\"800\" height=\"120\"><content textType=\"title\"><p>新标题</p></content></shape>"},
@@ -224,12 +224,12 @@ lark-cli slides +replace-slide --as user \
 
 ```bash
 # 读时记录 revision_id
-REV=$(lark-cli slides xml_presentation.slide get --as user \
+REV=$(work-cli slides xml_presentation.slide get --as user \
   --params "{\"xml_presentation_id\":\"$PRES_ID\",\"slide_id\":\"$SID\"}" \
   --jq '.data.revision_id')
 
 # 写时传 --revision-id；传不存在的版本号（超过当前 revision）返回 3350002
-lark-cli slides +replace-slide --as user \
+work-cli slides +replace-slide --as user \
   --presentation "$PRES_ID" --slide-id "$SID" --revision-id "$REV" \
   --parts "$PARTS"
 ```

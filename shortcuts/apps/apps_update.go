@@ -20,8 +20,8 @@ var AppsUpdate = common.Shortcut{
 	Description: "Partially update an app (only provided fields are sent)",
 	Risk:        "write",
 	Tips: []string{
-		`Example: lark-cli apps +update --app-id <app_id> --name "新名称"`,
-		`Example: lark-cli apps +update --app-id <app_id> --description "..."`,
+		`Example: work-cli apps +update --app-id <app_id> --name "新名称"`,
+		`Example: work-cli apps +update --app-id <app_id> --description "..."`,
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

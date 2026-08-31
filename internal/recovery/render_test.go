@@ -16,7 +16,7 @@ import (
 func TestRenderClonesEveryConcreteTypedErrorAndPreservesWireExtensions(t *testing.T) {
 	sentinel := errors.New("sentinel")
 	hint := Join("; ",
-		Command(TargetConfigInit, "run `lark-cli config init`"),
+		Command(TargetConfigInit, "run `work-cli config init`"),
 		Text("inspect logs"),
 	)
 	problem := func(category errs.Category, subtype errs.Subtype) errs.Problem {
@@ -175,8 +175,8 @@ func TestRenderClonesEveryConcreteTypedErrorAndPreservesWireExtensions(t *testin
 func TestRenderProjectsStructuredMessageWithoutMutatingSource(t *testing.T) {
 	message := Join("",
 		Text("operation failed."),
-		Command(TargetSkillsRead, " Run `lark-cli skills read lark-doc`."),
-		Text(" Run `lark-cli docs --help`."),
+		Command(TargetSkillsRead, " Run `work-cli skills read lark-doc`."),
+		Text(" Run `work-cli docs --help`."),
 	)
 	original := AnnotateMessage(
 		errs.NewValidationError(errs.SubtypeInvalidArgument, "%s", message.String()),
@@ -192,7 +192,7 @@ func TestRenderProjectsStructuredMessageWithoutMutatingSource(t *testing.T) {
 		t.Fatalf("Render returned %T, want typed error", rendered)
 	}
 	if got, want := renderedProblem.Message,
-		"operation failed. Run `lark-cli docs --help`."; got != want {
+		"operation failed. Run `work-cli docs --help`."; got != want {
 		t.Fatalf("rendered message = %q, want %q", got, want)
 	}
 	originalProblem, _ := errs.ProblemOf(original)
@@ -203,7 +203,7 @@ func TestRenderProjectsStructuredMessageWithoutMutatingSource(t *testing.T) {
 
 func TestRenderPreservesProducerEnrichmentAddedAfterAnnotation(t *testing.T) {
 	hint := Join("; ",
-		Command(TargetConfigInit, "run `lark-cli config init`"),
+		Command(TargetConfigInit, "run `work-cli config init`"),
 		Text("inspect logs"),
 	)
 	typed := errs.NewConfigError(errs.SubtypeNotConfigured, "not configured").
@@ -228,7 +228,7 @@ func TestRenderPreservesProducerEnrichmentAddedAfterAnnotation(t *testing.T) {
 }
 
 func TestRenderDoesNotBorrowNestedTypedErrorAnnotation(t *testing.T) {
-	innerHint := Join("", Command(TargetAuthLogin, "run `lark-cli auth login`"))
+	innerHint := Join("", Command(TargetAuthLogin, "run `work-cli auth login`"))
 	inner := Annotate(
 		errs.NewAuthenticationError(errs.SubtypeTokenMissing, "inner").
 			WithHint("%s", innerHint.String()),

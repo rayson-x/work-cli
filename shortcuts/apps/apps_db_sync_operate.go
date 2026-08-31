@@ -13,7 +13,7 @@ import (
 	"github.com/larksuite/cli/shortcuts/common"
 )
 
-const dbSyncOperateHint = "verify --task-id with `lark-cli apps +db-sync-get --app-id <app_id> --task-id <task_id>`; enable, disable, and delete only apply to streaming tasks"
+const dbSyncOperateHint = "verify --task-id with `work-cli apps +db-sync-get --app-id <app_id> --task-id <task_id>`; enable, disable, and delete only apply to streaming tasks"
 
 // AppsDBSyncEnable enables a disabled streaming Base data sync task.
 var AppsDBSyncEnable = common.Shortcut{
@@ -22,7 +22,7 @@ var AppsDBSyncEnable = common.Shortcut{
 	Description: "Enable a streaming Base data sync task",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-enable --app-id <app_id> --task-id streaming_123",
+		"Example: work-cli apps +db-sync-enable --app-id <app_id> --task-id streaming_123",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -49,7 +49,7 @@ var AppsDBSyncDisable = common.Shortcut{
 	Description: "Disable a streaming Base data sync task",
 	Risk:        "write",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-disable --app-id <app_id> --task-id streaming_123",
+		"Example: work-cli apps +db-sync-disable --app-id <app_id> --task-id streaming_123",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},
@@ -76,7 +76,7 @@ var AppsDBSyncDelete = common.Shortcut{
 	Description: "Delete a streaming Base data sync task while keeping target data",
 	Risk:        "high-risk-write",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-delete --app-id <app_id> --task-id streaming_123 --yes",
+		"Example: work-cli apps +db-sync-delete --app-id <app_id> --task-id streaming_123 --yes",
 	},
 	Scopes:    []string{"spark:app:write"},
 	AuthTypes: []string{"user"},

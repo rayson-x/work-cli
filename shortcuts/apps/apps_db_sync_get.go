@@ -21,7 +21,7 @@ var AppsDBSyncGet = common.Shortcut{
 	Description: "Get a Base data sync task",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-sync-get --app-id <app_id> --task-id <task_id>",
+		"Example: work-cli apps +db-sync-get --app-id <app_id> --task-id <task_id>",
 	},
 	Scopes:    []string{"spark:app:read"},
 	AuthTypes: []string{"user"},
@@ -58,7 +58,7 @@ var AppsDBSyncGet = common.Shortcut{
 		}
 		data, err := rctx.CallAPITyped("GET", appDbSyncTaskPath(appID), map[string]interface{}{"task_id": taskID}, nil)
 		if err != nil {
-			return withDBSyncHint(err, "verify --task-id; list tasks with `lark-cli apps +db-sync-list --app-id "+appID+"`")
+			return withDBSyncHint(err, "verify --task-id; list tasks with `work-cli apps +db-sync-list --app-id "+appID+"`")
 		}
 		rctx.OutFormat(data, nil, func(w io.Writer) {
 			renderDBSyncGetPretty(w, data)

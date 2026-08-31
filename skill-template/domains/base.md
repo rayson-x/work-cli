@@ -1,19 +1,19 @@
-> **命名约定：** Shortcut 命令组和原生 API / schema 都使用 `lark-cli base ...`。
-> **分流规则：** 如果用户要把本地文件导入成 Base / 多维表格 / bitable，第一步不是 `base`，而是 `lark-cli drive +import --type bitable`。
+> **命名约定：** Shortcut 命令组和原生 API / schema 都使用 `work-cli base ...`。
+> **分流规则：** 如果用户要把本地文件导入成 Base / 多维表格 / bitable，第一步不是 `base`，而是 `work-cli drive +import --type bitable`。
 
 ## 核心规则
 
 1. **原生 API 命令路径必须完整** — 资源名是多级点分路径，不能省略前缀
-   - `lark-cli base table.records create` ✅
-   - `lark-cli base records create` ❌
+   - `work-cli base table.records create` ✅
+   - `work-cli base records create` ❌
 2. **优先使用 Shortcut** — 有 Shortcut 的操作不要手拼原生 API
 3. **写记录前** — 先调用 `table.fields list` 获取字段 `type/ui_type`，再读 [lark-base-cell-value.md](../../skills/lark-base/references/lark-base-cell-value.md)；该文档是 CellValue 的 source of truth
 4. **写字段前** — 先读 [lark-base-field-json.md](../../skills/lark-base/references/lark-base-field-json.md) 确认字段类型 JSON 结构
 5. **筛选查询前** — 先读 [lark-base-view-set-filter.md](../../skills/lark-base/references/lark-base-view-set-filter.md)，当前 `base/v3` 通过 `view.filter update + table.records list` 组合完成筛选读取
 6. **批量上限 200 条/次** — 同一表建议串行写入，并在批次间延迟 0.5–1 秒
 7. **改名和删除按明确意图执行** — 视图重命名这类低风险改名操作，目标和新名称明确时可直接执行；删除记录 / 字段 / 表时，只要用户已经明确要求删除且目标明确，也可直接执行，不需要再补一次确认
-8. **不要走旧 bitable 路径** — Base 场景不要调用 `lark-cli api GET /open-apis/bitable/v1/...`；即使 wiki 解析结果是 `obj_type=bitable`，后续也应继续使用 `lark-cli base ...`
-9. **不要把本地文件导入误判成 Base 表内操作** — 如果目标是“把 Excel / CSV / `.base` 快照导入成 Base / 多维表格”，必须先走 `lark-cli drive +import --type bitable`；只有导入完成后，才回到 `lark-cli base ...`
+8. **不要走旧 bitable 路径** — Base 场景不要调用 `work-cli api GET /open-apis/bitable/v1/...`；即使 wiki 解析结果是 `obj_type=bitable`，后续也应继续使用 `work-cli base ...`
+9. **不要把本地文件导入误判成 Base 表内操作** — 如果目标是“把 Excel / CSV / `.base` 快照导入成 Base / 多维表格”，必须先走 `work-cli drive +import --type bitable`；只有导入完成后，才回到 `work-cli base ...`
 
 ## 意图 → 命令索引
 
@@ -22,7 +22,7 @@
 | 查表字段 | `table.fields list` | 写记录 / 更新前必调 |
 | 查记录 | `table.records list` | GET，简单列表，可附带 `view_id` |
 | 按视图筛选查询 | `view.filter update` + `table.records list` | 当前 `base/v3` 没有独立 `search` |
-| 把本地 Excel / CSV / `.base` 导入为 Base / 多维表格 | `lark-cli drive +import --type bitable` | 导入阶段属于 `drive`，不是 `base` |
+| 把本地 Excel / CSV / `.base` 导入为 Base / 多维表格 | `work-cli drive +import --type bitable` | 导入阶段属于 `drive`，不是 `base` |
 | 新增单条记录 | `table.records create` | 少量数据 |
 | 更新记录 | `table.records patch` | 只传需要变更的字段 |
 | 删除记录 | `table.records delete` | 单条删除 |
@@ -33,7 +33,7 @@
 ## 操作注意事项
 
 - **Base token 口径统一**：无论 Shortcut 还是原生 API，都统一使用 `base_token`
-- **附件字段**：上传本地文件时只能走 `lark-cli base +record-upload-attachment`
+- **附件字段**：上传本地文件时只能走 `work-cli base +record-upload-attachment`
 - **地理位置字段**：写入必须使用 `{lng,lat}`；读取、筛选和转文本等场景使用 `full_address` 字符串，筛选优先用包含匹配；只有公式能访问坐标
 - **能力边界**：当前 `base/v3` 原生 spec 以单表 / 单记录 / 视图筛选配置为主，批量写入和旧 `search` 场景优先走 unified Shortcut 组合能力
 - **视图重命名确认规则**：用户已经明确“把哪个视图改成什么名字”时，执行 `table.views patch` / 对应 shortcut 直接改名即可，不需要再补一句确认
@@ -49,7 +49,7 @@
 
 1. **使用 `wiki.spaces.get_node` 查询节点信息**
    ```bash
-   lark-cli wiki spaces.get_node --params '{"token":"&lt;wiki_token&gt;"}'
+   work-cli wiki spaces.get_node --params '{"token":"&lt;wiki_token&gt;"}'
    ```
 
 2. **从返回结果中提取关键信息**
@@ -64,7 +64,7 @@
    | `docx` | 新版云文档 | `drive file.comments.*`、`docx.*` |
    | `doc` | 旧版云文档 | `drive file.comments.*` |
    | `sheet` | 电子表格 | `sheets.*` |
-   | `bitable` | 多维表格 | `lark-cli base +...`（优先）；如果 shortcut 不覆盖，再用 `lark-cli base <resource> <method>`；不要改走 `lark-cli api /open-apis/bitable/v1/...` |
+   | `bitable` | 多维表格 | `work-cli base +...`（优先）；如果 shortcut 不覆盖，再用 `work-cli base <resource> <method>`；不要改走 `work-cli api /open-apis/bitable/v1/...` |
    | `slides` | 幻灯片 | `drive.*` |
    | `file` | 文件 | `drive.*` |
    | `mindnote` | 思维导图 | `drive.*` |
@@ -76,13 +76,13 @@
 5. **如果已经报了 token 错，再回退检查 wiki**
    - 如果命令返回 `param baseToken is invalid`、`base_token invalid`、`not found`，并且输入来自 `/wiki/...`，优先怀疑“把 wiki token 当成了 base token”
    - 重新执行 `wiki.spaces.get_node`
-   - 确认 `obj_type=bitable` 后，用 `node.obj_token` 重试 `lark-cli base ...`
+   - 确认 `obj_type=bitable` 后，用 `node.obj_token` 重试 `work-cli base ...`
 
 ### 查询示例
 
 ```bash
 # 查询 wiki 节点
-lark-cli wiki spaces.get_node --params '{"token":"Pgrrwvr***********UnRb"}'
+work-cli wiki spaces.get_node --params '{"token":"Pgrrwvr***********UnRb"}'
 ```
 
 返回结果示例：

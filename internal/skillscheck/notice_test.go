@@ -17,12 +17,12 @@ func TestStaleNotice_Message(t *testing.T) {
 		{
 			"drift",
 			StaleNotice{Current: "1.0.20", Target: "1.0.21"},
-			"lark-cli skills 1.0.20 out of sync with binary 1.0.21, run: lark-cli update",
+			"work-cli skills 1.0.20 out of sync with binary 1.0.21, run: work-cli update",
 		},
 		{
 			"official skills unknown",
 			StaleNotice{Current: "1.0.21", Target: "1.0.21", OfficialUnknown: true},
-			"lark-cli skills were installed from a fallback source; official completeness is unknown, run: lark-cli update",
+			"work-cli skills were installed from a fallback source; official completeness is unknown, run: work-cli update",
 		},
 	}
 	for _, tt := range tests {

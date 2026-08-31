@@ -48,7 +48,7 @@
 ## 原生 API
 
 ```bash
-lark-cli mail user_mailbox.templates list --params '{"user_mailbox_id":"me"}'
-lark-cli mail user_mailbox.templates get --params '{"user_mailbox_id":"me","template_id":"<id>"}'
-lark-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'
+work-cli mail user_mailbox.templates list --params '{"user_mailbox_id":"me"}'
+work-cli mail user_mailbox.templates get --params '{"user_mailbox_id":"me","template_id":"<id>"}'
+work-cli mail user_mailbox.templates delete --params '{"user_mailbox_id":"me","template_id":"<id>"}'
 ```

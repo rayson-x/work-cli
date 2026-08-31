@@ -21,7 +21,7 @@ var AppsDBAuditStatus = common.Shortcut{
 	Description: "Show table audit (row-change tracking) status",
 	Risk:        "read",
 	Tips: []string{
-		"Example: lark-cli apps +db-audit-status --app-id <app_id>",
+		"Example: work-cli apps +db-audit-status --app-id <app_id>",
 		"Check one table: --table orders",
 	},
 	Scopes:    []string{"spark:app:read"},
