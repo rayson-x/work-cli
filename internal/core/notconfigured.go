@@ -27,7 +27,7 @@ func isMalformedConfigError(err error) bool {
 // configured vs. couldn't read" disambiguation that every config-required
 // command should use:
 //
-//   - file missing → workspace-aware NotConfiguredError (init / bind hint)
+//   - file missing → canonical NotConfiguredError (config init hint)
 //   - parse error / permission error → real load failure with the original
 //     cause preserved, so the user can actually fix the broken file
 //
@@ -62,59 +62,24 @@ const (
 	// init" guidance — shared by NotConfiguredError and NoActiveProfileError
 	// so the same session can't show two different recommended commands.
 	localInitHint = "run `work-cli config init --new` in the background. It blocks and outputs a verification URL — retrieve the URL and open it in a browser to complete setup."
-
-	// agentBindHint is the canonical "you're in an Agent workspace, see
-	// the binding workflow" guidance. Always points at --help (never a
-	// ready-to-run bind command) so the AI reads the confirmation
-	// discipline (identity preset, user opt-in) before acting.
-	agentBindHint = "read `work-cli config bind --help`, then ask the user to confirm intent and identity preset (bot-only or user-default); only after both are confirmed, run `work-cli config bind`"
 )
 
-// NotConfiguredError returns the canonical "not configured" error, with a
-// hint that depends on the active workspace:
-//
-//   - WorkspaceLocal → suggest `config init --new` (creates a new app).
-//   - WorkspaceOpenClaw / WorkspaceHermes → point at `config bind --help`
-//     rather than a ready-to-run command, because binding is policy-laden:
-//     the user must pick an identity preset (bot-only vs user-default),
-//     and re-binding may overwrite an existing one. The help text walks
-//     the AI through the confirmation flow.
-//
-// All "config not loaded yet" call sites should use this helper rather than
-// hand-rolling a hint, so AI agents always get a workspace-correct next step.
+// NotConfiguredError returns the canonical "not configured" error. Every
+// host uses the same configuration file and therefore the same recovery.
 func NotConfiguredError() error {
-	ws := CurrentWorkspace()
-	if ws.IsLocal() {
-		hint := recovery.Join("", recovery.Command(recovery.TargetConfigInit, localInitHint)).
-			WithFallback("configure this distribution before retrying")
-		return recovery.Annotate(
-			errs.NewConfigError(errs.SubtypeNotConfigured, "not configured").
-				WithHint("%s", hint.String()),
-			hint,
-		)
-	}
-	// Agent workspace: the workspace name appears only in the message, never
-	// in the wire subtype, which stays not_configured.
-	hint := recovery.Join("", recovery.Command(recovery.TargetConfigBind, agentBindHint)).
-		WithFallback("bind this agent workspace through the distribution's supported setup flow")
+	hint := recovery.Join("", recovery.Command(recovery.TargetConfigInit, localInitHint)).
+		WithFallback("configure this distribution before retrying")
 	return recovery.Annotate(
-		errs.NewConfigError(errs.SubtypeNotConfigured,
-			"%s context detected but work-cli is not bound to it", ws.Display()).
+		errs.NewConfigError(errs.SubtypeNotConfigured, "not configured").
 			WithHint("%s", hint.String()),
 		hint,
 	)
 }
 
-// reconfigureHint returns the workspace-aware "fix it from scratch" hint
-// used by error paths that aren't full ConfigErrors (e.g. plain fmt.Errorf
-// strings from keychain / secret validation). Local → `config init`;
-// Agent → `config bind --help` so the AI reads the binding workflow and
-// confirms identity preset with the user before running the actual command.
+// reconfigureHint returns the single-config recovery hint used by error paths
+// that aren't full ConfigErrors.
 func reconfigureHint() string {
-	if CurrentWorkspace().IsLocal() {
-		return "please run `work-cli config init` to reconfigure"
-	}
-	return agentBindHint
+	return "please run `work-cli config init` to reconfigure"
 }
 
 // RequireAppConfig resolves the profile selection to an app entry, or returns
@@ -179,25 +144,12 @@ func (m *MultiAppConfig) ProfileNotFoundError(profile string, source ProfileSour
 }
 
 // NoActiveProfileError mirrors NotConfiguredError for the related
-// "config exists but the requested profile cannot be resolved" case. In agent
-// workspaces a missing profile typically means the binding was wiped while
-// the workspace marker remained — re-binding is the correct fix, not init.
+// "config exists but the requested profile cannot be resolved" case.
 func NoActiveProfileError() error {
-	ws := CurrentWorkspace()
-	if ws.IsLocal() {
-		hint := recovery.Join("", recovery.Command(recovery.TargetConfigInit, localInitHint)).
-			WithFallback("configure this distribution before retrying")
-		return recovery.Annotate(
-			errs.NewConfigError(errs.SubtypeNotConfigured, "no active profile").
-				WithHint("%s", hint.String()),
-			hint,
-		)
-	}
-	hint := recovery.Join("", recovery.Command(recovery.TargetConfigBind, agentBindHint)).
-		WithFallback("bind this agent workspace through the distribution's supported setup flow")
+	hint := recovery.Join("", recovery.Command(recovery.TargetConfigInit, localInitHint)).
+		WithFallback("configure this distribution before retrying")
 	return recovery.Annotate(
-		errs.NewConfigError(errs.SubtypeNotConfigured,
-			"no active profile in %s workspace", ws.Display()).
+		errs.NewConfigError(errs.SubtypeNotConfigured, "no active profile").
 			WithHint("%s", hint.String()),
 		hint,
 	)

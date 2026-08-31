@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	configcmd "github.com/larksuite/cli/cmd/config"
 	"github.com/larksuite/cli/errs"
 	"github.com/larksuite/cli/internal/cmdpolicy"
 	"github.com/larksuite/cli/internal/surface"
@@ -212,10 +211,6 @@ func installUnavailableProjections(
 
 func applyPresentationAffordances(root *cobra.Command, plan *surface.Plan) {
 	applyPluginFlagGate(root, plan)
-	configcmd.ProjectInitHelp(
-		findByPath(root, string(surface.CommandConfigInit)),
-		plan.CanReference(surface.CommandConfigBind),
-	)
 	root.Long = renderRootHelpSections(rootLongSections, plan)
 	root.SetUsageTemplate(renderRootUsageTemplate(plan))
 }

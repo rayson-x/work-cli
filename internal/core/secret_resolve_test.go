@@ -37,10 +37,29 @@ func TestValidateSecretKeyMatch_PlainSecret_Skipped(t *testing.T) {
 	}
 }
 
-func TestValidateSecretKeyMatch_FileRef_Skipped(t *testing.T) {
-	secret := SecretInput{Ref: &SecretRef{Source: "file", ID: "/tmp/secret.txt"}}
+func TestValidateSecretKeyMatch_EnvRef_Skipped(t *testing.T) {
+	secret := SecretInput{Ref: &SecretRef{Source: "env", ID: "WORK_CLI_TEST_SECRET"}}
 	if err := ValidateSecretKeyMatch("cli_abc123", secret); err != nil {
-		t.Errorf("file ref should be skipped, got: %v", err)
+		t.Errorf("env ref should be skipped, got: %v", err)
+	}
+}
+
+func TestResolveSecretInput_Env(t *testing.T) {
+	t.Setenv("WORK_CLI_TEST_SECRET", " secret-value ")
+	secret := SecretInput{Ref: &SecretRef{Source: "env", ID: "WORK_CLI_TEST_SECRET"}}
+	got, err := ResolveSecretInput(secret, nil)
+	if err != nil {
+		t.Fatalf("ResolveSecretInput() error = %v", err)
+	}
+	if got != "secret-value" {
+		t.Fatalf("ResolveSecretInput() = %q, want secret-value", got)
+	}
+}
+
+func TestSecretInputRejectsFileReference(t *testing.T) {
+	var secret SecretInput
+	if err := secret.UnmarshalJSON([]byte(`{"source":"file","id":"C:/outside/secret"}`)); err == nil {
+		t.Fatal("file-backed configuration must be rejected")
 	}
 }
 

@@ -41,7 +41,7 @@ func enrich(err *errs.PermissionError) error {
 }
 
 func TestStructuredRecoveryRejectsOpaqueFrameworkCommands(t *testing.T) {
-	for _, command := range []string{"work-cli config bind", "work-cli profile add"} {
+	for _, command := range []string{"work-cli profile add"} {
 		t.Run(command, func(t *testing.T) {
 			src := `package demo
 

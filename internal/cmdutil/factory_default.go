@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"sync"
 	"time"
@@ -51,11 +50,6 @@ func NewDefault(streams *IOStreams, inv InvocationContext) *Factory {
 		IOStreams:  streams,
 	}
 
-	// Workspace detection: determines which config subtree to use.
-	// Must run before any config or credential load, since those paths are
-	// workspace-scoped. Default is WorkspaceLocal — existing behavior unchanged.
-	ws := core.DetectWorkspaceFromEnv(os.Getenv)
-	core.SetCurrentWorkspace(ws)
 	workspaceConfig := core.NewConfigSnapshot()
 	bootstrapHostSignalSource := sync.OnceValue(func() riskcontrol.Source {
 		return resolveSDKHostSignalSource(workspaceConfig)

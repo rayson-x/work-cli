@@ -5,10 +5,10 @@ package core
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/larksuite/cli/internal/keychain"
-	"github.com/larksuite/cli/internal/vfs"
 )
 
 const secretKeyPrefix = "appsecret:"
@@ -18,18 +18,20 @@ func secretAccountKey(appId string) string {
 }
 
 // ResolveSecretInput resolves a SecretInput to a plain string.
-// SecretRef objects are resolved by source (file / keychain).
+// SecretRef objects are resolved by source (environment / keychain). Config
+// resolution intentionally never follows file references outside the single
+// CLI config root.
 func ResolveSecretInput(s SecretInput, kc keychain.KeychainAccess) (string, error) {
 	if s.Ref == nil {
 		return s.Plain, nil
 	}
 	switch s.Ref.Source {
-	case "file":
-		data, err := vfs.ReadFile(s.Ref.ID)
-		if err != nil {
-			return "", fmt.Errorf("failed to read secret file %s: %w", s.Ref.ID, err)
+	case "env":
+		value := strings.TrimSpace(os.Getenv(s.Ref.ID))
+		if value == "" {
+			return "", fmt.Errorf("secret environment variable %s is empty", s.Ref.ID)
 		}
-		return strings.TrimSpace(string(data)), nil
+		return value, nil
 	case "keychain":
 		return kc.Get(keychain.LarkCliService, s.Ref.ID)
 	default:
@@ -47,7 +49,7 @@ func ForStorage(appId string, input SecretInput, kc keychain.KeychainAccess) (Se
 	}
 	key := secretAccountKey(appId)
 	if err := kc.Set(keychain.LarkCliService, key, input.Plain); err != nil {
-		return SecretInput{}, fmt.Errorf("keychain unavailable: %w\nhint: use file: reference in config to bypass keychain", err)
+		return SecretInput{}, fmt.Errorf("keychain unavailable: %w\nhint: use an env secret reference in config to bypass keychain", err)
 	}
 	return SecretInput{Ref: &SecretRef{Source: "keychain", ID: key}}, nil
 }

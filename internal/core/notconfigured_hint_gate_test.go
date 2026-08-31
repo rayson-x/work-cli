@@ -17,10 +17,6 @@ import (
 // for one concealed tree filters only a clone and leaves the producer value
 // reusable by a tree where config/init remains referenceable.
 func TestNotConfiguredError_hintUsesBuildLocalSurface(t *testing.T) {
-	previous := CurrentWorkspace()
-	SetCurrentWorkspace(WorkspaceLocal)
-	t.Cleanup(func() { SetCurrentWorkspace(previous) })
-
 	source := NotConfiguredError()
 	var original *errs.ConfigError
 	if !errors.As(source, &original) || !strings.Contains(original.Hint, "config init") {

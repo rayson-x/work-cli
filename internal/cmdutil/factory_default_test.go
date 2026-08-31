@@ -52,6 +52,19 @@ func (k *factoryTenantTokenKeychain) Get(string, string) (string, error) {
 func (k *factoryTenantTokenKeychain) Set(string, string, string) error { return nil }
 func (k *factoryTenantTokenKeychain) Remove(string, string) error      { return nil }
 
+func TestNewDefaultIgnoresAgentHostMarkersForConfigLocation(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", dir)
+	t.Setenv("HERMES_HOME", t.TempDir())
+	t.Setenv("OPENCLAW_HOME", "")
+
+	NewDefault(nil, InvocationContext{})
+
+	if got := core.GetConfigDir(); got != dir {
+		t.Fatalf("GetConfigDir() = %q, want fixed root %q", got, dir)
+	}
+}
+
 func TestWithTenantAccessTokenLookupUsesExplicitCapability(t *testing.T) {
 	provider := &tenantLookupConfigurableProvider{}
 	got := withTenantAccessTokenLookup([]extcred.Provider{provider}, func(context.Context, string) (*extcred.Token, error) {

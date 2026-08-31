@@ -10,7 +10,7 @@ import (
 
 // ConfigSnapshot lazily captures one stable view of config.json for a CLI
 // invocation. All runtime consumers share the same load result so account and
-// workspace policy resolution cannot observe different file revisions. Callers
+// shared policy resolution cannot observe different file revisions. Callers
 // must treat the returned config as read-only.
 type ConfigSnapshot struct {
 	load func() (*MultiAppConfig, error)

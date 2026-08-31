@@ -18,7 +18,6 @@ const (
 	CommandAuthLogin         CommandID = "auth/login"
 	CommandConfig            CommandID = "config"
 	CommandConfigInit        CommandID = "config/init"
-	CommandConfigBind        CommandID = "config/bind"
 	CommandConfigStrictMode  CommandID = "config/strict-mode"
 	CommandConfigPolicyShow  CommandID = "config/policy/show"
 	CommandConfigPluginsShow CommandID = "config/plugins/show"

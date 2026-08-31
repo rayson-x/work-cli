@@ -13,7 +13,7 @@ import (
 	"github.com/larksuite/cli/internal/core"
 )
 
-func TestRiskControlWorkspacePolicy(t *testing.T) {
+func TestRiskControlConfigPolicy(t *testing.T) {
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
 	config := &core.MultiAppConfig{Apps: []core.AppConfig{{
 		AppId: "cli_test", AppSecret: core.PlainSecret("secret"), Brand: core.BrandFeishu,
@@ -44,7 +44,7 @@ func TestRiskControlWorkspacePolicy(t *testing.T) {
 	if err := cmd.Execute(); err != nil {
 		t.Fatalf("show: %v", err)
 	}
-	if got := stdout.String(); got != "risk-control: off (source: workspace)\n" {
+	if got := stdout.String(); got != "risk-control: off (source: config)\n" {
 		t.Fatalf("stdout = %q", got)
 	}
 
@@ -84,7 +84,7 @@ func TestRiskControlWorkspacePolicy(t *testing.T) {
 	}
 }
 
-func TestRiskControlWorkspacePolicyRejectsInvalidValue(t *testing.T) {
+func TestRiskControlConfigPolicyRejectsInvalidValue(t *testing.T) {
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
 	if err := core.SaveMultiAppConfig(&core.MultiAppConfig{Apps: []core.AppConfig{{
 		AppId: "cli_test", AppSecret: core.PlainSecret("secret"), Brand: core.BrandFeishu,
@@ -105,7 +105,7 @@ func TestRiskControlWorkspacePolicyRejectsInvalidValue(t *testing.T) {
 	}
 }
 
-func TestRiskControlWorkspacePolicyAllowedWithExternalCredentials(t *testing.T) {
+func TestRiskControlConfigPolicyAllowedWithExternalCredentials(t *testing.T) {
 	f := newConfigFactoryWithExternalProvider(t)
 	config := &core.MultiAppConfig{Apps: []core.AppConfig{{
 		AppId: "cli_test", AppSecret: core.PlainSecret("secret"), Brand: core.BrandFeishu,

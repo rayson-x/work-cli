@@ -150,7 +150,7 @@ func setStrictMode(f *cmdutil.Factory, multi *core.MultiAppConfig, app *core.App
 	}
 
 	if oldMode == core.StrictModeBot && (mode == core.StrictModeUser || mode == core.StrictModeOff) {
-		fmt.Fprintln(f.IOStreams.ErrOut, "⚠️ "+strictModeRelaxLang(app).IdentityEscalationMessage)
+		fmt.Fprintln(f.IOStreams.ErrOut, "⚠️ "+strictModeRelaxLang(app).Escalation)
 	}
 
 	scope := "profile"
@@ -161,14 +161,14 @@ func setStrictMode(f *cmdutil.Factory, multi *core.MultiAppConfig, app *core.App
 	return nil
 }
 
-// strictModeRelaxLang picks the bind-message bundle whose language matches the
-// active profile's Lang setting. Falls back to bindMsgZh when no profile is
+// strictModeRelaxLang picks the identity-warning bundle whose language matches
+// the active profile's Lang setting. Falls back to Chinese when no profile is
 // available (global mutation with no current app).
-func strictModeRelaxLang(app *core.AppConfig) *bindMsg {
+func strictModeRelaxLang(app *core.AppConfig) *identityMessage {
 	if app != nil {
-		return getBindMsg(app.Lang)
+		return identityMessageFor(app.Lang)
 	}
-	return getBindMsg("")
+	return identityMessageFor("")
 }
 
 func resolveStrictModeStatus(multi *core.MultiAppConfig, app *core.AppConfig) (core.StrictMode, string) {

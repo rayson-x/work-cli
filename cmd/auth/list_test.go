@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/larksuite/cli/internal/cmdutil"
-	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/recovery"
 	"github.com/larksuite/cli/internal/surface"
 )
@@ -64,27 +63,22 @@ func TestAuthListRun_JSONMode_NotConfigured_WritesStdoutOnly(t *testing.T) {
 	}
 }
 
-// TestAuthListRun_NotConfigured_AgentWorkspace_RoutesToBindHelp covers the
-// reason this hint exists workspace-aware in the first place: an AI agent
-// in OpenClaw / Hermes that probes auth list before binding gets routed to
-// `config bind --help` instead of the local-only `config init`.
-func TestAuthListRun_NotConfigured_AgentWorkspace_RoutesToBindHelp(t *testing.T) {
+// Agent host markers do not select a separate configuration source.
+func TestAuthListRun_NotConfigured_AgentWorkspaceUsesSharedConfigHint(t *testing.T) {
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
 
-	prev := core.CurrentWorkspace()
-	t.Cleanup(func() { core.SetCurrentWorkspace(prev) })
-	core.SetCurrentWorkspace(core.WorkspaceOpenClaw)
+	t.Setenv("OPENCLAW_HOME", t.TempDir())
 
 	f, _, stderr, _ := cmdutil.TestFactory(t, nil)
 	if err := authListRun(&ListOptions{Factory: f}); err != nil {
 		t.Fatalf("auth list should still succeed under agent workspace; got: %v", err)
 	}
 	out := stderr.String()
-	if !strings.Contains(out, "config bind --help") {
-		t.Errorf("agent hint must point at config bind --help: %s", out)
+	if !strings.Contains(out, "config init") {
+		t.Errorf("agent hint must point at shared config init: %s", out)
 	}
-	if strings.Contains(out, "config init") {
-		t.Errorf("agent hint must not mention config init: %s", out)
+	if strings.Contains(out, "config bind") {
+		t.Errorf("agent hint must not mention removed config bind: %s", out)
 	}
 }
 

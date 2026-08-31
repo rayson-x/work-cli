@@ -72,7 +72,7 @@ type MultiAppConfig struct {
 	Apps        []AppConfig `json:"apps"`
 }
 
-// RiskControlEnabled resolves the workspace policy. An omitted preference
+// RiskControlEnabled resolves the shared configuration policy. An omitted preference
 // keeps the default-on account-protection behavior.
 func (m *MultiAppConfig) RiskControlEnabled() bool {
 	return m != nil && (m.RiskControl == nil || *m.RiskControl)
@@ -207,15 +207,13 @@ func (c *CliConfig) CanBot() bool {
 	return c.SupportedIdentities == 0 || c.SupportedIdentities&identityBotBit != 0
 }
 
-// GetConfigDir returns the config directory path for the current workspace.
-// When workspace is local (default), this returns the same path as before
-// (LARKSUITE_CLI_CONFIG_DIR or ~/.lark-cli) — fully backward-compatible.
-// When workspace is openclaw/hermes, returns base/openclaw or base/hermes.
+// GetConfigDir returns the single resolved CLI configuration directory.
+// It never changes based on the host Agent environment.
 func GetConfigDir() string {
 	return GetRuntimeDir()
 }
 
-// GetConfigPath returns the config file path for the current workspace.
+// GetConfigPath returns the single CLI config file path.
 func GetConfigPath() string {
 	return filepath.Join(GetConfigDir(), "config.json")
 }

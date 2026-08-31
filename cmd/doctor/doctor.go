@@ -100,10 +100,9 @@ func doctorRun(opts *DoctorOptions, projector *recovery.Projector) error {
 	// ── 1. Config file ──
 	_, err := core.LoadMultiAppConfig()
 	if err != nil {
-		// For "config not present" cases, prefer the workspace-aware
-		// NotConfiguredError message + hint (e.g. "openclaw context
-		// detected but work-cli is not bound to it" → bind --help) over
-		// the OS-level "open ... no such file or directory".
+		// For "config not present" cases, prefer the canonical
+		// NotConfiguredError recovery over the OS-level
+		// "open ... no such file or directory".
 		// For other errors (parse, perms), keep the raw error so the
 		// underlying problem is still visible.
 		msg, hint := err.Error(), ""
@@ -270,9 +269,9 @@ func finishDoctor(f *cmdutil.Factory, checks []checkResult) error {
 	}
 
 	result := map[string]interface{}{
-		"ok":        allOK,
-		"workspace": core.CurrentWorkspace().Display(),
-		"checks":    checks,
+		"ok":         allOK,
+		"configPath": core.GetConfigPath(),
+		"checks":     checks,
 	}
 	output.PrintJson(f.IOStreams.Out, result)
 	if !allOK {

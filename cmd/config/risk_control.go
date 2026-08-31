@@ -13,17 +13,17 @@ import (
 	"github.com/larksuite/cli/internal/core"
 )
 
-// NewCmdConfigRiskControl creates the workspace risk-control policy command.
+// NewCmdConfigRiskControl creates the persistent risk-control policy command.
 func NewCmdConfigRiskControl(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "risk-control [on|off|default]",
-		Short: "Manage workspace account-protection policy",
-		Long: `View or set the account-protection risk-control policy for this workspace.
+		Short: "Manage account-protection policy",
+		Long: `View or set the account-protection risk-control policy in the shared CLI configuration.
 
-Account protection is on by default. Use off to opt this workspace out, on to
+Account protection is on by default. Use off to opt out, on to
 opt it back in explicitly, or default to remove the explicit preference.`,
 		Args: cobra.MaximumNArgs(1),
-		// This is persistent workspace policy, not credential management.
+		// This is persistent CLI policy, not credential management.
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			cmd.SilenceUsage = true
 			return nil
@@ -56,7 +56,7 @@ opt it back in explicitly, or default to remove the explicit preference.`,
 				return errs.NewInternalError(errs.SubtypeStorage,
 					"failed to save risk-control policy: %v", err).WithCause(err)
 			}
-			fmt.Fprintf(f.IOStreams.ErrOut, "Risk control set to %s (workspace)\n", args[0])
+			fmt.Fprintf(f.IOStreams.ErrOut, "Risk control set to %s (config)\n", args[0])
 			return nil
 		},
 	}
@@ -67,7 +67,7 @@ opt it back in explicitly, or default to remove the explicit preference.`,
 func printRiskControl(f *cmdutil.Factory, config *core.MultiAppConfig) {
 	source := "default"
 	if config.RiskControl != nil {
-		source = "workspace"
+		source = "config"
 	}
 	fmt.Fprintf(f.IOStreams.Out, "risk-control: %s (source: %s)\n", riskControlState(config.RiskControlEnabled()), source)
 }

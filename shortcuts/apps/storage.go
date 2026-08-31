@@ -34,7 +34,7 @@ func checkSeg(name, what string) error {
 }
 
 // appDir returns the storage directory for one app: ~/.lark-cli/spark/<esc(appID)>/
-// (workspace-aware).
+// (using the single CLI runtime directory).
 func appDir(appID string) string {
 	return filepath.Join(core.GetConfigDir(), storageRoot, validate.EncodePathSegment(appID))
 }

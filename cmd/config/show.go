@@ -70,7 +70,7 @@ func configShowRun(opts *ConfigShowOptions) error {
 	// effective profile and the persisted default can legitimately differ.
 	_, effectiveSource := config.EffectiveProfile(f.Invocation.Profile, f.Invocation.ProfileSource)
 	output.PrintJson(f.IOStreams.Out, map[string]interface{}{
-		"workspace":     core.CurrentWorkspace().Display(),
+		"configPath":    core.GetConfigPath(),
 		"profile":       app.ProfileName(),
 		"profileSource": effectiveSource.String(),
 		"appId":         app.AppId,

@@ -392,9 +392,6 @@ func TestConcealedBuildOmitsEmptyRootGroup(t *testing.T) {
 
 func TestRecoveryRenderingUsesExactBuildLocalSurfaceAndDoesNotMutate(t *testing.T) {
 	tmpHome(t)
-	previousWorkspace := core.CurrentWorkspace()
-	core.SetCurrentWorkspace(core.WorkspaceLocal)
-	t.Cleanup(func() { core.SetCurrentWorkspace(previousWorkspace) })
 
 	registerRestriction(t, []string{"config/init"}, nil)
 	concealedRuntime, _, _ := buildInternal(

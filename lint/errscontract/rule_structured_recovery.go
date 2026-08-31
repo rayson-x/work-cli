@@ -14,7 +14,6 @@ import (
 
 var opaqueCommandRecoveryLiterals = []string{
 	"work-cli auth login",
-	"work-cli config bind",
 	"work-cli profile add",
 }
 

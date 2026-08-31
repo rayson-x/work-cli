@@ -47,7 +47,7 @@ func (t *sdkBootstrapTransport) RoundTrip(req *http.Request) (*http.Response, er
 	base := t.base
 	if base == nil {
 		// Resolve Shared lazily so bridge installation never initializes
-		// workspace-scoped proxy state ahead of workspace selection.
+		// shared proxy state before configuration is loaded.
 		base = Shared()
 	}
 	buildPlatformPolicy := t.platformPolicyBuilder()

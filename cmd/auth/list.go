@@ -71,7 +71,7 @@ func authListRunWithRecovery(opts *ListOptions, projector *recovery.Projector) e
 		// auth list is a read-only probe; the "configured but no users"
 		// branch below already returns exit 0 with a stderr hint, so we
 		// keep the same contract here. We still want the hint to be
-		// workspace-aware, so we pull the message+hint out of
+		// configuration-aware, so we pull the message+hint out of
 		// NotConfiguredError() instead of hard-coding it.
 		var cfgErr *errs.ConfigError
 		if errors.As(projector.Render(core.NotConfiguredError()), &cfgErr) {

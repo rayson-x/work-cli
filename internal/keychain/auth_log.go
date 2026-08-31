@@ -16,7 +16,7 @@ import (
 	"github.com/larksuite/cli/internal/vfs"
 )
 
-// RuntimeDirFunc returns the workspace-aware config directory.
+// RuntimeDirFunc returns the single CLI config directory.
 // Default: falls back to LARKSUITE_CLI_CONFIG_DIR or ~/.lark-cli (pre-workspace behavior).
 // Injected by cmdutil.NewDefault → core.GetRuntimeDir after workspace detection.
 // This avoids an import cycle (core → keychain → core).
@@ -57,7 +57,7 @@ func authLogDir() string {
 		}
 	}
 
-	// Fall back to the workspace-aware runtime dir. RuntimeDirFunc is injected
+	// Fall back to the single CLI runtime dir. RuntimeDirFunc is injected
 	// by factory after workspace detection; before injection it defaults to
 	// the pre-workspace behavior so older call paths remain correct.
 	return filepath.Join(RuntimeDirFunc(), "logs")

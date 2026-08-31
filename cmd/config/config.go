@@ -25,6 +25,12 @@ func newCmdConfig(f *cmdutil.Factory, projector *recovery.Projector) *cobra.Comm
 	cmd := &cobra.Command{
 		Use:   "config",
 		Short: "Global CLI configuration management",
+		Long: `Global CLI configuration management.
+
+All profiles are loaded from one config.json under LARKSUITE_CLI_CONFIG_DIR,
+or ~/.lark-cli when that environment variable is unset. Host Agent variables
+never select another config directory. Secret references support environment
+variables and the OS credential store; file references are not supported.`,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			// Replicate rootCmd's PersistentPreRun behaviour: cobra stops at the first
 			// PersistentPreRun[E] found walking up the chain, so the root-level
@@ -37,7 +43,6 @@ func newCmdConfig(f *cmdutil.Factory, projector *recovery.Projector) *cobra.Comm
 	cmdutil.DisableAuthCheck(cmd)
 
 	cmd.AddCommand(NewCmdConfigInit(f, nil))
-	cmd.AddCommand(newCmdConfigBind(f, nil, projector))
 	cmd.AddCommand(NewCmdConfigRemove(f, nil))
 	cmd.AddCommand(NewCmdConfigShow(f, nil))
 	cmd.AddCommand(NewCmdConfigDefaultAs(f))

@@ -27,7 +27,7 @@ func runStrictMode(t *testing.T, args ...string) string {
 
 // expandsUserIdentity covers the only two transitions where AI gains the
 // ability to act under the user's identity, and asserts the warning fires.
-// Reuses bind_messages.go's IdentityEscalationMessage as the canonical text
+// Reuses the shared identity-escalation message as the canonical text
 // so all three call sites (bind upgrade, fresh user-default bind, strict-mode
 // relax) stay phrased identically.
 func TestStrictMode_BotToUser_WarnsAboutIdentityRisk(t *testing.T) {
@@ -35,7 +35,7 @@ func TestStrictMode_BotToUser_WarnsAboutIdentityRisk(t *testing.T) {
 	runStrictMode(t, "bot")
 
 	out := runStrictMode(t, "user")
-	if !strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if !strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("bot→user transition must surface IdentityEscalationMessage; got: %s", out)
 	}
 }
@@ -45,7 +45,7 @@ func TestStrictMode_BotToOff_WarnsAboutIdentityRisk(t *testing.T) {
 	runStrictMode(t, "bot")
 
 	out := runStrictMode(t, "off")
-	if !strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if !strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("bot→off transition must surface IdentityEscalationMessage; got: %s", out)
 	}
 }
@@ -58,7 +58,7 @@ func TestStrictMode_UserToBot_NoWarning(t *testing.T) {
 	runStrictMode(t, "user")
 
 	out := runStrictMode(t, "bot")
-	if strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("user→bot is a narrowing change; must not warn. got: %s", out)
 	}
 }
@@ -67,7 +67,7 @@ func TestStrictMode_OffToBot_NoWarning(t *testing.T) {
 	setupStrictModeTestConfig(t)
 	// Default starts at off; explicitly set bot — narrowing.
 	out := runStrictMode(t, "bot")
-	if strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("off→bot is a narrowing change; must not warn. got: %s", out)
 	}
 }
@@ -77,7 +77,7 @@ func TestStrictMode_OffToUser_NoWarning(t *testing.T) {
 	// even though it forces user identity. Don't warn.
 	setupStrictModeTestConfig(t)
 	out := runStrictMode(t, "user")
-	if strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("off→user does not newly permit user identity; must not warn. got: %s", out)
 	}
 }
@@ -94,7 +94,7 @@ func TestStrictMode_GlobalBotToUser_Warns(t *testing.T) {
 	runStrictMode(t, "bot", "--global")
 
 	out := runStrictMode(t, "user", "--global")
-	if !strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if !strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("global bot→user must warn (broadens user-identity for inheriting profiles); got: %s", out)
 	}
 }
@@ -104,7 +104,7 @@ func TestStrictMode_GlobalBotToOff_Warns(t *testing.T) {
 	runStrictMode(t, "bot", "--global")
 
 	out := runStrictMode(t, "off", "--global")
-	if !strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if !strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("global bot→off must warn (newly permits user identity in inheriting profiles); got: %s", out)
 	}
 }
@@ -118,7 +118,7 @@ func TestStrictMode_GlobalOffToUser_WithProfileBotOverride_NoWarning(t *testing.
 	runStrictMode(t, "off", "--global") // global = off
 
 	out := runStrictMode(t, "user", "--global")
-	if strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("global off→user with profile-bot-override must not warn (profile unaffected, global wasn't bot); got: %s", out)
 	}
 }
@@ -134,7 +134,7 @@ func TestStrictMode_GlobalBotToOff_WithProfileOffOverride_Warns(t *testing.T) {
 	runStrictMode(t, "off")             // profile-level explicit off (already shows the warning at profile scope)
 
 	out := runStrictMode(t, "off", "--global")
-	if !strings.Contains(out, bindMsgZh.IdentityEscalationMessage) {
+	if !strings.Contains(out, identityMsgZh.Escalation) {
 		t.Errorf("global bot→off must warn even when current profile has explicit off (other profiles inherit and newly permit user identity); got: %s", out)
 	}
 }

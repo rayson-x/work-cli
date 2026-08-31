@@ -539,35 +539,20 @@ func tokenFor(r *common.RuntimeContext) string {
 	if t := strings.TrimSpace(r.Str("base-token")); t != "" {
 		return t
 	}
+	if t := strings.TrimSpace(os.Getenv("WORKLINE_BASE_TOKEN")); t != "" {
+		return t
+	}
 	if r.Config != nil {
 		if t := strings.TrimSpace(r.Config.WorklineBaseToken); t != "" {
 			return t
 		}
-	}
-	// Some shortcut runtime paths attach credentials without carrying custom
-	// profile extensions into RuntimeContext.Config. Read the active profile as
-	// a deterministic fallback so the shared Base remains reusable across new
-	// agent sessions without an environment variable or a separate init step.
-	if cfg, err := core.LoadMultiAppConfig(); err == nil {
-		profile := ""
-		if r.Config != nil {
-			profile = r.Config.ProfileName
-		}
-		if app := cfg.CurrentAppConfig(profile); app != nil && app.Workline != nil {
-			if t := strings.TrimSpace(app.Workline.BaseToken); t != "" {
-				return t
-			}
-		}
-	}
-	if t := strings.TrimSpace(os.Getenv("WORKLINE_BASE_TOKEN")); t != "" {
-		return t
 	}
 	return "<workline.base_token>"
 }
 func requireToken(r *common.RuntimeContext) (string, error) {
 	t := tokenFor(r)
 	if t == "" || strings.HasPrefix(t, "<") {
-		return "", invalid("tracking workspace is not ready; run `work-cli track apply` first, then retry")
+		return "", invalid("Workline Base is not initialized; run `work-cli track apply` once to create the Base and save its base_token, then retry")
 	}
 	return t, nil
 }

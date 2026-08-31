@@ -60,6 +60,43 @@ func TestFrozenSchemaAndProjection(t *testing.T) {
 	}
 }
 
+func TestTokenForUsesExplicitOverrideOrder(t *testing.T) {
+	cmd := &cobra.Command{}
+	cmd.Flags().String("base-token", "", "")
+	runtime := &common.RuntimeContext{
+		Cmd:    cmd,
+		Config: &core.CliConfig{WorklineBaseToken: "config-token"},
+	}
+
+	t.Setenv("WORKLINE_BASE_TOKEN", "env-token")
+	if got := tokenFor(runtime); got != "env-token" {
+		t.Fatalf("tokenFor() = %q, want environment override", got)
+	}
+	if err := cmd.Flags().Set("base-token", "flag-token"); err != nil {
+		t.Fatal(err)
+	}
+	if got := tokenFor(runtime); got != "flag-token" {
+		t.Fatalf("tokenFor() = %q, want explicit flag override", got)
+	}
+}
+
+func TestRequireTokenExplainsBaseInitialization(t *testing.T) {
+	cmd := &cobra.Command{}
+	cmd.Flags().String("base-token", "", "")
+	runtime := &common.RuntimeContext{Cmd: cmd, Config: &core.CliConfig{}}
+
+	_, err := requireToken(runtime)
+	if err == nil {
+		t.Fatal("requireToken() error = nil, want initialization guidance")
+	}
+	message := err.Error()
+	for _, want := range []string{"Workline Base is not initialized", "work-cli track apply", "save its base_token"} {
+		if !strings.Contains(message, want) {
+			t.Fatalf("requireToken() error = %q, want %q", message, want)
+		}
+	}
+}
+
 func TestEvidenceSourceKeyIsStable(t *testing.T) {
 	input := map[string]any{"wechat_owner_id": "owner", "conversation_id": "conv", "message_id": "msg", "forward_path": "0/1"}
 	first := evidenceSourceKey(input)

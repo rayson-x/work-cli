@@ -12,19 +12,7 @@ import (
 	"github.com/larksuite/cli/errs"
 )
 
-// saveAndRestoreWorkspace ensures package-level currentWorkspace is reset
-// between subtests so cross-test pollution can't make assertions pass by
-// accident.
-func saveAndRestoreWorkspace(t *testing.T) {
-	t.Helper()
-	prev := CurrentWorkspace()
-	t.Cleanup(func() { SetCurrentWorkspace(prev) })
-}
-
 func TestNotConfiguredError_Local(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceLocal)
-
 	err := NotConfiguredError()
 	var cfgErr *errs.ConfigError
 	if !errors.As(err, &cfgErr) {
@@ -44,37 +32,30 @@ func TestNotConfiguredError_Local(t *testing.T) {
 	}
 }
 
-func TestNotConfiguredError_OpenClaw(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceOpenClaw)
+func TestNotConfiguredError_OpenClawUsesSharedRecovery(t *testing.T) {
+	t.Setenv("OPENCLAW_HOME", t.TempDir())
 
 	err := NotConfiguredError()
 	var cfgErr *errs.ConfigError
 	if !errors.As(err, &cfgErr) {
 		t.Fatalf("error type = %T, want *errs.ConfigError", err)
 	}
-	// The wire subtype stays not_configured; the workspace name only appears
-	// in the message, never in the typed taxonomy.
 	if cfgErr.Subtype != errs.SubtypeNotConfigured {
 		t.Errorf("subtype = %q, want not_configured", cfgErr.Subtype)
 	}
-	if !strings.Contains(cfgErr.Message, "openclaw") {
-		t.Errorf("message must name the openclaw workspace; got %q", cfgErr.Message)
+	if cfgErr.Message != "not configured" {
+		t.Errorf("message = %q, want shared not-configured message", cfgErr.Message)
 	}
-	// Hint must point at --help (read first, confirm with user, then bind),
-	// NOT a directly-executable bind command — binding is policy-laden
-	// (identity preset, may overwrite existing binding).
-	if !strings.Contains(cfgErr.Hint, "config bind --help") {
-		t.Errorf("agent hint must point to `config bind --help`; got %q", cfgErr.Hint)
+	if !strings.Contains(cfgErr.Hint, "config init --new") {
+		t.Errorf("hint must point to the shared config init flow; got %q", cfgErr.Hint)
 	}
-	if strings.Contains(cfgErr.Hint, "config init") {
-		t.Errorf("agent hint must NOT mention config init (would cause AI to create a new app); got %q", cfgErr.Hint)
+	if strings.Contains(cfgErr.Hint, "config bind") {
+		t.Errorf("hint must not mention removed Agent binding; got %q", cfgErr.Hint)
 	}
 }
 
-func TestNotConfiguredError_Hermes(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceHermes)
+func TestNotConfiguredError_HermesUsesSharedRecovery(t *testing.T) {
+	t.Setenv("HERMES_HOME", t.TempDir())
 
 	err := NotConfiguredError()
 	var cfgErr *errs.ConfigError
@@ -84,18 +65,15 @@ func TestNotConfiguredError_Hermes(t *testing.T) {
 	if cfgErr.Subtype != errs.SubtypeNotConfigured {
 		t.Errorf("subtype = %q, want not_configured", cfgErr.Subtype)
 	}
-	if !strings.Contains(cfgErr.Message, "hermes") {
-		t.Errorf("message must name the hermes workspace; got %q", cfgErr.Message)
+	if cfgErr.Message != "not configured" {
+		t.Errorf("message = %q, want shared not-configured message", cfgErr.Message)
 	}
-	if !strings.Contains(cfgErr.Hint, "config bind --help") {
-		t.Errorf("hermes hint must point to `config bind --help`; got %q", cfgErr.Hint)
+	if !strings.Contains(cfgErr.Hint, "config init --new") {
+		t.Errorf("hint must point to the shared config init flow; got %q", cfgErr.Hint)
 	}
 }
 
 func TestNoActiveProfileError_Local(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceLocal)
-
 	err := NoActiveProfileError()
 	var cfgErr *errs.ConfigError
 	if !errors.As(err, &cfgErr) {
@@ -106,43 +84,36 @@ func TestNoActiveProfileError_Local(t *testing.T) {
 	}
 }
 
-func TestNoActiveProfileError_AgentSuggestsBind(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceOpenClaw)
+func TestNoActiveProfileError_AgentUsesSharedRecovery(t *testing.T) {
+	t.Setenv("OPENCLAW_HOME", t.TempDir())
 
 	err := NoActiveProfileError()
 	var cfgErr *errs.ConfigError
 	if !errors.As(err, &cfgErr) {
 		t.Fatalf("error type = %T, want *errs.ConfigError", err)
 	}
-	if !strings.Contains(cfgErr.Hint, "config bind --help") {
-		t.Errorf("agent hint must point to `config bind --help`; got %q", cfgErr.Hint)
+	if !strings.Contains(cfgErr.Hint, "config init --new") {
+		t.Errorf("hint must point to shared config init; got %q", cfgErr.Hint)
 	}
 }
 
 func TestReconfigureHint_Local(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceLocal)
-
 	got := reconfigureHint()
 	if !strings.Contains(got, "config init") {
 		t.Errorf("local reconfigure hint must mention config init; got %q", got)
 	}
 }
 
-func TestReconfigureHint_Agent(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceHermes)
+func TestReconfigureHint_AgentUsesSharedRecovery(t *testing.T) {
+	t.Setenv("HERMES_HOME", t.TempDir())
 
 	got := reconfigureHint()
-	if !strings.Contains(got, "config bind --help") {
-		t.Errorf("agent reconfigure hint must point to `config bind --help`; got %q", got)
+	if !strings.Contains(got, "config init") {
+		t.Errorf("agent reconfigure hint must point to shared config init; got %q", got)
 	}
 }
 
 func TestLoadOrNotConfigured_FileMissing_ReturnsNotConfigured(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceLocal)
 	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
 
 	_, err := LoadOrNotConfigured()
@@ -314,8 +285,6 @@ func TestProfileNotFoundError_DanglingCurrentApp(t *testing.T) {
 }
 
 func TestProfileNotFoundError_EmptyConfigFallsBackToNotConfigured(t *testing.T) {
-	saveAndRestoreWorkspace(t)
-	SetCurrentWorkspace(WorkspaceLocal)
 	multi := &MultiAppConfig{}
 	_, err := multi.RequireAppConfig("", ProfileFromConfig)
 	var cfgErr *errs.ConfigError

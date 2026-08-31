@@ -23,8 +23,8 @@ type AuditParams struct {
 	AllowSymlinkPath      bool
 }
 
-// AssertSecurePath verifies that a file/command path is safe for use with
-// OpenClaw SecretRef resolution. On success it returns the effective path
+// AssertSecurePath verifies that a security-sensitive file path is safe to use.
+// On success it returns the effective path
 // (the symlink target, if the input was a symlink and allowed).
 //
 // The check is a short, ordered pipeline — each step below is both a read of
@@ -68,8 +68,7 @@ func AssertSecurePath(params AuditParams) (string, error) {
 // the process cwd and defeat the point of a static audit. Shell-style
 // shortcuts like `~` are home-relative, not cwd-relative — they are an
 // orthogonal concern and the audit is intentionally Go-stdlib strict here.
-// Callers that accept user-authored config (e.g. resolveFileRef) must
-// pre-resolve any such shortcuts before passing the path in.
+// Callers must pre-resolve any such shortcuts before passing the path in.
 func requireAbsolutePath(target, label string) error {
 	if !filepath.IsAbs(target) {
 		return fmt.Errorf("%s: path must be absolute, got %q", label, target)
@@ -125,7 +124,8 @@ func requireInTrustedDirs(effectivePath string, trustedDirs []string, label stri
 	cleaned := filepath.Clean(effectivePath)
 	for _, dir := range trustedDirs {
 		cleanDir := filepath.Clean(dir)
-		if cleaned == cleanDir || strings.HasPrefix(cleaned, cleanDir+"/") {
+		rel, err := filepath.Rel(cleanDir, cleaned)
+		if err == nil && rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
 			return nil
 		}
 	}

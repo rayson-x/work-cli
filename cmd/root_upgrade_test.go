@@ -67,14 +67,6 @@ func TestOfferRootUpgrade(t *testing.T) {
 	origRun := runRootUpgrade
 	t.Cleanup(func() { runRootUpgrade = origRun })
 
-	// This test builds a Factory literal (no NewDefault), so it never runs
-	// workspace detection; pin the process-global workspace to Local so
-	// statePath() resolves under LARKSUITE_CLI_CONFIG_DIR rather than a stale
-	// subdir inherited from a prior test in the package.
-	origWS := core.CurrentWorkspace()
-	t.Cleanup(func() { core.SetCurrentWorkspace(origWS) })
-	core.SetCurrentWorkspace(core.WorkspaceLocal)
-
 	cases := []struct {
 		name                string
 		in, out, err        bool

@@ -26,7 +26,6 @@ const (
 	TargetAuthLogin         Target = Target(surface.CommandAuthLogin)
 	TargetConfig            Target = Target(surface.CommandConfig)
 	TargetConfigInit        Target = Target(surface.CommandConfigInit)
-	TargetConfigBind        Target = Target(surface.CommandConfigBind)
 	TargetConfigStrictMode  Target = Target(surface.CommandConfigStrictMode)
 	TargetConfigPolicyShow  Target = Target(surface.CommandConfigPolicyShow)
 	TargetConfigPluginsShow Target = Target(surface.CommandConfigPluginsShow)
