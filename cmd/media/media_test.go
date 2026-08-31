@@ -58,6 +58,46 @@ func TestResolveUploadsWaitsAndFetchesImageArtifact(t *testing.T) {
 	require.Equal(t, "media/1", result["media_ref"])
 }
 
+func TestTranscribeUploadsWaitsAndFetchesTranscript(t *testing.T) {
+	t.Helper()
+	var seenUpload, seenTask, seenTranscript bool
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		require.Equal(t, "Bearer local-key", r.Header.Get("Authorization"))
+		switch r.URL.Path {
+		case "/v1/audio/transcriptions":
+			seenUpload = true
+			require.Equal(t, http.MethodPost, r.Method)
+			require.NoError(t, r.ParseMultipartForm(1<<20))
+			file, header, err := r.FormFile("file")
+			require.NoError(t, err)
+			defer file.Close()
+			require.Equal(t, "audio/mpeg", header.Header.Get("Content-Type"))
+			_, err = io.ReadAll(file)
+			require.NoError(t, err)
+			writeJSON(w, map[string]any{"media_ref": "media/audio-1", "task_ref": "task/audio-1", "reused": false})
+		case "/v1/tasks/task/audio-1":
+			seenTask = true
+			writeJSON(w, map[string]any{"task_ref": "task/audio-1", "status": "succeeded", "result_ref": "artifact/transcript-1"})
+		case "/v1/media/media/audio-1/transcript":
+			seenTranscript = true
+			writeJSON(w, map[string]any{"media_ref": "media/audio-1", "segments": []any{map[string]any{"text": "adjust the cuff"}}})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	file := filepath.Join(t.TempDir(), "voice.mp3")
+	require.NoError(t, os.WriteFile(file, []byte("mp3"), 0o600))
+	result, err := testClient(t, server.URL).transcribe(context.Background(), file, "")
+	require.NoError(t, err)
+	require.True(t, seenUpload)
+	require.True(t, seenTask)
+	require.True(t, seenTranscript)
+	require.Equal(t, "transcript", result["kind"])
+	require.Equal(t, "media/audio-1", result["media_ref"])
+}
+
 func TestObservePostsSelectorAndWaitsForArtifact(t *testing.T) {
 	var gotSelector map[string]any
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -157,6 +197,10 @@ func TestTransportAndSelectorValidation(t *testing.T) {
 	selector, err := observationSelector(-1, -1, "segment-1", "quoted", "", "")
 	require.NoError(t, err)
 	require.Equal(t, "quote", selector["type"])
+	_, err = audioMIME("voice.mp3", "")
+	require.NoError(t, err)
+	_, err = audioMIME("voice.mp3", "video/mp4")
+	require.Error(t, err)
 }
 
 func testClient(t *testing.T, rawURL string) *client {

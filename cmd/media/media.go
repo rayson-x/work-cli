@@ -47,8 +47,8 @@ func NewCmdMedia(f *cmdutil.Factory) *cobra.Command {
 	o := &options{factory: f}
 	cmd := &cobra.Command{
 		Use:   "media",
-		Short: "Understand exported local images and videos",
-		Long:  "Understand local image and video files. Resolve one file, group image-only batches, read completed results, or inspect a video interval. Commands return structured JSON.",
+		Short: "Understand exported local images, videos, and audio",
+		Long:  "Understand local image, video, and audio files. Resolve one image or video, transcribe one audio file, group image-only batches, read completed results, or inspect a video interval. Commands return structured JSON.",
 	}
 	cmd.PersistentFlags().StringVar(&o.serverURL, "server-url", "", "override the media endpoint URL")
 	cmd.PersistentFlags().Int64Var(&o.pollInterval, "poll-ms", 0, "task polling interval in milliseconds")
@@ -57,7 +57,7 @@ func NewCmdMedia(f *cmdutil.Factory) *cobra.Command {
 	_ = cmd.PersistentFlags().MarkHidden("server-url")
 	_ = cmd.PersistentFlags().MarkHidden("poll-ms")
 	_ = cmd.PersistentFlags().MarkHidden("allow-insecure-http")
-	cmd.AddCommand(newResolveCmd(o), newResolveBatchCmd(o), newBatchCmd(o), newTaskCmd(o), newTranscriptCmd(o), newArtifactCmd(o), newObserveCmd(o), newInquireCmd(o))
+	cmd.AddCommand(newResolveCmd(o), newTranscribeCmd(o), newResolveBatchCmd(o), newBatchCmd(o), newTaskCmd(o), newTranscriptCmd(o), newArtifactCmd(o), newObserveCmd(o), newInquireCmd(o))
 	cmdutil.DisableAuthCheck(cmd)
 	return cmd
 }
@@ -66,7 +66,7 @@ func newResolveCmd(o *options) *cobra.Command {
 	var mimeType string
 	cmd := &cobra.Command{
 		Use:   "resolve <file>",
-		Short: "Upload a file and wait for its transcript or image observation",
+		Short: "Upload an image or video and wait for its result",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := newClient(cmd.Context(), o)
@@ -81,6 +81,29 @@ func newResolveCmd(o *options) *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&mimeType, "mime-type", "", "override detected media MIME type")
+	setReadRisk(cmd)
+	return cmd
+}
+
+func newTranscribeCmd(o *options) *cobra.Command {
+	var mimeType string
+	cmd := &cobra.Command{
+		Use:   "transcribe <audio>",
+		Short: "Upload an audio file and wait for its transcript",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			c, err := newClient(cmd.Context(), o)
+			if err != nil {
+				return err
+			}
+			result, err := c.transcribe(cmd.Context(), args[0], mimeType)
+			if err != nil {
+				return err
+			}
+			return emit(o.factory, result)
+		},
+	}
+	cmd.Flags().StringVar(&mimeType, "mime-type", "", "override detected audio MIME type")
 	setReadRisk(cmd)
 	return cmd
 }
@@ -352,6 +375,33 @@ func (c *client) resolve(ctx context.Context, file, overrideMIME string) (map[st
 	return result, nil
 }
 
+func (c *client) transcribe(ctx context.Context, file, overrideMIME string) (map[string]any, error) {
+	mimeType, err := audioMIME(file, overrideMIME)
+	if err != nil {
+		return nil, err
+	}
+	upload, err := c.uploadTo(ctx, "/v1/audio/transcriptions", file, mimeType)
+	if err != nil {
+		return nil, err
+	}
+	task, err := c.wait(ctx, upload.TaskRef)
+	if err != nil {
+		return nil, err
+	}
+	transcript, err := c.transcript(ctx, upload.MediaRef)
+	if err != nil {
+		return nil, err
+	}
+	return map[string]any{
+		"kind":      "transcript",
+		"media_ref": upload.MediaRef,
+		"task_ref":  upload.TaskRef,
+		"reused":    upload.Reused,
+		"task":      task.output(),
+		"result":    transcript,
+	}, nil
+}
+
 func (c *client) resolveBatch(ctx context.Context, paths []string) (any, error) {
 	batch, err := c.uploadImages(ctx, paths)
 	if err != nil {
@@ -393,6 +443,10 @@ func (c *client) artifact(ctx context.Context, ref string) (any, error) {
 	return out, err
 }
 func (c *client) upload(ctx context.Context, path, mimeType string) (uploadResult, error) {
+	return c.uploadTo(ctx, "/v1/media", path, mimeType)
+}
+
+func (c *client) uploadTo(ctx context.Context, endpoint, path, mimeType string) (uploadResult, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return uploadResult{}, invalid("cannot open media file %q: %v", path, err)
@@ -414,7 +468,7 @@ func (c *client) upload(ctx context.Context, path, mimeType string) (uploadResul
 		return uploadResult{}, errs.NewInternalError(errs.SubtypeSDKError, "finish media upload: %v", err).WithCause(err)
 	}
 	var out uploadResult
-	if err = c.request(ctx, http.MethodPost, "/v1/media", &body, w.FormDataContentType(), &out); err != nil {
+	if err = c.request(ctx, http.MethodPost, endpoint, &body, w.FormDataContentType(), &out); err != nil {
 		return out, err
 	}
 	if out.MediaRef == "" || out.TaskRef == "" {
@@ -706,6 +760,30 @@ func mediaMIME(path, override string) (string, error) {
 		return "video/x-matroska", nil
 	}
 	return "", invalid("unsupported media extension")
+}
+
+func audioMIME(path, override string) (string, error) {
+	if strings.TrimSpace(override) != "" {
+		if !strings.HasPrefix(strings.ToLower(override), "audio/") {
+			return "", invalid("--mime-type must be an audio MIME type")
+		}
+		return override, nil
+	}
+	switch strings.ToLower(filepath.Ext(path)) {
+	case ".mp3":
+		return "audio/mpeg", nil
+	case ".m4a":
+		return "audio/mp4", nil
+	case ".wav":
+		return "audio/wav", nil
+	case ".aac":
+		return "audio/aac", nil
+	case ".flac":
+		return "audio/flac", nil
+	case ".ogg", ".opus":
+		return "audio/ogg", nil
+	}
+	return "", invalid("unsupported audio extension")
 }
 func observationSelector(start, end int64, segment, quote, startWord, endWord string) (map[string]any, error) {
 	hasInterval := start >= 0 || end >= 0

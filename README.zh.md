@@ -16,7 +16,7 @@ work-cli --help
 | 命令 | 用途 | 从这里开始 |
 | --- | --- | --- |
 | `work-cli wechat` | 读取本机微信对话并导出可用文件 | `work-cli wechat --help` |
-| `work-cli media` | 理解本地图片与视频 | `work-cli media --help` |
+| `work-cli media` | 理解本地图片、视频与音频 | `work-cli media --help` |
 | `work-cli image` | 生成或编辑图片，并保存到本地 | `work-cli image --help` |
 | `work-cli track` | 查询和更新款式进度记录 | `work-cli track --help` |
 
@@ -29,6 +29,7 @@ work-cli wechat sessions
 work-cli wechat history --help
 
 work-cli media resolve <file>
+work-cli media transcribe <audio>
 work-cli media resolve-batch <image> <image>
 
 work-cli image generate --prompt <text> --out-dir <directory>

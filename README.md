@@ -16,7 +16,7 @@ work-cli --help
 | Command | Use it to | Start with |
 | --- | --- | --- |
 | `work-cli wechat` | Read local WeChat conversations and export available files | `work-cli wechat --help` |
-| `work-cli media` | Understand local images and videos | `work-cli media --help` |
+| `work-cli media` | Understand local images, videos, and audio | `work-cli media --help` |
 | `work-cli image` | Generate or edit images and save the results locally | `work-cli image --help` |
 | `work-cli track` | Read and update apparel progress records | `work-cli track --help` |
 
@@ -29,6 +29,7 @@ work-cli wechat sessions
 work-cli wechat history --help
 
 work-cli media resolve <file>
+work-cli media transcribe <audio>
 work-cli media resolve-batch <image> <image>
 
 work-cli image generate --prompt <text> --out-dir <directory>
