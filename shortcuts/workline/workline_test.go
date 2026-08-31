@@ -60,40 +60,28 @@ func TestFrozenSchemaAndProjection(t *testing.T) {
 	}
 }
 
-func TestTokenForUsesExplicitOverrideOrder(t *testing.T) {
+func TestTokenForUsesEnterpriseDefault(t *testing.T) {
 	cmd := &cobra.Command{}
-	cmd.Flags().String("base-token", "", "")
 	runtime := &common.RuntimeContext{
 		Cmd:    cmd,
 		Config: &core.CliConfig{WorklineBaseToken: "config-token"},
 	}
 
-	t.Setenv("WORKLINE_BASE_TOKEN", "env-token")
-	if got := tokenFor(runtime); got != "env-token" {
-		t.Fatalf("tokenFor() = %q, want environment override", got)
-	}
-	if err := cmd.Flags().Set("base-token", "flag-token"); err != nil {
-		t.Fatal(err)
-	}
-	if got := tokenFor(runtime); got != "flag-token" {
-		t.Fatalf("tokenFor() = %q, want explicit flag override", got)
+	if got := tokenFor(runtime); got != core.DefaultWorklineBaseToken {
+		t.Fatalf("tokenFor() = %q, want enterprise default", got)
 	}
 }
 
-func TestRequireTokenExplainsBaseInitialization(t *testing.T) {
+func TestRequireTokenUsesEnterpriseDefault(t *testing.T) {
 	cmd := &cobra.Command{}
-	cmd.Flags().String("base-token", "", "")
 	runtime := &common.RuntimeContext{Cmd: cmd, Config: &core.CliConfig{}}
 
-	_, err := requireToken(runtime)
-	if err == nil {
-		t.Fatal("requireToken() error = nil, want initialization guidance")
+	got, err := requireToken(runtime)
+	if err != nil {
+		t.Fatalf("requireToken() error = %v", err)
 	}
-	message := err.Error()
-	for _, want := range []string{"Workline Base is not initialized", "work-cli track apply", "save its base_token"} {
-		if !strings.Contains(message, want) {
-			t.Fatalf("requireToken() error = %q, want %q", message, want)
-		}
+	if got != core.DefaultWorklineBaseToken {
+		t.Fatalf("requireToken() = %q, want enterprise default", got)
 	}
 }
 

@@ -165,20 +165,16 @@ func trackingShortcuts(service, queryCommand, applyCommand, styleEventsCommand s
 	}
 }
 
-func baseFlags() []common.Flag {
-	return []common.Flag{{Name: "base-token", Desc: "Tracking workspace ID", Hidden: true}}
-}
-
 func queryShortcut(service, command string, hidden bool) common.Shortcut {
-	return common.Shortcut{Service: service, Command: command, Description: "Find apparel progress records", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "query request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunQuery, Validate: validateQuery, Execute: executeQuery}
+	return common.Shortcut{Service: service, Command: command, Description: "Find apparel progress records", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: []common.Flag{{Name: "json", Desc: "query request JSON", Required: true, Input: []string{common.File, common.Stdin}}}, DryRun: dryRunQuery, Validate: validateQuery, Execute: executeQuery}
 }
 
 func applyShortcut(service, command string, hidden bool) common.Shortcut {
-	return common.Shortcut{Service: service, Command: command, Description: "Save apparel progress records", Risk: "write", UserScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, ConditionalUserScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload"}, ConditionalBotScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload", "docs:permission.member:create"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "json", Desc: "progress request JSON", Required: true, Input: []string{common.File, common.Stdin}}), DryRun: dryRunApply, Validate: validateApply, Execute: executeApply}
+	return common.Shortcut{Service: service, Command: command, Description: "Save apparel progress records", Risk: "write", UserScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:record:create", "base:record:update", "base:table:read", "base:field:read"}, ConditionalUserScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload"}, ConditionalBotScopes: []string{"base:app:create", "base:table:create", "base:field:create", "docs:document.media:upload", "docs:permission.member:create"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: []common.Flag{{Name: "json", Desc: "progress request JSON", Required: true, Input: []string{common.File, common.Stdin}}}, DryRun: dryRunApply, Validate: validateApply, Execute: executeApply}
 }
 
 func styleEventsShortcut(service, command string, hidden bool) common.Shortcut {
-	return common.Shortcut{Service: service, Command: command, Description: "View one Style's recorded progress", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: append(baseFlags(), common.Flag{Name: "style-id", Desc: "Style ID", Required: true}), DryRun: dryRunStyleEvents, Validate: func(_ context.Context, r *common.RuntimeContext) error {
+	return common.Shortcut{Service: service, Command: command, Description: "View one Style's recorded progress", Risk: "read", UserScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, BotScopes: []string{"base:record:read", "base:table:read", "base:field:read"}, AuthTypes: []string{"user", "bot"}, Hidden: hidden, Flags: []common.Flag{{Name: "style-id", Desc: "Style ID", Required: true}}, DryRun: dryRunStyleEvents, Validate: func(_ context.Context, r *common.RuntimeContext) error {
 		if strings.TrimSpace(r.Str("style-id")) == "" {
 			return invalid("--style-id is required")
 		}
@@ -536,18 +532,7 @@ func dryRunStyleEvents(_ context.Context, r *common.RuntimeContext) *common.DryR
 }
 
 func tokenFor(r *common.RuntimeContext) string {
-	if t := strings.TrimSpace(r.Str("base-token")); t != "" {
-		return t
-	}
-	if t := strings.TrimSpace(os.Getenv("WORKLINE_BASE_TOKEN")); t != "" {
-		return t
-	}
-	if r.Config != nil {
-		if t := strings.TrimSpace(r.Config.WorklineBaseToken); t != "" {
-			return t
-		}
-	}
-	return "<workline.base_token>"
+	return core.DefaultWorklineBaseToken
 }
 func requireToken(r *common.RuntimeContext) (string, error) {
 	t := tokenFor(r)

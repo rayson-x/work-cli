@@ -301,6 +301,9 @@ func configInitRun(opts *ConfigInitOptions) error {
 			return errs.NewValidationError(errs.SubtypeInvalidArgument, "app secret read from stdin is empty")
 		}
 	}
+	if opts.appSecret != "" && opts.AppID == "" {
+		opts.AppID = core.DefaultEnterpriseAppID
+	}
 
 	existing, err := core.LoadMultiAppConfig()
 	if err != nil {

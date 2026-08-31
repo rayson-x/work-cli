@@ -25,6 +25,14 @@ const (
 	AsUser Identity = "user"
 	AsBot  Identity = "bot"
 	AsAuto Identity = "auto"
+
+	// DefaultEnterpriseAppID is the shared Feishu app used by this distribution.
+	// Users authorize it once instead of creating or selecting an app themselves.
+	DefaultEnterpriseAppID = "cli_aa1e4f9725b8dcc5"
+
+	// DefaultWorklineBaseToken is the sole apparel tracking Base for this
+	// distribution. A fixed target prevents same-named Bases from diverging.
+	DefaultWorklineBaseToken = "LbOibL07XalWgFsRQhScdMXdnGe"
 )
 
 // IsBot returns true if the identity is bot.
