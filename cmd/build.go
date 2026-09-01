@@ -11,6 +11,7 @@ import (
 
 	"github.com/larksuite/cli/cmd/api"
 	"github.com/larksuite/cli/cmd/auth"
+	casecmd "github.com/larksuite/cli/cmd/case"
 	"github.com/larksuite/cli/cmd/completion"
 	cmdconfig "github.com/larksuite/cli/cmd/config"
 	"github.com/larksuite/cli/cmd/doctor"
@@ -313,6 +314,7 @@ func buildInternalWithConfig(ctx context.Context, inv cmdutil.InvocationContext,
 	rootCmd.AddCommand(wechat.NewCmd())
 	rootCmd.AddCommand(cmdevent.NewCmdEvents(f))
 	rootCmd.AddCommand(media.NewCmdMedia(f))
+	rootCmd.AddCommand(casecmd.NewCmdCase(f))
 	rootCmd.AddCommand(skill.NewCmdSkill(f))
 	if !cfg.skipService {
 		if cfg.serviceCatalog != nil {
