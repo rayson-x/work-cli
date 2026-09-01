@@ -8,7 +8,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestCreateCaseUsesStableIdempotencyAndCaseContract(t *testing.T) {
@@ -104,7 +107,9 @@ func TestEvidenceSealRunAndReadsUseCaseContractRoutes(t *testing.T) {
 		case "/v1/cases/case-1/inference-runs/run-1":
 			_, _ = w.Write([]byte(`{"run_ref":"run-1","status":"succeeded"}`))
 		case "/v1/cases/case-1/interpretation":
-			if r.URL.Query().Get("view") != "audit" { t.Fatalf("view = %q", r.URL.Query().Get("view")) }
+			if r.URL.Query().Get("view") != "audit" {
+				t.Fatalf("view = %q", r.URL.Query().Get("view"))
+			}
 			_, _ = w.Write([]byte(`{"case_id":"case-1","view":"audit"}`))
 		default:
 			http.NotFound(w, r)
@@ -113,14 +118,88 @@ func TestEvidenceSealRunAndReadsUseCaseContractRoutes(t *testing.T) {
 	defer server.Close()
 	c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: t.TempDir() + "/case-operations.json", RetryBase: time.Millisecond})
 	item := EvidenceItem{ClientEvidenceKey: "e-1", SourceKey: "wechat:m-1", Kind: "message", SourceLocator: map[string]any{"message_id": "m-1"}, ImmutablePayload: map[string]any{"text": "hello"}}
-	if _, err := c.SubmitEvidenceBundle(context.Background(), "case-1", EvidenceBundle{Coverage: map[string]any{"source": "wechat"}, Items: []EvidenceItem{item}}); err != nil { t.Fatal(err) }
-	if _, err := c.SealEvidenceBundle(context.Background(), "case-1", "bundle-1"); err != nil { t.Fatal(err) }
-	if _, err := c.StartInferenceRun(context.Background(), "case-1", InferenceRunRequest{BaseCaseRevision: 2, Pipeline: "style-track"}); err != nil { t.Fatal(err) }
-	if _, err := c.GetCase(context.Background(), "case-1"); err != nil { t.Fatal(err) }
-	if _, err := c.GetEvidence(context.Background(), "case-1"); err != nil { t.Fatal(err) }
-	if _, err := c.GetRun(context.Background(), "case-1", "run-1"); err != nil { t.Fatal(err) }
-	if _, err := c.GetInterpretation(context.Background(), "case-1", "audit"); err != nil { t.Fatal(err) }
-	if len(paths) != 7 { t.Fatalf("paths = %#v", paths) }
+	if _, err := c.SubmitEvidenceBundle(context.Background(), "case-1", EvidenceBundle{Coverage: map[string]any{"source": "wechat"}, Items: []EvidenceItem{item}}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.SealEvidenceBundle(context.Background(), "case-1", "bundle-1"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.StartInferenceRun(context.Background(), "case-1", InferenceRunRequest{BaseCaseRevision: 2, Pipeline: "style-track"}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.GetCase(context.Background(), "case-1"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.GetEvidence(context.Background(), "case-1"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.GetRun(context.Background(), "case-1", "run-1"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := c.GetInterpretation(context.Background(), "case-1", "audit"); err != nil {
+		t.Fatal(err)
+	}
+	if len(paths) != 7 {
+		t.Fatalf("paths = %#v", paths)
+	}
+}
+
+func TestSealDoesNotRetryNonIdempotentPostAndRecoversFromCaseRead(t *testing.T) {
+	var sealRequests, sleeps, caseReads int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Path == "/v1/cases/case-1/evidence-bundles/bundle-1/seal" {
+			sealRequests++
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_, _ = w.Write([]byte(`{"error":{"code":"case_store_unavailable","message":"temporary"}}`))
+			return
+		}
+		if r.URL.Path == "/v1/cases/case-1" {
+			caseReads++
+			_, _ = w.Write([]byte(`{"case_id":"case-1","revision":3,"evidence":{"bundles":[{"bundle_ref":"bundle-1","status":"sealed"}]}}`))
+			return
+		}
+		http.NotFound(w, r)
+	}))
+	defer server.Close()
+	c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: t.TempDir() + "/case-operations.json", MaxRetries: 4, Sleep: func(time.Duration) error { sleeps++; return nil }})
+	result, err := c.SealEvidenceBundle(context.Background(), "case-1", "bundle-1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result["recovered"] != true || sealRequests != 1 || caseReads != 1 || sleeps != 0 {
+		t.Fatalf("result=%#v seal=%d reads=%d sleeps=%d", result, sealRequests, caseReads, sleeps)
+	}
+}
+
+func TestConcurrentClientsKeepPersistentOperationStateValid(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"case_id":"case-1","purpose":"style-track","status":"open","revision":0}`))
+	}))
+	defer server.Close()
+	statePath := t.TempDir() + "/case-operations.json"
+	input := CreateCaseRequest{Purpose: "style-track", SourceScope: map[string]any{"platform": "wechat"}}
+	var group sync.WaitGroup
+	for i := 0; i < 12; i++ {
+		group.Add(1)
+		go func() {
+			defer group.Done()
+			_, _ = New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: statePath, RetryBase: time.Millisecond}).CreateCase(context.Background(), input)
+		}()
+	}
+	group.Wait()
+	raw, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var state stateFile
+	if err := json.Unmarshal(raw, &state); err != nil {
+		t.Fatalf("state is invalid JSON: %v", err)
+	}
+	if len(state.Operations) != 1 || state.Operations[0].Hash == "" {
+		t.Fatalf("state = %#v", state)
+	}
 }
 
 func contains(value, needle string) bool {
