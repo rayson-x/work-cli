@@ -130,6 +130,19 @@ func TestDecodeAnalysisProjectionPreservesResourcesAndNestedForward(t *testing.T
 	if messages[1].ForwardPath != "root/0" || messages[1].Speaker.SourceKey != "hash-b" || len(messages[1].Attachments) != 1 || messages[1].Attachments[0].LocalPath != "C:/media/a.jpg" {
 		t.Fatalf("nested=%#v", messages[1])
 	}
+	bundles, err := New(Options{}).CollectBundles(messages, Scope{Owner: "o", Conversation: "chat"})
+	if err != nil || len(bundles) != 1 {
+		t.Fatalf("collect=%#v err=%v", bundles, err)
+	}
+	foundForward := false
+	for _, relation := range bundles[0].Relations {
+		if relation.Type == "forward_contains" {
+			foundForward = true
+		}
+	}
+	if !foundForward {
+		t.Fatalf("forward relation missing: %#v", bundles[0].Relations)
+	}
 }
 
 var _ = caseclient.ContractVersion

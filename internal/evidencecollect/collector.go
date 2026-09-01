@@ -29,6 +29,7 @@ type Attachment struct {
 type Message struct {
 	Owner, Conversation, ConversationType, ID, SourceTime, Text, ForwardPath, ReplyTo string
 	OwnerIdentity, Forwarder, Speaker                                                 SourceIdentity
+	ForwardParentID                                                                   string
 	Quote                                                                             map[string]any
 	RawLocator                                                                        map[string]any
 	Attachments                                                                       []Attachment
@@ -127,6 +128,11 @@ func (c *Collector) bundle(messages []Message, scope Scope, index int) caseclien
 	relations := make([]caseclient.EvidenceRelation, 0)
 	failures := []string{}
 	seen := map[string]string{}
+	messageKeys := map[string]string{}
+	for _, m := range messages {
+		parent := makeItem(m, -1)
+		messageKeys[m.Owner+"\x1f"+m.Conversation+"\x1f"+m.ID+"\x1f"+m.ForwardPathOrRoot()] = parent.ClientEvidenceKey
+	}
 	for _, m := range messages {
 		parent := makeItem(m, -1)
 		items = append(items, parent)
@@ -169,6 +175,11 @@ func (c *Collector) bundle(messages []Message, scope Scope, index int) caseclien
 				}
 			}
 		}
+		if m.ForwardParentID != "" {
+			if target := messageKeys[m.Owner+"\x1f"+m.Conversation+"\x1f"+m.ForwardParentID+"\x1froot"]; target != "" {
+				relations = append(relations, caseclient.EvidenceRelation{FromClientEvidenceKey: parent.ClientEvidenceKey, ToClientEvidenceKey: target, Type: "forward_contains"})
+			}
+		}
 	}
 	coverage := map[string]any{"collector_version": CollectorVersion, "platform": "wechat", "owner": scope.Owner, "conversation": scope.Conversation, "conversation_type": scope.ConversationType, "participant_ids": scope.ParticipantIDs, "requested_from": scope.From, "requested_to": scope.To, "requested_message_ids": scope.MessageIDs, "message_start": messages[0].ID, "message_end": messages[len(messages)-1].ID, "source_time_start": messages[0].SourceTime, "source_time_end": messages[len(messages)-1].SourceTime, "complete": true, "missing_reasons": []string{}, "media_export_failures": failures, "media_complete": len(failures) == 0, "bundle_index": index}
 	body := map[string]any{"coverage": coverage, "items": items, "relations": relations}
@@ -193,7 +204,7 @@ func makeItem(m Message, ordinal int) caseclient.EvidenceItem {
 	locator["account_owner"] = m.OwnerIdentity
 	locator["forwarder"] = m.Forwarder
 	locator["speaker"] = speaker
-	payload := map[string]any{"text": m.Text, "account_owner": m.OwnerIdentity, "forwarder": m.Forwarder, "speaker": speaker, "quote": m.Quote, "reply_to_message_id": m.ReplyTo, "forward_path": forward}
+	payload := map[string]any{"text": m.Text, "account_owner": m.OwnerIdentity, "forwarder": m.Forwarder, "speaker": speaker, "quote": m.Quote, "reply_to_message_id": m.ReplyTo, "forward_path": forward, "forward_parent_message_id": m.ForwardParentID}
 	return caseclient.EvidenceItem{ClientEvidenceKey: "evidence:" + hash(source), SourceKey: source, Kind: "message", SourceTime: m.SourceTime, SpeakerSourceKey: speaker.SourceKey, RawText: m.Text, SourceLocator: locator, ImmutablePayload: payload}
 }
 func sourceIdentityKey(owner, conversation, forward string, identity SourceIdentity) string {
@@ -426,6 +437,7 @@ func appendForwarded(out []Message, parent Message, record map[string]any, path 
 			child.Conversation = parent.Conversation
 		}
 		child.ForwardPath = path + "/" + strconv.Itoa(index)
+		child.ForwardParentID = parent.ID
 		out = append(out, child)
 		out = appendForwarded(out, child, childRecord, child.ForwardPath)
 	}
