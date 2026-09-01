@@ -8,8 +8,10 @@ import (
 	"encoding/json"
 	"io"
 	"mime"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/larksuite/cli/errs"
@@ -314,19 +316,37 @@ func newRun(o *options) *cobra.Command {
 }
 
 func newInterpretation(o *options) *cobra.Command {
-	var view string
+	var view, dateFrom, dateTo, personID, sourceIdentityID, responsibilityID, styleID, sampleVariantID, supplier, customer, conversationID, cursor string
+	var limit int
 	cmd := &cobra.Command{Use: "interpretation <case_ref>", Short: "Read the cloud interpretation", Args: cobra.ExactArgs(1), RunE: func(cmd *cobra.Command, args []string) error {
 		c, err := o.client()
 		if err != nil {
 			return err
 		}
-		result, err := c.GetInterpretation(cmd.Context(), args[0], view)
+		query := url.Values{}
+		for key, value := range map[string]string{"date_from": dateFrom, "date_to": dateTo, "person_id": personID, "source_identity_id": sourceIdentityID, "responsibility_id": responsibilityID, "style_id": styleID, "sample_variant_id": sampleVariantID, "supplier": supplier, "customer": customer, "conversation_id": conversationID, "cursor": cursor} {
+			if value != "" { query.Set(key, value) }
+		}
+		if cmd.Flags().Changed("limit") { query.Set("limit", strconv.Itoa(limit)) }
+		result, err := c.GetInterpretationQuery(cmd.Context(), args[0], view, query)
 		if err != nil {
 			return err
 		}
 		return emit(o.factory, result)
 	}}
 	cmd.Flags().StringVar(&view, "view", "confirmed", "confirmed or audit")
+	cmd.Flags().StringVar(&dateFrom, "date-from", "", "include events at or after this timestamp")
+	cmd.Flags().StringVar(&dateTo, "date-to", "", "include events at or before this timestamp")
+	cmd.Flags().StringVar(&personID, "person-id", "", "filter by confirmed Person reference")
+	cmd.Flags().StringVar(&sourceIdentityID, "source-identity-id", "", "filter by Source Identity reference")
+	cmd.Flags().StringVar(&responsibilityID, "responsibility-id", "", "filter by Responsibility reference")
+	cmd.Flags().StringVar(&styleID, "style-id", "", "filter by Style reference")
+	cmd.Flags().StringVar(&sampleVariantID, "sample-variant-id", "", "filter by SampleVariant reference")
+	cmd.Flags().StringVar(&supplier, "supplier", "", "filter by supplier")
+	cmd.Flags().StringVar(&customer, "customer", "", "filter by customer")
+	cmd.Flags().StringVar(&conversationID, "conversation-id", "", "filter by source conversation")
+	cmd.Flags().IntVar(&limit, "limit", 0, "maximum events per page")
+	cmd.Flags().StringVar(&cursor, "cursor", "", "next page cursor returned by the Case service")
 	return cmd
 }
 

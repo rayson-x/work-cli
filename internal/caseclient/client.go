@@ -454,13 +454,31 @@ func (c *Client) GetRun(ctx context.Context, caseRef, runRef string) (map[string
 	return out, err
 }
 func (c *Client) GetInterpretation(ctx context.Context, caseRef, view string) (map[string]any, error) {
+	return c.GetInterpretationQuery(ctx, caseRef, view, nil)
+}
+func (c *Client) GetInterpretationQuery(ctx context.Context, caseRef, view string, query url.Values) (map[string]any, error) {
 	path := "/v1/cases/" + url.PathEscape(caseRef) + "/interpretation"
 	if view != "" {
-		path += "?view=" + url.QueryEscape(view)
+		query = cloneQuery(query)
+		query.Set("view", view)
+	}
+	if len(query) > 0 {
+		path += "?" + query.Encode()
 	}
 	var out map[string]any
 	err := c.jsonRequest(ctx, http.MethodGet, path, "", nil, &out)
 	return out, err
+}
+
+func cloneQuery(query url.Values) url.Values {
+	if query == nil {
+		return make(url.Values)
+	}
+	out := make(url.Values, len(query))
+	for key, values := range query {
+		out[key] = append([]string(nil), values...)
+	}
+	return out
 }
 
 func (c *Client) jsonRequest(ctx context.Context, method, path, idempotencyKey string, payload any, out any) error {

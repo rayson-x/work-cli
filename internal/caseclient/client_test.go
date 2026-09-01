@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"sync"
 	"testing"
@@ -142,6 +143,25 @@ func TestEvidenceSealRunAndReadsUseCaseContractRoutes(t *testing.T) {
 	}
 	if len(paths) != 7 {
 		t.Fatalf("paths = %#v", paths)
+	}
+}
+
+func TestGetInterpretationQueryEncodesCloudFilters(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("view") != "confirmed" || r.URL.Query().Get("style_id") != "style/1" || r.URL.Query().Get("limit") != "2" {
+			t.Fatalf("query = %#v", r.URL.Query())
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"view":"confirmed"}`))
+	}))
+	defer server.Close()
+	c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: t.TempDir() + "/case-operations.json"})
+	query := url.Values{"style_id": {"style/1"}, "limit": {"2"}}
+	if _, err := c.GetInterpretationQuery(context.Background(), "case-1", "confirmed", query); err != nil {
+		t.Fatal(err)
+	}
+	if len(query) != 2 {
+		t.Fatalf("caller query mutated: %#v", query)
 	}
 }
 
