@@ -15,6 +15,7 @@ import (
 	"github.com/larksuite/cli/errs"
 	"github.com/larksuite/cli/internal/caseclient"
 	"github.com/larksuite/cli/internal/cmdutil"
+	"github.com/larksuite/cli/internal/evidencecollect"
 	"github.com/larksuite/cli/internal/output"
 	"github.com/larksuite/cli/internal/worklineauth"
 	"github.com/spf13/cobra"
@@ -35,9 +36,150 @@ func NewCmdCase(f *cmdutil.Factory) *cobra.Command {
 	cmd.PersistentFlags().StringVar(&o.key, "api-key", "", "override the Case service API key")
 	_ = cmd.PersistentFlags().MarkHidden("server-url")
 	_ = cmd.PersistentFlags().MarkHidden("api-key")
-	cmd.AddCommand(newCreate(o), newSubmit(o), newSeal(o), newStartRun(o), newStatus(o), newEvidence(o), newRun(o), newInterpretation(o), newMediaUpload(o), newMediaBatch(o))
+	cmd.AddCommand(newCreate(o), newSubmit(o), newCollect(o), newSeal(o), newStartRun(o), newStatus(o), newEvidence(o), newRun(o), newInterpretation(o), newMediaUpload(o), newMediaBatch(o))
 	cmdutil.DisableAuthCheck(cmd)
 	return cmd
+}
+
+// newCollect is the bounded local-collection seam. The input is the JSON
+// emitted by the local WeChat reader (or a test fixture); this command only
+// transports source Evidence and never creates canonical apparel records.
+func newCollect(o *options) *cobra.Command {
+	var file, scopeJSON, purpose, pipeline string
+	var maxMessages int
+	cmd := &cobra.Command{Use: "collect", Short: "Collect bounded WeChat JSON into a cloud Case", Args: cobra.NoArgs, RunE: func(cmd *cobra.Command, _ []string) error {
+		raw, err := readJSON(cmd, file)
+		if err != nil {
+			return err
+		}
+		messages, err := evidencecollect.Decode(raw)
+		if err != nil {
+			return invalid("--messages-json is invalid: %v", err)
+		}
+		var scope evidencecollect.Scope
+		if err := json.Unmarshal([]byte(scopeJSON), &scope); err != nil || scope.Owner == "" || scope.Conversation == "" {
+			return invalid("--scope-json must include owner and conversation")
+		}
+		bundles, err := evidencecollect.New(evidencecollect.Options{MaxMessagesPerBundle: maxMessages}).CollectBundles(messages, scope)
+		if err != nil {
+			return invalid("collect evidence: %v", err)
+		}
+		client, err := o.client()
+		if err != nil {
+			return err
+		}
+		created, err := client.CreateCase(cmd.Context(), caseclient.CreateCaseRequest{Purpose: purpose, SourceScope: map[string]any{"platform": "wechat", "owner": scope.Owner, "conversation": scope.Conversation, "from": scope.From, "to": scope.To, "participant_ids": scope.ParticipantIDs}})
+		if err != nil {
+			return err
+		}
+		results := map[string]any{"case": created, "bundles": []any{}}
+		for i := range bundles {
+			if err := uploadBundleMedia(cmd, client, &bundles[i]); err != nil {
+				return err
+			}
+			// Media refs and export dispositions are part of the submitted
+			// payload; let caseclient derive the final stable key after they are
+			// known instead of reusing the pre-upload collector key.
+			bundles[i].Key = ""
+			result, err := client.SubmitEvidenceBundle(cmd.Context(), created.CaseRef, bundles[i])
+			if err != nil {
+				return err
+			}
+			sealed, err := client.SealEvidenceBundle(cmd.Context(), created.CaseRef, result.BundleRef)
+			if err != nil {
+				return err
+			}
+			results["bundles"] = append(results["bundles"].([]any), map[string]any{"submitted": result, "sealed": sealed})
+		}
+		if pipeline != "" {
+			status, err := client.GetCase(cmd.Context(), created.CaseRef)
+			if err != nil {
+				return err
+			}
+			revision := 0
+			if n, ok := status["revision"].(float64); ok {
+				revision = int(n)
+			}
+			run, err := client.StartInferenceRun(cmd.Context(), created.CaseRef, caseclient.InferenceRunRequest{BaseCaseRevision: revision, Pipeline: pipeline})
+			if err != nil {
+				return err
+			}
+			results["run"] = run
+		}
+		return emit(o.factory, results)
+	}}
+	cmd.Flags().StringVar(&file, "messages-json", "-", "bounded WeChat messages JSON file, or - for stdin")
+	cmd.Flags().StringVar(&scopeJSON, "scope-json", "", "collection scope JSON with owner, conversation, and optional range/participants")
+	cmd.Flags().StringVar(&purpose, "purpose", "style-track", "Case purpose")
+	cmd.Flags().StringVar(&pipeline, "pipeline", "", "optional cloud inference pipeline")
+	cmd.Flags().IntVar(&maxMessages, "max-messages-per-bundle", 500, "maximum messages per Evidence Bundle")
+	_ = cmd.MarkFlagRequired("scope-json")
+	return cmd
+}
+
+func uploadBundleMedia(cmd *cobra.Command, client *caseclient.Client, bundle *caseclient.EvidenceBundle) error {
+	for i := range bundle.Items {
+		item := &bundle.Items[i]
+		if item.Kind != "image" && item.Kind != "video" && item.Kind != "audio" && item.Kind != "file" {
+			continue
+		}
+		path, _ := item.ImmutablePayload["local_path"].(string)
+		if path == "" {
+			if reason, ok := item.ImmutablePayload["export_error"].(string); ok && reason != "" {
+				markMediaFailure(bundle, item.SourceKey, reason)
+			}
+			continue
+		}
+		file, err := cmdutil.OpenLocalFile(path)
+		if err != nil {
+			item.ImmutablePayload["export_error"] = "media_not_exported: " + err.Error()
+			markMediaFailure(bundle, item.SourceKey, item.ImmutablePayload["export_error"].(string))
+			continue
+		}
+		mimeType, _ := item.ImmutablePayload["mime_type"].(string)
+		if mimeType == "" {
+			mimeType = "application/octet-stream"
+		}
+		media, uploadErr := client.UploadMedia(cmd.Context(), caseclient.MediaFile{Name: filepath.Base(path), MIME: mimeType, Reader: file})
+		_ = file.Close()
+		if uploadErr != nil {
+			item.ImmutablePayload["export_error"] = uploadErr.Error()
+			markMediaFailure(bundle, item.SourceKey, uploadErr.Error())
+			continue
+		}
+		item.MediaRef = media.MediaRef
+	}
+	return nil
+}
+
+func markMediaFailure(bundle *caseclient.EvidenceBundle, sourceKey, reason string) {
+	failures, _ := bundle.Coverage["media_export_failures"].([]any)
+	if len(failures) == 0 {
+		if values, ok := bundle.Coverage["media_export_failures"].([]string); ok {
+			for _, value := range values {
+				failures = append(failures, value)
+			}
+		}
+	}
+	failures = append(failures, sourceKey)
+	for _, value := range failures[:len(failures)-1] {
+		if value == sourceKey {
+			failures = failures[:len(failures)-1]
+			break
+		}
+	}
+	bundle.Coverage["media_export_failures"] = failures
+	bundle.Coverage["media_complete"] = false
+	missing, _ := bundle.Coverage["missing_reasons"].([]any)
+	if len(missing) == 0 {
+		if values, ok := bundle.Coverage["missing_reasons"].([]string); ok {
+			for _, value := range values {
+				missing = append(missing, value)
+			}
+		}
+	}
+	missing = append(missing, map[string]any{"source_key": sourceKey, "reason": reason})
+	bundle.Coverage["missing_reasons"] = missing
 }
 
 func newCreate(o *options) *cobra.Command {
