@@ -24,7 +24,6 @@ type Problem struct {
 	Category       Category `json:"type"`
 	Subtype        Subtype  `json:"subtype,omitempty"`
 	Code           int      `json:"code,omitempty"`
-	ServerCode     string   `json:"server_code,omitempty"`
 	Message        string   `json:"message"`
 	Hint           string   `json:"hint,omitempty"`
 	LogID          string   `json:"log_id,omitempty"`

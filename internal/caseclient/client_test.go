@@ -35,6 +35,18 @@ func TestErrorMapsToTypedContract(t *testing.T) {
 	}
 }
 
+func TestForbiddenErrorMapsToPermissionContract(t *testing.T) {
+	cause := errors.New("case authorization refused")
+	got := &Error{Operation: "POST /v1/cases", Status: http.StatusForbidden, Code: "case_forbidden", Message: "tenant access denied", Retryable: true, RetryAfter: 5 * time.Second, Cause: cause}
+	var typed *errs.PermissionError
+	if !errors.As(got, &typed) {
+		t.Fatalf("case error did not map to typed permission error: %T", got)
+	}
+	if typed.Subtype != errs.SubtypePermissionDenied || typed.ServerCode != "case_forbidden" || typed.Code != 0 || !typed.Retryable || !errors.Is(got, cause) {
+		t.Fatalf("typed=%#v cause=%v", typed, typed.Cause)
+	}
+}
+
 func TestCreateCaseUsesStableIdempotencyAndCaseContract(t *testing.T) {
 	var requests int
 	var firstKey string

@@ -220,9 +220,12 @@ func (e *Error) typedError() error {
 				typed.RetryAfterSeconds = int(e.RetryAfter / time.Second)
 			}
 		case *errs.ConfigError:
-			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Code, typed.Retryable = numericCode, e.Retryable
 			typed.Cause = e.Cause
 		case *errs.InternalError:
+			typed.Code, typed.Retryable = numericCode, e.Retryable
+			typed.Cause = e.Cause
+		case *errs.PermissionError:
 			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
 			typed.Cause = e.Cause
 		}

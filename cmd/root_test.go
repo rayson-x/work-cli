@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 	"testing"
 
@@ -473,6 +474,22 @@ func TestHandleRootError_CaseClientErrorUsesTypedEnvelope(t *testing.T) {
 	envelope := decodeErrorEnvelope(t, errOut.Bytes())
 	if envelope["type"] != string(errs.CategoryNetwork) || envelope["server_code"] != "case_store_unavailable" || envelope["retryable"] != true {
 		t.Fatalf("case error envelope=%#v", envelope)
+	}
+}
+
+func TestHandleRootError_CaseClientForbiddenUsesPermissionEnvelope(t *testing.T) {
+	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
+	f, _, _, _ := cmdutil.TestFactory(t, nil)
+	errOut := &bytes.Buffer{}
+	f.IOStreams.ErrOut = errOut
+	err := &caseclient.Error{Operation: "POST /v1/cases", Status: http.StatusForbidden, Code: "case_forbidden", Message: "tenant access denied", Retryable: true}
+	exit := handleRootError(f, err, nil)
+	if exit != int(output.ExitAuth) {
+		t.Fatalf("exit = %d, want %d", exit, output.ExitAuth)
+	}
+	envelope := decodeErrorEnvelope(t, errOut.Bytes())
+	if envelope["type"] != string(errs.CategoryAuthorization) || envelope["subtype"] != string(errs.SubtypePermissionDenied) || envelope["server_code"] != "case_forbidden" || envelope["retryable"] != true {
+		t.Fatalf("forbidden case error envelope=%#v", envelope)
 	}
 }
 

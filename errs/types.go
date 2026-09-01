@@ -61,9 +61,10 @@ type TypedError interface {
 // it is intentionally not serialized.
 type ValidationError struct {
 	Problem
-	Param  string         `json:"param,omitempty"`
-	Params []InvalidParam `json:"params,omitempty"`
-	Cause  error          `json:"-"`
+	ServerCode string         `json:"server_code,omitempty"`
+	Param      string         `json:"param,omitempty"`
+	Params     []InvalidParam `json:"params,omitempty"`
+	Cause      error          `json:"-"`
 }
 
 // InvalidParam is one structured validation diagnostic: the parameter that
@@ -130,6 +131,11 @@ func (e *ValidationError) WithCode(code int) *ValidationError {
 	return e
 }
 
+func (e *ValidationError) WithServerCode(code string) *ValidationError {
+	e.ServerCode = code
+	return e
+}
+
 func (e *ValidationError) WithRetryable() *ValidationError {
 	e.Retryable = true
 	return e
@@ -157,6 +163,7 @@ func (e *ValidationError) WithCause(cause error) *ValidationError {
 // it is intentionally not serialized.
 type AuthenticationError struct {
 	Problem
+	ServerCode string `json:"server_code,omitempty"`
 	UserOpenID string `json:"user_open_id,omitempty"`
 	Cause      error  `json:"-"`
 }
@@ -202,6 +209,11 @@ func (e *AuthenticationError) WithCode(code int) *AuthenticationError {
 	return e
 }
 
+func (e *AuthenticationError) WithServerCode(code string) *AuthenticationError {
+	e.ServerCode = code
+	return e
+}
+
 func (e *AuthenticationError) WithRetryable() *AuthenticationError {
 	e.Retryable = true
 	return e
@@ -224,6 +236,7 @@ func (e *AuthenticationError) WithCause(cause error) *AuthenticationError {
 // it is intentionally not serialized.
 type PermissionError struct {
 	Problem
+	ServerCode      string   `json:"server_code,omitempty"`
 	MissingScopes   []string `json:"missing_scopes,omitempty"`
 	RequestedScopes []string `json:"requested_scopes,omitempty"`
 	GrantedScopes   []string `json:"granted_scopes,omitempty"`
@@ -270,6 +283,11 @@ func (e *PermissionError) WithLogID(logID string) *PermissionError {
 
 func (e *PermissionError) WithCode(code int) *PermissionError {
 	e.Code = code
+	return e
+}
+
+func (e *PermissionError) WithServerCode(code string) *PermissionError {
+	e.ServerCode = code
 	return e
 }
 
@@ -383,6 +401,7 @@ func (e *ConfigError) WithCause(cause error) *ConfigError {
 // errors.Is / errors.Unwrap; it is intentionally not serialized.
 type NetworkError struct {
 	Problem
+	ServerCode string `json:"server_code,omitempty"`
 	// RetryAfterSeconds is an upstream-provided minimum delay before another
 	// attempt. Zero means no precise delay was provided and omits the field.
 	RetryAfterSeconds int   `json:"retry_after_seconds,omitempty"`
@@ -430,6 +449,11 @@ func (e *NetworkError) WithCode(code int) *NetworkError {
 	return e
 }
 
+func (e *NetworkError) WithServerCode(code string) *NetworkError {
+	e.ServerCode = code
+	return e
+}
+
 func (e *NetworkError) WithRetryable() *NetworkError {
 	e.Retryable = true
 	return e
@@ -452,6 +476,7 @@ func (e *NetworkError) WithCause(cause error) *NetworkError {
 // errors.Is / errors.Unwrap; it is intentionally not serialized.
 type APIError struct {
 	Problem
+	ServerCode string `json:"server_code,omitempty"`
 	// RetryAfterSeconds is an upstream-provided minimum delay before another
 	// attempt. Zero means no precise delay was provided and omits the field.
 	RetryAfterSeconds int   `json:"retry_after_seconds,omitempty"`
@@ -496,6 +521,11 @@ func (e *APIError) WithLogID(logID string) *APIError {
 
 func (e *APIError) WithCode(code int) *APIError {
 	e.Code = code
+	return e
+}
+
+func (e *APIError) WithServerCode(code string) *APIError {
+	e.ServerCode = code
 	return e
 }
 
