@@ -63,6 +63,7 @@ Typed errors render to **stderr** as one JSON object per process exit:
 | `error.log_id` | informational | upstream request id (server-side trace) |
 | `error.retryable` | wire-stable | `true` when present; omitted when `false` |
 | `error.retry_after_seconds` | per-Subtype-stable | upstream-provided minimum delay before retry; emitted when available for retryable `api/rate_limit` and HTTP-backed `network` errors |
+| `error.server_code` | per-Subtype-stable | optional string business code from an HTTP-backed Case/API adapter; emitted only by the concrete typed subtype that owns it, never by the shared `Problem` shape |
 | `error.param` | per-Subtype-stable | single offending parameter (`ValidationError`); see **Validation parameters** |
 | `error.params` | per-Subtype-stable | per-parameter validation detail array (`ValidationError`); see **Validation parameters** |
 | per-Subtype extension fields | per-Subtype-stable | e.g. `missing_scopes`, `console_url`, `challenge_url`; `console_url` is emitted for developer/admin recovery such as `app_scope_not_applied`, not user `missing_scope` |
@@ -78,6 +79,16 @@ envelope intentionally does not expose an implementation detail such as
 `retry_after_source`. Generic command dispatch does not replay a request
 automatically; a bounded operation such as multipart download may consume this
 field under its own idempotency and retry budget.
+
+`server_code` is a per-Subtype extension for HTTP-backed typed errors whose
+upstream business code is a string (for example, a Case service code such as
+`observation_incomplete`). It is defined on the concrete typed error that
+needs it (`AuthenticationError`, `ValidationError`, `PermissionError`,
+`APIError`, or `NetworkError`), not on `Problem`; errors that do not own this
+extension omit the field. The shared `error.code` remains the upstream numeric
+code when one is available. Consumers must branch on `type`, `subtype`, and
+numeric `code` for cross-service behavior, and treat `server_code` as an
+adapter-specific diagnostic.
 
 `SecurityPolicyError` renders through the same typed envelope as every
 other category. `error.type` is `"policy"`, `error.subtype` is one of

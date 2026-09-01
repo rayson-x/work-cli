@@ -37,6 +37,14 @@ import (
 
 const ContractVersion = "case.v1"
 
+const (
+	// DefaultInferenceTimeout covers the Case service's media-readiness and
+	// cloud-agent budgets (120s + 900s) while still respecting a caller's
+	// shorter context deadline.
+	DefaultInferenceTimeout      = 17 * time.Minute
+	DefaultInferencePollInterval = time.Second
+)
+
 type Options struct {
 	BaseURL    string
 	APIKey     string
@@ -45,17 +53,25 @@ type Options struct {
 	MaxRetries int
 	RetryBase  time.Duration
 	Sleep      func(time.Duration) error
+	// InferenceTimeout is the maximum duration for one synchronous inference
+	// start-and-poll operation. Zero uses DefaultInferenceTimeout.
+	InferenceTimeout time.Duration
+	// InferencePollInterval controls how often a running inference is read back.
+	// Zero uses DefaultInferencePollInterval.
+	InferencePollInterval time.Duration
 }
 
 type Client struct {
-	base       *url.URL
-	apiKey     string
-	http       *http.Client
-	statePath  string
-	maxRetries int
-	retryBase  time.Duration
-	sleep      func(time.Duration) error
-	mu         sync.Mutex
+	base                  *url.URL
+	apiKey                string
+	http                  *http.Client
+	statePath             string
+	maxRetries            int
+	retryBase             time.Duration
+	sleep                 func(time.Duration) error
+	inferenceTimeout      time.Duration
+	inferencePollInterval time.Duration
+	mu                    sync.Mutex
 }
 
 type CreateCaseRequest struct {
@@ -240,6 +256,8 @@ func (e *Error) typedError() error {
 		return withCommon(errs.NewAPIError(errs.SubtypeConflict, message))
 	case http.StatusPreconditionFailed:
 		return withCommon(errs.NewAPIError(errs.SubtypeFailedPrecondition, message))
+	case http.StatusFailedDependency:
+		return withCommon(errs.NewAPIError(errs.SubtypeServerError, message).WithRetryable())
 	case http.StatusNotFound:
 		return withCommon(errs.NewAPIError(errs.SubtypeNotFound, message))
 	case http.StatusTooManyRequests:
@@ -334,11 +352,19 @@ func NewWithError(options Options) (*Client, error) {
 	if sleep == nil {
 		sleep = func(d time.Duration) error { time.Sleep(d); return nil }
 	}
+	inferenceTimeout := options.InferenceTimeout
+	if inferenceTimeout <= 0 {
+		inferenceTimeout = DefaultInferenceTimeout
+	}
+	inferencePollInterval := options.InferencePollInterval
+	if inferencePollInterval <= 0 {
+		inferencePollInterval = DefaultInferencePollInterval
+	}
 	statePath := options.StatePath
 	if statePath == "" {
 		statePath = filepath.Join(core.GetConfigDir(), "case-operations.json")
 	}
-	return &Client{base: base, apiKey: key, http: h, statePath: statePath, maxRetries: retries, retryBase: baseDelay, sleep: sleep}, nil
+	return &Client{base: base, apiKey: key, http: h, statePath: statePath, maxRetries: retries, retryBase: baseDelay, sleep: sleep, inferenceTimeout: inferenceTimeout, inferencePollInterval: inferencePollInterval}, nil
 }
 
 func (c *Client) CreateCase(ctx context.Context, input CreateCaseRequest) (Case, error) {
@@ -456,13 +482,71 @@ func (c *Client) StartInferenceRun(ctx context.Context, caseRef string, input In
 	}
 	var out InferenceRun
 	path := "/v1/cases/" + url.PathEscape(caseRef) + "/inference-runs"
-	if err := c.jsonRequest(ctx, http.MethodPost, path, key, body, &out); err != nil {
+	runClient := c.inferenceClient()
+	runCtx, cancel := context.WithTimeout(ctx, runClient.inferenceTimeout)
+	defer cancel()
+	var err error
+	if err := runClient.jsonRequest(runCtx, http.MethodPost, path, key, body, &out); err != nil {
 		return InferenceRun{}, err
+	}
+	if out.Status == "running" || out.Status == "queued" {
+		out, err = runClient.waitForInferenceRun(runCtx, caseRef, out.RunRef)
+		if err != nil {
+			return InferenceRun{}, err
+		}
 	}
 	if err := c.complete("run.start", key, out.RunRef); err != nil {
 		return out, err
 	}
 	return out, nil
+}
+
+// inferenceClient raises only the client-level timeout for the long-running
+// inference operation. It clones the policy-routed HTTP client and transport,
+// so ordinary Case requests keep their existing timeout and proxy behavior.
+func (c *Client) inferenceClient() *Client {
+	if c == nil || c.http == nil || c.inferenceTimeout <= 0 || c.http.Timeout == 0 || c.http.Timeout >= c.inferenceTimeout {
+		return c
+	}
+	h := *c.http
+	h.Timeout = c.inferenceTimeout
+	return &Client{
+		base:                  c.base,
+		apiKey:                c.apiKey,
+		http:                  &h,
+		statePath:             c.statePath,
+		maxRetries:            c.maxRetries,
+		retryBase:             c.retryBase,
+		sleep:                 c.sleep,
+		inferenceTimeout:      c.inferenceTimeout,
+		inferencePollInterval: c.inferencePollInterval,
+	}
+}
+
+func (c *Client) waitForInferenceRun(ctx context.Context, caseRef, runRef string) (InferenceRun, error) {
+	if strings.TrimSpace(runRef) == "" {
+		return InferenceRun{}, &Error{Operation: "run.poll", Code: "invalid_response", Message: "case service omitted inference run reference"}
+	}
+	path := "/v1/cases/" + url.PathEscape(caseRef) + "/inference-runs/" + url.PathEscape(runRef)
+	for {
+		if c.inferencePollInterval > 0 {
+			if err := c.sleep(c.inferencePollInterval); err != nil {
+				return InferenceRun{}, &Error{Operation: "run.poll", Code: "network_timeout", Message: "inference run polling interrupted", Retryable: true, Cause: err}
+			}
+		}
+		var out InferenceRun
+		if err := c.jsonRequest(ctx, http.MethodGet, path, "", nil, &out); err != nil {
+			return InferenceRun{}, err
+		}
+		if out.Status != "running" && out.Status != "queued" {
+			return out, nil
+		}
+		select {
+		case <-ctx.Done():
+			return InferenceRun{}, &Error{Operation: "run.poll", Code: "network_timeout", Message: "inference run polling timed out", Retryable: true, Cause: ctx.Err()}
+		default:
+		}
+	}
 }
 
 // UploadMedia buffers one exported media file so an uncertain request can be
@@ -735,6 +819,10 @@ func decodeError(operation string, resp *http.Response, body []byte) *Error {
 		e.Retryable = true
 	case 409, 412, 422, 401, 403:
 		e.Retryable = false
+	case 424:
+		// Observation/readiness is a recoverable server-side dependency state;
+		// callers may retry after the server-provided delay.
+		e.Retryable = true
 	default:
 		e.Retryable = resp.StatusCode >= 500
 	}

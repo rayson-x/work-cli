@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -121,6 +122,87 @@ func TestAPIErrorCarriesRetryHintAndDoesNotExposeToken(t *testing.T) {
 	}
 }
 
+func TestObservationReadiness424IsRetryableAPIError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/cases/case-1" {
+			t.Fatalf("path = %s", r.URL.Path)
+		}
+		w.Header().Set("Retry-After", "2")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusFailedDependency)
+		_, _ = w.Write([]byte(`{"error":{"code":"observation_incomplete","message":"media readiness timed out"}}`))
+	}))
+	defer server.Close()
+
+	c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: t.TempDir() + "/case-operations.json", MaxRetries: -1})
+	_, err := c.GetCase(context.Background(), "case-1")
+	if err == nil {
+		t.Fatal("GetCase() error = nil, want 424")
+	}
+	var apiErr *errs.APIError
+	if !errors.As(err, &apiErr) {
+		t.Fatalf("error = %T %v, want typed API error", err, err)
+	}
+	if apiErr.Subtype != errs.SubtypeServerError || !apiErr.Retryable || apiErr.RetryAfterSeconds != 2 || apiErr.ServerCode != "observation_incomplete" {
+		t.Fatalf("typed API error = %#v", apiErr)
+	}
+}
+
+func TestStartInferenceRunRaisesClientTimeoutForLongRun(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/cases/case-1/inference-runs" {
+			t.Fatalf("path = %s", r.URL.Path)
+		}
+		time.Sleep(40 * time.Millisecond)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"run_ref":"run-1","case_ref":"case-1","base_case_revision":2,"status":"succeeded"}`))
+	}))
+	defer server.Close()
+
+	c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: &http.Client{Timeout: 5 * time.Millisecond}, StatePath: t.TempDir() + "/case-operations.json", MaxRetries: -1, InferenceTimeout: 100 * time.Millisecond})
+	got, err := c.StartInferenceRun(context.Background(), "case-1", InferenceRunRequest{BaseCaseRevision: 2, Pipeline: "style-track"})
+	if err != nil {
+		t.Fatalf("StartInferenceRun() error = %v", err)
+	}
+	if got.Status != "succeeded" || got.RunRef != "run-1" {
+		t.Fatalf("run = %#v", got)
+	}
+}
+
+func TestStartInferenceRunPollsRunningUntilTerminal(t *testing.T) {
+	for _, want := range []string{"succeeded", "failed"} {
+		t.Run(want, func(t *testing.T) {
+			var polls int
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				switch r.URL.Path {
+				case "/v1/cases/case-1/inference-runs":
+					_, _ = w.Write([]byte(`{"run_ref":"run-1","case_ref":"case-1","base_case_revision":2,"status":"running"}`))
+				case "/v1/cases/case-1/inference-runs/run-1":
+					polls++
+					status := "running"
+					if polls >= 2 {
+						status = want
+					}
+					_, _ = fmt.Fprintf(w, `{"run_ref":"run-1","case_ref":"case-1","base_case_revision":2,"status":%q}`, status)
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			c := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: t.TempDir() + "/case-operations.json", MaxRetries: -1, InferenceTimeout: 200 * time.Millisecond, InferencePollInterval: time.Millisecond})
+			got, err := c.StartInferenceRun(context.Background(), "case-1", InferenceRunRequest{BaseCaseRevision: 2, Pipeline: "style-track"})
+			if err != nil {
+				t.Fatalf("StartInferenceRun() error = %v", err)
+			}
+			if got.Status != want || polls != 2 {
+				t.Fatalf("run = %#v polls=%d", got, polls)
+			}
+		})
+	}
+}
+
 func TestEvidenceSealRunAndReadsUseCaseContractRoutes(t *testing.T) {
 	var paths []string
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -172,7 +254,7 @@ func TestEvidenceSealRunAndReadsUseCaseContractRoutes(t *testing.T) {
 	if _, err := c.GetInterpretation(context.Background(), "case-1", "audit"); err != nil {
 		t.Fatal(err)
 	}
-	if len(paths) != 7 {
+	if len(paths) != 8 {
 		t.Fatalf("paths = %#v", paths)
 	}
 }
