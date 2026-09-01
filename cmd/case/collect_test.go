@@ -6,6 +6,7 @@ package casecmd
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -18,6 +19,89 @@ import (
 	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/worklineauth"
 )
+
+func TestCollectUploadsExtensionMIMEAndPreservesStickerKind(t *testing.T) {
+	var uploadedTypes []string
+	var submitted map[string]any
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/v1/cases":
+			_, _ = w.Write([]byte(`{"case_id":"case-media","purpose":"style-track","status":"open","revision":0}`))
+		case "/v1/media":
+			reader, err := r.MultipartReader()
+			if err != nil {
+				t.Fatalf("multipart reader: %v", err)
+			}
+			part, err := reader.NextPart()
+			if err != nil {
+				t.Fatalf("multipart part: %v", err)
+			}
+			if part.FormName() != "file" {
+				t.Fatalf("multipart field=%q", part.FormName())
+			}
+			uploadedTypes = append(uploadedTypes, part.Header.Get("Content-Type"))
+			_, _ = io.ReadAll(part)
+			_, _ = w.Write([]byte(`{"media_ref":"media-` + string(rune('0'+len(uploadedTypes))) + `","status":"ready","reused":false}`))
+		case "/v1/cases/case-media/evidence-bundles":
+			if err := json.NewDecoder(r.Body).Decode(&submitted); err != nil {
+				t.Fatalf("decode evidence bundle: %v", err)
+			}
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-media","case_ref":"case-media","case_revision":1,"status":"accepted"}`))
+		case "/v1/cases/case-media/evidence-bundles/bundle-media/seal":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-media","status":"sealed"}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "media-key")
+	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "media-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	mediaPath := filepath.Join(t.TempDir(), "sample.PNG")
+	if err := os.WriteFile(mediaPath, []byte("png"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	raw := `{"data":{"messages":[` +
+		`{"owner":"owner","conversation_id":"chat","message_id":"m-sticker","timestamp":"2026-09-01T00:00:00Z","message_type":"sticker","resource_path":"` + strings.ReplaceAll(mediaPath, `\`, `/`) + `","resource_status":"available"},` +
+		`{"owner":"owner","conversation_id":"chat","message_id":"m-emoji","timestamp":"2026-09-01T00:01:00Z","message_type":"emoji","resource_path":"` + strings.ReplaceAll(mediaPath, `\`, `/`) + `","resource_status":"available"}` +
+		`]}}`
+	cmd := NewCmdCase(factory)
+	cmd.SetIn(bytes.NewBufferString(raw))
+	cmd.SetArgs([]string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if len(uploadedTypes) != 2 || uploadedTypes[0] != "image/png" || uploadedTypes[1] != "image/png" {
+		t.Fatalf("uploaded MIME types=%#v", uploadedTypes)
+	}
+	items, ok := submitted["items"].([]any)
+	if !ok || len(items) != 4 {
+		t.Fatalf("submitted items=%#v", submitted["items"])
+	}
+	wantKinds := []string{"sticker", "emoji"}
+	seenKinds := map[string]bool{}
+	for _, rawItem := range items {
+		item := rawItem.(map[string]any)
+		if item["kind"] == "message" {
+			continue
+		}
+		if item["kind"] != "image" {
+			t.Fatalf("uploaded attachment kind=%#v", item["kind"])
+		}
+		payload := item["immutable_payload"].(map[string]any)
+		kind, _ := payload["attachment_kind"].(string)
+		seenKinds[kind] = true
+		if item["media_ref"] == nil || item["media_ref"] == "" {
+			t.Fatalf("attachment missing media ref=%#v", item)
+		}
+	}
+	for _, kind := range wantKinds {
+		if !seenKinds[kind] {
+			t.Fatalf("attachment_kind %q was not preserved: %#v", kind, seenKinds)
+		}
+	}
+}
 
 func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testing.T) {
 	var submitted map[string]any

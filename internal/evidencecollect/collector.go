@@ -289,6 +289,8 @@ func attachmentKind(kind string) string {
 		return "video"
 	case "audio", "voice":
 		return "audio"
+	case "sticker", "emoji", "emoticon":
+		return "image"
 	default:
 		return "file"
 	}

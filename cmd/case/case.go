@@ -154,6 +154,9 @@ func uploadBundleMedia(cmd *cobra.Command, client *caseclient.Client, bundle *ca
 			continue
 		}
 		mimeType, _ := item.ImmutablePayload["mime_type"].(string)
+		if strings.TrimSpace(mimeType) == "" {
+			mimeType = mime.TypeByExtension(strings.ToLower(filepath.Ext(path)))
+		}
 		if mimeType == "" {
 			mimeType = "application/octet-stream"
 		}
