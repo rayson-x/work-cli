@@ -8,9 +8,12 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/larksuite/cli/internal/caseclient"
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/worklineauth"
@@ -94,6 +97,21 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 	if missing, ok := coverage["missing_reasons"].([]any); !ok || len(missing) != 3 {
 		t.Fatalf("missing reasons=%#v", coverage["missing_reasons"])
 	}
+	failures := coverage["media_export_failures"].([]any)
+	unique := map[string]bool{}
+	for _, raw := range failures {
+		key, ok := raw.(string)
+		if !ok || unique[key] {
+			t.Fatalf("failure source keys=%#v", failures)
+		}
+		unique[key] = true
+	}
+	for _, raw := range coverage["missing_reasons"].([]any) {
+		reason := raw.(map[string]any)
+		if !unique[reason["source_key"].(string)] {
+			t.Fatalf("missing reason not aligned=%#v", reason)
+		}
+	}
 	relations := submitted["relations"].([]any)
 	if len(relations) != 4 {
 		t.Fatalf("relations = %#v", relations)
@@ -120,5 +138,107 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 	var output map[string]any
 	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil || output["ok"] != true {
 		t.Fatalf("output = %s err=%v", stdout.String(), err)
+	}
+}
+
+func TestCollectExistingCaseRejectsDifferentConversationBeforeBundleSubmit(t *testing.T) {
+	var bundleRequests int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Path == "/v1/cases/existing" {
+			_, _ = w.Write([]byte(`{"case_id":"existing","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"other-chat"},"status":"open","revision":1}`))
+			return
+		}
+		if r.URL.Path == "/v1/cases/existing/evidence-bundles" {
+			bundleRequests++
+			t.Fatalf("bundle submitted after scope mismatch")
+		}
+		http.NotFound(w, r)
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "scope-key")
+	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "scope-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	cmd := NewCmdCase(factory)
+	cmd.SetIn(bytes.NewBufferString(`{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","text":"x"}`))
+	cmd.SetArgs([]string{"--server-url", server.URL, "collect", "--case-ref", "existing", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-"})
+	err := cmd.Execute()
+	apiErr, ok := err.(*caseclient.Error)
+	if !ok || apiErr.Status != 422 || apiErr.Code != "scope_mismatch" {
+		t.Fatalf("error=%T %#v", err, err)
+	}
+	if bundleRequests != 0 {
+		t.Fatalf("bundle requests=%d", bundleRequests)
+	}
+}
+
+func TestCollectAbortsBundleOnTransientMediaFailureAndRetriesCompleteOnce(t *testing.T) {
+	mediaAttempts, bundleRequests := 0, 0
+	var submitted map[string]any
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/v1/cases":
+			_, _ = w.Write([]byte(`{"case_id":"case-retry","purpose":"style-track","status":"open","revision":0}`))
+		case "/v1/cases/case-retry":
+			_, _ = w.Write([]byte(`{"case_id":"case-retry","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"},"status":"open","revision":0}`))
+		case "/v1/media":
+			mediaAttempts++
+			if mediaAttempts <= 3 {
+				w.WriteHeader(http.StatusServiceUnavailable)
+				_, _ = w.Write([]byte(`{"error":{"code":"temporary","message":"try again"}}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"media_ref":"media-1","status":"ready","reused":false}`))
+		case "/v1/cases/case-retry/evidence-bundles":
+			bundleRequests++
+			_ = json.NewDecoder(r.Body).Decode(&submitted)
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-1","case_ref":"case-retry","case_revision":1,"status":"accepted"}`))
+		case "/v1/cases/case-retry/evidence-bundles/bundle-1/seal":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-1","status":"sealed"}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "retry-key")
+	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "retry-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	mediaPath := filepath.Join(t.TempDir(), "sample.jpg")
+	if err := os.WriteFile(mediaPath, []byte("image"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	input := `{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","text":"样衣","attachments":[{"type":"image","ordinal":0,"local_path":"` + strings.ReplaceAll(mediaPath, `\`, `/`) + `","mime_type":"image/jpeg","content_hash":"image-hash"}]}`
+	first := NewCmdCase(factory)
+	first.SetIn(bytes.NewBufferString(input))
+	first.SetArgs([]string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-"})
+	if err := first.Execute(); err == nil {
+		t.Fatal("transient media failure should abort before bundle submit")
+	} else if apiErr, ok := err.(*caseclient.Error); !ok || !apiErr.Retryable {
+		t.Fatalf("transient media error=%T %#v", err, err)
+	}
+	if bundleRequests != 0 {
+		t.Fatalf("first bundle requests=%d", bundleRequests)
+	}
+	second := NewCmdCase(factory)
+	second.SetIn(bytes.NewBufferString(input))
+	second.SetArgs([]string{"--server-url", server.URL, "collect", "--case-ref", "case-retry", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-"})
+	if err := second.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if bundleRequests != 1 || submitted == nil {
+		t.Fatalf("bundle requests=%d submitted=%#v", bundleRequests, submitted)
+	}
+	items := submitted["items"].([]any)
+	keys := map[string]bool{}
+	for _, raw := range items {
+		key := raw.(map[string]any)["source_key"].(string)
+		if keys[key] {
+			t.Fatalf("duplicate source key=%s", key)
+		}
+		keys[key] = true
+	}
+	if len(items) != 2 || items[1].(map[string]any)["media_ref"] != "media-1" {
+		t.Fatalf("submitted items=%#v", items)
 	}
 }

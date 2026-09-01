@@ -74,6 +74,14 @@ func newCollect(o *options) *cobra.Command {
 			if err != nil {
 				return err
 			}
+		} else {
+			current, err := client.GetCase(cmd.Context(), caseRef)
+			if err != nil {
+				return err
+			}
+			if err := validateCollectionScope(current, scope); err != nil {
+				return err
+			}
 		}
 		results := map[string]any{"case": created, "bundles": []any{}}
 		for i := range bundles {
@@ -150,11 +158,28 @@ func uploadBundleMedia(cmd *cobra.Command, client *caseclient.Client, bundle *ca
 		media, uploadErr := client.UploadMedia(cmd.Context(), caseclient.MediaFile{Name: filepath.Base(path), MIME: mimeType, Reader: file})
 		_ = file.Close()
 		if uploadErr != nil {
+			if apiErr, ok := uploadErr.(*caseclient.Error); ok && apiErr.Retryable {
+				return uploadErr
+			}
 			item.ImmutablePayload["export_error"] = uploadErr.Error()
 			markMediaFailure(bundle, item.SourceKey, uploadErr.Error())
 			continue
 		}
 		item.MediaRef = media.MediaRef
+	}
+	return nil
+}
+
+func validateCollectionScope(current map[string]any, scope evidencecollect.Scope) error {
+	value, ok := current["source_scope"].(map[string]any)
+	if !ok {
+		return &caseclient.Error{Operation: "case.collect", Status: 422, Code: "scope_mismatch", Message: "existing Case source scope is unavailable"}
+	}
+	platform, _ := value["platform"].(string)
+	owner, _ := value["owner"].(string)
+	conversation, _ := value["conversation_ref"].(string)
+	if strings.TrimSpace(platform) != "wechat" || strings.TrimSpace(owner) != strings.TrimSpace(scope.Owner) || strings.TrimSpace(conversation) != strings.TrimSpace(scope.Conversation) {
+		return &caseclient.Error{Operation: "case.collect", Status: 422, Code: "scope_mismatch", Message: "existing Case source scope does not match collection scope"}
 	}
 	return nil
 }
