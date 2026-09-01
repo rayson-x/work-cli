@@ -15,9 +15,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/larksuite/cli/errs"
 	"github.com/larksuite/cli/internal/caseclient"
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
+	"github.com/larksuite/cli/internal/evidencecollect"
 	"github.com/larksuite/cli/internal/output"
 	"github.com/larksuite/cli/internal/worklineauth"
 )
@@ -67,6 +69,160 @@ func TestMediaBatchEmitsPartialFailureAndNonZeroSignal(t *testing.T) {
 	}
 	if requests != 2 {
 		t.Fatalf("media requests=%d", requests)
+	}
+}
+
+func TestCollectSubmitsCollectorInterpretationAfterSealedEvidenceWithoutStartingRun(t *testing.T) {
+	var order []string
+	var collectorBody map[string]any
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		order = append(order, r.URL.Path)
+		switch r.URL.Path {
+		case "/v1/cases":
+			_, _ = w.Write([]byte(`{"case_id":"case-collector","purpose":"style-track","status":"open","revision":0}`))
+		case "/v1/cases/case-collector/evidence-bundles":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-collector","case_ref":"case-collector","case_revision":1,"status":"accepted"}`))
+		case "/v1/cases/case-collector/evidence-bundles/bundle-collector/seal":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-collector","status":"sealed"}`))
+		case "/v1/cases/case-collector/collector-interpretations":
+			if err := json.NewDecoder(r.Body).Decode(&collectorBody); err != nil {
+				t.Fatal(err)
+			}
+			if got := r.Header.Get("Idempotency-Key"); got != "collector-page-1" {
+				t.Fatalf("collector idempotency key=%q", got)
+			}
+			_, _ = w.Write([]byte(`{"collector_interpretation_ref":"collector-1","case_ref":"case-collector","status":"proposed","disposition":"accepted"}`))
+		default:
+			t.Fatalf("unexpected request %s", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "collector-key")
+	factory, stdout, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "collector-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	raw := `{"data":{"messages":[{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","content":"样衣已寄出"}]}}`
+	decoded, err := evidencecollect.Decode([]byte(raw))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundles, err := evidencecollect.New(evidencecollect.Options{}).CollectBundles(decoded, evidencecollect.Scope{Owner: "owner", Conversation: "chat"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	packet := caseclient.CollectorInterpretation{
+		ContractVersion: caseclient.CollectorInterpretationContractVersion,
+		CollectorRunKey: "collector-page-1",
+		Model:           "gpt-5.6-luna",
+		PromptVersion:   "style-track-collector.v1",
+		Coverage:        map[string]any{"messages": 1},
+		Hypotheses: []caseclient.CollectorHypothesis{{
+			Key: "shipment", Statement: "可能已寄出", Status: "proposed",
+			EvidenceRefs: []caseclient.CollectorEvidenceRef{{SourceKey: bundles[0].Items[0].SourceKey}},
+		}},
+	}
+	packetJSON, err := json.Marshal(packet)
+	if err != nil {
+		t.Fatal(err)
+	}
+	packetPath := filepath.Join(t.TempDir(), "collector.json")
+	if err := os.WriteFile(packetPath, packetJSON, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	cmd := NewCmdCase(factory)
+	cmd.SetIn(bytes.NewBufferString(raw))
+	cmd.SetArgs([]string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-", "--collector-interpretation-json", packetPath})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	wantOrder := []string{"/v1/cases", "/v1/cases/case-collector/evidence-bundles", "/v1/cases/case-collector/evidence-bundles/bundle-collector/seal", "/v1/cases/case-collector/collector-interpretations"}
+	if strings.Join(order, "|") != strings.Join(wantOrder, "|") {
+		t.Fatalf("request order=%#v", order)
+	}
+	payload, ok := collectorBody["payload"].(map[string]any)
+	if !ok || payload["hypotheses"] == nil {
+		t.Fatalf("collector request=%#v", collectorBody)
+	}
+	var output map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
+		t.Fatal(err)
+	}
+	if output["ok"] != true {
+		t.Fatalf("output=%s", stdout.String())
+	}
+	data := output["data"].(map[string]any)
+	if data["inference_status"] != "scheduled" || data["collector_receipt"] == nil {
+		t.Fatalf("data=%#v", data)
+	}
+}
+
+func TestCollectRejectsCollectorInterpretationReferenceBeforeNetwork(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		http.Error(w, "unexpected network", http.StatusInternalServerError)
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "collector-key")
+	factory, _, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "collector-invalid-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	packet := `{"contract_version":"case.v1","collector_run_key":"collector-page-1","model":"gpt-5.6-luna","prompt_version":"style-track-collector.v1","coverage":{},"episodes":[{"key":"e1","evidence_refs":[{"source_key":"other-case/source"}]}]}`
+	packetPath := filepath.Join(t.TempDir(), "collector-invalid.json")
+	if err := os.WriteFile(packetPath, []byte(packet), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	cmd := NewCmdCase(factory)
+	cmd.SetIn(bytes.NewBufferString(`{"data":{"messages":[{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","content":"x"}]}}`))
+	cmd.SetArgs([]string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-", "--collector-interpretation-json", packetPath})
+	err := cmd.Execute()
+	var validation *errs.ValidationError
+	if !errors.As(err, &validation) {
+		t.Fatalf("error=%T %#v", err, err)
+	}
+	if requests != 0 {
+		t.Fatalf("network requests=%d", requests)
+	}
+}
+
+func TestCollectPipelineRemainsExplicitManualOverride(t *testing.T) {
+	var runStarted bool
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/v1/cases":
+			_, _ = w.Write([]byte(`{"case_id":"case-pipeline","purpose":"style-track","status":"open","revision":0}`))
+		case "/v1/cases/case-pipeline/evidence-bundles":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-pipeline","case_ref":"case-pipeline","case_revision":1,"status":"accepted"}`))
+		case "/v1/cases/case-pipeline/evidence-bundles/bundle-pipeline/seal":
+			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-pipeline","status":"sealed"}`))
+		case "/v1/cases/case-pipeline":
+			_, _ = w.Write([]byte(`{"case_id":"case-pipeline","revision":1,"source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"}}`))
+		case "/v1/cases/case-pipeline/inference-runs":
+			runStarted = true
+			_, _ = w.Write([]byte(`{"run_ref":"run-1","case_ref":"case-pipeline","status":"succeeded"}`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "pipeline-key")
+	factory, stdout, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "pipeline-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	cmd := NewCmdCase(factory)
+	cmd.SetIn(bytes.NewBufferString(`{"data":{"messages":[{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","content":"x"}]}}`))
+	cmd.SetArgs([]string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-", "--pipeline", "style-track.v1"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	if !runStarted {
+		t.Fatal("manual pipeline run was not started")
+	}
+	var envelope map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+		t.Fatal(err)
+	}
+	if envelope["data"].(map[string]any)["inference_status"] != "manual_override" {
+		t.Fatalf("output=%s", stdout.String())
 	}
 }
 

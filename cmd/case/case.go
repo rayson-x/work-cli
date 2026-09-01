@@ -47,7 +47,7 @@ func NewCmdCase(f *cmdutil.Factory) *cobra.Command {
 // emitted by the local WeChat reader (or a test fixture); this command only
 // transports source Evidence and never creates canonical apparel records.
 func newCollect(o *options) *cobra.Command {
-	var file, scopeJSON, purpose, pipeline, caseRef string
+	var file, scopeJSON, purpose, pipeline, caseRef, collectorInterpretationFile string
 	var maxMessages int
 	cmd := &cobra.Command{Use: "collect", Short: "Collect bounded WeChat JSON into a cloud Case", Args: cobra.NoArgs, RunE: func(cmd *cobra.Command, _ []string) error {
 		raw, err := readJSON(cmd, file)
@@ -65,6 +65,21 @@ func newCollect(o *options) *cobra.Command {
 		bundles, err := evidencecollect.New(evidencecollect.Options{MaxMessagesPerBundle: maxMessages}).CollectBundles(messages, scope)
 		if err != nil {
 			return invalid("collect evidence: %v", err)
+		}
+		var collectorInterpretation *caseclient.CollectorInterpretation
+		if strings.TrimSpace(collectorInterpretationFile) != "" {
+			rawInterpretation, readErr := readJSON(cmd, collectorInterpretationFile)
+			if readErr != nil {
+				return readErr
+			}
+			packet, decodeErr := caseclient.DecodeCollectorInterpretation(rawInterpretation)
+			if decodeErr != nil {
+				return invalid("--collector-interpretation-json is invalid: %v", decodeErr)
+			}
+			if validateErr := caseclient.ValidateCollectorInterpretation(packet, bundles); validateErr != nil {
+				return invalid("collector interpretation: %v", validateErr)
+			}
+			collectorInterpretation = &packet
 		}
 		client, err := o.client()
 		if err != nil {
@@ -85,7 +100,7 @@ func newCollect(o *options) *cobra.Command {
 				return err
 			}
 		}
-		results := map[string]any{"case": created, "bundles": []any{}}
+		results := map[string]any{"case": created, "bundles": []any{}, "inference_status": "not_requested"}
 		for i := range bundles {
 			if err := uploadBundleMedia(cmd, client, &bundles[i]); err != nil {
 				return err
@@ -104,6 +119,14 @@ func newCollect(o *options) *cobra.Command {
 			}
 			results["bundles"] = append(results["bundles"].([]any), map[string]any{"submitted": result, "sealed": sealed})
 		}
+		if collectorInterpretation != nil {
+			receipt, submitErr := client.SubmitCollectorInterpretation(cmd.Context(), created.CaseRef, *collectorInterpretation, bundles)
+			if submitErr != nil {
+				return submitErr
+			}
+			results["collector_receipt"] = receipt
+			results["inference_status"] = "scheduled"
+		}
 		if pipeline != "" {
 			status, err := client.GetCase(cmd.Context(), created.CaseRef)
 			if err != nil {
@@ -118,13 +141,16 @@ func newCollect(o *options) *cobra.Command {
 				return err
 			}
 			results["run"] = run
+			results["inference_status"] = "manual_override"
 		}
 		return emit(o.factory, results)
 	}}
 	cmd.Flags().StringVar(&file, "messages-json", "-", "bounded WeChat messages JSON file, or - for stdin")
 	cmd.Flags().StringVar(&scopeJSON, "scope-json", "", "collection scope JSON with owner, conversation, and optional range/participants")
 	cmd.Flags().StringVar(&purpose, "purpose", "style-track", "Case purpose")
-	cmd.Flags().StringVar(&pipeline, "pipeline", "", "optional cloud inference pipeline")
+	cmd.Flags().StringVar(&pipeline, "pipeline", "", "deprecated manual cloud inference override (normally omit)")
+	_ = cmd.Flags().MarkDeprecated("pipeline", "use --collector-interpretation-json; this flag explicitly starts a manual inference run")
+	cmd.Flags().StringVar(&collectorInterpretationFile, "collector-interpretation-json", "", "local CollectorInterpretation v1 JSON file, submitted after evidence is sealed")
 	cmd.Flags().StringVar(&caseRef, "case-ref", "", "existing Case reference for additional collection pages")
 	cmd.Flags().IntVar(&maxMessages, "max-messages-per-bundle", 500, "maximum messages per Evidence Bundle")
 	_ = cmd.MarkFlagRequired("scope-json")
