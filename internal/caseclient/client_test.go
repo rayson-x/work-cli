@@ -6,6 +6,7 @@ package caseclient
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -199,6 +200,39 @@ func TestConcurrentClientsKeepPersistentOperationStateValid(t *testing.T) {
 	}
 	if len(state.Operations) != 1 || state.Operations[0].Hash == "" {
 		t.Fatalf("state = %#v", state)
+	}
+}
+
+func TestRestartReusesStableKeyAndPayloadAfterUncertainFailure(t *testing.T) {
+	var keys []string
+	var bodies [][]byte
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		body, _ := io.ReadAll(r.Body)
+		keys = append(keys, r.Header.Get("Idempotency-Key"))
+		bodies = append(bodies, body)
+		w.Header().Set("Content-Type", "application/json")
+		if requests == 1 {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_, _ = w.Write([]byte(`{"error":{"code":"case_store_unavailable","message":"temporary"}}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"case_id":"case-1","purpose":"style-track","status":"open","revision":0}`))
+	}))
+	defer server.Close()
+	statePath := t.TempDir() + "/case-operations.json"
+	input := CreateCaseRequest{Purpose: "style-track", SourceScope: map[string]any{"platform": "wechat"}}
+	first := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: statePath, MaxRetries: -1})
+	if _, err := first.CreateCase(context.Background(), input); err == nil {
+		t.Fatal("first uncertain request should fail")
+	}
+	second := New(Options{BaseURL: server.URL, APIKey: "case-key", HTTP: server.Client(), StatePath: statePath, MaxRetries: -1})
+	if _, err := second.CreateCase(context.Background(), input); err != nil {
+		t.Fatal(err)
+	}
+	if len(keys) != 2 || keys[0] == "" || keys[0] != keys[1] || string(bodies[0]) != string(bodies[1]) {
+		t.Fatalf("keys=%#v bodies=%q", keys, bodies)
 	}
 }
 
