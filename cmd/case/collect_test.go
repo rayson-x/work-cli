@@ -171,7 +171,7 @@ func TestCollectReportsNotScheduledWhenCasePurposeIsNotStyleTrack(t *testing.T) 
 		{
 			name:            "existing non-style case",
 			caseArgs:        []string{"--case-ref", "case-other"},
-			currentResponse: `{"case_id":"case-other","purpose":"other-purpose","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"},"status":"open","revision":0}`,
+			currentResponse: `{"case_id":"case-other","purpose":"other-purpose","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"},"status":"closed","revision":7,"created_at":"2026-09-01T00:00:00Z","updated_at":"2026-09-02T00:00:00Z","disposition":"existing"}`,
 		},
 		{
 			name:            "existing case without purpose",
@@ -252,6 +252,12 @@ func TestCollectReportsNotScheduledWhenCasePurposeIsNotStyleTrack(t *testing.T) 
 			data := envelope["data"].(map[string]any)
 			if data["inference_status"] != "not_scheduled" || data["collector_receipt"] == nil {
 				t.Fatalf("data=%#v", data)
+			}
+			if tt.name == "existing non-style case" {
+				caseData := data["case"].(map[string]any)
+				if caseData["case_id"] != "case-other" || caseData["purpose"] != "other-purpose" || caseData["status"] != "closed" || caseData["revision"] != float64(7) || caseData["created_at"] != "2026-09-01T00:00:00Z" || caseData["updated_at"] != "2026-09-02T00:00:00Z" {
+					t.Fatalf("case read model=%#v", caseData)
+				}
 			}
 		})
 	}

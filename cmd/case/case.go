@@ -101,6 +101,10 @@ func newCollect(o *options) *cobra.Command {
 			if err := validateCollectionScope(current, scope); err != nil {
 				return err
 			}
+			created = caseFromReadModel(current)
+			if created.CaseRef == "" {
+				created.CaseRef = caseRef
+			}
 			casePurpose, _ = current["purpose"].(string)
 		}
 		results := map[string]any{"case": created, "bundles": []any{}, "inference_status": "not_requested"}
@@ -162,6 +166,26 @@ func newCollect(o *options) *cobra.Command {
 	cmd.Flags().IntVar(&maxMessages, "max-messages-per-bundle", 500, "maximum messages per Evidence Bundle")
 	_ = cmd.MarkFlagRequired("scope-json")
 	return cmd
+}
+
+func caseFromReadModel(raw map[string]any) caseclient.Case {
+	caseData := caseclient.Case{SourceScope: raw["source_scope"]}
+	caseData.CaseRef, _ = raw["case_id"].(string)
+	if caseData.CaseRef == "" {
+		caseData.CaseRef, _ = raw["case_ref"].(string)
+	}
+	caseData.Purpose, _ = raw["purpose"].(string)
+	caseData.Status, _ = raw["status"].(string)
+	caseData.CreatedAt, _ = raw["created_at"].(string)
+	caseData.UpdatedAt, _ = raw["updated_at"].(string)
+	caseData.Disposition, _ = raw["disposition"].(string)
+	switch revision := raw["revision"].(type) {
+	case float64:
+		caseData.Revision = int(revision)
+	case int:
+		caseData.Revision = revision
+	}
+	return caseData
 }
 
 func uploadBundleMedia(cmd *cobra.Command, client *caseclient.Client, bundle *caseclient.EvidenceBundle) error {
