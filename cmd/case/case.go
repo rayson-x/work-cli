@@ -125,9 +125,12 @@ func uploadBundleMedia(cmd *cobra.Command, client *caseclient.Client, bundle *ca
 		}
 		path, _ := item.ImmutablePayload["local_path"].(string)
 		if path == "" {
-			if reason, ok := item.ImmutablePayload["export_error"].(string); ok && reason != "" {
-				markMediaFailure(bundle, item.SourceKey, reason)
+			reason, _ := item.ImmutablePayload["export_error"].(string)
+			if reason == "" {
+				reason = "media_not_exported"
+				item.ImmutablePayload["export_error"] = reason
 			}
+			markMediaFailure(bundle, item.SourceKey, reason)
 			continue
 		}
 		file, err := cmdutil.OpenLocalFile(path)

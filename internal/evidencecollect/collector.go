@@ -34,10 +34,13 @@ type Message struct {
 	Attachments                                                                       []Attachment
 }
 type Scope struct {
-	Owner, Conversation, ConversationType string
-	ParticipantIDs                        []string
-	From, To                              string
-	MessageIDs                            []string
+	Owner            string   `json:"owner"`
+	Conversation     string   `json:"conversation"`
+	ConversationType string   `json:"conversation_type"`
+	ParticipantIDs   []string `json:"participant_ids"`
+	From             string   `json:"from"`
+	To               string   `json:"to"`
+	MessageIDs       []string `json:"message_ids"`
 }
 type Options struct{ MaxMessagesPerBundle int }
 type Collector struct{ max int }
@@ -302,7 +305,7 @@ func decodeValue(v any) ([]Message, error) {
 			if !ok {
 				return nil, fmt.Errorf("invalid message record")
 			}
-			return []Message{m}, nil
+			return appendForwarded([]Message{m}, m, x, m.ForwardPathOrRoot()), nil
 		}
 		for _, k := range []string{"messages", "data", "items"} {
 			if n, ok := x[k]; ok {
@@ -326,6 +329,7 @@ func decodeValue(v any) ([]Message, error) {
 			return nil, fmt.Errorf("invalid message record")
 		}
 		out = append(out, m)
+		out = appendForwarded(out, m, record, m.ForwardPathOrRoot())
 	}
 	return out, nil
 }
@@ -342,6 +346,12 @@ func decodeMap(v map[string]any) (Message, bool) {
 	m.ID = stringField(v, "message_id", "id")
 	m.SourceTime = stringField(v, "timestamp", "source_time", "time", "created_at")
 	m.Text = stringField(v, "content", "text", "raw_text")
+	if m.Text == "" {
+		m.Text = stringField(v, "message_text")
+	}
+	if m.Conversation == "" {
+		m.Conversation = stringField(v, "conversation_identity")
+	}
 	m.ForwardPath = stringField(v, "forward_path")
 	m.ReplyTo = stringField(v, "reply_to_message_id", "reply_to")
 	if s, ok := v["speaker"].(map[string]any); ok {
@@ -349,8 +359,8 @@ func decodeMap(v map[string]any) (Message, bool) {
 	} else if s, ok := v["from"].(map[string]any); ok {
 		m.Speaker = identity(s)
 	} else {
-		m.Speaker.SourceKey = stringField(v, "speaker_source_key", "speaker_id")
-		m.Speaker.DisplayName = stringField(v, "speaker_name", "display_name")
+		m.Speaker.SourceKey = stringField(v, "speaker_source_key", "speaker_id", "sender_identity")
+		m.Speaker.DisplayName = stringField(v, "speaker_name", "display_name", "sender_name")
 		m.Speaker.WeChatID = stringField(v, "speaker_wechat_id", "wechat_id")
 	}
 	if s, ok := v["forwarder"].(map[string]any); ok {
@@ -360,6 +370,10 @@ func decodeMap(v map[string]any) (Message, bool) {
 	}
 	if q, ok := v["quote"].(map[string]any); ok {
 		m.Quote = q
+	} else if rich, ok := v["rich_content"].(map[string]any); ok {
+		if q, ok := rich["quote"].(map[string]any); ok {
+			m.Quote = q
+		}
 	}
 	if l, ok := v["raw_locator"].(map[string]any); ok {
 		m.RawLocator = l
@@ -371,10 +385,62 @@ func decodeMap(v map[string]any) (Message, bool) {
 			}
 		}
 	}
+	if len(m.Attachments) == 0 {
+		if resources, ok := v["resources"].([]any); ok {
+			m.Attachments = decodeResources(resources)
+		}
+	}
+	if len(m.Attachments) == 0 {
+		if path := stringField(v, "resource_path"); path != "" {
+			m.Attachments = []Attachment{{Ordinal: 0, Kind: stringField(v, "message_type", "type"), LocalPath: path}}
+		}
+		if status := stringField(v, "resource_status"); status != "" && len(m.Attachments) == 0 {
+			m.Attachments = []Attachment{{Ordinal: 0, Kind: stringField(v, "message_type", "type"), ExportError: status}}
+		}
+	}
 	if m.Speaker.SourceKey == "" {
 		m.Speaker.SourceKey = sourceIdentityKey(m.Owner, m.Conversation, m.ForwardPathOrRoot(), m.Speaker)
 	}
-	return m, m.ID != "" && m.Conversation != ""
+	return m, m.ID != ""
+}
+func appendForwarded(out []Message, parent Message, record map[string]any, path string) []Message {
+	children, ok := record["forwarded_messages"].([]any)
+	if !ok {
+		if rich, yes := record["rich_content"].(map[string]any); yes {
+			children, _ = rich["forwarded_messages"].([]any)
+		}
+	}
+	for index, raw := range children {
+		childRecord, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		child, ok := decodeMap(childRecord)
+		if !ok {
+			continue
+		}
+		if child.Owner == "" {
+			child.Owner = parent.Owner
+		}
+		if child.Conversation == "" {
+			child.Conversation = parent.Conversation
+		}
+		child.ForwardPath = path + "/" + strconv.Itoa(index)
+		out = append(out, child)
+		out = appendForwarded(out, child, childRecord, child.ForwardPath)
+	}
+	return out
+}
+func decodeResources(resources []any) []Attachment {
+	out := make([]Attachment, 0, len(resources))
+	for index, raw := range resources {
+		value, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		out = append(out, Attachment{Ordinal: index, Kind: stringField(value, "kind", "type"), MIME: stringField(value, "mime", "mime_type"), Name: stringField(value, "name", "filename"), LocalPath: stringField(value, "filepath", "local_path", "path"), ContentHash: stringField(value, "content_hash", "hash"), ExportError: stringField(value, "error", "export_error")})
+	}
+	return out
 }
 func (m Message) ForwardPathOrRoot() string {
 	if m.ForwardPath != "" {

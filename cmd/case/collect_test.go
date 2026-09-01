@@ -24,10 +24,14 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 			for _, rawItem := range submitted["items"].([]any) {
 				item := rawItem.(map[string]any)
 				kind := item["kind"].(string)
-				if kind != "message" && kind != "image" && kind != "video" && kind != "audio" && kind != "file" { t.Errorf("invalid evidence kind %q", kind) }
+				if kind != "message" && kind != "image" && kind != "video" && kind != "audio" && kind != "file" {
+					t.Errorf("invalid evidence kind %q", kind)
+				}
 				if kind != "message" && item["media_ref"] == nil {
 					payload := item["immutable_payload"].(map[string]any)
-					if payload["export_error"] == "" { t.Errorf("missing media ref without export error: %#v", item) }
+					if payload["export_error"] == "" {
+						t.Errorf("missing media ref without export error: %#v", item)
+					}
 				}
 			}
 			_, _ = w.Write([]byte(`{"bundle_ref":"bundle-1","case_ref":"case-1","case_revision":1,"status":"accepted"}`))

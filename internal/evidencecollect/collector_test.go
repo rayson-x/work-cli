@@ -121,4 +121,15 @@ func TestDecodeJSONLAndParticipantScopeUseSourceIdentityOnly(t *testing.T) {
 	}
 }
 
+func TestDecodeAnalysisProjectionPreservesResourcesAndNestedForward(t *testing.T) {
+	raw := []byte("{\"timestamp\":\"2026-09-01T00:00:00Z\",\"sender_identity\":\"wx-a\",\"sender_name\":\"Alice\",\"message_type\":\"forward\",\"text\":\"转发\",\"message_id\":\"outer\",\"conversation_identity\":\"chat\",\"forwarded_messages\":[{\"message_id\":\"inner\",\"sender_identity\":\"hash-b\",\"sender_name\":\"Bob\",\"message_type\":\"image\",\"resource_path\":\"C:/media/a.jpg\"}]}\n")
+	messages, err := Decode(raw)
+	if err != nil || len(messages) != 2 {
+		t.Fatalf("messages=%#v err=%v", messages, err)
+	}
+	if messages[1].ForwardPath != "root/0" || messages[1].Speaker.SourceKey != "hash-b" || len(messages[1].Attachments) != 1 || messages[1].Attachments[0].LocalPath != "C:/media/a.jpg" {
+		t.Fatalf("nested=%#v", messages[1])
+	}
+}
+
 var _ = caseclient.ContractVersion
