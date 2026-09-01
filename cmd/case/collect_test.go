@@ -156,6 +156,107 @@ func TestCollectSubmitsCollectorInterpretationAfterSealedEvidenceWithoutStarting
 	}
 }
 
+func TestCollectReportsNotScheduledWhenCasePurposeIsNotStyleTrack(t *testing.T) {
+	tests := []struct {
+		name            string
+		caseArgs        []string
+		createResponse  string
+		currentResponse string
+	}{
+		{
+			name:           "new non-style case",
+			caseArgs:       []string{"--purpose", "other-purpose"},
+			createResponse: `{"case_id":"case-other","purpose":"other-purpose","status":"open","revision":0}`,
+		},
+		{
+			name:            "existing non-style case",
+			caseArgs:        []string{"--case-ref", "case-other"},
+			currentResponse: `{"case_id":"case-other","purpose":"other-purpose","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"},"status":"open","revision":0}`,
+		},
+		{
+			name:            "existing case without purpose",
+			caseArgs:        []string{"--case-ref", "case-other"},
+			currentResponse: `{"case_id":"case-other","source_scope":{"platform":"wechat","owner":"owner","conversation_ref":"chat"},"status":"open","revision":0}`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				switch r.URL.Path {
+				case "/v1/cases":
+					if tt.createResponse == "" {
+						t.Fatalf("unexpected case creation")
+					}
+					_, _ = w.Write([]byte(tt.createResponse))
+				case "/v1/cases/case-other":
+					if tt.currentResponse == "" {
+						t.Fatalf("unexpected existing case read")
+					}
+					_, _ = w.Write([]byte(tt.currentResponse))
+				case "/v1/cases/case-other/evidence-bundles":
+					_, _ = w.Write([]byte(`{"bundle_ref":"bundle-other","case_ref":"case-other","case_revision":1,"status":"accepted"}`))
+				case "/v1/cases/case-other/evidence-bundles/bundle-other/seal":
+					_, _ = w.Write([]byte(`{"bundle_ref":"bundle-other","status":"sealed"}`))
+				case "/v1/cases/case-other/collector-interpretations":
+					_, _ = w.Write([]byte(`{"collector_interpretation_ref":"collector-other","case_ref":"case-other","status":"proposed"}`))
+				default:
+					t.Fatalf("unexpected request %s", r.URL.Path)
+				}
+			}))
+			defer server.Close()
+			t.Setenv(worklineauth.MediaAPIKeyEnv, "collector-key")
+			factory, stdout, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "collector-purpose-test"})
+			factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+			raw := `{"data":{"messages":[{"owner":"owner","conversation_id":"chat","message_id":"m1","timestamp":"2026-09-01T00:00:00Z","content":"context"}]}}`
+			decoded, err := evidencecollect.Decode([]byte(raw))
+			if err != nil {
+				t.Fatal(err)
+			}
+			bundles, err := evidencecollect.New(evidencecollect.Options{}).CollectBundles(decoded, evidencecollect.Scope{Owner: "owner", Conversation: "chat"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			packet := caseclient.CollectorInterpretation{
+				ContractVersion: caseclient.CollectorInterpretationContractVersion,
+				CollectorRunKey: "collector-purpose-test",
+				Model:           "gpt-5.6-luna",
+				PromptVersion:   "style-track-collector.v1",
+				Coverage:        map[string]any{"messages": 1},
+				Hypotheses: []caseclient.CollectorHypothesis{{
+					Key: "context", Statement: "可能相关", Status: "proposed",
+					EvidenceRefs: []caseclient.CollectorEvidenceRef{{SourceKey: bundles[0].Items[0].SourceKey}},
+				}},
+			}
+			packetJSON, err := json.Marshal(packet)
+			if err != nil {
+				t.Fatal(err)
+			}
+			packetPath := filepath.Join(t.TempDir(), "collector.json")
+			if err := os.WriteFile(packetPath, packetJSON, 0o600); err != nil {
+				t.Fatal(err)
+			}
+			cmd := NewCmdCase(factory)
+			cmd.SetIn(bytes.NewBufferString(raw))
+			args := []string{"--server-url", server.URL, "collect", "--scope-json", `{"owner":"owner","conversation":"chat"}`, "--messages-json", "-", "--collector-interpretation-json", packetPath}
+			args = append(args, tt.caseArgs...)
+			cmd.SetArgs(args)
+			if err := cmd.Execute(); err != nil {
+				t.Fatal(err)
+			}
+			var envelope map[string]any
+			if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+				t.Fatalf("stdout=%q: %v", stdout.String(), err)
+			}
+			data := envelope["data"].(map[string]any)
+			if data["inference_status"] != "not_scheduled" || data["collector_receipt"] == nil {
+				t.Fatalf("data=%#v", data)
+			}
+		})
+	}
+}
+
 func TestCollectRejectsCollectorInterpretationReferenceBeforeNetwork(t *testing.T) {
 	requests := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -86,11 +86,13 @@ func newCollect(o *options) *cobra.Command {
 			return err
 		}
 		created := caseclient.Case{CaseRef: caseRef, Purpose: purpose, Status: "open"}
+		casePurpose := ""
 		if strings.TrimSpace(caseRef) == "" {
 			created, err = client.CreateCase(cmd.Context(), caseclient.CreateCaseRequest{Purpose: purpose, SourceScope: map[string]any{"platform": "wechat", "owner": scope.Owner, "conversation_ref": scope.Conversation, "conversation": scope.Conversation, "from": scope.From, "to": scope.To, "participant_ids": scope.ParticipantIDs}})
 			if err != nil {
 				return err
 			}
+			casePurpose = created.Purpose
 		} else {
 			current, err := client.GetCase(cmd.Context(), caseRef)
 			if err != nil {
@@ -99,6 +101,7 @@ func newCollect(o *options) *cobra.Command {
 			if err := validateCollectionScope(current, scope); err != nil {
 				return err
 			}
+			casePurpose, _ = current["purpose"].(string)
 		}
 		results := map[string]any{"case": created, "bundles": []any{}, "inference_status": "not_requested"}
 		for i := range bundles {
@@ -125,7 +128,11 @@ func newCollect(o *options) *cobra.Command {
 				return submitErr
 			}
 			results["collector_receipt"] = receipt
-			results["inference_status"] = "scheduled"
+			if casePurpose == "style-track" {
+				results["inference_status"] = "scheduled"
+			} else {
+				results["inference_status"] = "not_scheduled"
+			}
 		}
 		if pipeline != "" {
 			status, err := client.GetCase(cmd.Context(), created.CaseRef)
