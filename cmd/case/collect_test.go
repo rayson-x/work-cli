@@ -18,8 +18,8 @@ import (
 	"github.com/larksuite/cli/internal/caseclient"
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
-	"github.com/larksuite/cli/internal/worklineauth"
 	"github.com/larksuite/cli/internal/output"
+	"github.com/larksuite/cli/internal/worklineauth"
 )
 
 func TestMediaBatchEmitsPartialFailureAndNonZeroSignal(t *testing.T) {
@@ -45,8 +45,12 @@ func TestMediaBatchEmitsPartialFailureAndNonZeroSignal(t *testing.T) {
 	dir := t.TempDir()
 	first := filepath.Join(dir, "first.png")
 	second := filepath.Join(dir, "second.png")
-	if err := os.WriteFile(first, []byte("one"), 0o600); err != nil { t.Fatal(err) }
-	if err := os.WriteFile(second, []byte("two"), 0o600); err != nil { t.Fatal(err) }
+	if err := os.WriteFile(first, []byte("one"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(second, []byte("two"), 0o600); err != nil {
+		t.Fatal(err)
+	}
 	cmd := NewCmdCase(factory)
 	cmd.SetArgs([]string{"--server-url", server.URL, "media-batch", first, second})
 	err := cmd.Execute()
@@ -55,9 +59,15 @@ func TestMediaBatchEmitsPartialFailureAndNonZeroSignal(t *testing.T) {
 		t.Fatalf("error=%T %v", err, err)
 	}
 	var envelope map[string]any
-	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil { t.Fatalf("stdout=%q: %v", stdout.String(), err) }
-	if envelope["ok"] != false { t.Fatalf("partial envelope=%#v", envelope) }
-	if requests != 2 { t.Fatalf("media requests=%d", requests) }
+	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil {
+		t.Fatalf("stdout=%q: %v", stdout.String(), err)
+	}
+	if envelope["ok"] != false {
+		t.Fatalf("partial envelope=%#v", envelope)
+	}
+	if requests != 2 {
+		t.Fatalf("media requests=%d", requests)
+	}
 }
 
 func TestCollectUploadsExtensionMIMEAndPreservesStickerKind(t *testing.T) {

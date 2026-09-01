@@ -328,9 +328,13 @@ func newInterpretation(o *options) *cobra.Command {
 		}
 		query := url.Values{}
 		for key, value := range map[string]string{"date_from": dateFrom, "date_to": dateTo, "person_id": personID, "source_identity_id": sourceIdentityID, "responsibility_id": responsibilityID, "style_id": styleID, "sample_variant_id": sampleVariantID, "supplier": supplier, "customer": customer, "conversation_id": conversationID, "cursor": cursor} {
-			if value != "" { query.Set(key, value) }
+			if value != "" {
+				query.Set(key, value)
+			}
 		}
-		if cmd.Flags().Changed("limit") { query.Set("limit", strconv.Itoa(limit)) }
+		if cmd.Flags().Changed("limit") {
+			query.Set("limit", strconv.Itoa(limit))
+		}
 		result, err := c.GetInterpretationQuery(cmd.Context(), args[0], view, query)
 		if err != nil {
 			return err
@@ -495,10 +499,10 @@ func emit(f *cmdutil.Factory, value any) error {
 }
 func emitPartial(f *cmdutil.Factory, value any) error {
 	emitter := output.NewEmitter(output.EmitterConfig{
-		Out:         f.IOStreams.Out,
-		ErrOut:      f.IOStreams.ErrOut,
-		CommandPath: "case media-batch",
-		Identity:    string(f.ResolvedIdentity),
+		Out:            f.IOStreams.Out,
+		ErrOut:         f.IOStreams.ErrOut,
+		CommandPath:    "case media-batch",
+		Identity:       string(f.ResolvedIdentity),
 		NoticeProvider: output.GetNotice,
 	})
 	return emitter.PartialFailure(value, output.EmitOptions{})

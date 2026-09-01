@@ -76,18 +76,18 @@ type Case struct {
 }
 
 type EvidenceItem struct {
-	ClientEvidenceKey string         `json:"client_evidence_key"`
-	SourceKey         string         `json:"source_key"`
-	Kind              string         `json:"kind"`
-	SourceTime        string         `json:"source_time,omitempty"`
-	SpeakerSourceKey  string         `json:"speaker_source_key,omitempty"`
-	SpeakerDisplayName string       `json:"speaker_display_name,omitempty"`
-	SpeakerIdentityKind string      `json:"speaker_identity_kind,omitempty"`
-	RawText           string         `json:"raw_text,omitempty"`
-	MediaRef          string         `json:"media_ref,omitempty"`
-	ContentHash       string         `json:"content_hash,omitempty"`
-	SourceLocator     map[string]any `json:"source_locator"`
-	ImmutablePayload  map[string]any `json:"immutable_payload"`
+	ClientEvidenceKey   string         `json:"client_evidence_key"`
+	SourceKey           string         `json:"source_key"`
+	Kind                string         `json:"kind"`
+	SourceTime          string         `json:"source_time,omitempty"`
+	SpeakerSourceKey    string         `json:"speaker_source_key,omitempty"`
+	SpeakerDisplayName  string         `json:"speaker_display_name,omitempty"`
+	SpeakerIdentityKind string         `json:"speaker_identity_kind,omitempty"`
+	RawText             string         `json:"raw_text,omitempty"`
+	MediaRef            string         `json:"media_ref,omitempty"`
+	ContentHash         string         `json:"content_hash,omitempty"`
+	SourceLocator       map[string]any `json:"source_locator"`
+	ImmutablePayload    map[string]any `json:"immutable_payload"`
 }
 
 type EvidenceRelation struct {
@@ -210,11 +210,15 @@ func (e *Error) typedError() error {
 		case *errs.APIError:
 			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
 			typed.Cause = e.Cause
-			if e.RetryAfter > 0 { typed.RetryAfterSeconds = int(e.RetryAfter / time.Second) }
+			if e.RetryAfter > 0 {
+				typed.RetryAfterSeconds = int(e.RetryAfter / time.Second)
+			}
 		case *errs.NetworkError:
 			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
 			typed.Cause = e.Cause
-			if e.RetryAfter > 0 { typed.RetryAfterSeconds = int(e.RetryAfter / time.Second) }
+			if e.RetryAfter > 0 {
+				typed.RetryAfterSeconds = int(e.RetryAfter / time.Second)
+			}
 		case *errs.ConfigError:
 			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
 			typed.Cause = e.Cause
