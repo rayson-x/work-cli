@@ -128,6 +128,33 @@ func TestValidateCollectorInterpretationRejectsCrossCollectionAndConfirmedCandid
 	}
 }
 
+func TestValidateCollectorInterpretationAcceptsOnlyCandidateStatuses(t *testing.T) {
+	validStatuses := []string{"candidate", "proposed", "unresolved", "rejected", "unknown"}
+	for _, status := range validStatuses {
+		packet, bundles := collectorFixture()
+		packet.Hypotheses[0].Status = status
+		packet.Alternatives[0].Status = status
+		if err := ValidateCollectorInterpretation(packet, bundles); err != nil {
+			t.Fatalf("status %q should be accepted: %v", status, err)
+		}
+	}
+
+	invalidStatuses := []string{"", " confirmed ", "confirmed", "CANDIDATE", "arbitrary"}
+	for _, status := range invalidStatuses {
+		packet, bundles := collectorFixture()
+		packet.Hypotheses[0].Status = status
+		if err := ValidateCollectorInterpretation(packet, bundles); err == nil {
+			t.Fatalf("hypothesis status %q should be rejected", status)
+		}
+
+		packet, bundles = collectorFixture()
+		packet.Alternatives[0].Status = status
+		if err := ValidateCollectorInterpretation(packet, bundles); err == nil {
+			t.Fatalf("alternative status %q should be rejected", status)
+		}
+	}
+}
+
 func TestSubmitCollectorInterpretationMapsClientEvidenceKeyWithoutNetworkOnMiss(t *testing.T) {
 	packet, bundles := collectorFixture()
 	packet.EvidenceLinks = []CollectorEvidenceLink{{ClientEvidenceKey: "evidence-1", Relation: "contextual"}}

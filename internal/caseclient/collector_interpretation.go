@@ -90,6 +90,15 @@ type CollectorInterpretationResult struct {
 	Disposition                string `json:"disposition,omitempty"`
 }
 
+func validateCollectorCandidateStatus(status, kind string) error {
+	switch status {
+	case "candidate", "proposed", "unresolved", "rejected", "unknown":
+		return nil
+	default:
+		return fmt.Errorf("collector %s status %q must be one of candidate, proposed, unresolved, rejected, unknown", kind, status)
+	}
+}
+
 // ValidateCollectorInterpretation checks packet shape and that every evidence
 // reference belongs to the just-collected bundles. This keeps malformed or
 // cross-Case packets from causing a network side effect.
@@ -157,8 +166,8 @@ func ValidateCollectorInterpretation(packet CollectorInterpretation, bundles []E
 		if strings.TrimSpace(hypothesis.Key) == "" || strings.TrimSpace(hypothesis.Statement) == "" {
 			return fmt.Errorf("hypothesis key and statement are required")
 		}
-		if strings.EqualFold(strings.TrimSpace(hypothesis.Status), "confirmed") {
-			return fmt.Errorf("collector hypotheses must remain candidates, not confirmed")
+		if err := validateCollectorCandidateStatus(hypothesis.Status, "hypothesis"); err != nil {
+			return err
 		}
 		if err := checkRefs(hypothesis.EvidenceRefs); err != nil {
 			return err
@@ -168,8 +177,8 @@ func ValidateCollectorInterpretation(packet CollectorInterpretation, bundles []E
 		if strings.TrimSpace(alternative.Key) == "" || strings.TrimSpace(alternative.Statement) == "" {
 			return fmt.Errorf("alternative key and statement are required")
 		}
-		if strings.EqualFold(strings.TrimSpace(alternative.Status), "confirmed") {
-			return fmt.Errorf("collector alternatives must remain candidates, not confirmed")
+		if err := validateCollectorCandidateStatus(alternative.Status, "alternative"); err != nil {
+			return err
 		}
 		if err := checkRefs(alternative.EvidenceRefs); err != nil {
 			return err
