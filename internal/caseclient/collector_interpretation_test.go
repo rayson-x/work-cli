@@ -47,9 +47,11 @@ func collectorFixture() (CollectorInterpretation, []EvidenceBundle) {
 			EvidenceRefs: []CollectorEvidenceRef{{SourceKey: "wechat|conversation=chat|message=m1"}},
 		}},
 		EvidenceLinks: []CollectorEvidenceLink{{
-			SourceKey: "wechat|conversation=chat|message=m1",
-			Relation:  "supporting",
-			Note:      "原始消息",
+			SourceKey:         "wechat|conversation=chat|message=m1",
+			EvidenceRef:       "old-cloud-ref",
+			ClientEvidenceKey: "evidence-1",
+			Relation:          "supporting",
+			Note:              "原始消息",
 		}},
 		MissingEvidence: []CollectorMissingEvidence{{
 			Key:         "missing-photo",
@@ -84,6 +86,14 @@ func TestSubmitCollectorInterpretationUsesCaseEnvelopeAndStableKey(t *testing.T)
 		if !ok || payload["episodes"] == nil || payload["hypotheses"] == nil || payload["missing_evidence"] == nil {
 			t.Fatalf("request payload=%#v", body["payload"])
 		}
+		links, ok := body["evidence_links"].([]any)
+		if !ok || len(links) != 1 {
+			t.Fatalf("normalized evidence links=%#v", body["evidence_links"])
+		}
+		link := links[0].(map[string]any)
+		if link["source_key"] != "wechat|conversation=chat|message=m1" || link["evidence_ref"] != nil || link["client_evidence_key"] != nil {
+			t.Fatalf("normalized evidence link=%#v", link)
+		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"collector_interpretation_ref":"collector-1","case_ref":"case-1","status":"proposed","disposition":"accepted"}`))
 	}))
@@ -115,5 +125,41 @@ func TestValidateCollectorInterpretationRejectsCrossCollectionAndConfirmedCandid
 	packet.Hypotheses[0].Status = "confirmed"
 	if err := ValidateCollectorInterpretation(packet, bundles); err == nil {
 		t.Fatal("expected confirmed candidate error")
+	}
+}
+
+func TestSubmitCollectorInterpretationMapsClientEvidenceKeyWithoutNetworkOnMiss(t *testing.T) {
+	packet, bundles := collectorFixture()
+	packet.EvidenceLinks = []CollectorEvidenceLink{{ClientEvidenceKey: "evidence-1", Relation: "contextual"}}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal(err)
+		}
+		links := body["evidence_links"].([]any)
+		link := links[0].(map[string]any)
+		if link["source_key"] != "wechat|conversation=chat|message=m1" || link["client_evidence_key"] != nil {
+			t.Fatalf("normalized client link=%#v", link)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"collector_interpretation_ref":"collector-1","case_ref":"case-1","status":"proposed"}`))
+	}))
+	defer server.Close()
+	c := New(Options{BaseURL: server.URL, APIKey: "key", HTTP: server.Client(), StatePath: filepath.Join(t.TempDir(), "state.json")})
+	if _, err := c.SubmitCollectorInterpretation(context.Background(), "case-1", packet, bundles); err != nil {
+		t.Fatal("expected server response")
+	}
+	if requests != 1 {
+		t.Fatalf("mapped client key requests=%d", requests)
+	}
+	packet.EvidenceLinks[0].ClientEvidenceKey = "not-in-bundles"
+	requests = 0
+	if _, err := c.SubmitCollectorInterpretation(context.Background(), "case-1", packet, bundles); err == nil {
+		t.Fatal("expected local client key validation error")
+	}
+	if requests != 0 {
+		t.Fatalf("unknown client key requests=%d", requests)
 	}
 }

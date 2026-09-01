@@ -32,8 +32,8 @@ type CollectorEvidenceLink struct {
 	EvidenceRef       string `json:"evidence_ref,omitempty"`
 	ClientEvidenceKey string `json:"client_evidence_key,omitempty"`
 	// EvidenceAnchorID is populated only when a caller already has a cloud
-	// anchor. Local collection normally uses source_key/evidence_ref instead;
-	// those remain in payload for server-side resolution.
+	// anchor. Local collection normally uses source_key or client_evidence_key;
+	// the original candidate link remains in payload for auditability.
 	EvidenceAnchorID string `json:"evidence_anchor_id,omitempty"`
 	Relation         string `json:"relation"`
 	Note             string `json:"note,omitempty"`
@@ -179,8 +179,23 @@ func ValidateCollectorInterpretation(packet CollectorInterpretation, bundles []E
 		if link.Relation != "supporting" && link.Relation != "contradicting" && link.Relation != "contextual" {
 			return fmt.Errorf("unsupported evidence link relation %q", link.Relation)
 		}
-		if err := checkRef(link.SourceKey, link.EvidenceRef, link.ClientEvidenceKey); err != nil {
-			return err
+		// Links may carry an old/local reference alongside the preferred
+		// server reference. Submit normalizes them by priority; validate only
+		// the selected reference so a lower-priority audit field cannot make a
+		// valid anchor or source link fail locally.
+		switch {
+		case strings.TrimSpace(link.EvidenceAnchorID) != "":
+		case strings.TrimSpace(link.SourceKey) != "":
+			if err := checkRef(link.SourceKey, "", ""); err != nil {
+				return err
+			}
+		case strings.TrimSpace(link.EvidenceRef) != "":
+		case strings.TrimSpace(link.ClientEvidenceKey) != "":
+			if err := checkRef("", "", link.ClientEvidenceKey); err != nil {
+				return err
+			}
+		default:
+			return fmt.Errorf("evidence link must include evidence_anchor_id, source_key, evidence_ref, or client_evidence_key")
 		}
 	}
 	for _, missing := range packet.MissingEvidence {
@@ -205,7 +220,10 @@ func (c *Client) SubmitCollectorInterpretation(ctx context.Context, caseRef stri
 	if key == "" {
 		key = packet.CollectorRunKey
 	}
-	body := collectorInterpretationRequest(packet)
+	body, requestErr := collectorInterpretationRequest(packet, bundles)
+	if requestErr != nil {
+		return CollectorInterpretationResult{}, &Error{Operation: "collector-interpretation.submit", Status: 422, Code: "invalid_input", Message: requestErr.Error(), Cause: requestErr}
+	}
 	if key == "" {
 		key = stableKey("collector-interpretation:"+caseRef, body)
 	}
@@ -223,7 +241,7 @@ func (c *Client) SubmitCollectorInterpretation(ctx context.Context, caseRef stri
 	return out, nil
 }
 
-func collectorInterpretationRequest(packet CollectorInterpretation) map[string]any {
+func collectorInterpretationRequest(packet CollectorInterpretation, bundles []EvidenceBundle) (map[string]any, error) {
 	payload := map[string]any{
 		"contract_version":  packet.ContractVersion,
 		"collector_run_key": packet.CollectorRunKey,
@@ -242,12 +260,38 @@ func collectorInterpretationRequest(packet CollectorInterpretation) map[string]a
 		"payload":           payload,
 	}
 	if len(packet.EvidenceLinks) > 0 {
-		// Keep source_key/evidence_ref links in the envelope as well as in the
-		// payload. The Case API resolves them against the tenant's Evidence
-		// anchors; client_evidence_key is explicitly a local-only fallback.
-		request["evidence_links"] = packet.EvidenceLinks
+		links := make([]CollectorEvidenceLink, 0, len(packet.EvidenceLinks))
+		clientSources := make(map[string]string)
+		for _, bundle := range bundles {
+			for _, item := range bundle.Items {
+				if item.ClientEvidenceKey != "" && item.SourceKey != "" {
+					clientSources[item.ClientEvidenceKey] = item.SourceKey
+				}
+			}
+		}
+		for _, link := range packet.EvidenceLinks {
+			normalized := CollectorEvidenceLink{Relation: link.Relation, Note: link.Note}
+			switch {
+			case strings.TrimSpace(link.EvidenceAnchorID) != "":
+				normalized.EvidenceAnchorID = strings.TrimSpace(link.EvidenceAnchorID)
+			case strings.TrimSpace(link.SourceKey) != "":
+				normalized.SourceKey = strings.TrimSpace(link.SourceKey)
+			case strings.TrimSpace(link.EvidenceRef) != "":
+				normalized.EvidenceRef = strings.TrimSpace(link.EvidenceRef)
+			case strings.TrimSpace(link.ClientEvidenceKey) != "":
+				sourceKey := clientSources[strings.TrimSpace(link.ClientEvidenceKey)]
+				if sourceKey == "" {
+					return nil, fmt.Errorf("collector interpretation references evidence outside this collection: client_evidence_key %q", link.ClientEvidenceKey)
+				}
+				normalized.SourceKey = sourceKey
+			}
+			links = append(links, normalized)
+		}
+		// The server receives one canonical reference per link; the original
+		// candidate references remain in payload above for auditability.
+		request["evidence_links"] = links
 	}
-	return request
+	return request, nil
 }
 
 func DecodeCollectorInterpretation(raw []byte) (CollectorInterpretation, error) {
