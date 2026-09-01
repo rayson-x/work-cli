@@ -6,6 +6,7 @@ package casecmd
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -18,7 +19,46 @@ import (
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/worklineauth"
+	"github.com/larksuite/cli/internal/output"
 )
+
+func TestMediaBatchEmitsPartialFailureAndNonZeroSignal(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Path != "/v1/media" {
+			http.NotFound(w, r)
+			return
+		}
+		requests++
+		if requests == 1 {
+			_, _ = w.Write([]byte(`{"media_ref":"media-1","status":"ready","reused":false}`))
+			return
+		}
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		_, _ = w.Write([]byte(`{"error":{"code":"media_not_exported","message":"not exported"}}`))
+	}))
+	defer server.Close()
+	t.Setenv(worklineauth.MediaAPIKeyEnv, "media-key")
+	factory, stdout, _, _ := cmdutil.TestFactory(t, &core.CliConfig{AppID: "batch-test"})
+	factory.HttpClient = func() (*http.Client, error) { return server.Client(), nil }
+	dir := t.TempDir()
+	first := filepath.Join(dir, "first.png")
+	second := filepath.Join(dir, "second.png")
+	if err := os.WriteFile(first, []byte("one"), 0o600); err != nil { t.Fatal(err) }
+	if err := os.WriteFile(second, []byte("two"), 0o600); err != nil { t.Fatal(err) }
+	cmd := NewCmdCase(factory)
+	cmd.SetArgs([]string{"--server-url", server.URL, "media-batch", first, second})
+	err := cmd.Execute()
+	var partial *output.PartialFailureError
+	if !errors.As(err, &partial) || partial.Code != output.ExitAPI {
+		t.Fatalf("error=%T %v", err, err)
+	}
+	var envelope map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &envelope); err != nil { t.Fatalf("stdout=%q: %v", stdout.String(), err) }
+	if envelope["ok"] != false { t.Fatalf("partial envelope=%#v", envelope) }
+	if requests != 2 { t.Fatalf("media requests=%d", requests) }
+}
 
 func TestCollectUploadsExtensionMIMEAndPreservesStickerKind(t *testing.T) {
 	var uploadedTypes []string

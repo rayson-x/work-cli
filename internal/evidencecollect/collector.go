@@ -236,7 +236,26 @@ func makeItem(m Message, ordinal int) caseclient.EvidenceItem {
 	locator["structural_context"] = m.StructuralContext
 	payload := map[string]any{"text": m.Text, "account_owner": m.OwnerIdentity, "forwarder": m.Forwarder, "speaker": speaker, "quote": m.Quote, "reply_to_message_id": m.ReplyTo, "forward_path": forward, "forward_parent_message_id": m.ForwardParentID, "forward_parent_path": m.ForwardParentPath}
 	payload["structural_context"] = m.StructuralContext
-	return caseclient.EvidenceItem{ClientEvidenceKey: "evidence:" + hash(source), SourceKey: source, Kind: "message", SourceTime: m.SourceTime, SpeakerSourceKey: speaker.SourceKey, RawText: m.Text, SourceLocator: locator, ImmutablePayload: payload}
+	return caseclient.EvidenceItem{ClientEvidenceKey: "evidence:" + hash(source), SourceKey: source, Kind: "message", SourceTime: m.SourceTime, SpeakerSourceKey: speaker.SourceKey, SpeakerDisplayName: speaker.DisplayName, SpeakerIdentityKind: speakerIdentityKind(m, speaker), RawText: m.Text, SourceLocator: locator, ImmutablePayload: payload}
+}
+
+// speakerIdentityKind describes only how the source presented this identity;
+// it never infers a Person or a workflow responsibility.
+func speakerIdentityKind(m Message, speaker SourceIdentity) string {
+	if sameSourceIdentity(m.OwnerIdentity, speaker) {
+		return "account"
+	}
+	if m.ForwardPath != "" && m.ForwardPath != "root" {
+		return "forwarded_author"
+	}
+	return "speaker_label"
+}
+
+func sameSourceIdentity(a, b SourceIdentity) bool {
+	if a.WeChatID != "" && b.WeChatID != "" {
+		return a.WeChatID == b.WeChatID
+	}
+	return a.SourceKey != "" && a.SourceKey == b.SourceKey
 }
 func sourceIdentityKey(owner, conversation, forward string, identity SourceIdentity) string {
 	seed := identity.DisplayName

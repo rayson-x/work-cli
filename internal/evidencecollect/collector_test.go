@@ -40,6 +40,9 @@ func TestCollectPreservesOccurrencesIdentitiesAndAttachmentCoordinates(t *testin
 	if bundles[0].Items[0].SpeakerSourceKey == "" || bundles[0].Items[0].SourceLocator["forward_path"] != "outer/a" {
 		t.Fatalf("item=%#v", bundles[0].Items[0])
 	}
+	if bundles[0].Items[0].SpeakerDisplayName != "转发来源" || bundles[0].Items[0].SpeakerIdentityKind != "forwarded_author" {
+		t.Fatalf("speaker identity contract=%#v", bundles[0].Items[0])
+	}
 	if bundles[0].Items[1].SourceLocator["coordinates"] == nil {
 		t.Fatal("media coordinates were lost")
 	}

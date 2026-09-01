@@ -20,6 +20,7 @@ import (
 	"github.com/larksuite/cli/cmd/schema"
 	"github.com/larksuite/cli/errs"
 	internalauth "github.com/larksuite/cli/internal/auth"
+	"github.com/larksuite/cli/internal/caseclient"
 	"github.com/larksuite/cli/internal/cmdmeta"
 	"github.com/larksuite/cli/internal/cmdutil"
 	"github.com/larksuite/cli/internal/core"
@@ -456,6 +457,22 @@ func TestHandleRootError_PartialWritePreservesExitCode(t *testing.T) {
 	exit := handleRootError(f, err, nil)
 	if exit != int(output.ExitAuth) {
 		t.Errorf("exit = %d, want %d (typed exit code preserved despite write failure)", exit, int(output.ExitAuth))
+	}
+}
+
+func TestHandleRootError_CaseClientErrorUsesTypedEnvelope(t *testing.T) {
+	t.Setenv("LARKSUITE_CLI_CONFIG_DIR", t.TempDir())
+	f, _, _, _ := cmdutil.TestFactory(t, nil)
+	errOut := &bytes.Buffer{}
+	f.IOStreams.ErrOut = errOut
+	err := &caseclient.Error{Operation: "POST /v1/cases", Status: 503, Code: "case_store_unavailable", Message: "temporary", Retryable: true}
+	exit := handleRootError(f, err, nil)
+	if exit != int(output.ExitNetwork) {
+		t.Fatalf("exit = %d, want %d", exit, output.ExitNetwork)
+	}
+	envelope := decodeErrorEnvelope(t, errOut.Bytes())
+	if envelope["type"] != string(errs.CategoryNetwork) || envelope["server_code"] != "case_store_unavailable" || envelope["retryable"] != true {
+		t.Fatalf("case error envelope=%#v", envelope)
 	}
 }
 

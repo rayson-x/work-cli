@@ -6,6 +6,7 @@ package caseclient
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -14,7 +15,25 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/larksuite/cli/errs"
 )
+
+func TestErrorMapsToTypedContract(t *testing.T) {
+	cause := errors.New("upstream unavailable")
+	got := &Error{Operation: "GET /v1/cases/x", Status: http.StatusServiceUnavailable, Code: "case_store_unavailable", Message: "temporary", Retryable: true, RetryAfter: 3 * time.Second, Cause: cause}
+	var typed *errs.NetworkError
+	if !errors.As(got, &typed) {
+		t.Fatalf("case error did not map to typed network error: %T", got)
+	}
+	if typed.Subtype != errs.SubtypeNetworkServer || typed.ServerCode != "case_store_unavailable" || !typed.Retryable || typed.RetryAfterSeconds != 3 || !errors.Is(got, cause) {
+		t.Fatalf("typed=%#v cause=%v", typed, typed.Cause)
+	}
+	var carrier errs.TypedError
+	if !errors.As(got, &carrier) || errs.CategoryOf(got) != errs.CategoryNetwork {
+		t.Fatalf("typed carrier/category missing: %T %s", carrier, errs.CategoryOf(got))
+	}
+}
 
 func TestCreateCaseUsesStableIdempotencyAndCaseContract(t *testing.T) {
 	var requests int

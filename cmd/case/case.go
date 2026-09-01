@@ -404,6 +404,12 @@ func newMediaBatch(o *options) *cobra.Command {
 		if err != nil {
 			return err
 		}
+		if result.Status == "failed" {
+			if err := emitPartial(o.factory, result); err != nil {
+				return err
+			}
+			return output.PartialFailure(output.ExitAPI)
+		}
 		return emit(o.factory, result)
 	}}
 	cmd.Flags().StringVar(&mimeType, "mime-type", "", "override media MIME type for all files")
@@ -486,6 +492,16 @@ func readJSON(cmd *cobra.Command, path string) ([]byte, error) {
 func emit(f *cmdutil.Factory, value any) error {
 	output.PrintJson(f.IOStreams.Out, map[string]any{"ok": true, "data": value})
 	return nil
+}
+func emitPartial(f *cmdutil.Factory, value any) error {
+	emitter := output.NewEmitter(output.EmitterConfig{
+		Out:         f.IOStreams.Out,
+		ErrOut:      f.IOStreams.ErrOut,
+		CommandPath: "case media-batch",
+		Identity:    string(f.ResolvedIdentity),
+		NoticeProvider: output.GetNotice,
+	})
+	return emitter.PartialFailure(value, output.EmitOptions{})
 }
 func invalid(format string, args ...any) error {
 	return errs.NewValidationError(errs.SubtypeInvalidArgument, format, args...)

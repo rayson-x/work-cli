@@ -21,11 +21,13 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/larksuite/cli/errs"
 	"github.com/larksuite/cli/internal/core"
 	"github.com/larksuite/cli/internal/lockfile"
 	"github.com/larksuite/cli/internal/validate"
@@ -79,6 +81,8 @@ type EvidenceItem struct {
 	Kind              string         `json:"kind"`
 	SourceTime        string         `json:"source_time,omitempty"`
 	SpeakerSourceKey  string         `json:"speaker_source_key,omitempty"`
+	SpeakerDisplayName string       `json:"speaker_display_name,omitempty"`
+	SpeakerIdentityKind string      `json:"speaker_identity_kind,omitempty"`
 	RawText           string         `json:"raw_text,omitempty"`
 	MediaRef          string         `json:"media_ref,omitempty"`
 	ContentHash       string         `json:"content_hash,omitempty"`
@@ -153,6 +157,101 @@ type Error struct {
 	Retryable  bool
 	RetryAfter time.Duration
 	Cause      error
+}
+
+// As exposes Case API failures through the repository-wide typed error
+// contract. The transport keeps the server's string code in ServerCode while
+// the shared numeric Code is populated when the service returned a number.
+// Reflection is needed for errs' intentionally private problem-carrier
+// interface, which errors.As passes here as a pointer to that interface.
+func (e *Error) As(target any) bool {
+	if e == nil {
+		return false
+	}
+	typed := e.typedError()
+	if typed == nil {
+		return false
+	}
+	want := reflect.ValueOf(target)
+	if !want.IsValid() || want.Kind() != reflect.Pointer || want.IsNil() {
+		return false
+	}
+	dst := want.Elem()
+	if !dst.CanSet() {
+		return false
+	}
+	value := reflect.ValueOf(typed)
+	if value.Type().AssignableTo(dst.Type()) {
+		dst.Set(value)
+		return true
+	}
+	if dst.Kind() == reflect.Interface && value.Type().Implements(dst.Type()) {
+		dst.Set(value)
+		return true
+	}
+	return false
+}
+
+func (e *Error) typedError() error {
+	serverCode := strings.TrimSpace(e.Code)
+	numericCode, _ := strconv.Atoi(serverCode)
+	message := e.Message
+	if message == "" {
+		message = fmt.Sprintf("case API request failed (HTTP %d)", e.Status)
+	}
+	withCommon := func(err error) error {
+		switch typed := err.(type) {
+		case *errs.ValidationError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+		case *errs.AuthenticationError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+		case *errs.APIError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+			if e.RetryAfter > 0 { typed.RetryAfterSeconds = int(e.RetryAfter / time.Second) }
+		case *errs.NetworkError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+			if e.RetryAfter > 0 { typed.RetryAfterSeconds = int(e.RetryAfter / time.Second) }
+		case *errs.ConfigError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+		case *errs.InternalError:
+			typed.ServerCode, typed.Code, typed.Retryable = serverCode, numericCode, e.Retryable
+			typed.Cause = e.Cause
+		}
+		return err
+	}
+	switch e.Status {
+	case http.StatusUnauthorized:
+		return withCommon(errs.NewAuthenticationError(errs.SubtypeTokenInvalid, message))
+	case http.StatusUnprocessableEntity:
+		return withCommon(errs.NewValidationError(errs.SubtypeInvalidParameters, message))
+	case http.StatusConflict:
+		return withCommon(errs.NewAPIError(errs.SubtypeConflict, message))
+	case http.StatusPreconditionFailed:
+		return withCommon(errs.NewAPIError(errs.SubtypeFailedPrecondition, message))
+	case http.StatusNotFound:
+		return withCommon(errs.NewAPIError(errs.SubtypeNotFound, message))
+	case http.StatusTooManyRequests:
+		return withCommon(errs.NewAPIError(errs.SubtypeRateLimit, message))
+	case http.StatusServiceUnavailable:
+		return withCommon(errs.NewNetworkError(errs.SubtypeNetworkServer, message).WithRetryable())
+	case http.StatusForbidden:
+		return withCommon(errs.NewPermissionError(errs.SubtypePermissionDenied, message))
+	}
+	if e.Status >= 500 {
+		return withCommon(errs.NewNetworkError(errs.SubtypeNetworkServer, message).WithRetryable())
+	}
+	if e.Status == 0 && (serverCode == "invalid_config" || strings.HasPrefix(serverCode, "state_")) {
+		return withCommon(errs.NewConfigError(errs.SubtypeInvalidConfig, message))
+	}
+	if e.Status == 0 && e.Retryable {
+		return withCommon(errs.NewNetworkError(errs.SubtypeNetworkTransport, message).WithRetryable())
+	}
+	return withCommon(errs.NewInternalError(errs.SubtypeUnknown, message))
 }
 
 func (e *Error) Error() string {
