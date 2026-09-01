@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Lark Technologies Pte. Ltd.
+// SPDX-License-Identifier: MIT
+
 package casecmd
 
 import (
@@ -5,6 +8,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/larksuite/cli/internal/cmdutil"
@@ -14,10 +18,14 @@ import (
 
 func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testing.T) {
 	var submitted map[string]any
+	var createdScope map[string]any
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
 		case "/v1/cases":
+			var body map[string]any
+			_ = json.NewDecoder(r.Body).Decode(&body)
+			createdScope = body["source_scope"].(map[string]any)
 			_, _ = w.Write([]byte(`{"case_id":"case-1","purpose":"style-track","status":"open","revision":0}`))
 		case "/v1/cases/case-1/evidence-bundles":
 			_ = json.NewDecoder(r.Body).Decode(&submitted)
@@ -25,12 +33,12 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 				item := rawItem.(map[string]any)
 				kind := item["kind"].(string)
 				if kind != "message" && kind != "image" && kind != "video" && kind != "audio" && kind != "file" {
-					t.Errorf("invalid evidence kind %q", kind)
+					t.Fatalf("invalid evidence kind %q", kind)
 				}
 				if kind != "message" && item["media_ref"] == nil {
 					payload := item["immutable_payload"].(map[string]any)
 					if payload["export_error"] == "" {
-						t.Errorf("missing media ref without export error: %#v", item)
+						t.Fatalf("missing media ref without export error: %#v", item)
 					}
 				}
 			}
@@ -56,6 +64,9 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 	if len(submitted) == 0 {
 		t.Fatal("bundle was not submitted")
 	}
+	if createdScope["conversation_ref"] != "chat" {
+		t.Fatalf("source scope=%#v", createdScope)
+	}
 	items, ok := submitted["items"].([]any)
 	if !ok || len(items) != 5 {
 		t.Fatalf("submitted items = %#v", submitted["items"])
@@ -74,9 +85,37 @@ func TestCollectCommandTransportsRawOccurrencesWithoutProductInference(t *testin
 	if coverage["complete"] != true || coverage["collector_version"] != "wechat-evidence.v1" {
 		t.Fatalf("coverage = %#v", coverage)
 	}
+	if coverage["media_complete"] != false {
+		t.Fatalf("media_complete=%#v", coverage["media_complete"])
+	}
+	if failures, ok := coverage["media_export_failures"].([]any); !ok || len(failures) != 3 {
+		t.Fatalf("media failures=%#v", coverage["media_export_failures"])
+	}
+	if missing, ok := coverage["missing_reasons"].([]any); !ok || len(missing) != 3 {
+		t.Fatalf("missing reasons=%#v", coverage["missing_reasons"])
+	}
 	relations := submitted["relations"].([]any)
 	if len(relations) != 4 {
 		t.Fatalf("relations = %#v", relations)
+	}
+	for _, rawRelation := range relations {
+		relation := rawRelation.(map[string]any)
+		from, to := relation["from_client_evidence_key"].(string), relation["to_client_evidence_key"].(string)
+		if from == "" || to == "" {
+			t.Fatalf("relation endpoints=%#v", relation)
+		}
+		if relation["type"] == "attachment_of" && from == to {
+			t.Fatalf("self attachment relation=%#v", relation)
+		}
+	}
+	for _, rawItem := range items {
+		item := rawItem.(map[string]any)
+		source := item["source_key"].(string)
+		for _, part := range []string{"platform=wechat", "owner=owner", "conversation=chat", "message="} {
+			if !strings.Contains(source, part) {
+				t.Fatalf("source key %q missing %q", source, part)
+			}
+		}
 	}
 	var output map[string]any
 	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil || output["ok"] != true {

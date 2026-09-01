@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Lark Technologies Pte. Ltd.
+// SPDX-License-Identifier: MIT
+
 // Package evidencecollect adapts bounded local WeChat output into immutable
 // source Evidence. It deliberately does not infer products, people, styles,
 // responsibilities, or events.
@@ -30,6 +33,8 @@ type Message struct {
 	Owner, Conversation, ConversationType, ID, SourceTime, Text, ForwardPath, ReplyTo string
 	OwnerIdentity, Forwarder, Speaker                                                 SourceIdentity
 	ForwardParentID                                                                   string
+	ForwardParentPath                                                                 string
+	StructuralContext                                                                 bool
 	Quote                                                                             map[string]any
 	RawLocator                                                                        map[string]any
 	Attachments                                                                       []Attachment
@@ -65,7 +70,7 @@ func (c *Collector) CollectBundles(messages []Message, scope Scope) ([]caseclien
 	if err != nil {
 		return nil, fmt.Errorf("invalid scope to time: %w", err)
 	}
-	filtered := make([]Message, 0, len(messages))
+	normalized := make([]Message, 0, len(messages))
 	wanted := map[string]bool{}
 	for _, id := range scope.MessageIDs {
 		wanted[id] = true
@@ -80,20 +85,44 @@ func (c *Collector) CollectBundles(messages []Message, scope Scope) ([]caseclien
 		if m.OwnerIdentity.SourceKey == "" || m.OwnerIdentity.SourceKey == "wechat|owner=" {
 			m.OwnerIdentity.SourceKey = "wechat|owner=" + m.Owner
 		}
-		if m.Owner != scope.Owner || m.Conversation != scope.Conversation || (len(wanted) > 0 && !wanted[m.ID]) {
+		if m.Owner != scope.Owner || m.Conversation != scope.Conversation {
 			continue
 		}
-		if len(scope.ParticipantIDs) > 0 && !participantMatch(m.Speaker, scope.ParticipantIDs) {
-			continue
-		}
-		when, timeErr := parseSourceTime(m.SourceTime)
+		_, timeErr := parseSourceTime(m.SourceTime)
 		if timeErr != nil {
 			return nil, fmt.Errorf("invalid message %s time: %w", m.ID, timeErr)
 		}
-		if from != nil && (when == nil || when.Before(*from)) || to != nil && (when == nil || when.After(*to)) {
-			continue
+		normalized = append(normalized, m)
+	}
+	selected := make([]bool, len(normalized))
+	for index, m := range normalized {
+		when, _ := parseSourceTime(m.SourceTime)
+		selected[index] = (len(wanted) == 0 || wanted[m.ID]) && (len(scope.ParticipantIDs) == 0 || participantMatch(m.Speaker, scope.ParticipantIDs)) && (from == nil || when != nil && !when.Before(*from)) && (to == nil || when != nil && !when.After(*to))
+	}
+	if len(scope.ParticipantIDs) > 0 || len(wanted) > 0 {
+		changed := true
+		for changed {
+			changed = false
+			for index, m := range normalized {
+				if !selected[index] || m.ForwardParentID == "" {
+					continue
+				}
+				for parentIndex, parent := range normalized {
+					if selected[parentIndex] || parent.ID != m.ForwardParentID || parent.ForwardPathOrRoot() != m.ForwardParentPath {
+						continue
+					}
+					selected[parentIndex] = true
+					normalized[parentIndex].StructuralContext = true
+					changed = true
+				}
+			}
 		}
-		filtered = append(filtered, m)
+	}
+	filtered := make([]Message, 0, len(normalized))
+	for index, m := range normalized {
+		if selected[index] {
+			filtered = append(filtered, m)
+		}
 	}
 	sort.SliceStable(filtered, func(i, j int) bool {
 		left, _ := parseSourceTime(filtered[i].SourceTime)
@@ -176,7 +205,7 @@ func (c *Collector) bundle(messages []Message, scope Scope, index int) caseclien
 			}
 		}
 		if m.ForwardParentID != "" {
-			if target := messageKeys[m.Owner+"\x1f"+m.Conversation+"\x1f"+m.ForwardParentID+"\x1froot"]; target != "" {
+			if target := messageKeys[m.Owner+"\x1f"+m.Conversation+"\x1f"+m.ForwardParentID+"\x1f"+m.ForwardParentPath]; target != "" {
 				relations = append(relations, caseclient.EvidenceRelation{FromClientEvidenceKey: parent.ClientEvidenceKey, ToClientEvidenceKey: target, Type: "forward_contains"})
 			}
 		}
@@ -204,7 +233,9 @@ func makeItem(m Message, ordinal int) caseclient.EvidenceItem {
 	locator["account_owner"] = m.OwnerIdentity
 	locator["forwarder"] = m.Forwarder
 	locator["speaker"] = speaker
-	payload := map[string]any{"text": m.Text, "account_owner": m.OwnerIdentity, "forwarder": m.Forwarder, "speaker": speaker, "quote": m.Quote, "reply_to_message_id": m.ReplyTo, "forward_path": forward, "forward_parent_message_id": m.ForwardParentID}
+	locator["structural_context"] = m.StructuralContext
+	payload := map[string]any{"text": m.Text, "account_owner": m.OwnerIdentity, "forwarder": m.Forwarder, "speaker": speaker, "quote": m.Quote, "reply_to_message_id": m.ReplyTo, "forward_path": forward, "forward_parent_message_id": m.ForwardParentID, "forward_parent_path": m.ForwardParentPath}
+	payload["structural_context"] = m.StructuralContext
 	return caseclient.EvidenceItem{ClientEvidenceKey: "evidence:" + hash(source), SourceKey: source, Kind: "message", SourceTime: m.SourceTime, SpeakerSourceKey: speaker.SourceKey, RawText: m.Text, SourceLocator: locator, ImmutablePayload: payload}
 }
 func sourceIdentityKey(owner, conversation, forward string, identity SourceIdentity) string {
@@ -438,6 +469,7 @@ func appendForwarded(out []Message, parent Message, record map[string]any, path 
 		}
 		child.ForwardPath = path + "/" + strconv.Itoa(index)
 		child.ForwardParentID = parent.ID
+		child.ForwardParentPath = path
 		out = append(out, child)
 		out = appendForwarded(out, child, childRecord, child.ForwardPath)
 	}

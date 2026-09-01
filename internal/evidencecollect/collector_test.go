@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Lark Technologies Pte. Ltd.
+// SPDX-License-Identifier: MIT
+
 package evidencecollect
 
 import (
@@ -122,9 +125,9 @@ func TestDecodeJSONLAndParticipantScopeUseSourceIdentityOnly(t *testing.T) {
 }
 
 func TestDecodeAnalysisProjectionPreservesResourcesAndNestedForward(t *testing.T) {
-	raw := []byte("{\"timestamp\":\"2026-09-01T00:00:00Z\",\"sender_identity\":\"wx-a\",\"sender_name\":\"Alice\",\"message_type\":\"forward\",\"text\":\"转发\",\"message_id\":\"outer\",\"conversation_identity\":\"chat\",\"forwarded_messages\":[{\"message_id\":\"inner\",\"sender_identity\":\"hash-b\",\"sender_name\":\"Bob\",\"message_type\":\"image\",\"resource_path\":\"C:/media/a.jpg\"}]}\n")
+	raw := []byte("{\"timestamp\":\"2026-09-01T00:00:00Z\",\"sender_identity\":\"wx-a\",\"sender_name\":\"Alice\",\"message_type\":\"forward\",\"text\":\"转发\",\"message_id\":\"outer\",\"conversation_identity\":\"chat\",\"forwarded_messages\":[{\"message_id\":\"inner\",\"sender_identity\":\"hash-b\",\"sender_name\":\"Bob\",\"message_type\":\"image\",\"resource_path\":\"C:/media/a.jpg\",\"forwarded_messages\":[{\"message_id\":\"grandchild\",\"sender_identity\":\"wx-target\",\"sender_name\":\"Target\",\"message_type\":\"text\"}]}]}\n")
 	messages, err := Decode(raw)
-	if err != nil || len(messages) != 2 {
+	if err != nil || len(messages) != 3 {
 		t.Fatalf("messages=%#v err=%v", messages, err)
 	}
 	if messages[1].ForwardPath != "root/0" || messages[1].Speaker.SourceKey != "hash-b" || len(messages[1].Attachments) != 1 || messages[1].Attachments[0].LocalPath != "C:/media/a.jpg" {
@@ -142,6 +145,28 @@ func TestDecodeAnalysisProjectionPreservesResourcesAndNestedForward(t *testing.T
 	}
 	if !foundForward {
 		t.Fatalf("forward relation missing: %#v", bundles[0].Relations)
+	}
+	forwardRelations := 0
+	for _, relation := range bundles[0].Relations {
+		if relation.Type == "forward_contains" {
+			forwardRelations++
+		}
+	}
+	if forwardRelations != 2 {
+		t.Fatalf("nested forward relations=%#v", bundles[0].Relations)
+	}
+	filtered, err := New(Options{}).CollectBundles(messages, Scope{Owner: "o", Conversation: "chat", ParticipantIDs: []string{"wx-target"}})
+	if err != nil || len(filtered) != 1 || len(filtered[0].Items) != 4 {
+		t.Fatalf("ancestor closure=%#v err=%v", filtered, err)
+	}
+	structural := 0
+	for _, item := range filtered[0].Items {
+		if item.ImmutablePayload["structural_context"] == true {
+			structural++
+		}
+	}
+	if structural != 3 {
+		t.Fatalf("structural context=%d items=%#v", structural, filtered[0].Items)
 	}
 }
 

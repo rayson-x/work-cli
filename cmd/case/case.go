@@ -45,7 +45,7 @@ func NewCmdCase(f *cmdutil.Factory) *cobra.Command {
 // emitted by the local WeChat reader (or a test fixture); this command only
 // transports source Evidence and never creates canonical apparel records.
 func newCollect(o *options) *cobra.Command {
-	var file, scopeJSON, purpose, pipeline string
+	var file, scopeJSON, purpose, pipeline, caseRef string
 	var maxMessages int
 	cmd := &cobra.Command{Use: "collect", Short: "Collect bounded WeChat JSON into a cloud Case", Args: cobra.NoArgs, RunE: func(cmd *cobra.Command, _ []string) error {
 		raw, err := readJSON(cmd, file)
@@ -68,9 +68,12 @@ func newCollect(o *options) *cobra.Command {
 		if err != nil {
 			return err
 		}
-		created, err := client.CreateCase(cmd.Context(), caseclient.CreateCaseRequest{Purpose: purpose, SourceScope: map[string]any{"platform": "wechat", "owner": scope.Owner, "conversation": scope.Conversation, "from": scope.From, "to": scope.To, "participant_ids": scope.ParticipantIDs}})
-		if err != nil {
-			return err
+		created := caseclient.Case{CaseRef: caseRef, Purpose: purpose, Status: "open"}
+		if strings.TrimSpace(caseRef) == "" {
+			created, err = client.CreateCase(cmd.Context(), caseclient.CreateCaseRequest{Purpose: purpose, SourceScope: map[string]any{"platform": "wechat", "owner": scope.Owner, "conversation_ref": scope.Conversation, "conversation": scope.Conversation, "from": scope.From, "to": scope.To, "participant_ids": scope.ParticipantIDs}})
+			if err != nil {
+				return err
+			}
 		}
 		results := map[string]any{"case": created, "bundles": []any{}}
 		for i := range bundles {
@@ -112,6 +115,7 @@ func newCollect(o *options) *cobra.Command {
 	cmd.Flags().StringVar(&scopeJSON, "scope-json", "", "collection scope JSON with owner, conversation, and optional range/participants")
 	cmd.Flags().StringVar(&purpose, "purpose", "style-track", "Case purpose")
 	cmd.Flags().StringVar(&pipeline, "pipeline", "", "optional cloud inference pipeline")
+	cmd.Flags().StringVar(&caseRef, "case-ref", "", "existing Case reference for additional collection pages")
 	cmd.Flags().IntVar(&maxMessages, "max-messages-per-bundle", 500, "maximum messages per Evidence Bundle")
 	_ = cmd.MarkFlagRequired("scope-json")
 	return cmd
